@@ -35,6 +35,18 @@ export interface Faq {
   answer: string;
 }
 
+export interface ShopifyService {
+  number: string;
+  title: string;
+  /** Short punchy line used for the home stack glimpse. */
+  tagline: string;
+  /** Fuller description used on the Shopify services page. */
+  description: string;
+  features: string[];
+  /** Visual tone key for the home stack card (see .tone-* in global.css). */
+  tone: 'indigo' | 'terracotta' | 'amber' | 'sage' | 'ink';
+}
+
 export interface SiteSettings {
   name: string;
   role: string;

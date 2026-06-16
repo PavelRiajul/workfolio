@@ -96,14 +96,25 @@ function initReveal() {
   ScrollTrigger.refresh();
 }
 
-/* ---- Count-up stats ---------------------------------------------------- */
+/* ---- Count-up stats ----------------------------------------------------
+   Supports data-suffix, data-prefix (+ / − / $), data-decimals, and
+   data-sep="true" for thousands separators. */
 function initCountUp() {
   const els = document.querySelectorAll<HTMLElement>('[data-count]');
   els.forEach((el) => {
     const target = parseFloat(el.dataset.count || '0') || 0;
     const suffix = el.dataset.suffix || '';
+    const prefix = el.dataset.prefix || '';
+    const decimals = parseInt(el.dataset.decimals || '0', 10) || 0;
+    const sep = el.dataset.sep === 'true';
+    const fmt = (v: number) => {
+      const s = sep
+        ? v.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })
+        : v.toFixed(decimals);
+      return prefix + s + suffix;
+    };
     if (prefersReduced) {
-      el.textContent = target + suffix;
+      el.textContent = fmt(target);
       return;
     }
     const obj = { v: 0 };
@@ -114,17 +125,67 @@ function initCountUp() {
       onEnter: () =>
         gsap.to(obj, {
           v: target,
-          duration: 1.1,
+          duration: 1.2,
           ease: 'power3.out',
           onUpdate: () => {
-            el.textContent = Math.round(obj.v) + suffix;
+            el.textContent = fmt(obj.v);
           },
           onComplete: () => {
-            el.textContent = target + suffix;
+            el.textContent = fmt(target);
           },
         }),
     });
   });
+}
+
+/* ---- CRO revenue calculator ------------------------------------------- */
+function initCroCalc() {
+  const root = document.getElementById('calc');
+  if (!root) return;
+  const ids = ['ci-vis', 'ci-aov', 'ci-cur', 'ci-tgt'] as const;
+  const [vis, aov, cur, tgt] = ids.map((id) => document.getElementById(id) as HTMLInputElement | null);
+  if (!vis || !aov || !cur || !tgt) return;
+
+  const set = (id: string, txt: string) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = txt;
+  };
+  const money = (n: number) => '$' + Math.round(n).toLocaleString('en-US');
+  const paint = (el: HTMLInputElement) => {
+    const min = +el.min;
+    const max = +el.max;
+    const p = ((+el.value - min) / (max - min)) * 100;
+    el.style.background = `linear-gradient(to right, #5e8e3e ${p}%, rgba(10,10,10,0.1) ${p}%)`;
+  };
+
+  const update = () => {
+    const v = +vis.value;
+    const a = +aov.value;
+    const c = +cur.value;
+    const t = +tgt.value;
+    const now = v * (c / 100) * a;
+    const after = v * (t / 100) * a;
+    const extraMo = after - now;
+    const extraOrdersYr = v * ((t - c) / 100) * 12;
+
+    set('cv-vis', v.toLocaleString('en-US'));
+    set('cv-aov', '$' + a.toLocaleString('en-US'));
+    set('cv-cur', c.toFixed(1) + '%');
+    set('cv-tgt', t.toFixed(1) + '%');
+
+    set('co-year', money(Math.max(extraMo * 12, 0)));
+    const delta = (t - c).toFixed(1);
+    set('co-sub', `from a ${t >= c ? '+' : ''}${delta} pt conversion change`);
+    set('co-now', money(now) + '/mo');
+    set('co-after', money(after) + '/mo');
+    set('co-mo', (extraMo >= 0 ? '+' : '−') + money(Math.abs(extraMo)) + '/mo');
+    set('co-orders', (extraOrdersYr >= 0 ? '+' : '−') + Math.round(Math.abs(extraOrdersYr)).toLocaleString('en-US'));
+
+    [vis, aov, cur, tgt].forEach(paint);
+  };
+
+  [vis, aov, cur, tgt].forEach((el) => el.addEventListener('input', update));
+  update();
 }
 
 /* ---- Hero entrance ----------------------------------------------------- */
@@ -428,6 +489,8 @@ function initHeroTilt() {
   };
   scope.addEventListener('pointermove', (e) => {
     if (e.pointerType === 'touch') return;
+    if (stage.dataset.locked === '1') return; // the mascot is tilting the stack
+
     const r = scope.getBoundingClientRect();
     const x = (e.clientX - r.left) / r.width - 0.5; // -0.5 … 0.5
     const y = (e.clientY - r.top) / r.height - 0.5;
@@ -439,6 +502,50 @@ function initHeroTilt() {
     nextRx = baseRx;
     nextRy = baseRy;
     if (!raf) raf = requestAnimationFrame(apply);
+  });
+}
+
+/* ---- Shopify service stack: settle cards back as the next pins --------- */
+function initShopifyStack() {
+  if (prefersReduced) return;
+  const cards = gsap.utils.toArray<HTMLElement>('.sstack-card');
+  if (cards.length < 2) return;
+  cards.forEach((card, i) => {
+    if (i === cards.length - 1) return; // top-most card never gets covered
+    gsap.fromTo(
+      card,
+      { scale: 1, filter: 'brightness(1)' },
+      {
+        scale: 0.93,
+        filter: 'brightness(0.84)',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: cards[i + 1],
+          start: 'top 78%',
+          end: 'top 14%',
+          scrub: true,
+        },
+      }
+    );
+  });
+}
+
+/* ---- Metric bars: grow from zero when their group scrolls in ----------- */
+function initBarGrow() {
+  if (prefersReduced) return;
+  const groups = gsap.utils.toArray<HTMLElement>('[data-bars]');
+  if (!groups.length) return;
+  groups.forEach((group) => {
+    const bars = gsap.utils.toArray<HTMLElement>('.bargrow', group);
+    if (!bars.length) return;
+    gsap.set(bars, { scaleX: 0 });
+    ScrollTrigger.create({
+      trigger: group,
+      start: 'top 82%',
+      once: true,
+      onEnter: () =>
+        gsap.to(bars, { scaleX: 1, duration: 0.95, ease: 'power3.out', stagger: 0.07 }),
+    });
   });
 }
 
@@ -506,6 +613,9 @@ ready(() => {
   initNav();
   initWhatsAppFab();
   initHeroTilt();
+  initShopifyStack();
+  initBarGrow();
+  initCroCalc();
   initTabSpy();
   initReveal();
   initHeroIntro();

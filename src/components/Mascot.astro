@@ -73,7 +73,9 @@ const { state = 'idle' } = Astro.props;
     background: none;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
-    animation: m-in .5s var(--m-ease) both;
+    /* no fill-mode: the entrance must release the transform so the journey
+       (Web Animations API) can drive the mascot freely afterwards */
+    animation: m-in .5s var(--m-ease);
   }
   .mascot:focus-visible { outline: none; }
   .mascot:focus-visible .m-blob { stroke: var(--m-accent); stroke-width: 2; }
@@ -169,6 +171,24 @@ const { state = 'idle' } = Astro.props;
     100%    { transform: scale(1);    opacity: 1; }
   }
 
+  /* ===== Journey (homepage choreography) =================================
+     While "busy", the WAAPI drives the .mascot's travel (translate); these
+     classes drive the weighted body/leg poses via transitions, in sync with
+     each phase. transform-origin stays at the feet, so squash reads as weight. */
+  .mascot.busy { z-index: 1099; }
+  .mascot.busy .mascot-bubble { opacity: 0 !important; }
+  .mascot.busy .m-body { animation: none; transition: transform .2s var(--m-ease); }
+  .mascot.busy .m-leg  { animation: none; transition: transform .2s var(--m-ease); }
+  .mascot.busy.crouch  .m-body { transform: translateY(6px) scale(1.16, .82); } /* load */
+  .mascot.busy.leaping .m-body { transform: scale(.9, 1.14); }                  /* stretch airborne */
+  .mascot.busy.leaping .m-leg  { transform: translateY(-9px) rotate(-10deg); }  /* tuck */
+  .mascot.busy.landing .m-body { transform: scale(1.22, .74); }                 /* impact squash */
+  .mascot.busy.sliding .m-body { transform: rotate(-9deg) scale(1.02, .98); }   /* lean down the ramp */
+  .mascot.busy.sliding .m-leg  { transform: rotate(14deg); }                    /* feet out front */
+  /* face the direction of travel */
+  .mascot-svg { transition: transform .2s ease; }
+  .mascot.face-left .mascot-svg { transform: scaleX(-1); }
+
   /* ===== Reduced motion ==================================================
      Kill ambient loops (entrance, breathing, walking, blink) so the page is
      calm at rest — but KEEP the click-triggered jump: it's user-initiated and
@@ -184,34 +204,205 @@ const { state = 'idle' } = Astro.props;
 </style>
 
 <script>
-  // JS only toggles state classes — all motion lives in CSS.
-  const m = document.getElementById('mascot');
-  const body = m?.querySelector('.m-body');
+  const m = document.getElementById('mascot') as HTMLElement | null;
+  const body = m?.querySelector('.m-body') as SVGElement | null;
   if (m && body) {
-    let near = false; // hovered or keyboard-focused
     const STATES = ['idle', 'walking', 'jumping'];
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const wait = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+    let near = false;   // hovered / focused
+    let busy = false;   // a journey is playing
+
     const set = (s: string) => {
+      if (busy) return;
       m.classList.remove(...STATES);
       m.classList.add(s);
       m.dataset.state = s;
     };
     const isJumping = () => m.classList.contains('jumping');
 
-    // One physical hop per click. Re-clicking mid-air restarts the jump.
+    /* ---- fallback: one physical hop (reduced-motion / mobile / scrolled) -- */
     const jump = () => {
       m.classList.remove('jumping');
-      void m.offsetWidth; // reflow so the animation restarts from frame 0
+      void m.offsetWidth;
       set('jumping');
     };
-    // When the hop lands (the finite jump animation ends), settle back.
     body.addEventListener('animationend', () => {
-      if (isJumping()) set(near ? 'walking' : 'idle');
+      if (!busy && isJumping()) set(near ? 'walking' : 'idle');
     });
 
-    m.addEventListener('mouseenter', () => { near = true; if (!isJumping()) set('walking'); });
-    m.addEventListener('mouseleave', () => { near = false; if (!isJumping()) set('idle'); });
-    m.addEventListener('focus', () => { near = true; if (!isJumping()) set('walking'); });
-    m.addEventListener('blur', () => { near = false; if (!isJumping()) set('idle'); });
-    m.addEventListener('click', jump);
+    /* ---- journey: travel via the Web Animations API, baked per phase ------ */
+    let offX = 0, offY = 0; // current translate offset from the home corner
+    const bake = (a: Animation) => a.finished.then(() => { try { a.commitStyles(); } catch {} a.cancel(); });
+    function leap(dx: number, dy: number, dur: number, arc: number) {
+      const apexY = Math.min(offY, dy) - arc;
+      const midX = offX + (dx - offX) * 0.5;
+      const a = m!.animate(
+        [
+          { transform: `translate(${offX}px, ${offY}px)`, easing: 'cubic-bezier(.2,.5,.5,.85)' },
+          { transform: `translate(${midX}px, ${apexY}px)`, offset: 0.5, easing: 'cubic-bezier(.4,.05,.75,1)' },
+          { transform: `translate(${dx}px, ${dy}px)` },
+        ],
+        { duration: dur, fill: 'forwards' }
+      );
+      offX = dx; offY = dy;
+      return bake(a);
+    }
+    function slide(dx: number, dy: number, dur: number) {
+      const a = m!.animate(
+        [
+          { transform: `translate(${offX}px, ${offY}px)`, easing: 'cubic-bezier(.45,0,.55,1)' },
+          { transform: `translate(${dx}px, ${dy}px)` },
+        ],
+        { duration: dur, fill: 'forwards' }
+      );
+      offX = dx; offY = dy;
+      return bake(a);
+    }
+
+    // current untransformed home position (left/bottom are CSS-fixed):
+    // current rect = home + offset, so home = rect - offset.
+    function homePos() {
+      const r = m!.getBoundingClientRect();
+      return { cx: r.left + r.width / 2 - offX, feetY: r.bottom - offY };
+    }
+    const curX = () => homePos().cx + offX;            // current feet x in the viewport
+    const face = (targetX: number) => m!.classList.toggle('face-left', targetX < curX());
+    const onScreen = (el: Element | null) => {
+      if (!el) return false;
+      const r = el.getBoundingClientRect();
+      return r.width > 0 && r.top >= 40 && r.bottom <= window.innerHeight - 80 && r.left >= 0 && r.right <= window.innerWidth;
+    };
+    const tabbar = () => parseInt(getComputedStyle(document.documentElement).getPropertyValue('--tabbar-h')) || 64;
+    // looser than onScreen: the element's TOP edge just needs to be reachable
+    // (so the pet can sit on top of tall cards that aren't fully in view).
+    const landable = (el: Element | null) => {
+      if (!el) return false;
+      const r = el.getBoundingClientRect();
+      return r.width > 30 && r.top >= 56 && r.top <= window.innerHeight - tabbar() - 90 && r.left >= 4 && r.right <= window.innerWidth - 4;
+    };
+
+    /* ---- behaviours ------------------------------------------------------ */
+    const svg = m.querySelector('.mascot-svg') as SVGElement | null;
+    // Playable elements across EVERY page/section (not just the hero).
+    const PLAY = '.btn, .chip, .work-card, .post-card, .post-feature, .appr-card, .trait-card, .tst-card, .acc summary, .ft-soc, .brand-wall span, .cs-pill';
+    const playables = () => [...document.querySelectorAll<HTMLElement>(PLAY)].filter((el) => el !== m && landable(el));
+
+    // hop onto whatever is currently on screen; it dips under the weight
+    async function interact(el: HTMLElement) {
+      const h = homePos(); const r = el.getBoundingClientRect();
+      const tx = r.left + r.width * (0.3 + Math.random() * 0.4);
+      face(tx);
+      if (Math.random() < 0.5) { m.classList.add('crouch'); await wait(120); m.classList.remove('crouch'); }
+      m.classList.add('leaping');
+      await leap(tx - h.cx, r.top - h.feetY, 500 + Math.random() * 340, 90 + Math.random() * 150);
+      m.classList.remove('leaping'); m.classList.add('landing');
+      el.classList.add('mascot-bonk');
+      await wait(180); m.classList.remove('landing');
+      el.classList.remove('mascot-bonk');
+      if (Math.random() < 0.3) await spin();
+      await wait(100 + Math.random() * 220);
+    }
+
+    // stay put but show personality: look around, double-bounce, or spin
+    async function idleAct() {
+      const k = Math.random();
+      if (k < 0.4) {
+        m.classList.toggle('face-left'); await wait(380);
+        m.classList.toggle('face-left'); await wait(380);
+      } else if (k < 0.74) {
+        m.classList.add('leaping'); await leap(offX, offY, 300, 55); m.classList.remove('leaping');
+        m.classList.add('landing'); await wait(110); m.classList.remove('landing');
+        m.classList.add('leaping'); await leap(offX, offY, 250, 32); m.classList.remove('leaping');
+        m.classList.add('landing'); await wait(110); m.classList.remove('landing');
+      } else {
+        await spin();
+      }
+    }
+
+    async function spin() {
+      if (!svg) return;
+      m.classList.remove('face-left');
+      await svg.animate(
+        [{ transform: 'rotate(0deg)' }, { transform: 'rotate(360deg)' }],
+        { duration: 520, easing: 'cubic-bezier(.45,0,.45,1)' }
+      ).finished;
+    }
+    async function playStack(stage: HTMLElement) {
+      let h = homePos(); const r = stage.getBoundingClientRect();
+      face(r.left + r.width * 0.42);
+      m.classList.add('crouch'); await wait(140); m.classList.remove('crouch');
+      m.classList.add('leaping');
+      await leap(r.left + r.width * 0.42 - h.cx, r.top + r.height * 0.26 - h.feetY, 760, 175);
+      m.classList.remove('leaping'); m.classList.add('landing');
+      stage.dataset.locked = '1';
+      stage.style.setProperty('--rx', '1deg');
+      stage.style.setProperty('--ry', '-42deg');
+      await wait(300); m.classList.remove('landing'); await wait(220);
+      m.classList.add('sliding'); stage.style.setProperty('--rx', '22deg');
+      h = homePos();
+      const gx = 60 + Math.random() * (window.innerWidth * 0.45);
+      const gy = window.innerHeight - tabbar() - (40 + Math.random() * 70);
+      face(gx);
+      await slide(gx - h.cx, gy - h.feetY, 840);
+      m.classList.remove('sliding');
+      stage.style.removeProperty('--rx'); stage.style.removeProperty('--ry');
+      delete stage.dataset.locked;
+    }
+    async function wander() {
+      const h = homePos();
+      const tx = 50 + Math.random() * (window.innerWidth - 110);
+      const ty = 140 + Math.random() * (window.innerHeight - 140 - tabbar() - 40);
+      face(tx);
+      m.classList.add('leaping');
+      await leap(tx - h.cx, ty - h.feetY, 560 + Math.random() * 280, 80 + Math.random() * 130);
+      m.classList.remove('leaping'); m.classList.add('landing');
+      await wait(150); m.classList.remove('landing');
+    }
+
+    /* ---- the roam loop: auto-start, wander randomly, react to elements ---- */
+    let roaming = false;
+    const desktop = () => window.matchMedia('(min-width: 900px)').matches;
+
+    async function step() {
+      busy = true; m.classList.remove(...STATES); m.classList.add('busy');
+      try {
+        const stage = document.getElementById('hv-stage');
+        const els = playables();
+        const roll = Math.random();
+        if (onScreen(stage) && roll < 0.18) await playStack(stage as HTMLElement); // hero-only special
+        else if (els.length && roll < 0.62) await interact(els[(Math.random() * els.length) | 0]);
+        else if (roll < 0.82) await wander();
+        else await idleAct();
+      } catch { /* keep roaming even if a phase hiccups */ }
+      m.classList.remove('busy'); busy = false;
+    }
+
+    async function roam() {
+      while (roaming) {
+        set('idle');
+        await wait(1100 + Math.random() * 2400);
+        if (!roaming) break;
+        if (busy || document.hidden || !desktop()) continue;
+        await step();
+      }
+    }
+    function startRoam() {
+      if (roaming || reduce.matches || !desktop()) return;
+      roaming = true;
+      roam();
+    }
+
+    // auto-start a moment after load; pause/resume on viewport changes
+    setTimeout(startRoam, 1600);
+    window.addEventListener('resize', () => { if (desktop()) startRoam(); else roaming = false; });
+    reduce.addEventListener?.('change', () => { if (reduce.matches) roaming = false; else startRoam(); });
+
+    // click = an excited hop in place (works mid-roam idle and under reduced motion)
+    m.addEventListener('click', () => { if (!busy) jump(); });
+    m.addEventListener('mouseenter', () => { near = true; if (!busy && !isJumping()) set('walking'); });
+    m.addEventListener('mouseleave', () => { near = false; if (!busy && !isJumping()) set('idle'); });
+    m.addEventListener('focus', () => { near = true; if (!busy && !isJumping()) set('walking'); });
+    m.addEventListener('blur', () => { near = false; if (!busy && !isJumping()) set('idle'); });
   }
 </script>

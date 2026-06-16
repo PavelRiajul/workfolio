@@ -1,0 +1,46 @@
+---
+// The CRO "dashboard" visual: a conversion-uplift card, a live A/B test with
+// a winner, and a checkout funnel. Shared by the Shopify page CRO section and
+// the dedicated /cro page. Wrap it in a element carrying `data-bars` (so the
+// bars grow on scroll) — e.g. <div class="cro-viz" data-bars>.
+const funnel = [
+  { step: 'Sessions', value: '12,480', w: '100%' },
+  { step: 'Product views', value: '7,140', w: '74%' },
+  { step: 'Add to cart', value: '3,120', w: '48%' },
+  { step: 'Checkout', value: '1,560', w: '32%' },
+  { step: 'Purchase', value: '998', w: '22%' },
+];
+---
+<div class="cro-card cro-uplift">
+  <div>
+    <span class="cro-k">Conversion rate</span>
+    <div class="cro-rate"><s>2.1%</s><span class="cro-arrow">→</span><b>3.4%</b></div>
+  </div>
+  <span class="cro-badge"><i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i> +62%</span>
+</div>
+
+<div class="cro-card cro-ab">
+  <div class="cro-ab-head"><span>A/B Test · Product page</span><span class="cro-live"><span class="d"></span> Running</span></div>
+  <div class="cro-ab-row">
+    <div class="cro-ab-top"><span class="cro-ab-name">A · Control</span><b>2.4%</b></div>
+    <div class="cro-ab-bar"><i class="bargrow" style="width:60%"></i></div>
+  </div>
+  <div class="cro-ab-row win">
+    <div class="cro-ab-top"><span class="cro-ab-name">B · Sticky add-to-cart <em>Winner</em></span><b>3.2%</b></div>
+    <div class="cro-ab-bar"><i class="bargrow" style="width:80%"></i></div>
+  </div>
+  <div class="cro-ab-foot">+34% uplift · 98% confidence · 14-day test</div>
+</div>
+
+<div class="cro-card cro-funnel">
+  <span class="cro-k">Checkout funnel</span>
+  <div class="cro-fn">
+    {funnel.map((r) => (
+      <div class="cro-fn-row">
+        <span>{r.step}</span>
+        <div class="cro-fn-bar bargrow" style={`--w:${r.w}`}></div>
+        <b>{r.value}</b>
+      </div>
+    ))}
+  </div>
+</div>

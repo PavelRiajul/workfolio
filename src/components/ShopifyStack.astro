@@ -1,0 +1,56 @@
+---
+// A scroll-stacking glimpse of the Shopify services. Cards pin and stack as
+// you scroll (pure CSS sticky; GSAP adds a subtle settle-back scale).
+// Each card pairs its copy with a tone-matched mockup of what the service
+// actually delivers. Full detail lives on /shopify.
+import type { ShopifyService } from '../lib/types';
+import ServiceVisual from './ServiceVisual.astro';
+
+interface Props {
+  services: ShopifyService[];
+}
+const { services } = Astro.props;
+// Keep the home glimpse tight — a few key features per card.
+const PEEK = 4;
+---
+<section class="section section-bordered">
+  <div class="sstack-head" data-reveal>
+    <div>
+      <div class="eyebrow">— Shopify services</div>
+      <h2>Shopify, end to end.</h2>
+    </div>
+    <a href="/shopify" class="btn btn-light btn-sm">Explore Shopify ↗</a>
+  </div>
+
+  <div class="sstack" id="sstack">
+    {services.map((s, i) => (
+      <a
+        href="/shopify"
+        class={`sstack-card tone-${s.tone}`}
+        style={`--i:${i}`}
+        aria-label={`${s.title} — see Shopify services`}
+      >
+        <span class="sstack-go" aria-hidden="true">↗</span>
+
+        <div class="sstack-main">
+          <span class="sstack-kicker">
+            <i class="fa-brands fa-shopify" aria-hidden="true"></i>
+            Shopify · {s.number}
+          </span>
+          <h3>{s.title}</h3>
+          <p class="sstack-lede">{s.tagline}</p>
+          <div class="sstack-tags">
+            {s.features.slice(0, PEEK).map((f) => <span class="sstack-tag">{f}</span>)}
+            {s.features.length > PEEK && (
+              <span class="sstack-tag more">+{s.features.length - PEEK} more</span>
+            )}
+          </div>
+        </div>
+
+        <div class="sstack-visual" aria-hidden="true">
+          <ServiceVisual service={s} />
+        </div>
+      </a>
+    ))}
+  </div>
+</section>

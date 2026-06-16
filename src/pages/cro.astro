@@ -1,0 +1,265 @@
+---
+import Base from '../layouts/Base.astro';
+import ClosingCta from '../components/ClosingCta.astro';
+import CroDashboard from '../components/CroDashboard.astro';
+import { getSite } from '../lib/content';
+
+const site = await getSite();
+
+// Hero KPIs (animated count-ups)
+const heroStats = [
+  { v: 62, prefix: '+', suffix: '%', l: 'Avg. conversion uplift' },
+  { v: 41, prefix: '−', suffix: '%', l: 'Cart abandonment cut' },
+  { v: 98, suffix: '%', l: 'A/B tests hit significance' },
+];
+
+// Track record — by the numbers (dark band)
+// Ordered so the headline money stat lands last — it becomes the big,
+// full-width "hero" cell when the grid collapses to 2×2 + 1 on mobile.
+const numbers = [
+  { v: 12, l: 'Shopify stores optimized' },
+  { v: 47, l: 'A/B tests shipped' },
+  { v: 3.4, decimals: 1, suffix: '%', l: 'Avg. conversion reached' },
+  { v: 138, prefix: '+', suffix: '%', l: 'Best single-test lift' },
+  { v: 1.2, prefix: '$', decimals: 1, suffix: 'M+', l: 'Extra revenue generated' },
+];
+
+// Funnel leak (each stage count animates; drop-offs annotated)
+const funnel = [
+  { name: 'Sessions', count: 12480, w: '100%' },
+  { name: 'Product views', count: 7140, w: '72%', drop: '−43%', why: 'slow load · weak hero' },
+  { name: 'Add to cart', count: 3120, w: '48%', drop: '−56%', why: 'unclear PDP · no urgency' },
+  { name: 'Checkout', count: 1560, w: '33%', drop: '−50%', why: 'forced account · surprise fees' },
+  { name: 'Purchase', count: 998, w: '22%', drop: '−36%', why: 'long form · few pay options' },
+];
+
+// Fixes (impact bars grow on scroll)
+const fixes = [
+  { ic: 'fa-box-open', t: 'Product pages', b: 'Imagery, copy, reviews and a sticky add-to-cart.', w: '92%' },
+  { ic: 'fa-cart-shopping', t: 'Cart & checkout', b: 'Fewer steps, express pay, recovered carts.', w: '88%' },
+  { ic: 'fa-mobile-screen-button', t: 'Mobile UX', b: 'Speed and tap-friendly flows where most traffic is.', w: '80%' },
+  { ic: 'fa-gauge-high', t: 'Store speed', b: 'Core Web Vitals that pay back in orders.', w: '71%' },
+  { ic: 'fa-shield-halved', t: 'Trust & proof', b: 'Reviews, badges and guarantees at the point of doubt.', w: '64%' },
+];
+
+// Process loop
+const process = [
+  { n: '01', t: 'Audit & data review', b: 'GA4, Shopify analytics, heatmaps and session recordings pinpoint exactly where visitors hesitate and drop.' },
+  { n: '02', t: 'Hypotheses & prioritisation', b: 'Findings become testable hypotheses, ranked by impact, confidence and effort (ICE) — highest leverage first.' },
+  { n: '03', t: 'Design & build the variant', b: 'Built directly in your theme — pixel-clean, fast, and flicker-free.' },
+  { n: '04', t: 'A/B test to significance', b: 'Traffic is split and the test runs to 95%+ confidence. No guessing, no peeking.' },
+  { n: '05', t: 'Ship the winner', b: 'Winners roll out, the learning is documented, and the lift is banked.' },
+];
+
+// Experiments leaderboard (lift numbers animate)
+const experiments = [
+  { t: 'Sticky add-to-cart', area: 'PDP · mobile', metric: 'Add-to-cart rate', lift: 34 },
+  { t: 'One-page checkout', area: 'Checkout', metric: 'Checkout completion', lift: 19 },
+  { t: 'Trust badges at checkout', area: 'Checkout', metric: 'Completion rate', lift: 12 },
+  { t: 'Free-shipping threshold bar', area: 'Cart', metric: 'Average order value', lift: 9 },
+];
+
+const faqs = [
+  { q: 'How much can I realistically expect to gain?', a: "It depends on your starting point — a rough, app-heavy store has more headroom than a polished one. Single tests often land 5–30% on the metric they target, and because CRO compounds, those wins stack. I'll give you an honest read after the audit, not a fantasy number." },
+  { q: 'Do I need a lot of traffic for A/B testing?', a: "Some, yes — statistical significance needs volume. Under ~10k monthly visitors we lean on best-practice fixes, heatmaps and session recordings first, and save formal A/B tests for the pages that get enough traffic." },
+  { q: 'How long does a CRO test take?', a: 'Usually 2–4 weeks per test to reach 95%+ confidence, depending on traffic and effect size. Rushing it is how you ship false winners — so I let tests run their course.' },
+  { q: 'What tools do you use?', a: 'GA4 and Shopify analytics for the numbers, Hotjar or Microsoft Clarity for heatmaps and recordings, and a Shopify-friendly A/B setup that runs without slowing the store or causing flicker.' },
+  { q: 'Will testing slow my store down?', a: "No. Variants are built into the theme and performance-budgeted — no third-party flicker, no layout shift. CRO and speed pull the same direction here." },
+  { q: 'Is CRO a one-time project?', a: "It can start as a sprint, but it's really a program. The biggest returns come from a steady cadence of tests, each starting from the last winner's baseline." },
+];
+---
+<Base
+  title="Shopify CRO — Conversion Rate Optimization — Riajul Islam"
+  description="Conversion rate optimization for Shopify — funnel audits, A/B testing and checkout work that turns more of your existing traffic into buyers."
+  subpage={true}
+>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-inner shell" data-hero-intro>
+      <div class="hero-meta" data-hero-item>
+        <span>—</span>
+        <span>Conversion Rate Optimization</span>
+        <span class="chip-open chip-shop"><span class="dot"></span>More conversions</span>
+      </div>
+      <h1 data-hero-item>Turn more visitors<br>into <span class="accent accent-shop">buyers.</span></h1>
+      <div class="hero-lower">
+        <div class="hero-copy">
+          <p class="hero-lede" data-hero-item>Most stores don't have a traffic problem — they have a conversion problem. CRO is the systematic work of turning more of your existing visitors into customers: auditing the funnel, forming hypotheses, and A/B testing the changes that actually move revenue.</p>
+          <div class="hero-actions" data-hero-item>
+            <a href="/start?tab=form" class="btn btn-dark">Get a CRO audit <span>↗</span></a>
+            <a href="#cro-process" class="btn btn-light">See my process</a>
+          </div>
+          <div class="hero-stats" data-hero-item style="margin-top:40px;">
+            {heroStats.map((s) => (
+              <div>
+                <div class="num" data-count={String(s.v)} data-prefix={s.prefix || ''} data-suffix={s.suffix || ''}>{(s.prefix || '') + '0' + (s.suffix || '')}</div>
+                <div class="lbl">{s.l}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div class="cro-viz" data-hero-item data-bars aria-hidden="true">
+          <CroDashboard />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- By the numbers (dark) -->
+  <section class="section process">
+    <div style="max-width:var(--maxw);margin:0 auto;">
+      <div class="eyebrow" data-reveal>— By the numbers</div>
+      <h2 class="section-h2" data-reveal style="color:#fff;">CRO, measured.</h2>
+      <div class="cs-out-grid bento-5" data-reveal>
+        {numbers.map((n) => (
+          <div>
+            <div class="stat" data-count={String(n.v)} data-prefix={n.prefix || ''} data-suffix={n.suffix || ''} data-decimals={String(n.decimals || 0)}>{(n.prefix || '') + '0' + (n.suffix || '')}</div>
+            <div class="lbl">{n.l}</div>
+          </div>
+        ))}
+      </div>
+      <p class="cs-out-note" data-reveal>Figures across recent Shopify engagements. Your numbers depend on your starting point — the audit tells us where the headroom is.</p>
+    </div>
+  </section>
+
+  <!-- Revenue calculator -->
+  <section class="section section-bordered">
+    <div style="max-width:var(--maxw);margin:0 auto;">
+      <div class="work-head" data-reveal>
+        <div>
+          <div class="eyebrow">— Do the math</div>
+          <h2 class="section-h2">What a better rate is worth.</h2>
+        </div>
+        <a href="/start?tab=form" class="btn btn-light btn-sm">Get your number ↗</a>
+      </div>
+      <div class="calc" id="calc" data-reveal>
+        <div class="calc-controls">
+          <label class="calc-field">
+            <span class="calc-l">Monthly visitors <b id="cv-vis">20,000</b></span>
+            <input class="calc-range" type="range" id="ci-vis" min="2000" max="200000" step="1000" value="20000" aria-label="Monthly visitors" />
+          </label>
+          <label class="calc-field">
+            <span class="calc-l">Average order value <b id="cv-aov">$65</b></span>
+            <input class="calc-range" type="range" id="ci-aov" min="15" max="400" step="5" value="65" aria-label="Average order value" />
+          </label>
+          <label class="calc-field">
+            <span class="calc-l">Current conversion rate <b id="cv-cur">2.0%</b></span>
+            <input class="calc-range" type="range" id="ci-cur" min="0.5" max="8" step="0.1" value="2.0" aria-label="Current conversion rate" />
+          </label>
+          <label class="calc-field">
+            <span class="calc-l">Target conversion rate <b id="cv-tgt">3.0%</b></span>
+            <input class="calc-range" type="range" id="ci-tgt" min="0.5" max="10" step="0.1" value="3.0" aria-label="Target conversion rate" />
+          </label>
+        </div>
+        <div class="calc-out">
+          <span class="calc-out-k">Extra revenue / year</span>
+          <div class="calc-big" id="co-year">$0</div>
+          <div class="calc-sub" id="co-sub">from a +1.0 pt conversion change</div>
+          <div class="calc-rows">
+            <div><span>Revenue now</span><b id="co-now">$0/mo</b></div>
+            <div><span>After</span><b id="co-after">$0/mo</b></div>
+            <div class="up"><span>Monthly uplift</span><b id="co-mo">+$0</b></div>
+            <div class="up"><span>Extra orders / yr</span><b id="co-orders">0</b></div>
+          </div>
+        </div>
+      </div>
+      <p class="calc-note">Illustrative — drag the sliders to model your own store. Real projections come from your analytics.</p>
+    </div>
+  </section>
+
+  <!-- Funnel leak + fixes -->
+  <section class="section section-bordered">
+    <div style="max-width:var(--maxw);margin:0 auto;">
+      <div class="eyebrow" data-reveal>— Where the money leaks</div>
+      <h2 class="section-h2" data-reveal style="max-width:680px;">For every 100 visitors,<br>92 leave without buying.</h2>
+      <div class="lf">
+        <div class="leak" data-reveal>
+          {funnel.map((f, i) => (
+            <>
+              {i > 0 && (
+                <div class="leak-gap"><span class="leak-drop">{f.drop}</span><span class="leak-why">{f.why}</span></div>
+              )}
+              <div class="leak-stage" style={`--w:${f.w}`}>
+                <span class="leak-name">{f.name}</span>
+                <span class="leak-val" data-count={String(f.count)} data-sep="true">{f.count.toLocaleString('en-US')}</span>
+              </div>
+            </>
+          ))}
+        </div>
+        <div class="fixes" data-reveal data-bars>
+          {fixes.map((f) => (
+            <div class="fix">
+              <span class="fix-ic"><i class={`fa-solid ${f.ic}`} aria-hidden="true"></i></span>
+              <div class="fix-body"><h3>{f.t}</h3><p>{f.b}</p></div>
+              <div class="fix-impact"><span>Impact</span><div class="fix-bar"><i class="bargrow" style={`width:${f.w}`}></i></div></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process loop (dark) -->
+  <section id="cro-process" class="section process" style="scroll-margin-top:24px;">
+    <div style="max-width:var(--maxw);margin:0 auto;">
+      <div class="eyebrow" data-reveal>— The process</div>
+      <h2 class="section-h2" data-reveal style="color:#fff;">A loop, not a one-off.</h2>
+      <div class="cyc" data-reveal>
+        {process.map((s) => (
+          <div class="cyc-step">
+            <div class="cyc-node">{s.n}</div>
+            <div class="cyc-body"><h3>{s.t}</h3><p>{s.b}</p></div>
+          </div>
+        ))}
+        <div class="cyc-loop"><i class="fa-solid fa-arrow-rotate-left" aria-hidden="true"></i> Then back to 01 — at a higher baseline</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experiments leaderboard -->
+  <section class="section section-bordered">
+    <div style="max-width:var(--maxw);margin:0 auto;">
+      <div class="eyebrow" data-reveal>— Tests that moved the needle</div>
+      <h2 class="section-h2" data-reveal>Real experiments, ranked by lift.</h2>
+      <div class="lead" data-reveal>
+        <div class="lead-row lead-head">
+          <span>#</span><span>Test</span><span class="lead-metric">Metric</span><span style="text-align:right;">Lift</span>
+        </div>
+        <div class="lead-body">
+          {experiments.map((e, i) => (
+            <div class="lead-row">
+              <span class="lead-rank">{String(i + 1).padStart(2, '0')}</span>
+              <span class="lead-test">{e.t}<span>{e.area}</span></span>
+              <span class="lead-metric">{e.metric}</span>
+              <span class="lead-lift" data-count={String(e.lift)} data-prefix="+" data-suffix="%">+{e.lift}%</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section section-bordered">
+    <div class="split">
+      <div data-reveal>
+        <div class="eyebrow">— CRO FAQ</div>
+        <h2 class="section-h2">The questions<br>I usually get.</h2>
+      </div>
+      <div data-reveal>
+        {faqs.map((f, i) => (
+          <details class="acc" open={i === 0}>
+            <summary>
+              <div class="acc-label"><span class="acc-title faq">{f.q}</span></div>
+              <span class="acc-ic">+</span>
+            </summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <ClosingCta title={"Ready to convert more\nof your traffic?"} bordered={true} secondaryLabel="See Shopify work" secondaryHref="/shopify" />
+</Base>

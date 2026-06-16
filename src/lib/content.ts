@@ -3,7 +3,7 @@
 import { safeFetch } from './sanity';
 import * as fallback from '../data/content';
 import type {
-  SiteSettings, HomeContent, Project, Post, AboutContent, ResumeContent,
+  SiteSettings, HomeContent, Project, Post, AboutContent, ResumeContent, ShopifyService,
 } from './types';
 
 const imageProjection = `image{ alt, asset->{ _id, url } }`;
@@ -29,6 +29,16 @@ export function getHome(): Promise<HomeContent> {
     }`,
     {},
     fallback.home
+  );
+}
+
+export function getShopifyServices(): Promise<ShopifyService[]> {
+  return safeFetch<ShopifyService[]>(
+    `*[_type == "shopifyService"] | order(number asc){
+      number, title, tagline, description, features, tone
+    }`,
+    {},
+    fallback.shopifyServices
   );
 }
 

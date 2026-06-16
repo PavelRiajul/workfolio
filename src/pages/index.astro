@@ -5,11 +5,13 @@ import WorkCard from '../components/WorkCard.astro';
 import ClosingCta from '../components/ClosingCta.astro';
 import ProjectModal from '../components/ProjectModal.astro';
 import Mascot from '../components/Mascot.astro';
-import { getSite, getHome, getProjects } from '../lib/content';
+import ShopifyStack from '../components/ShopifyStack.astro';
+import { getSite, getHome, getProjects, getShopifyServices } from '../lib/content';
 
 const site = await getSite();
 const home = await getHome();
 const projects = await getProjects();
+const shopifyServices = await getShopifyServices();
 
 const filters = [
   { label: 'All', value: 'all' },
@@ -115,6 +117,43 @@ const filters = [
     </div>
     <div class="work-grid" style="margin-top:32px;">
       {projects.map((p) => <WorkCard project={p} />)}
+    </div>
+  </section>
+
+  <!-- Shopify services (scroll-stacking glimpse → /shopify) -->
+  <ShopifyStack services={shopifyServices} />
+
+  <!-- Shopify CRO highlight (different treatment to /shopify#sh-cro) -->
+  <section class="section section-bordered">
+    <div class="shell" style="padding:0;">
+      <div class="croh" data-reveal>
+        <div class="croh-bg" aria-hidden="true"></div>
+        <div class="croh-grid">
+          <div class="croh-copy">
+            <div class="eyebrow">— Conversion-first</div>
+            <h2 class="croh-h">Stores built to<br><span class="accent">convert</span>, not just look good.</h2>
+            <p class="croh-p">CRO sits at the heart of every Shopify build I ship — audits, A/B tests and checkout tuning that grow revenue from the traffic you already have. Same visitors, more orders.</p>
+            <a href="/cro" class="croh-link">Explore Shopify CRO <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="croh-stats" data-bars aria-hidden="true">
+            <div class="croh-stat">
+              <div class="croh-num"><span class="pre">+</span><span data-count="62" data-suffix="%">0%</span></div>
+              <div class="croh-bar"><i class="bargrow" style="width:84%"></i></div>
+              <div class="croh-lbl">avg. conversion uplift</div>
+            </div>
+            <div class="croh-stat">
+              <div class="croh-num"><span class="pre">−</span><span data-count="41" data-suffix="%">0%</span></div>
+              <div class="croh-bar"><i class="bargrow" style="width:58%"></i></div>
+              <div class="croh-lbl">cart abandonment</div>
+            </div>
+            <div class="croh-stat">
+              <div class="croh-num"><span data-count="98" data-suffix="%">0%</span></div>
+              <div class="croh-bar"><i class="bargrow" style="width:93%"></i></div>
+              <div class="croh-lbl">A/B test confidence</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 

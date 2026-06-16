@@ -2,10 +2,13 @@
 import Base from '../layouts/Base.astro';
 import Placeholder from '../components/Placeholder.astro';
 import ClosingCta from '../components/ClosingCta.astro';
-import { getSite, getProjects } from '../lib/content';
+import ServiceVisual from '../components/ServiceVisual.astro';
+import CroDashboard from '../components/CroDashboard.astro';
+import { getSite, getProjects, getShopifyServices } from '../lib/content';
 
 const site = await getSite();
 const projects = await getProjects();
+const services = await getShopifyServices();
 const shopifyProjects = projects.filter((p) => p.tags.includes('shopify'));
 const featured = shopifyProjects[0];
 
@@ -17,14 +20,17 @@ const heroStats = [
 
 const brands = ['Vellum', 'Harborline', 'Northwind', 'Brightlane', 'Kettle & Co.', 'Field Notes', 'Lumen', 'Atlas Supply'];
 
-const capabilities = [
-  { t: 'Headless on Hydrogen', b: "Shopify's Storefront API + Hydrogen on the edge — sub-second loads while your team keeps the admin they already know." },
-  { t: 'Custom themes & Liquid', b: "A bespoke theme, or surgical fixes to the one you have. If Liquid can do it, I won't reach for an app." },
-  { t: 'Apps & checkout extensions', b: "Custom apps, checkout UI extensions and Functions for the logic off-the-shelf apps can't handle." },
-  { t: 'Migrations & replatforming', b: 'WooCommerce, Magento or a crusty old theme into modern Shopify, with redirects and SEO kept intact.' },
-  { t: 'Speed & Core Web Vitals', b: 'Audits and fixes that move LCP, CLS and INP — and the conversion rate riding on them.' },
-  { t: 'Integrations that hold up', b: "Klaviyo, subscriptions, ERPs, payments, a headless CMS — wired up so they don't break next month." },
+const croFeatures = [
+  'Conversion audit & funnel analysis',
+  'A/B & multivariate testing',
+  'Product page (PDP) optimization',
+  'Cart & checkout optimization',
+  'Mobile conversion optimization',
+  'Trust, urgency & social proof',
+  'Heatmaps & session recordings',
+  'Landing page optimization',
 ];
+
 
 const approach = [
   { n: '01', t: 'Audit & strategy', b: 'A Lighthouse audit and a funnel review, then a plan tied to revenue — not vanity metrics.' },
@@ -126,18 +132,62 @@ const faqs = [
     </div>
   </section>
 
-  <!-- Capabilities -->
-  <section class="section section-bordered">
+  <!-- Services showcase (alternating per-service feature rows) -->
+  <section id="sh-services" class="section section-bordered" style="scroll-margin-top:24px;">
     <div style="max-width:var(--maxw);margin:0 auto;">
-      <div class="eyebrow" data-reveal>— What I do on Shopify</div>
-      <h2 class="section-h2" data-reveal>More than a theme tweak.</h2>
-      <div class="trait-grid">
-        {capabilities.map((c) => (
-          <div class="trait-card" data-reveal>
-            <h3>{c.t}</h3>
-            <p>{c.b}</p>
+      <div class="work-head" data-reveal>
+        <div>
+          <div class="eyebrow">— What I do on Shopify</div>
+          <h2 class="section-h2" style="max-width:560px;">Five ways I help your store.</h2>
+        </div>
+        <a href="/start?tab=form" class="btn btn-light btn-sm">Start a project ↗</a>
+      </div>
+
+      <div class="svc-showcase">
+        {services.map((s, i) => (
+          <div class={`svcf ${i % 2 === 1 ? 'rev' : ''}`} data-reveal>
+            <div class={`svcf-media tone-${s.tone}`}>
+              <span class="svcf-ghost" aria-hidden="true">{s.number}</span>
+              <ServiceVisual service={s} />
+            </div>
+            <div class="svcf-copy">
+              <div class="svcf-top">
+                <span class="svcf-tag"><i class="fa-brands fa-shopify" aria-hidden="true"></i> Shopify service</span>
+                <span class="svcf-no">{s.number} / 05</span>
+              </div>
+              <h3>{s.title}</h3>
+              <p>{s.description}</p>
+              <ul class="svcf-feats">
+                {s.features.map((f) => <li><i class="fa-solid fa-check" aria-hidden="true"></i>{f}</li>)}
+              </ul>
+              <a class="svcf-cta" href="/start?tab=form">Start a project <span aria-hidden="true">↗</span></a>
+            </div>
           </div>
         ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CRO — the headline service -->
+  <section id="sh-cro" class="section section-bordered cro-sec" style="scroll-margin-top:24px;">
+    <div class="cro">
+      <div class="cro-copy" data-reveal>
+        <div class="eyebrow">— Conversion rate optimization</div>
+        <h2 class="section-h2">More revenue from the<br>traffic you already have.</h2>
+        <p class="cro-lede">A fast store is step one — CRO is how it actually <em>sells</em>. I run data-driven tests on your product pages, cart and checkout to turn more of your existing visitors into buyers. Same traffic, more orders, no extra ad spend.</p>
+        <div class="cro-pills">
+          {croFeatures.map((f) => (
+            <span class="cro-pill"><i class="fa-solid fa-check" aria-hidden="true"></i>{f}</span>
+          ))}
+        </div>
+        <div class="cro-actions">
+          <a href="/cro" class="btn btn-dark">Explore CRO in detail <span>↗</span></a>
+          <a href="/start?tab=form" class="btn btn-light">Get a CRO audit</a>
+        </div>
+      </div>
+
+      <div class="cro-viz" data-reveal data-bars aria-hidden="true">
+        <CroDashboard />
       </div>
     </div>
   </section>

@@ -11,6 +11,7 @@ import type {
   Post,
   AboutContent,
   ResumeContent,
+  ShopifyService,
 } from '../lib/types';
 
 export const site: SiteSettings = {
@@ -94,6 +95,93 @@ export const home: HomeContent = {
   ],
   closingTitle: 'Looking for a developer\nwho actually ships?',
 };
+
+export const shopifyServices: ShopifyService[] = [
+  {
+    number: '01',
+    title: 'Shopify Store Development',
+    tagline: 'From Figma to a live, conversion-ready storefront.',
+    description:
+      'I build high-performing Shopify stores from Figma, custom design or brand requirements — with clean structure, responsive layout and a conversion-focused user experience.',
+    features: [
+      'Figma to Shopify development',
+      'Custom Shopify theme development',
+      'Responsive storefront design',
+      'Product and collection setup',
+      'Payment gateway setup',
+      'Shipping and tax configuration',
+      'Shopify app integration',
+      'Store launch support',
+    ],
+    tone: 'indigo',
+  },
+  {
+    number: '02',
+    title: 'Shopify Custom Features',
+    tagline: "The sections and logic off-the-shelf apps can't handle.",
+    description:
+      'I develop custom Shopify features, sections and storefront functionality that make stores more flexible, interactive and business-ready.',
+    features: [
+      'Custom Shopify sections',
+      'Advanced storefront interactions',
+      'Custom cart features',
+      'Product filter setup',
+      'Bundle and offer features',
+      'Third-party integration',
+      'Custom Shopify functionality',
+    ],
+    tone: 'terracotta',
+  },
+  {
+    number: '03',
+    title: 'Shopify Performance Optimization',
+    tagline: 'Faster loads, greener Core Web Vitals, more conversions.',
+    description:
+      'I improve Shopify store speed, Core Web Vitals and overall performance to create a faster shopping experience for your customers.',
+    features: [
+      'Shopify speed optimization',
+      'Core Web Vitals improvement',
+      'Image and media optimization',
+      'Script and app cleanup',
+      'Theme code optimization',
+      'Performance audit and fixes',
+    ],
+    tone: 'amber',
+  },
+  {
+    number: '04',
+    title: 'Shopify Store Customization',
+    tagline: 'Reshape an existing store to actually fit your brand.',
+    description:
+      'I customize existing Shopify stores with better design, improved sections, smoother layouts and storefront features that match the brand properly.',
+    features: [
+      'Shopify theme customization',
+      'UI / UX improvements',
+      'Custom section development',
+      'Homepage and product page updates',
+      'Store layout modifications',
+      'App-based feature setup',
+      'Theme update support',
+    ],
+    tone: 'sage',
+  },
+  {
+    number: '05',
+    title: 'Shopify Development Support',
+    tagline: 'Ongoing, reliable help long after launch.',
+    description:
+      'I provide ongoing Shopify development support for store owners, designers, agencies and ecommerce teams who need reliable technical help.',
+    features: [
+      'Ongoing Shopify support',
+      'Bug fixing and maintenance',
+      'Store updates and improvements',
+      'UI and storefront adjustments',
+      'New feature development',
+      'Long-term technical support',
+    ],
+    tone: 'ink',
+  },
+];
 
 export const projects: Project[] = [
   {

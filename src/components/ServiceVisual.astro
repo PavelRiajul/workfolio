@@ -1,0 +1,98 @@
+---
+// A tone-matched mockup of what a Shopify service delivers. Shared by the
+// home scroll-stack (ShopifyStack) and the Shopify-page services explorer.
+import type { ShopifyService } from '../lib/types';
+
+interface Props {
+  service: ShopifyService;
+}
+const { service: s } = Astro.props;
+---
+{s.tone === 'indigo' && (
+  <div class="sv">
+    <div class="sv-panel">
+      <div class="sv-bar"><i></i><i></i><i></i><em>yourstore.myshopify.com</em></div>
+      <div class="sv-hero">
+        <div><b>Summer Collection</b><span>Built pixel-perfect from your Figma.</span></div>
+        <span class="sv-shopbtn">Shop Now</span>
+      </div>
+      <div class="sv-grid3">
+        <div class="sv-prod"><span class="sv-ph"></span><b>$49</b></div>
+        <div class="sv-prod"><span class="sv-ph"></span><b>$79</b></div>
+        <div class="sv-prod"><span class="sv-ph"></span><b>$99</b></div>
+      </div>
+    </div>
+    <div class="sv-cap">Desktop & mobile — pixel perfect</div>
+  </div>
+)}
+
+{s.tone === 'terracotta' && (
+  <div class="sv">
+    <div class="sv-panel">
+      <div class="sv-cart-top"><span>Your Cart (3)</span><span>×</span></div>
+      <div class="sv-citem">
+        <span class="sv-thumb"></span>
+        <span class="sv-cmeta"><b>Premium T-Shirt · M</b><span>$49.00</span></span>
+        <span class="sv-qty">− 1 +</span>
+      </div>
+      <div class="sv-citem">
+        <span class="sv-thumb"></span>
+        <span class="sv-cmeta"><b>Custom Hoodie · L</b><span>$89.00</span></span>
+        <span class="sv-qty">− 2 +</span>
+      </div>
+      <div class="sv-csum"><span>Subtotal</span><span>$227.00</span></div>
+      <div class="sv-csum"><span>Shipping</span><span class="free">FREE</span></div>
+      <div class="sv-ctotal"><span>Total</span><span>$227.00</span></div>
+      <span class="sv-checkout">Checkout Securely →</span>
+    </div>
+    <div class="sv-chips"><span>Custom Cart</span><span>Product Filters</span><span>Bundle Builder</span></div>
+  </div>
+)}
+
+{s.tone === 'amber' && (
+  <div class="sv sv-perf">
+    <div class="sv-gauge"><div class="sv-gauge-in"><b>92</b><span>Performance</span></div></div>
+    <div class="sv-panel sv-cwv">
+      <div class="sv-cwv-row"><em>LCP</em><div class="sv-track"><i style="width:78%"></i></div><b>1.8s ✓</b></div>
+      <div class="sv-cwv-row"><em>FID</em><div class="sv-track"><i style="width:40%"></i></div><b>12ms ✓</b></div>
+      <div class="sv-cwv-row"><em>CLS</em><div class="sv-track"><i style="width:55%"></i></div><b>0.04 ✓</b></div>
+      <div class="sv-ba-mini"><span class="b">4.2s</span><i>→</i><span class="a">0.9s</span></div>
+    </div>
+  </div>
+)}
+
+{s.tone === 'sage' && (
+  <div class="sv sv-ba">
+    <span class="sv-ba-lab">Before</span>
+    <div class="sv-panel">
+      <div class="sv-bar"><i></i><i></i><i></i></div>
+      <div class="sv-ba-default">Default Theme — No Identity</div>
+      <div class="sv-ba-ph"><span></span><span></span><span></span></div>
+    </div>
+    <span class="sv-ba-arrow">↓</span>
+    <span class="sv-ba-lab after">After</span>
+    <div class="sv-panel sv-ba-after">
+      <div class="sv-ba-brand"><b>YOUR BRAND</b><span>Crafted for conversion.</span><em>Explore Now →</em></div>
+      <div class="sv-ba-ph"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+)}
+
+{s.tone === 'ink' && (
+  <div class="sv">
+    <div class="sv-panel">
+      <div class="sv-bar"><i></i><i></i><i></i><em>cart-drawer.liquid</em></div>
+      <div class="sv-code-body">
+        <div><span class="ln">3</span><span class="dim">&#123;&#123; cart.item_count &#125;&#125; items</span></div>
+        <div><span class="ln">4</span><span class="bug">for item in cart.items limit: 10 ← bug</span></div>
+        <div><span class="ln">5</span><span class="fix">for item in cart.items ✓ fixed</span></div>
+        <div><span class="ln">6</span><span class="dim">&#123;&#123; item.title | escape &#125;&#125;</span></div>
+      </div>
+    </div>
+    <div class="sv-chat">
+      <span class="sv-msg in">Cart showing wrong count after checkout. Help!</span>
+      <span class="sv-msg out">Found it — bug in cart-drawer.liquid line 4. Fixing now, 2 mins!</span>
+      <span class="sv-resp"><span>Avg. response</span><b>&lt; 2 hours · Mon–Sat</b></span>
+    </div>
+  </div>
+)}
