@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import WorkCard from '../components/WorkCard.astro';
+import ClosingCta from '../components/ClosingCta.astro';
+import ProjectModal from '../components/ProjectModal.astro';
+import { getProjects } from '../lib/content';
+
+const projects = await getProjects();
+const filters = [
+  { label: 'All', value: 'all' },
+  { label: 'Shopify', value: 'shopify' },
+  { label: 'Next.js', value: 'nextjs' },
+  { label: 'React Native', value: 'reactnative' },
+  { label: 'MERN', value: 'mern' },
+];
+---
+<Base title="Work — Riajul Islam" description="Selected products I've shipped — headless Shopify, full-stack web apps and cross-platform mobile." subpage={true}>
+  <section class="section" style="padding-top:clamp(72px,11vw,120px);padding-bottom:40px;">
+    <div class="page-hero" data-reveal>
+      <div class="eyebrow">— Selected Work</div>
+      <h1>Everything I've<br>built, in one place.</h1>
+      <p>A selection of products I've shipped — from headless Shopify storefronts to full-stack web apps and cross-platform mobile. Each one built to make it ship.</p>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:clamp(40px,7vw,64px);">
+    <div style="max-width:var(--maxw);margin:0 auto;">
+      <div class="filters" data-reveal style="margin-bottom:40px;">
+        {filters.map((f, i) => (
+          <button class={`chip ${i === 0 ? 'active' : ''}`} data-filter={f.value}>{f.label}</button>
+        ))}
+      </div>
+      <div class="work-grid">
+        {projects.map((p) => <WorkCard project={p} />)}
+      </div>
+    </div>
+  </section>
+
+  <ClosingCta title={"Like what you see?\nLet's build the next one."} />
+
+  <ProjectModal projects={projects} />
+</Base>

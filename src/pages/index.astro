@@ -1,0 +1,225 @@
+---
+import Base from '../layouts/Base.astro';
+import Marquee from '../components/Marquee.astro';
+import WorkCard from '../components/WorkCard.astro';
+import ClosingCta from '../components/ClosingCta.astro';
+import ProjectModal from '../components/ProjectModal.astro';
+import Mascot from '../components/Mascot.astro';
+import { getSite, getHome, getProjects } from '../lib/content';
+
+const site = await getSite();
+const home = await getHome();
+const projects = await getProjects();
+
+const filters = [
+  { label: 'All', value: 'all' },
+  { label: 'Shopify', value: 'shopify' },
+  { label: 'Next.js', value: 'nextjs' },
+  { label: 'React Native', value: 'reactnative' },
+  { label: 'MERN', value: 'mern' },
+];
+---
+<Base title={`${site.name} — ${site.role}`} description={home.lede} onHome={true} bodyClass="home">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-inner shell" data-hero-intro>
+      <div class="hero-meta" data-hero-item>
+        <span>—</span>
+        <span>{home.badge}</span>
+        <span class="chip-open"><span class="dot"></span>Available for projects</span>
+      </div>
+      <h1 data-hero-item>
+        {home.headlineLines.map((l, i) => (<>{l}{i < home.headlineLines.length - 1 && <br />}</>))}
+        {home.accentWord && <> <span class="accent">{home.accentWord}</span></>}
+      </h1>
+      <div class="hero-lower">
+        <div class="hero-copy">
+          <p class="hero-lede" data-hero-item>{home.lede}</p>
+          <div class="hero-actions" data-hero-item>
+            <a href="/start?tab=form" class="btn btn-dark">{home.primaryCta} <span>↗</span></a>
+            <a href="/work" class="btn btn-light">{home.secondaryCta}</a>
+          </div>
+          <div class="hero-avail" data-hero-item>
+            <span class="pulse"></span>{home.availabilityNote}
+          </div>
+          <div class="hero-building" data-hero-item>
+            Currently building with <span id="hero-rot" data-words={JSON.stringify(home.rotatingWords)}>{home.rotatingWords[0]}</span>
+          </div>
+          <div class="hero-stats" data-hero-item>
+            {home.stats.map((s) => (
+              <div>
+                <div class="num" data-count={String(s.value)} data-suffix={s.suffix || ''}>0{s.suffix || ''}</div>
+                <div class="lbl">{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div class="hero-visual" data-hero-item aria-hidden="true">
+          <div class="hv-stage" id="hv-stage">
+            <div class="hv-card hv-code"><div class="hv-inner">
+              <div class="hv-code-body mono">
+                <div><span class="t-key">const</span> <span class="t-fn">ship</span> = () <span class="t-key">=&gt;</span> {'{'}</div>
+                <div>  <span class="t-fn">build</span>();</div>
+                <div>  <span class="t-fn">deploy</span>();</div>
+                <div>{'}'}</div>
+              </div>
+              <span class="hv-tag dark">TypeScript</span>
+            </div></div>
+            <div class="hv-card hv-browser"><div class="hv-inner">
+              <div class="hv-bar"><span></span><span></span><span></span><em>riajulislam.dev</em></div>
+              <div class="hv-screen">
+                <div class="hv-line w60"></div>
+                <div class="hv-line w40"></div>
+                <div class="hv-bars"><i style="height:40%"></i><i style="height:72%"></i><i style="height:54%"></i><i style="height:92%"></i><i style="height:66%"></i></div>
+                <span class="hv-tag">Next.js</span>
+              </div>
+            </div></div>
+            <div class="hv-card hv-phone"><div class="hv-inner">
+              <div class="hv-notch"></div>
+              <div class="hv-app">
+                <div class="hv-line w50"></div>
+                <div class="hv-row"></div>
+                <div class="hv-row"></div>
+                <div class="hv-cta"></div>
+                <span class="hv-tag">React Native</span>
+              </div>
+            </div></div>
+            <div class="hv-card hv-shop"><div class="hv-inner">
+              <div class="hv-shop-head"><i class="fa-brands fa-shopify" aria-hidden="true"></i><span class="hv-shop-store"></span></div>
+              <div class="hv-shop-img"></div>
+              <div class="hv-shop-row"><span class="hv-shop-name"></span><span class="hv-shop-price">$48</span></div>
+              <span class="hv-shop-btn">Add to cart</span>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Marquee items={site.techStack} />
+
+  <!-- Selected Work -->
+  <section id="work" class="section">
+    <div class="work-head" data-reveal>
+      <div>
+        <div class="eyebrow">— Selected Work</div>
+        <h2>Things I've built,<br>in one place.</h2>
+      </div>
+      <a href="/work" class="btn btn-light btn-sm">All projects ↗</a>
+    </div>
+    <div class="filters" data-reveal style="margin-top:44px;">
+      {filters.map((f, i) => (
+        <button class={`chip ${i === 0 ? 'active' : ''}`} data-filter={f.value}>{f.label}</button>
+      ))}
+    </div>
+    <div class="work-grid" style="margin-top:32px;">
+      {projects.map((p) => <WorkCard project={p} />)}
+    </div>
+  </section>
+
+  <!-- How I Work -->
+  <section class="section section-bordered">
+    <div class="shell" style="padding:0;">
+      <div data-reveal>
+        <div class="eyebrow">{home.approachEyebrow}</div>
+        <h2 class="section-h2" style="max-width:640px;">{home.approachTitle}</h2>
+        <p style="font-size:18px;line-height:1.55;color:var(--color-grey-2);max-width:520px;margin:22px 0 0;">{home.approachLede}</p>
+      </div>
+      <div class="appr-grid">
+        {home.principles.map((p, i) => (
+          <div class={`appr-card ${i === home.principles.length - 1 ? 'dark' : ''}`} data-reveal>
+            <div class="appr-top"><h3>{p.title}</h3><span class="appr-num">{p.number}</span></div>
+            {i === home.principles.length - 1
+              ? <p>{p.body}</p>
+              : <div class="appr-desc"><p>{p.body}</p></div>}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services" class="section section-bordered">
+    <div class="split">
+      <div data-reveal>
+        <div class="eyebrow">— Services</div>
+        <h2 class="section-h2">What I build.</h2>
+        <p class="split-lede">Whether you're hiring or contracting, here's where I deliver. Most projects blend two or three.</p>
+      </div>
+      <div data-reveal>
+        {home.services.map((s, i) => (
+          <details class="acc" open={i === 0}>
+            <summary><span class="acc-label"><span class="acc-num">{s.number}</span><span class="acc-title">{s.title}</span></span><span class="acc-ic">+</span></summary>
+            <p>{s.body}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Process (dark) -->
+  <section id="process" class="section process">
+    <div class="split">
+      <div data-reveal>
+        <div class="eyebrow">— Process</div>
+        <h2 class="section-h2">Built<br>for speed.</h2>
+        <p class="split-lede">Six steps from first message to live product. No bloat, no ceremony — just momentum and clean commits.</p>
+      </div>
+      <div data-reveal>
+        {home.process.map((s, i) => (
+          <details class="acc" open={i === 0}>
+            <summary><span class="acc-label"><span class="acc-num">{s.number}</span><span class="acc-title sm">{s.title}</span></span><span class="acc-ic">+</span></summary>
+            <p>{s.body}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="section section-bordered">
+    <div class="shell" style="padding:0;">
+      <div data-reveal>
+        <div class="eyebrow">— What People Say</div>
+        <h2 class="section-h2">Don't take my word for it.</h2>
+      </div>
+      <div class="tst-grid">
+        {home.testimonials.map((t) => (
+          <div class="tst-card" data-reveal>
+            <div class="tst-quote">"</div>
+            <p class="tst-body">{t.quote}</p>
+            <div class="tst-author">
+              <span class="tst-avatar" style={`background:${t.color};`}>{t.initials}</span>
+              <span><span class="tst-name">{t.name}</span><span class="tst-role">{t.role}</span></span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section section-bordered">
+    <div class="split">
+      <div data-reveal>
+        <div class="eyebrow">— FAQ</div>
+        <h2 class="section-h2">Questions,<br>answered.</h2>
+      </div>
+      <div data-reveal>
+        {home.faqs.map((f, i) => (
+          <details class="acc" open={i === 0}>
+            <summary><span class="acc-title faq">{f.question}</span><span class="acc-ic">+</span></summary>
+            <p>{f.answer}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <ClosingCta title={home.closingTitle} />
+
+  <ProjectModal projects={projects} />
+
+  <Mascot />
+</Base>

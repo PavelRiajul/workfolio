@@ -1,0 +1,31 @@
+---
+import type { Project } from '../lib/types';
+interface Props { projects: Project[]; }
+const { projects } = Astro.props;
+
+// Build the modal lookup consumed by main.ts (only projects with modal data).
+const modalData: Record<string, unknown> = {};
+for (const p of projects) {
+  if (!p.modalSummary) continue;
+  modalData[p.slug] = {
+    name: p.title,
+    stack: p.stack,
+    type: p.type,
+    summary: p.modalSummary,
+    outcomes: p.modalOutcomes.map((o) => [o.stat, o.label]),
+    href: p.hasCaseStudy ? `/work/${p.slug}` : '#',
+  };
+}
+---
+<div class="pm-overlay" id="pm-overlay">
+  <div class="pm-dialog" id="pm-dialog">
+    <button class="pm-close" id="pm-close" aria-label="Close">✕</button>
+    <div class="pm-eyebrow">— Project</div>
+    <h3 id="pm-title">Project</h3>
+    <div id="pm-meta"></div>
+    <p id="pm-summary"></p>
+    <div id="pm-outcomes"></div>
+    <a id="pm-link" class="pm-link" href="#">View full case study →</a>
+  </div>
+</div>
+<script type="application/json" id="pm-data" set:html={JSON.stringify(modalData)}></script>

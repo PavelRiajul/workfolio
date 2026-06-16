@@ -1,0 +1,163 @@
+---
+import Base from '../../layouts/Base.astro';
+import Placeholder from '../../components/Placeholder.astro';
+import { getProjects, getProject } from '../../lib/content';
+import type { Project } from '../../lib/types';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  const studies = projects.filter((p) => p.hasCaseStudy);
+  const full = (await Promise.all(studies.map((p) => getProject(p.slug)))).filter(
+    Boolean
+  ) as Project[];
+
+  return full.map((project, i) => {
+    const next = full[(i + 1) % full.length];
+    return {
+      params: { slug: project.slug },
+      props: { project, nextName: next.title, nextSlug: next.slug },
+    };
+  });
+}
+
+interface Props { project: Project; nextName: string; nextSlug: string; }
+const { project: p, nextName, nextSlug } = Astro.props;
+const heroLabel = `${p.title} — hero mockup`;
+const hasInsights = p.insights && p.insights.length > 0;
+const hasMobile = p.mobileScreens && p.mobileScreens.length > 0;
+---
+<Base title={`${p.title} — Case Study`} description={p.summary} subpage={true}>
+  <article class="cs-article section" style="padding-top:clamp(56px,9vw,96px);padding-bottom:0;">
+    <a href="/#work" class="cs-back">← Back to work</a>
+
+    <header style="margin-top:32px;" data-reveal>
+      <div class="cs-pills">
+        {p.pills.map((pill) => <span class="cs-pill">{pill}</span>)}
+      </div>
+      <h1 class="cs-title">{p.title} <span class="year">({p.year})</span></h1>
+      <p class="cs-summary">{p.summary}</p>
+    </header>
+
+    <div class="cs-meta" data-reveal>
+      {p.meta.map((m) => (
+        <div><div class="lbl">{m.label}</div><div class="val">{m.value}</div></div>
+      ))}
+    </div>
+
+    <div class="cs-hero" data-reveal><Placeholder label={heroLabel} image={p.image} /></div>
+  </article>
+
+  <section class="section" style="padding-bottom:0;padding-top:clamp(64px,10vw,110px);">
+    <div class="cs-split" style="max-width:var(--maxw);margin:0 auto;" data-reveal>
+      <div>
+        <div class="eyebrow">— The Challenge</div>
+        <h2 class="cs-h2">What needed<br>solving.</h2>
+      </div>
+      <div>{p.challenge.map((para) => <p class="cs-body">{para}</p>)}</div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-bottom:0;padding-top:clamp(56px,9vw,90px);">
+    <div class="cs-split" style="max-width:var(--maxw);margin:0 auto;" data-reveal>
+      <div>
+        <div class="eyebrow">— The Approach</div>
+        <h2 class="cs-h2">How I<br>built it.</h2>
+      </div>
+      <div>{p.approach.map((para) => <p class="cs-body">{para}</p>)}</div>
+    </div>
+  </section>
+
+  {hasInsights && (
+    <section class="section" style="padding-bottom:0;padding-top:clamp(64px,10vw,110px);">
+      <div style="max-width:var(--maxw);margin:0 auto;" data-reveal>
+        <div class="eyebrow">— Key Decisions</div>
+        <h2 class="cs-h2">The calls that shaped it.</h2>
+        <div style="margin-top:48px;">
+          {p.insights.map((ins) => (
+            <div class="cs-insight">
+              <div>
+                <div class="num">{ins.number} — PRINCIPLE</div>
+                <h3>"{ins.finding}"</h3>
+              </div>
+              <div>
+                <div class="how">How I applied it</div>
+                <p>{ins.did}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section" style="padding-bottom:0;padding-top:clamp(64px,10vw,110px);">
+    <div style="max-width:var(--maxw);margin:0 auto;" data-reveal>
+      <div class="eyebrow">— Process</div>
+      <h2 class="cs-h2">How the work got done.</h2>
+      <div class="cs-proc-grid">
+        {p.processSteps.map((ph) => (
+          <div class="cs-proc">
+            <div class="frame"><Placeholder label={ph.label} /></div>
+            <div class="pb">
+              <div class="num">{ph.number}</div>
+              <h3>{ph.title}</h3>
+              <p>{ph.body}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-bottom:0;padding-top:clamp(64px,10vw,110px);">
+    <div style="max-width:var(--maxw);margin:0 auto;" data-reveal>
+      <div class="eyebrow">— Selected Screens</div>
+      <h2 class="cs-h2">A closer look.</h2>
+      <div class="cs-screens">
+        {p.screens.map((sc) => (
+          <figure>
+            <div class="frame"><Placeholder label={sc} /></div>
+            <figcaption>{sc}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {hasMobile && (
+    <section class="section" style="padding-bottom:0;padding-top:clamp(64px,10vw,110px);">
+      <div style="max-width:var(--maxw);margin:0 auto;" data-reveal>
+        <div class="eyebrow">— Mobile Companion</div>
+        <h2 class="cs-h2">The app, up close.</h2>
+        <div class="cs-mobile">
+          {p.mobileScreens.map((ms) => (
+            <figure><div class="frame"><Placeholder label={ms} /></div></figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="cs-outcomes">
+    <div class="section" style="max-width:var(--maxw);margin:0 auto;padding-top:clamp(64px,10vw,110px);padding-bottom:clamp(64px,10vw,110px);">
+      <div class="eyebrow">— Outcomes</div>
+      <h2>The work moved the numbers.</h2>
+      <div class="cs-out-grid">
+        {p.outcomes.map((o) => (
+          <div><div class="stat">{o.stat}</div><div class="lbl">{o.label}</div></div>
+        ))}
+      </div>
+      {p.outcomesNote && <p class="cs-out-note">{p.outcomesNote}</p>}
+    </div>
+  </section>
+
+  <a class="next-link" href={`/work/${nextSlug}`}>
+    <div class="section" style="max-width:var(--maxw);margin:0 auto;padding-top:clamp(56px,9vw,90px);padding-bottom:clamp(56px,9vw,90px);">
+      <div class="eyebrow">— Next Project</div>
+      <div class="next-row">
+        <h2 class="next-name">{nextName}</h2>
+        <span class="next-arrow">↗</span>
+      </div>
+    </div>
+  </a>
+</Base>

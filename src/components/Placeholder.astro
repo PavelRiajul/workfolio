@@ -1,0 +1,11 @@
+---
+import type { SanityImage } from '../lib/types';
+interface Props { label: string; image?: SanityImage | null; class?: string; }
+const { label, image, class: cls = '' } = Astro.props;
+const url = image?.asset?.url;
+---
+<div class={`fill ${cls}`}>
+  {url
+    ? <img src={url} alt={image?.alt || label} loading="lazy" />
+    : <div class="placeholder"><span>{label}</span></div>}
+</div>

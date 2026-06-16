@@ -1,0 +1,19 @@
+---
+interface Props { title: string; bordered?: boolean; secondaryLabel?: string; secondaryHref?: string; }
+const {
+  title,
+  bordered = false,
+  secondaryLabel = 'View résumé',
+  secondaryHref = '/resume',
+} = Astro.props;
+const lines = title.split('\n');
+---
+<section class={`closing ${bordered ? 'bordered' : ''}`}>
+  <div class="closing-card" data-reveal>
+    <h2>{lines.map((l, i) => (<>{l}{i < lines.length - 1 && <br />}</>))}</h2>
+    <div class="closing-actions">
+      <a href="/start?tab=form" class="btn btn-dark btn-cta">Get in touch <span>↗</span></a>
+      <a href={secondaryHref} class="btn btn-light btn-cta">{secondaryLabel}</a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,27 @@
+---
+import Placeholder from './Placeholder.astro';
+import type { Project } from '../lib/types';
+interface Props { project: Project; coverLabel?: string; }
+const { project: p, coverLabel } = Astro.props;
+const interactive = p.hasCaseStudy || !!p.modalSummary;
+const href = p.hasCaseStudy ? `/work/${p.slug}` : '#';
+const label = coverLabel || `${p.title} — ${p.type}`;
+const Tag = interactive ? 'a' : 'div';
+const attrs = interactive
+  ? { href, 'data-project': p.slug }
+  : {};
+---
+<Tag class="work-card" data-tags={p.tags.join(',')} data-reveal {...attrs}>
+  <div class="work-thumb">
+    <Placeholder label={label} image={p.image} />
+    {interactive && (
+      <div class="work-overlay"><span>View case study ↗</span></div>
+    )}
+  </div>
+  <h3>{p.title}</h3>
+  <p>{p.blurb}</p>
+  <div class="work-tags">
+    <span class="tag-pill">{p.stack}</span>
+    <span class="tag-note">{p.type}</span>
+  </div>
+</Tag>

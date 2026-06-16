@@ -1,0 +1,79 @@
+---
+import Base from '../layouts/Base.astro';
+import Placeholder from '../components/Placeholder.astro';
+import { getPosts } from '../lib/content';
+
+const posts = await getPosts();
+const featured = posts.find((p) => p.featured);
+const rest = posts.filter((p) => !p.featured);
+
+const categories = [
+  { label: 'All', value: 'all' },
+  { label: 'E-commerce', value: 'ecommerce' },
+  { label: 'Mobile', value: 'mobile' },
+  { label: 'Full-Stack', value: 'fullstack' },
+  { label: 'Frontend', value: 'frontend' },
+  { label: 'Backend', value: 'backend' },
+  { label: 'Performance', value: 'performance' },
+  { label: 'Career', value: 'career' },
+];
+---
+<Base title="Blog — Riajul Islam" description="Notes on building things — Shopify, Next.js, the MERN stack, React Native, and freelancing." subpage={true}>
+  <section class="section" style="padding-bottom:clamp(28px,5vw,40px);">
+    <div class="page-hero">
+      <div class="eyebrow">— Writing</div>
+      <h1>Notes on<br>building things.</h1>
+      <p>Short, practical write-ups on Shopify, Next.js, the MERN stack, React Native — and the occasional lesson from freelancing.</p>
+    </div>
+  </section>
+
+  <section style="max-width:var(--maxw);margin:0 auto;padding:0 clamp(20px,5vw,40px) clamp(28px,4vw,40px);">
+    <div class="filters">
+      {categories.map((c, i) => (
+        <button class={`chip ${i === 0 ? 'active' : ''}`} data-blog-filter={c.value}>{c.label}</button>
+      ))}
+    </div>
+  </section>
+
+  {featured && (
+    <section style="max-width:var(--maxw);margin:0 auto;padding:0 clamp(20px,5vw,40px) clamp(28px,4vw,40px);">
+      <a class="post-card post-feature" data-category={featured.category} href="#">
+        <div class="cover"><div class="post-img-zoom"><Placeholder label={featured.coverLabel} image={featured.image} /></div></div>
+        <div class="pf-body">
+          <div class="pf-meta">
+            <span class="pf-badge">Featured</span>
+            <span class="pf-sub">{featured.categoryLabel} · {featured.readTime}</span>
+          </div>
+          <h2 class="post-title">{featured.title}</h2>
+          <p>{featured.excerpt}</p>
+          <div class="post-date" style="margin-top:22px;">{featured.date}</div>
+        </div>
+      </a>
+    </section>
+  )}
+
+  <section style="max-width:var(--maxw);margin:0 auto;padding:0 clamp(20px,5vw,40px) clamp(72px,11vw,120px);">
+    <div class="post-grid">
+      {rest.map((p) => (
+        <a class="post-card" data-category={p.category} href="#">
+          <div class="cover"><div class="post-img-zoom"><Placeholder label={p.coverLabel} image={p.image} /></div></div>
+          <div class="pc-meta"><span class="pc-tag">{p.categoryLabel}</span>{p.readTime}</div>
+          <h3 class="post-title">{p.title}</h3>
+          <p>{p.excerpt}</p>
+          <div class="post-date" style="margin-top:16px;">{p.date}</div>
+        </a>
+      ))}
+    </div>
+    <div id="blog-empty" class="blog-empty">No posts in this category yet — check back soon.</div>
+  </section>
+
+  <section class="closing">
+    <div class="closing-card">
+      <h2>Got a project worth<br>writing about?</h2>
+      <div class="closing-actions">
+        <a href="/start?tab=form" class="btn btn-dark btn-cta">Get in touch <span>↗</span></a>
+        <a href="/work" class="btn btn-light btn-cta">See my work</a>
+      </div>
+    </div>
+  </section>
+</Base>

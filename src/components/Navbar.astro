@@ -1,0 +1,28 @@
+---
+import type { SiteSettings } from '../lib/types';
+interface Props { site: SiteSettings; onHome?: boolean; subpage?: boolean; }
+const path = Astro.url.pathname;
+
+const tabs = [
+  { label: 'Home', href: '/', icon: 'fa-solid fa-house', active: path === '/' },
+  { label: 'Work', href: '/work', icon: 'fa-solid fa-folder-open', active: path.startsWith('/work') },
+  { label: 'Shopify', href: '/shopify', icon: 'fa-brands fa-shopify', active: path.startsWith('/shopify') },
+  { label: 'Blog', href: '/blog', icon: 'fa-solid fa-feather', active: path.startsWith('/blog') },
+  { label: 'About', href: '/about', icon: 'fa-solid fa-user', active: path.startsWith('/about') },
+  { label: 'Talk', href: '/start?tab=form', icon: 'fa-solid fa-paper-plane', active: path.startsWith('/start') },
+];
+---
+<nav class="tabbar" id="nav" aria-label="Primary">
+  <div class="tabbar-inner">
+    {tabs.map((t) => (
+      <a
+        href={t.href}
+        class={`tab ${t.active ? 'active' : ''}`}
+        aria-current={t.active ? 'page' : undefined}
+      >
+        <i class={t.icon} aria-hidden="true"></i>
+        <span>{t.label}</span>
+      </a>
+    ))}
+  </div>
+</nav>

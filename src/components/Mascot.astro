@@ -1,0 +1,217 @@
+---
+// ============================================================================
+// Mascot — a reusable animated SVG pet that adopts the host site's design system.
+// MASCOT_DESCRIPTION: a small friendly blob pet with two big eyes.
+// STATES: idle (default) · walking (on hover/focus) · jumping (click toggles).
+// Pure inline SVG + CSS keyframes. JS only swaps state classes. No libraries.
+//
+// To reuse on another site: re-run the token detection, then edit ONLY the
+// THEME block in the <style> below. Everything else is style-independent.
+// ============================================================================
+interface Props { state?: 'idle' | 'walking' | 'jumping'; }
+const { state = 'idle' } = Astro.props;
+---
+<button
+  class={`mascot ${state}`}
+  id="mascot"
+  type="button"
+  data-state={state}
+  aria-label="Blob mascot — hover to walk, click to jump"
+>
+  <span class="mascot-bubble" aria-hidden="true">let's ship!</span>
+  <svg class="mascot-svg" viewBox="0 0 120 124" role="img" aria-hidden="true">
+    <!-- ground shadow -->
+    <ellipse class="m-shadow" cx="60" cy="112" rx="27" ry="5"></ellipse>
+
+    <!-- legs sit BEHIND the body; each is its own group with a hip pivot -->
+    <g class="m-leg m-leg-l"><rect x="44" y="80" width="11" height="24" rx="5.5"></rect></g>
+    <g class="m-leg m-leg-r"><rect x="65" y="80" width="11" height="24" rx="5.5"></rect></g>
+
+    <!-- body bobs/squashes; transform-origin anchored near the feet -->
+    <g class="m-body">
+      <path class="m-blob" d="M60 20 C80 20 96 35 96 58 C96 82 80 95 60 95 C40 95 24 82 24 58 C24 35 40 20 60 20 Z"></path>
+      <g class="m-eye m-eye-l">
+        <circle class="m-sclera" cx="49" cy="55" r="11"></circle>
+        <circle class="m-pupil" cx="51" cy="57" r="5"></circle>
+      </g>
+      <g class="m-eye m-eye-r">
+        <circle class="m-sclera" cx="76" cy="55" r="11"></circle>
+        <circle class="m-pupil" cx="78" cy="57" r="5"></circle>
+      </g>
+      <path class="m-mouth" d="M53 73 Q60 80 67 73"></path>
+    </g>
+  </svg>
+</button>
+
+<style>
+  .mascot {
+    /* ===== THEME — detected from the host site's design system ==============
+       Re-theme by editing ONLY this block. Values read the host's own CSS
+       variables first, with portable fallbacks. ============================= */
+    --m-accent:   var(--color-blue, #2563eb);          /* brand / primary  → body */
+    --m-accent-2: #5e8e3e;                              /* secondary (unused fill, kept for reuse) */
+    --m-fg:       var(--color-ink, #0a0a0a);            /* ink → pupils + mouth */
+    --m-eye:      #ffffff;                              /* sclera */
+    --m-surface:  var(--color-surface, #f4f4f5);        /* tooltip bg */
+    --m-line:     rgba(10, 10, 10, 0.10);               /* thin border (site uses subtle borders) */
+    --m-radius:   9999px;                               /* site pills are fully round */
+    --m-shadow:   0 12px 26px -10px rgba(10, 10, 10, 0.28);   /* soft elevation (tooltip) */
+    --m-drop:     drop-shadow(0 8px 9px rgba(10, 10, 10, 0.16)); /* soft body shadow */
+    --m-stroke-w: 0;                                    /* flat/minimal site → no outline */
+    --m-font:     var(--font-body, 'Inter', sans-serif);
+    --m-ease:     cubic-bezier(.22, .61, .36, 1);       /* site's smooth ease */
+    /* ====================================================================== */
+
+    position: fixed;
+    left: clamp(14px, 3vw, 22px);
+    /* tuck into the bottom-left corner, just above the host's tab bar */
+    bottom: calc(var(--tabbar-h, 0px) + 18px);
+    z-index: 1095;
+    width: clamp(64px, 7vw, 78px);
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    animation: m-in .5s var(--m-ease) both;
+  }
+  .mascot:focus-visible { outline: none; }
+  .mascot:focus-visible .m-blob { stroke: var(--m-accent); stroke-width: 2; }
+  /* Decorative + desktop-only: the mobile bottom is busy (tab bar + FAB). */
+  @media (max-width: 767px) { .mascot { display: none; } }
+
+  .mascot-svg { width: 100%; height: auto; display: block; overflow: visible; filter: var(--m-drop); }
+
+  /* ---- adopt the host palette / outline language ------------------------- */
+  .m-blob   { fill: var(--m-accent); stroke: var(--m-fg); stroke-width: var(--m-stroke-w); }
+  .m-sclera { fill: var(--m-eye); }
+  .m-pupil  { fill: var(--m-fg); }
+  .m-mouth  { fill: none; stroke: var(--m-fg); stroke-width: 2.4; stroke-linecap: round; opacity: .82; }
+  .m-shadow { fill: rgba(10, 10, 10, 0.12); }
+
+  /* per-element pivots — the key to natural limb motion */
+  .m-body, .m-eye, .m-leg, .m-shadow { transform-box: fill-box; }
+  .m-body  { transform-origin: 50% 100%; }   /* anchor bob/squash at the feet */
+  .m-eye   { transform-origin: 50% 50%; }     /* blink from eye centre */
+  .m-leg   { transform-origin: 50% 0%; }      /* swing from the hip */
+  .m-shadow{ transform-origin: 50% 50%; }     /* shrinks/grows with height */
+  .m-leg rect { fill: var(--m-accent); }
+
+  /* tooltip — uses the host font, radius, surface + shadow ----------------- */
+  .mascot-bubble {
+    position: absolute;
+    left: 50%; bottom: calc(100% + 8px);
+    transform: translateX(-50%) translateY(4px) scale(.96);
+    transform-origin: bottom center;
+    white-space: nowrap;
+    font-family: var(--m-font);
+    font-size: 12.5px; font-weight: 500;
+    color: var(--m-fg);
+    background: var(--m-surface);
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius);
+    padding: 6px 13px;
+    box-shadow: var(--m-shadow);
+    opacity: 0; pointer-events: none;
+    transition: opacity .22s var(--m-ease), transform .22s var(--m-ease);
+  }
+  .mascot:hover .mascot-bubble,
+  .mascot:focus-visible .mascot-bubble { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+
+  /* ---- eyes always blink (any state) ------------------------------------- */
+  .m-eye { animation: m-blink 4.2s ease-in-out infinite; }
+  .m-eye-r { animation-delay: .15s; }
+
+  /* ===== IDLE — gentle breathing bob ===================================== */
+  .mascot.idle .m-body { animation: m-breathe 3s ease-in-out infinite; }
+
+  /* ===== WALKING — alternating legs + brisk bob ========================== */
+  .mascot.walking .m-body { animation: m-walkbob .5s ease-in-out infinite; }
+  .mascot.walking .m-leg-l { animation: m-step .5s ease-in-out infinite; }
+  .mascot.walking .m-leg-r { animation: m-step .5s ease-in-out infinite; animation-delay: -.25s; }
+
+  /* ===== JUMPING — one physical hop: anticipation → gravity arc → settle ==
+     Each keyframe sets its OWN outgoing easing so the arc obeys gravity:
+     decelerate on the way up, accelerate on the way down, hard squash on
+     impact, then a damped secondary bounce. Plays ONCE per click. ========= */
+  .mascot.jumping .m-body  { animation: m-jump 1s both; }
+  .mascot.jumping .m-leg-l { animation: m-tuck 1s both; }
+  .mascot.jumping .m-leg-r { animation: m-tuck 1s both; animation-delay: .03s; }
+  .mascot.jumping .m-shadow{ animation: m-shadow 1s both; }
+
+  @keyframes m-in     { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes m-breathe{ 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-3px) scale(1.03); } }
+  @keyframes m-blink  { 0%, 90%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.12); } }
+  @keyframes m-walkbob{ 0%, 100% { transform: translateY(0) rotate(-1.5deg); } 50% { transform: translateY(-3px) rotate(1.5deg); } }
+  @keyframes m-step   { 0%, 100% { transform: rotate(22deg); } 50% { transform: rotate(-22deg); } }
+
+  @keyframes m-jump {
+    0%   { transform: translateY(0)    scale(1, 1);     animation-timing-function: cubic-bezier(.34,.02,.7,.2); } /* settle → load */
+    13%  { transform: translateY(7px)  scale(1.18, .8); animation-timing-function: cubic-bezier(.18,.85,.3,1); }  /* deep crouch, then explode up */
+    32%  { transform: translateY(-34px) scale(.9, 1.14); animation-timing-function: cubic-bezier(.3,0,.55,.5); }  /* rising, decelerating (gravity) */
+    45%  { transform: translateY(-40px) scale(.96, 1.06); animation-timing-function: cubic-bezier(.5,.4,.85,1); } /* apex hang → start falling */
+    63%  { transform: translateY(0)    scale(1.22, .74); animation-timing-function: cubic-bezier(.2,.85,.35,1); } /* impact: hard squash */
+    77%  { transform: translateY(-10px) scale(.98, 1.04); animation-timing-function: cubic-bezier(.3,0,.6,.5); }  /* damped secondary bounce */
+    88%  { transform: translateY(0)    scale(1.09, .93); animation-timing-function: ease-out; }                   /* second, softer impact */
+    95%  { transform: translateY(-2px) scale(1, 1); }                                                            /* micro settle */
+    100% { transform: translateY(0)    scale(1, 1); }
+  }
+  @keyframes m-tuck {
+    0%, 13%  { transform: translateY(0) rotate(0); }
+    32%, 45% { transform: translateY(-9px) rotate(-10deg); } /* tuck up while airborne */
+    63%      { transform: translateY(2px) rotate(7deg); }    /* splay out on landing */
+    77%, 100%{ transform: translateY(0) rotate(0); }
+  }
+  @keyframes m-shadow {
+    0%, 13% { transform: scale(1);    opacity: 1; }
+    42%     { transform: scale(.66);  opacity: .5; }   /* small + faint when airborne */
+    63%     { transform: scale(1.12); opacity: 1; }    /* spreads on impact */
+    100%    { transform: scale(1);    opacity: 1; }
+  }
+
+  /* ===== Reduced motion ==================================================
+     Kill ambient loops (entrance, breathing, walking, blink) so the page is
+     calm at rest — but KEEP the click-triggered jump: it's user-initiated and
+     brief, which reduced-motion guidance permits. ========================= */
+  @media (prefers-reduced-motion: reduce) {
+    .mascot { animation: none; opacity: 1; }
+    .mascot .m-eye,
+    .mascot.idle .m-body,
+    .mascot.walking .m-body,
+    .mascot.walking .m-leg { animation: none !important; }
+    .mascot-bubble { transition: opacity .01s; }
+  }
+</style>
+
+<script>
+  // JS only toggles state classes — all motion lives in CSS.
+  const m = document.getElementById('mascot');
+  const body = m?.querySelector('.m-body');
+  if (m && body) {
+    let near = false; // hovered or keyboard-focused
+    const STATES = ['idle', 'walking', 'jumping'];
+    const set = (s: string) => {
+      m.classList.remove(...STATES);
+      m.classList.add(s);
+      m.dataset.state = s;
+    };
+    const isJumping = () => m.classList.contains('jumping');
+
+    // One physical hop per click. Re-clicking mid-air restarts the jump.
+    const jump = () => {
+      m.classList.remove('jumping');
+      void m.offsetWidth; // reflow so the animation restarts from frame 0
+      set('jumping');
+    };
+    // When the hop lands (the finite jump animation ends), settle back.
+    body.addEventListener('animationend', () => {
+      if (isJumping()) set(near ? 'walking' : 'idle');
+    });
+
+    m.addEventListener('mouseenter', () => { near = true; if (!isJumping()) set('walking'); });
+    m.addEventListener('mouseleave', () => { near = false; if (!isJumping()) set('idle'); });
+    m.addEventListener('focus', () => { near = true; if (!isJumping()) set('walking'); });
+    m.addEventListener('blur', () => { near = false; if (!isJumping()) set('idle'); });
+    m.addEventListener('click', jump);
+  }
+</script>

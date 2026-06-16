@@ -1,0 +1,109 @@
+---
+import Base from '../layouts/Base.astro';
+import Placeholder from '../components/Placeholder.astro';
+
+const needs = [
+  'A full-time / contract role',
+  'Shopify development',
+  'Web app (Next.js / React)',
+  'Mobile app (React Native)',
+  'Full-stack / API work (MERN)',
+];
+const budgets = ['Under $2k', '$2k–5k', '$5k–10k', '$10k–25k', '$25k+', 'Not sure yet'];
+const timelines = ['ASAP', 'Within 1 month', '1–3 months', '3+ months / flexible'];
+---
+<Base title="Let's work together — Riajul Islam" description="Hiring for a role or have a project in mind? Book a call or send the details." subpage={true}>
+  <section class="start-wrap section" style="padding-bottom:clamp(40px,8vw,60px);">
+    <div class="eyebrow">— Hiring or building? Let's talk</div>
+    <h1 style="font-family:var(--font-display);font-weight:600;font-size:clamp(32px,7vw,62px);line-height:0.98;letter-spacing:-0.035em;margin:18px 0 0;">Let's work<br>together.</h1>
+    <p style="font-size:19px;line-height:1.55;color:var(--color-grey-1);max-width:560px;margin:26px 0 0;">Hiring for a role or have a project in mind? Book a quick call, or send the details and I'll come back to you with next steps. Either way, you'll hear from me within 24 hours.</p>
+
+    <div class="start-tabs">
+      <button class="start-tab" data-tab="call">Book a call</button>
+      <button class="start-tab active" data-tab="form">Send a message</button>
+    </div>
+  </section>
+
+  <section class="start-wrap" style="padding:0 clamp(20px,5vw,40px) 120px;">
+    <!-- Book a call -->
+    <div class="start-panel" data-panel="call">
+      <div class="call-card">
+        <div class="call-grid">
+          <div class="call-left">
+            <h2>25-minute intro call</h2>
+            <p>No pitch, no pressure. We'll talk through the role or project, the stack and timeline, and whether we're a good match.</p>
+            <div class="call-points">
+              <div class="call-point"><span class="d"></span>25 minutes · video call</div>
+              <div class="call-point"><span class="d"></span>Dhaka time (GMT+6), flexible across zones</div>
+              <div class="call-point"><span class="d"></span>Reply within 24 hours</div>
+            </div>
+          </div>
+          <div class="call-right">
+            <Placeholder label="Scheduler embed — Cal.com / Calendly" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Send a message -->
+    <div class="start-panel active" data-panel="form">
+      <div class="form-card">
+        <form id="contact-form">
+          <div class="field-grid">
+            <label class="flabel">
+              <span class="lt">Your name *</span>
+              <input class="field" required type="text" placeholder="Jane Doe" />
+            </label>
+            <label class="flabel">
+              <span class="lt">Work email *</span>
+              <input class="field" required type="email" placeholder="jane@company.com" />
+            </label>
+          </div>
+
+          <div style="margin-top:30px;">
+            <span class="lt" style="display:block;font-size:14px;font-weight:500;margin-bottom:12px;">What's this about? *</span>
+            <div class="check-list">
+              {needs.map((n) => (
+                <label class="check-lbl"><input type="checkbox" name="need" />{n}</label>
+              ))}
+            </div>
+          </div>
+
+          <div class="field-grid" style="margin-top:30px;">
+            <label class="flabel">
+              <span class="lt">Budget <span class="muted">(freelance)</span></span>
+              <select class="field">
+                <option value="" disabled selected>Select a range</option>
+                {budgets.map((b) => <option>{b}</option>)}
+              </select>
+            </label>
+            <label class="flabel">
+              <span class="lt">Timeline</span>
+              <select class="field">
+                <option value="" disabled selected>Select a timeline</option>
+                {timelines.map((t) => <option>{t}</option>)}
+              </select>
+            </label>
+          </div>
+
+          <label class="flabel" style="margin-top:30px;">
+            <span class="lt">Anything else? (optional)</span>
+            <textarea class="field" rows="4" placeholder="A few lines about the product, the team, or what's keeping you up at night."></textarea>
+          </label>
+
+          <div class="form-foot">
+            <button type="submit" class="btn btn-dark" style="padding:14px 28px;">Send message <span>↗</span></button>
+            <span class="form-note">I'll get back to you within 24 hours.</span>
+          </div>
+        </form>
+
+        <div id="form-success" class="form-success" style="display:none;">
+          <div class="tick">✓</div>
+          <h2>Got it — thank you.</h2>
+          <p>Your details are in. I'll review and reply within 24 hours with next steps. Talk soon.</p>
+          <a href="/" class="btn btn-light" style="margin-top:30px;padding:12px 24px;">Back to home</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

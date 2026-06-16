@@ -1,0 +1,114 @@
+---
+import Base from '../layouts/Base.astro';
+import { getSite, getResume } from '../lib/content';
+
+const site = await getSite();
+const resume = await getResume();
+const mailto = `mailto:${site.email}`;
+
+// Data handed to the client-side PDF generator (real text-layer PDF).
+const pdfData = {
+  name: site.name,
+  role: site.role,
+  location: site.location,
+  email: site.email,
+  phone: site.phone,
+  github: site.socials.githubHandle,
+  linkedin: site.socials.linkedinHandle,
+  website: site.website,
+  summary: resume.summary,
+  skills: resume.skills,
+  experience: resume.experience,
+  projects: resume.projects,
+  education: resume.education,
+  languages: resume.languages,
+};
+---
+<Base
+  title="Résumé — Riajul Islam"
+  description="ATS-friendly résumé for Riajul Islam, full-stack & Shopify developer."
+  subpage={true}
+  bodyClass="resume-page"
+  printChrome={true}
+  backToTop={false}
+>
+  <main class="resume-doc">
+    <header class="resume-head">
+      <div class="resume-head-main">
+        <h1>{site.name}</h1>
+        <div class="resume-role">{site.role}</div>
+      </div>
+      {site.openToWork && <span class="resume-badge"><span class="d"></span>Open to work</span>}
+    </header>
+
+    <div class="resume-contacts">
+      <span>{site.location}</span>
+      <span class="sep">·</span>
+      <a href={mailto}>{site.email}</a>
+      <span class="sep">·</span>
+      <span>{site.phone}</span>
+      <span class="sep">·</span>
+      <a href={site.socials.github}>{site.socials.githubHandle}</a>
+      <span class="sep">·</span>
+      <a href={site.socials.linkedin}>{site.socials.linkedinHandle}</a>
+    </div>
+
+    {resume.highlights?.length > 0 && (
+      <div class="resume-highlights">
+        {resume.highlights.map((h) => (
+          <div class="rh"><span class="rh-val">{h.value}</span><span class="rh-lbl">{h.label}</span></div>
+        ))}
+      </div>
+    )}
+
+    <section class="resume-section">
+      <h2>Summary</h2>
+      <p>{resume.summary}</p>
+    </section>
+
+    <section class="resume-section">
+      <h2>Skills</h2>
+      <div class="skills-grid">
+        {resume.skills.map((s) => (<><div class="k">{s.label}</div><div class="v">{s.values}</div></>))}
+      </div>
+    </section>
+
+    <section class="resume-section">
+      <h2>Experience</h2>
+      {resume.experience.map((job) => (
+        <div class="resume-job">
+          <div class="row"><span class="jt">{job.title}</span><span class="jp">{job.period}</span></div>
+          <ul>{job.bullets.map((b) => <li>{b}</li>)}</ul>
+        </div>
+      ))}
+    </section>
+
+    <section class="resume-section">
+      <h2>Selected Projects</h2>
+      <div class="resume-projects">
+        {resume.projects.map((p) => (<div><b>{p.name}</b> — {p.description}</div>))}
+      </div>
+    </section>
+
+    <section class="resume-section">
+      <h2>Education &amp; Certifications</h2>
+      <div class="resume-edu">
+        {resume.education.map((e) => (
+          <div class="row"><span class="et">{e.title}</span><span class="ey">{e.year}</span></div>
+        ))}
+      </div>
+    </section>
+
+    <section class="resume-section">
+      <h2>Languages</h2>
+      <p>{resume.languages}</p>
+    </section>
+  </main>
+
+  <div class="no-print resume-actions">
+    <button id="copy-email-btn" class="btn btn-light btn-sm" data-email={site.email}>Copy email</button>
+    <button id="download-pdf-btn" class="btn btn-dark btn-sm">Download PDF <span>↓</span></button>
+  </div>
+
+  <script type="application/json" id="resume-data" set:html={JSON.stringify(pdfData)}></script>
+</Base>

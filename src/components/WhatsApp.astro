@@ -1,0 +1,18 @@
+---
+import type { SiteSettings } from '../lib/types';
+interface Props { site: SiteSettings; }
+const { site } = Astro.props;
+const phone = (site.whatsappPhone || '').replace(/[^0-9]/g, '');
+const href = `https://wa.me/${phone}?text=${encodeURIComponent(site.whatsappMessage || '')}`;
+---
+<a class="wa-fab" href={href} target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <svg class="wa-ring" viewBox="0 0 120 120">
+    <defs>
+      <path id="waTextCircle" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"></path>
+    </defs>
+    <text>
+      <textPath href="#waTextCircle" startOffset="0" textLength="283" lengthAdjust="spacing">LET'S TALK ON WHATSAPP • OPEN TO WORK •</textPath>
+    </text>
+  </svg>
+  <span class="wa-btn"><i class="fa-brands fa-whatsapp"></i></span>
+</a>

@@ -1,0 +1,80 @@
+---
+import '../styles/global.css';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import WhatsApp from '../components/WhatsApp.astro';
+import BackToTop from '../components/BackToTop.astro';
+import { getSite } from '../lib/content';
+
+interface Props {
+  title?: string;
+  description?: string;
+  onHome?: boolean;
+  subpage?: boolean;
+  bodyClass?: string;
+  printChrome?: boolean;
+  backToTop?: boolean;
+}
+
+const {
+  title = 'Riajul Islam — Full-Stack & Shopify Developer',
+  description = 'Full-stack & Shopify developer building fast, accessible web and mobile products with Next.js, the MERN stack and React Native.',
+  onHome = false,
+  subpage = false,
+  bodyClass = '',
+  printChrome = false,
+  backToTop = true,
+} = Astro.props;
+
+const site = await getSite();
+const chromeClass = printChrome ? 'no-print' : '';
+---
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body class={bodyClass}>
+    <div class={chromeClass}>
+      <a href="/" class="brand-sig" aria-label={`${site.name} — home`}>{site.name}</a>
+      {subpage && (
+        <a href="/" class="back-home" aria-label="Back to home">
+          <span aria-hidden="true">←</span> Home
+        </a>
+      )}
+      <Navbar site={site} onHome={onHome} subpage={subpage} />
+    </div>
+
+    <slot />
+
+    <div class={chromeClass}>
+      <Footer site={site} />
+    </div>
+
+    <div class={chromeClass}>
+      <WhatsApp site={site} />
+    </div>
+
+    {backToTop && <BackToTop />}
+
+    <script>
+      import '../scripts/main';
+    </script>
+  </body>
+</html>

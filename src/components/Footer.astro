@@ -1,0 +1,40 @@
+---
+import type { SiteSettings } from '../lib/types';
+interface Props { site: SiteSettings; }
+const { site } = Astro.props;
+const mailto = `mailto:${site.email}`;
+const links = [
+  { label: 'Home', href: '/' },
+  { label: 'Work', href: '/work' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'About', href: '/about' },
+  { label: 'Résumé', href: '/resume' },
+];
+---
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="ft-socials">
+      <a class="ft-soc" href={site.socials.github} target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github" style="font-size:18px;"></i></a>
+      <a class="ft-soc" href={site.socials.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in" style="font-size:17px;"></i></a>
+      <a class="ft-soc" href={site.socials.x} target="_blank" rel="noopener" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter" style="font-size:17px;"></i></a>
+      <a class="ft-soc" href={mailto} aria-label="Email"><i class="fa-solid fa-envelope" style="font-size:17px;"></i></a>
+    </div>
+
+    <nav class="ft-nav">
+      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+    </nav>
+
+    <div class="ft-wordmark" aria-hidden="true"><span>{site.footerWordmark}</span></div>
+
+    <div class="ft-bar">
+      <div class="ft-meta">
+        <span>© 2026 {site.name}</span>
+        <span class="sep">·</span>
+        <span>{site.location.split(',')[0]} · <span id="ft-clock" data-tz={site.timeZone}></span> · {site.gmtLabel}</span>
+      </div>
+      {site.openToWork && (
+        <div class="ft-status"><span class="dot"></span>Open to work</div>
+      )}
+    </div>
+  </div>
+</footer>

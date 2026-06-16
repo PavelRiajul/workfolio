@@ -1,0 +1,256 @@
+---
+import Base from '../layouts/Base.astro';
+import Placeholder from '../components/Placeholder.astro';
+import ClosingCta from '../components/ClosingCta.astro';
+import { getSite, getProjects } from '../lib/content';
+
+const site = await getSite();
+const projects = await getProjects();
+const shopifyProjects = projects.filter((p) => p.tags.includes('shopify'));
+const featured = shopifyProjects[0];
+
+const heroStats = [
+  { v: '−58%', l: 'Faster load times' },
+  { v: '+24%', l: 'Mobile conversion' },
+  { v: '12', l: 'Shopify builds shipped' },
+];
+
+const brands = ['Vellum', 'Harborline', 'Northwind', 'Brightlane', 'Kettle & Co.', 'Field Notes', 'Lumen', 'Atlas Supply'];
+
+const capabilities = [
+  { t: 'Headless on Hydrogen', b: "Shopify's Storefront API + Hydrogen on the edge — sub-second loads while your team keeps the admin they already know." },
+  { t: 'Custom themes & Liquid', b: "A bespoke theme, or surgical fixes to the one you have. If Liquid can do it, I won't reach for an app." },
+  { t: 'Apps & checkout extensions', b: "Custom apps, checkout UI extensions and Functions for the logic off-the-shelf apps can't handle." },
+  { t: 'Migrations & replatforming', b: 'WooCommerce, Magento or a crusty old theme into modern Shopify, with redirects and SEO kept intact.' },
+  { t: 'Speed & Core Web Vitals', b: 'Audits and fixes that move LCP, CLS and INP — and the conversion rate riding on them.' },
+  { t: 'Integrations that hold up', b: "Klaviyo, subscriptions, ERPs, payments, a headless CMS — wired up so they don't break next month." },
+];
+
+const approach = [
+  { n: '01', t: 'Audit & strategy', b: 'A Lighthouse audit and a funnel review, then a plan tied to revenue — not vanity metrics.' },
+  { n: '02', t: 'Design & build', b: 'Theme or headless, built mobile-first with clean, documented, reviewable code.' },
+  { n: '03', t: 'Speed & QA', b: 'Real-device testing, a performance budget, and a checkout that survives the edge cases.' },
+  { n: '04', t: 'Launch & grow', b: 'A zero-downtime cutover with redirects and analytics in place — then we iterate on data.' },
+];
+
+const results = [
+  { s: '−58%', l: 'page load time' },
+  { s: '+24%', l: 'mobile conversion' },
+  { s: '98', l: 'Lighthouse score' },
+  { s: '0', l: 'downtime at launch' },
+];
+
+const testimonials = [
+  { quote: 'Riajul shipped our Shopify rebuild ahead of schedule and our store has never been faster. Clean code, clear updates, zero drama.', name: 'Sarah Whitfield', role: 'Founder, Vellum', initials: 'SW', color: '#0F766E' },
+  { quote: 'He took our slow, app-stuffed theme and got it under a second on mobile. Conversion went up the first week.', name: 'Marcus Lee', role: 'Founder, Harborline', initials: 'ML', color: '#5e8e3e' },
+];
+
+const faqs = [
+  { q: 'Headless or a regular theme — which do I need?', a: "Most stores don't need headless. If a fast, well-built theme gets you there, I'll say so. Headless earns its keep once you've outgrown Liquid or want a fully custom front end — I'll be honest about which side you're on." },
+  { q: 'Can you work with my existing theme?', a: "Yes. A lot of the work is improving what's already there — speed, bug fixes, new sections — without a full rebuild." },
+  { q: 'How long does a Shopify build take?', a: "A focused theme build is usually 3–6 weeks; a headless storefront, 6–10. You get a real timeline after a short scoping call, not a guess." },
+  { q: 'Do you handle migrations?', a: "WooCommerce, Magento, BigCommerce or a legacy Shopify theme — I migrate products, content and URLs with redirects so you don't lose rankings." },
+  { q: 'Will it actually be fast on mobile?', a: "That's the whole point. Most store traffic is mobile, so I build to a performance budget and test on real devices, not just a fast laptop." },
+  { q: 'What happens after launch?', a: "I don't vanish at handoff. You get docs, a clean repo, and support options if you want a hand once it's live." },
+];
+---
+<Base
+  title="Shopify Development — Riajul Islam"
+  description="Headless Hydrogen builds, custom Liquid themes, migrations and speed work — Shopify stores that load fast and convert."
+  subpage={true}
+>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-inner shell" data-hero-intro>
+      <div class="hero-meta" data-hero-item>
+        <span>—</span>
+        <span>Shopify Development</span>
+        <span class="chip-open chip-shop"><span class="dot"></span>Open for builds</span>
+      </div>
+      <h1 data-hero-item>Shopify stores,<br>built to <span class="accent accent-shop">convert.</span></h1>
+      <div class="hero-lower">
+        <div class="hero-copy">
+          <p class="hero-lede" data-hero-item>From headless Hydrogen builds to custom Liquid themes and the odd rescue mission — I build Shopify stores that load in under a second and turn browsers into buyers. No bloated apps, no theme spaghetti.</p>
+          <div class="hero-actions" data-hero-item>
+            <a href="/start?tab=form" class="btn btn-dark">Start a Shopify project <span>↗</span></a>
+            <a href="#sh-work" class="btn btn-light">See Shopify work</a>
+          </div>
+          <div class="hero-stats" data-hero-item style="margin-top:40px;">
+            {heroStats.map((s) => (
+              <div>
+                <div class="num">{s.v}</div>
+                <div class="lbl">{s.l}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div class="hero-visual" data-hero-item aria-hidden="true">
+          <div class="hv-stage" id="hv-stage">
+            <div class="hv-card sh-store"><div class="hv-inner">
+              <div class="sh-store-top"><i class="fa-brands fa-shopify" aria-hidden="true"></i><span class="sh-dot-bar"></span><i class="fa-solid fa-bag-shopping" aria-hidden="true"></i></div>
+              <div class="sh-banner"><span>SUMMER<br>DROP</span></div>
+              <div class="sh-grid">
+                <div class="sh-tile"><div class="sh-tile-img"></div><span class="sh-tile-price">$24</span></div>
+                <div class="sh-tile"><div class="sh-tile-img"></div><span class="sh-tile-price">$39</span></div>
+                <div class="sh-tile"><div class="sh-tile-img"></div><span class="sh-tile-price">$18</span></div>
+              </div>
+            </div></div>
+            <div class="hv-card sh-stat"><div class="hv-inner">
+              <div class="sh-stat-val">+24%</div>
+              <div class="sh-stat-lbl">Conversion rate</div>
+              <div class="sh-spark"><i style="height:32%"></i><i style="height:54%"></i><i style="height:46%"></i><i style="height:72%"></i><i style="height:90%"></i></div>
+            </div></div>
+            <div class="hv-card sh-cart"><div class="hv-inner">
+              <div class="sh-cart-head"><i class="fa-solid fa-bag-shopping" aria-hidden="true"></i> Cart · 2</div>
+              <div class="sh-cart-row"><span class="sh-line"></span><span>$24</span></div>
+              <div class="sh-cart-row"><span class="sh-line"></span><span>$39</span></div>
+              <div class="sh-cart-total"><span>Total</span><b>$63</b></div>
+              <span class="sh-checkout">Checkout</span>
+            </div></div>
+            <div class="hv-card sh-badge"><div class="hv-inner"><i class="fa-brands fa-shopify" aria-hidden="true"></i></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Brands -->
+  <section class="section section-bordered">
+    <div style="max-width:var(--maxw);margin:0 auto;">
+      <div class="eyebrow" data-reveal>— Brands I've worked with</div>
+      <h2 class="section-h2" data-reveal style="max-width:760px;">Stores that needed to be fast — and stay that way.</h2>
+      <div class="brand-wall" data-reveal>
+        {brands.map((b) => <span>{b}</span>)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Capabilities -->
+  <section class="section section-bordered">
+    <div style="max-width:var(--maxw);margin:0 auto;">
+      <div class="eyebrow" data-reveal>— What I do on Shopify</div>
+      <h2 class="section-h2" data-reveal>More than a theme tweak.</h2>
+      <div class="trait-grid">
+        {capabilities.map((c) => (
+          <div class="trait-card" data-reveal>
+            <h3>{c.t}</h3>
+            <p>{c.b}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Approach -->
+  <section class="section section-bordered">
+    <div style="max-width:var(--maxw);margin:0 auto;">
+      <div class="eyebrow" data-reveal>— My approach</div>
+      <h2 class="section-h2" data-reveal>How a build actually goes.</h2>
+      <div class="appr-grid">
+        {approach.map((a) => (
+          <div class="appr-card" data-reveal>
+            <div class="appr-top">
+              <h3>{a.t}</h3>
+              <span class="appr-num">{a.n}/04</span>
+            </div>
+            <div class="appr-desc"><p>{a.b}</p></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Results -->
+  <section class="section process">
+    <div style="max-width:var(--maxw);margin:0 auto;">
+      <div class="eyebrow" data-reveal>— Results</div>
+      <h2 class="section-h2" data-reveal style="color:#fff;">Numbers from the last rebuild.</h2>
+      <div class="cs-out-grid" data-reveal>
+        {results.map((r) => (
+          <div>
+            <div class="stat">{r.s}</div>
+            <div class="lbl">{r.l}</div>
+          </div>
+        ))}
+      </div>
+      <p class="cs-out-note" data-reveal>Measured against the previous Liquid theme over the first month after launch. Your mileage depends on your starting point — but the direction is always the same.</p>
+    </div>
+  </section>
+
+  <!-- Featured work -->
+  {featured && (
+    <section id="sh-work" class="section section-bordered" style="scroll-margin-top:24px;">
+      <div style="max-width:var(--maxw);margin:0 auto;">
+        <div class="work-head" data-reveal>
+          <div>
+            <div class="eyebrow">— Featured Shopify work</div>
+            <h2 class="section-h2">A headless rebuild, in detail.</h2>
+          </div>
+          <a href="/work" class="btn btn-light btn-sm">All projects ↗</a>
+        </div>
+        <a href={`/work/${featured.slug}`} class="post-feature" data-reveal style="margin-top:44px;">
+          <div class="cover"><Placeholder label={`${featured.title} — ${featured.type}`} image={featured.image} /></div>
+          <div class="pf-body">
+            <div class="pf-meta">
+              {featured.pills.map((p) => <span class="pf-badge">{p}</span>)}
+            </div>
+            <h3 class="post-title">{featured.title}</h3>
+            <p>{featured.summary}</p>
+            <div class="sh-feat-stats">
+              {featured.outcomes.slice(0, 3).map((o) => (
+                <div><b>{o.stat}</b><span>{o.label}</span></div>
+              ))}
+            </div>
+          </div>
+        </a>
+      </div>
+    </section>
+  )}
+
+  <!-- Testimonials -->
+  <section class="section section-bordered">
+    <div style="max-width:var(--maxw);margin:0 auto;">
+      <div class="eyebrow" data-reveal>— What clients say</div>
+      <h2 class="section-h2" data-reveal>Shipped, fast, and still standing.</h2>
+      <div class="tst-grid">
+        {testimonials.map((t) => (
+          <div class="tst-card" data-reveal>
+            <div class="tst-quote">"</div>
+            <p class="tst-body">{t.quote}</p>
+            <div class="tst-author">
+              <span class="tst-avatar" style={`background:${t.color}`}>{t.initials}</span>
+              <div>
+                <span class="tst-name">{t.name}</span>
+                <span class="tst-role">{t.role}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section section-bordered">
+    <div class="split">
+      <div data-reveal>
+        <div class="eyebrow">— Shopify FAQ</div>
+        <h2 class="section-h2">The questions<br>I usually get.</h2>
+      </div>
+      <div data-reveal>
+        {faqs.map((f, i) => (
+          <details class="acc" open={i === 0}>
+            <summary>
+              <div class="acc-label"><span class="acc-title faq">{f.q}</span></div>
+              <span class="acc-ic">+</span>
+            </summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <ClosingCta title={"Ready to make Shopify\nactually sell?"} bordered={true} secondaryLabel="See all work" secondaryHref="/work" />
+</Base>
