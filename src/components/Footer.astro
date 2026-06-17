@@ -38,3 +38,21 @@ const links = [
     </div>
   </div>
 </footer>
+
+<style is:global>
+  .footer { position: relative; overflow: hidden; background: #fff; border-top: 1px solid var(--line); font-family: var(--font-body); }
+  .footer-inner { position: relative; z-index: 1; max-width: var(--maxw); margin: 0 auto; padding: clamp(56px,8vw,80px) clamp(20px,5vw,40px) 0; display: flex; flex-direction: column; align-items: center; }
+  .ft-socials { display: flex; gap: 12px; }
+  .ft-soc { width: 44px; height: 44px; border-radius: 9999px; border: 1px solid rgba(10,10,10,0.12); display: flex; align-items: center; justify-content: center; color: var(--color-grey-1); text-decoration: none; transition: all .22s ease; }
+  .ft-soc:hover { background: var(--color-ink); color: #fff; border-color: var(--color-ink); }
+  .ft-nav { display: flex; gap: clamp(18px,3vw,30px); margin-top: 30px; flex-wrap: wrap; justify-content: center; font-size: 15px; font-weight: 500; }
+  .ft-nav a { color: var(--color-grey-2); text-decoration: none; transition: color .2s ease; }
+  .ft-nav a:hover { color: var(--color-ink); }
+  .ft-wordmark { width: 100%; text-align: center; margin-top: clamp(20px,3vw,34px); line-height: 0.74; pointer-events: none; }
+  .ft-wordmark span { display: inline-block; font-family: var(--font-display); font-weight: 700; font-size: clamp(56px,16.5vw,224px); letter-spacing: -0.045em; text-transform: uppercase; white-space: nowrap; background: linear-gradient(180deg, rgba(10,10,10,0.13) 0%, rgba(10,10,10,0.06) 55%, rgba(10,10,10,0) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+  .ft-bar { width: 100%; border-top: 1px solid var(--line); margin-top: clamp(20px,3vw,32px); padding: 22px 0 30px; display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .ft-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13px; color: var(--color-grey-3); }
+  .ft-meta .sep { color: #d8d8d8; }
+  .ft-status { display: inline-flex; align-items: center; gap: 8px; background: rgba(31,175,84,0.1); border: 1px solid rgba(31,175,84,0.2); padding: 7px 14px; border-radius: 9999px; font-size: 13px; font-weight: 500; color: #178045; }
+  .ft-status .dot { width: 8px; height: 8px; border-radius: 9999px; background: #1faf54; display: inline-block; box-shadow: 0 0 0 3px rgba(31,175,84,0.18); }
+</style>

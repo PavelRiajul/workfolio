@@ -1,0 +1,26 @@
+---
+// Accordion FAQ section. Shared by Home, Shopify and CRO pages.
+interface FaqItem { q: string; a: string; }
+interface Props { eyebrow: string; title: string; items: FaqItem[]; }
+const { eyebrow, title, items } = Astro.props;
+const lines = title.split('\n');
+---
+<section class="section section-bordered">
+  <div class="split">
+    <div data-reveal>
+      <div class="eyebrow">{eyebrow}</div>
+      <h2 class="section-h2">{lines.map((l, i) => (<>{l}{i < lines.length - 1 && <br />}</>))}</h2>
+    </div>
+    <div data-reveal>
+      {items.map((f, i) => (
+        <details class="acc" open={i === 0}>
+          <summary>
+            <div class="acc-label"><span class="acc-title faq">{f.q}</span></div>
+            <span class="acc-ic">+</span>
+          </summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>

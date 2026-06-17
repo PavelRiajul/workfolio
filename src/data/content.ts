@@ -41,15 +41,15 @@ export const site: SiteSettings = {
 };
 
 export const home: HomeContent = {
-  badge: 'Full-stack & Shopify developer',
+  badge: 'Shopify & CRO developer',
   headlineLines: ["I don't just write code.", 'I make it'],
   accentWord: 'ship.',
   lede:
-    "I build Shopify stores, Next.js web apps and React Native mobile apps for founders and teams who'd rather ship than sit in another meeting about shipping. You bring the idea; I get it live.",
+    'I build and optimize Shopify stores that load fast and actually convert — headless Hydrogen, custom themes, and the CRO work that turns the traffic you already have into orders. Got a store to build or fix? I make it ship.',
   primaryCta: 'Start a project',
-  secondaryCta: 'See my work',
+  secondaryCta: 'See Shopify work',
   availabilityNote: 'Available for new projects · working remotely, worldwide',
-  rotatingWords: ['Next.js', 'React', 'the MERN stack', 'React Native', 'Shopify', 'TypeScript'],
+  rotatingWords: ['Shopify', 'Hydrogen', 'Liquid', 'the Storefront API', 'React', 'TypeScript'],
   stats: [
     { value: 15, suffix: '+', label: 'Products shipped' },
     { value: 100, suffix: '%', label: 'On-time delivery' },
@@ -93,7 +93,7 @@ export const home: HomeContent = {
     { question: 'Where are you based?', answer: 'Dhaka, Bangladesh (GMT+6), working comfortably across time zones with teams in the US, EU and beyond.' },
     { question: 'How do we get started?', answer: 'Grab my résumé or send a message through the contact form. I reply within 24 hours, either way.' },
   ],
-  closingTitle: 'Looking for a developer\nwho actually ships?',
+  closingTitle: 'Got a store to build —\nor one that should sell more?',
 };
 
 export const shopifyServices: ShopifyService[] = [

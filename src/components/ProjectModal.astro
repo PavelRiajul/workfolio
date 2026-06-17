@@ -29,3 +29,43 @@ for (const p of projects) {
   </div>
 </div>
 <script type="application/json" id="pm-data" set:html={JSON.stringify(modalData)}></script>
+
+<script>
+  // Project modal — co-located with the component (Home + Work pages).
+  interface ModalProject { name: string; stack: string; type: string; summary: string; outcomes: [string, string][]; href: string; }
+  const overlay = document.getElementById('pm-overlay');
+  const dataEl = document.getElementById('pm-data');
+  if (overlay && dataEl) {
+    let data: Record<string, ModalProject> = {};
+    try { data = JSON.parse(dataEl.textContent || '{}'); } catch { data = {}; }
+    const dialog = document.getElementById('pm-dialog');
+    const closeBtn = document.getElementById('pm-close');
+    const open = (p: ModalProject) => {
+      (document.getElementById('pm-title') as HTMLElement).textContent = p.name;
+      (document.getElementById('pm-meta') as HTMLElement).textContent = `${p.stack}  ·  ${p.type}`;
+      (document.getElementById('pm-summary') as HTMLElement).textContent = p.summary;
+      (document.getElementById('pm-outcomes') as HTMLElement).innerHTML = p.outcomes
+        .map((o) => `<div><div class="out-num">${o[0]}</div><div class="out-lbl">${o[1]}</div></div>`)
+        .join('');
+      if (p.href) document.getElementById('pm-link')?.setAttribute('href', p.href);
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
+    const close = () => { overlay.classList.remove('open'); document.body.style.overflow = ''; };
+    document.querySelectorAll<HTMLElement>('.work-card[data-project]').forEach((card) => {
+      card.addEventListener('click', (e) => {
+        const id = card.dataset.project || '';
+        const p = data[id];
+        if (!p) return; // no modal data → follow the link
+        e.preventDefault();
+        open(p);
+      });
+    });
+    overlay.addEventListener('click', close);
+    dialog?.addEventListener('click', (e) => e.stopPropagation());
+    closeBtn?.addEventListener('click', close);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.classList.contains('open')) close();
+    });
+  }
+</script>

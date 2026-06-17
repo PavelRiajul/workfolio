@@ -2,9 +2,10 @@
 import Base from '../layouts/Base.astro';
 import Placeholder from '../components/Placeholder.astro';
 import ClosingCta from '../components/ClosingCta.astro';
-import { getAbout } from '../lib/content';
+import { getAbout, getHome } from '../lib/content';
 
 const about = await getAbout();
+const home = await getHome();
 const headingLines = about.heading.split('\n');
 ---
 <Base title="About — Riajul Islam" description={about.leadParagraph} subpage={true}>
@@ -61,6 +62,46 @@ const headingLines = about.heading.split('\n');
             <h3>{t.title}</h3>
             <p>{t.body}</p>
           </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- How I work (the craft standards — moved here from Home) -->
+  <section class="section section-bordered">
+    <div class="shell" style="padding:0;">
+      <div data-reveal>
+        <div class="eyebrow">{home.approachEyebrow}</div>
+        <h2 class="about-h2" style="max-width:640px;">{home.approachTitle}</h2>
+        <p class="split-lede" style="max-width:520px;">{home.approachLede}</p>
+      </div>
+      <div class="appr-grid">
+        {home.principles.map((p, i) => (
+          <div class={`appr-card ${i === home.principles.length - 1 ? 'dark' : ''}`} data-reveal>
+            <div class="appr-top"><h3>{p.title}</h3><span class="appr-num">{p.number}</span></div>
+            {i === home.principles.length - 1
+              ? <p>{p.body}</p>
+              : <div class="appr-desc"><p>{p.body}</p></div>}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- What I build (the full range — moved here from Home) -->
+  <section class="section section-bordered">
+    <div class="split">
+      <div data-reveal>
+        <div class="eyebrow">— What I build</div>
+        <h2 class="about-h2">The full range.</h2>
+        <p class="split-lede">Shopify is where most of my work lands lately, but I build across the stack. Most projects blend two or three.</p>
+      </div>
+      <div data-reveal>
+        {home.services.map((s, i) => (
+          <details class="acc" open={i === 0}>
+            <summary><span class="acc-label"><span class="acc-num">{s.number}</span><span class="acc-title">{s.title}</span></span><span class="acc-ic">+</span></summary>
+            <p>{s.body}</p>
+          </details>
         ))}
       </div>
     </div>

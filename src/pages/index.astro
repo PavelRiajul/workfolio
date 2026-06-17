@@ -6,20 +6,14 @@ import ClosingCta from '../components/ClosingCta.astro';
 import ProjectModal from '../components/ProjectModal.astro';
 import Mascot from '../components/Mascot.astro';
 import ShopifyStack from '../components/ShopifyStack.astro';
+import Testimonials from '../components/Testimonials.astro';
+import Faq from '../components/Faq.astro';
 import { getSite, getHome, getProjects, getShopifyServices } from '../lib/content';
 
 const site = await getSite();
 const home = await getHome();
 const projects = await getProjects();
 const shopifyServices = await getShopifyServices();
-
-const filters = [
-  { label: 'All', value: 'all' },
-  { label: 'Shopify', value: 'shopify' },
-  { label: 'Next.js', value: 'nextjs' },
-  { label: 'React Native', value: 'reactnative' },
-  { label: 'MERN', value: 'mern' },
-];
 ---
 <Base title={`${site.name} — ${site.role}`} description={home.lede} onHome={true} bodyClass="home">
   <!-- Hero -->
@@ -40,7 +34,7 @@ const filters = [
           <p class="hero-lede" data-hero-item>{home.lede}</p>
           <div class="hero-actions" data-hero-item>
             <a href="/start?tab=form" class="btn btn-dark">{home.primaryCta} <span>↗</span></a>
-            <a href="/work" class="btn btn-light">{home.secondaryCta}</a>
+            <a href="/shopify" class="btn btn-light">{home.secondaryCta}</a>
           </div>
           <div class="hero-avail" data-hero-item>
             <span class="pulse"></span>{home.availabilityNote}
@@ -101,29 +95,10 @@ const filters = [
 
   <Marquee items={site.techStack} />
 
-  <!-- Selected Work -->
-  <section id="work" class="section">
-    <div class="work-head" data-reveal>
-      <div>
-        <div class="eyebrow">— Selected Work</div>
-        <h2>Things I've built,<br>in one place.</h2>
-      </div>
-      <a href="/work" class="btn btn-light btn-sm">All projects ↗</a>
-    </div>
-    <div class="filters" data-reveal style="margin-top:44px;">
-      {filters.map((f, i) => (
-        <button class={`chip ${i === 0 ? 'active' : ''}`} data-filter={f.value}>{f.label}</button>
-      ))}
-    </div>
-    <div class="work-grid" style="margin-top:32px;">
-      {projects.map((p) => <WorkCard project={p} />)}
-    </div>
-  </section>
-
-  <!-- Shopify services (scroll-stacking glimpse → /shopify) -->
+  <!-- What I do — Shopify (the offer) -->
   <ShopifyStack services={shopifyServices} />
 
-  <!-- Shopify CRO highlight (different treatment to /shopify#sh-cro) -->
+  <!-- Shopify CRO highlight (teaser → /cro) -->
   <section class="section section-bordered">
     <div class="shell" style="padding:0;">
       <div class="croh" data-reveal>
@@ -157,53 +132,31 @@ const filters = [
     </div>
   </section>
 
-  <!-- How I Work -->
-  <section class="section section-bordered">
-    <div class="shell" style="padding:0;">
-      <div data-reveal>
-        <div class="eyebrow">{home.approachEyebrow}</div>
-        <h2 class="section-h2" style="max-width:640px;">{home.approachTitle}</h2>
-        <p style="font-size:18px;line-height:1.55;color:var(--color-grey-2);max-width:520px;margin:22px 0 0;">{home.approachLede}</p>
+  <!-- Proof: what clients say -->
+  <Testimonials eyebrow="— What clients say" title="Don't take my word for it." items={home.testimonials} />
+
+  <!-- Proof of delivery — Shopify first, generalist demoted to a link -->
+  <section id="work" class="section section-bordered">
+    <div class="work-head" data-reveal>
+      <div>
+        <div class="eyebrow">— Selected work</div>
+        <h2>Proof it ships.</h2>
       </div>
-      <div class="appr-grid">
-        {home.principles.map((p, i) => (
-          <div class={`appr-card ${i === home.principles.length - 1 ? 'dark' : ''}`} data-reveal>
-            <div class="appr-top"><h3>{p.title}</h3><span class="appr-num">{p.number}</span></div>
-            {i === home.principles.length - 1
-              ? <p>{p.body}</p>
-              : <div class="appr-desc"><p>{p.body}</p></div>}
-          </div>
-        ))}
-      </div>
+      <a href="/work" class="btn btn-light btn-sm">All projects ↗</a>
     </div>
+    <div class="work-grid" style="margin-top:40px;">
+      {projects.map((p) => <WorkCard project={p} />)}
+    </div>
+    <p class="work-note" data-reveal>Mostly Shopify &amp; commerce lately — I also build Next.js web apps and React Native mobile apps. <a href="/work">See the full range →</a></p>
   </section>
 
-  <!-- Services -->
-  <section id="services" class="section section-bordered">
-    <div class="split">
-      <div data-reveal>
-        <div class="eyebrow">— Services</div>
-        <h2 class="section-h2">What I build.</h2>
-        <p class="split-lede">Whether you're hiring or contracting, here's where I deliver. Most projects blend two or three.</p>
-      </div>
-      <div data-reveal>
-        {home.services.map((s, i) => (
-          <details class="acc" open={i === 0}>
-            <summary><span class="acc-label"><span class="acc-num">{s.number}</span><span class="acc-title">{s.title}</span></span><span class="acc-ic">+</span></summary>
-            <p>{s.body}</p>
-          </details>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- Process (dark) -->
+  <!-- How we'll work together -->
   <section id="process" class="section process">
     <div class="split">
       <div data-reveal>
         <div class="eyebrow">— Process</div>
         <h2 class="section-h2">Built<br>for speed.</h2>
-        <p class="split-lede">Six steps from first message to live product. No bloat, no ceremony — just momentum and clean commits.</p>
+        <p class="split-lede">Six steps from first message to live store. No bloat, no ceremony — just momentum and clean commits.</p>
       </div>
       <div data-reveal>
         {home.process.map((s, i) => (
@@ -216,45 +169,8 @@ const filters = [
     </div>
   </section>
 
-  <!-- Testimonials -->
-  <section class="section section-bordered">
-    <div class="shell" style="padding:0;">
-      <div data-reveal>
-        <div class="eyebrow">— What People Say</div>
-        <h2 class="section-h2">Don't take my word for it.</h2>
-      </div>
-      <div class="tst-grid">
-        {home.testimonials.map((t) => (
-          <div class="tst-card" data-reveal>
-            <div class="tst-quote">"</div>
-            <p class="tst-body">{t.quote}</p>
-            <div class="tst-author">
-              <span class="tst-avatar" style={`background:${t.color};`}>{t.initials}</span>
-              <span><span class="tst-name">{t.name}</span><span class="tst-role">{t.role}</span></span>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
   <!-- FAQ -->
-  <section class="section section-bordered">
-    <div class="split">
-      <div data-reveal>
-        <div class="eyebrow">— FAQ</div>
-        <h2 class="section-h2">Questions,<br>answered.</h2>
-      </div>
-      <div data-reveal>
-        {home.faqs.map((f, i) => (
-          <details class="acc" open={i === 0}>
-            <summary><span class="acc-title faq">{f.question}</span><span class="acc-ic">+</span></summary>
-            <p>{f.answer}</p>
-          </details>
-        ))}
-      </div>
-    </div>
-  </section>
+  <Faq eyebrow="— FAQ" title={"Questions,\nanswered."} items={home.faqs.map((f) => ({ q: f.question, a: f.answer }))} />
 
   <ClosingCta title={home.closingTitle} />
 

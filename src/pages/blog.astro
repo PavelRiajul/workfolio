@@ -77,3 +77,25 @@ const categories = [
     </div>
   </section>
 </Base>
+
+<script>
+  // Blog category filter — Blog page only.
+  const chips = document.querySelectorAll<HTMLElement>('[data-blog-filter]');
+  const cards = document.querySelectorAll<HTMLElement>('[data-category]');
+  const empty = document.getElementById('blog-empty');
+  if (chips.length) {
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const f = chip.dataset.blogFilter;
+        chips.forEach((c) => c.classList.toggle('active', c === chip));
+        let shown = 0;
+        cards.forEach((card) => {
+          const show = f === 'all' || card.dataset.category === f;
+          card.style.display = show ? '' : 'none';
+          if (show) shown++;
+        });
+        if (empty) empty.style.display = shown === 0 ? 'block' : 'none';
+      });
+    });
+  }
+</script>

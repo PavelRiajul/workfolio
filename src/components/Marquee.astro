@@ -12,3 +12,11 @@ const { items } = Astro.props;
     </div>
   </div>
 </section>
+
+<style is:global>
+  .marquee { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 26px 0; overflow: hidden; }
+  .marquee-track { display: flex; width: max-content; animation: nojaMarquee 32s linear infinite; }
+  .marquee-row { display: flex; align-items: center; gap: 34px; padding-right: 34px; font-family: var(--font-display); font-weight: 500; font-size: 26px; letter-spacing: -0.02em; color: var(--color-ink); white-space: nowrap; }
+  .marquee-row .star { color: var(--color-blue); }
+  @keyframes nojaMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+</style>

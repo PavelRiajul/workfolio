@@ -40,3 +40,22 @@ const filters = [
 
   <ProjectModal projects={projects} />
 </Base>
+
+<script>
+  // Project filter — Work page only.
+  const chips = document.querySelectorAll<HTMLElement>('[data-filter]');
+  const cards = document.querySelectorAll<HTMLElement>('.work-grid [data-tags]');
+  if (chips.length && cards.length) {
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const f = chip.dataset.filter;
+        chips.forEach((c) => c.classList.toggle('active', c === chip));
+        cards.forEach((card) => {
+          const tags = (card.dataset.tags || '').split(',');
+          const show = f === 'all' || (f && tags.includes(f));
+          card.style.display = show ? '' : 'none';
+        });
+      });
+    });
+  }
+</script>

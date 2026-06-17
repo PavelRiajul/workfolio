@@ -112,3 +112,35 @@ const pdfData = {
 
   <script type="application/json" id="resume-data" set:html={JSON.stringify(pdfData)}></script>
 </Base>
+
+<script>
+  // Copy email + download PDF — Résumé page only.
+  const copyBtn = document.getElementById('copy-email-btn');
+  if (copyBtn) {
+    const email = copyBtn.dataset.email || '';
+    copyBtn.addEventListener('click', () => {
+      const done = () => { copyBtn.textContent = 'Copied ✓'; window.setTimeout(() => { copyBtn.textContent = 'Copy email'; }, 1600); };
+      try { navigator.clipboard.writeText(email).then(done, done); } catch { done(); }
+    });
+  }
+  const dlBtn = document.getElementById('download-pdf-btn');
+  const dataEl = document.getElementById('resume-data');
+  if (dlBtn && dataEl) {
+    dlBtn.addEventListener('click', async () => {
+      const label = dlBtn.textContent;
+      dlBtn.setAttribute('disabled', 'true');
+      dlBtn.textContent = 'Preparing…';
+      try {
+        const data = JSON.parse(dataEl.textContent || '{}');
+        const { generateResumePdf } = await import('../scripts/resume-pdf');
+        generateResumePdf(data);
+      } catch (err) {
+        console.error('PDF generation failed:', err);
+        try { window.print(); } catch { /* noop */ }
+      } finally {
+        dlBtn.removeAttribute('disabled');
+        dlBtn.textContent = label;
+      }
+    });
+  }
+</script>

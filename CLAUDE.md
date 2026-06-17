@@ -1,0 +1,98 @@
+# CLAUDE.md — workfolio
+
+Riajul Islam's portfolio. Editorial, minimal, white-on-ink with a single blue accent;
+heavy on tasteful motion (GSAP reveals, Lenis smooth scroll, CSS 3D, an autonomous
+SVG mascot). Built from a design handoff. Static Astro site with an optional embedded
+Sanity CMS.
+
+## Stack
+- **Astro 5** (static output) — `.astro` components + islands. React integration is installed (for Sanity Studio) but the UI is plain Astro + vanilla TS.
+- **Tailwind CSS v4** via `@tailwindcss/vite` — but most styling is hand-written in `src/styles/global.css` using CSS custom properties (design tokens live in `@theme`).
+- **GSAP + ScrollTrigger** for scroll reveals, count-ups, pinning. **Lenis** for smooth scroll.
+- **Sanity v3** — Studio embedded at `/admin`. Content is fetched via GROQ with a **seeded offline fallback**, so the whole site renders with zero credentials.
+- **jsPDF** — generates the downloadable résumé PDF (text-layer) from data.
+- No animation libraries beyond GSAP. The mascot/3D effects are pure CSS + Web Animations API.
+
+## Commands
+```bash
+npm run dev      # astro dev — local server (port 4321, or 4322+ if busy)
+npm run build    # astro build → dist/
+npm run preview  # serve the built site
+```
+`.env` (see `.env.example`): `PUBLIC_SANITY_PROJECT_ID`, `PUBLIC_SANITY_DATASET`. When the
+project id is `placeholder` (default), the site uses seeded content from `src/data/content.ts`.
+
+## Architecture / data flow
+Pages **never** hardcode content or query Sanity directly. The flow is:
+
+```
+src/data/content.ts   ← seeded fallback content (the source of truth offline)
+src/lib/types.ts      ← all content TypeScript interfaces
+src/lib/sanity.ts     ← safeFetch(): query Sanity, fall back to seeded content on miss/empty/error
+src/lib/content.ts    ← one loader per content type (GROQ query + fallback). Pages import ONLY from here.
+```
+
+**To add/change content:** edit `src/data/content.ts`, add/update the type in `src/lib/types.ts`,
+and (if it's a new type) add a loader + GROQ projection in `src/lib/content.ts`. Loaders:
+`getSite, getHome, getShopifyServices, getProjects, getProject, getPosts, getAbout, getResume`.
+
+## Routes (`src/pages/`)
+| Path | File | Notes |
+| --- | --- | --- |
+| `/` | `index.astro` | Hero (3D card stack), tech marquee, work grid, Shopify service scroll-stack, CRO highlight band, how-I-work, process, testimonials, FAQ, closing CTA. **Hosts the Mascot.** |
+| `/work` | `work.astro` | Filterable project grid + case-study modal |
+| `/work/[slug]` | `work/[slug].astro` | Case study — `vellum`, `northwind`, `pulse`, `anchor` |
+| `/shopify` | `shopify.astro` | Shopify service landing — hero (Shopify 3D scene), brands, services explorer (`ServiceVisual`), approach, CRO section (`CroDashboard`), results, featured work, testimonials, FAQ |
+| `/cro` | `cro.astro` | Conversion-rate-optimization landing — KPI count-ups, funnel-leak viz, `CroDashboard`, a small interactive ROI calculator (`initCroCalc`) |
+| `/about` | `about.astro` | Bio, photo gallery, traits |
+| `/blog` | `blog.astro` | Featured post + category-filtered grid |
+| `/resume` | `resume.astro` | ATS résumé; copy-email, print, real downloadable PDF (jsPDF, lazy-loaded `resume-pdf.ts`) |
+| `/start` | `start.astro` | Contact — "book a call" / "send a message" tabs |
+| `/admin` | (Sanity) | Embedded Studio |
+
+## Components (`src/components/`)
+- `Navbar.astro` — **bottom tab bar** (not a top navbar). Floating pill on desktop, full-width bar on mobile. Tabs: Home · Work · Shopify · CRO · Blog · About · Talk. Supports `fa-solid`/`fa-brands` icons via full icon class. Has `id="nav"`.
+- `Footer.astro`, `WhatsApp.astro` (floating FAB, bottom-right), `BackToTop.astro` (`#b2t`, bottom-left).
+- `Mascot.astro` — autonomous animated SVG blob pet (see below). Home only.
+- `WorkCard.astro`, `ProjectModal.astro`, `Placeholder.astro` (hatch placeholder for missing imagery), `Marquee.astro`, `ClosingCta.astro`.
+- `ShopifyStack.astro` — home scroll-stacking glimpse of Shopify services (sticky cards + GSAP settle). Pairs copy with `ServiceVisual`.
+- `ServiceVisual.astro` — tone-matched mockup of each Shopify service (`tone`: indigo/terracotta/amber/sage/ink). Shared by `ShopifyStack` and `/shopify`.
+- `CroDashboard.astro` — CRO visual (uplift card + live A/B test + checkout funnel). Wrap in an element with `data-bars` so bars grow on scroll. Shared by `/shopify` and `/cro`.
+
+## Layout — `src/layouts/Base.astro`
+Wraps every page. Renders: handwritten brand signature (`.brand-sig`, Caveat font, fixed top-left, links home), a "← Home" pill (`.back-home`, fixed top-right, only when `subpage`), `Navbar`, `<slot/>`, `Footer`, `WhatsApp`, `BackToTop` (unless `backToTop={false}`), and imports `src/scripts/main.ts`.
+Props: `title, description, onHome, subpage, bodyClass, printChrome, backToTop`.
+- `onHome` is set on `/`; `subpage` on every other page (shows the back-home pill, hides chrome on print when `printChrome`).
+- Home passes `bodyClass="home"` (used to stack `.b2t` above the mascot).
+
+## Design system (`src/styles/global.css`)
+Tokens in `@theme` (also exposed as CSS vars):
+- Colors: `--color-ink #0a0a0a`, `--color-grey-1/2/3`, `--color-surface #f4f4f5`, `--color-blue #2563eb` (the single brand accent). Shopify green `#5e8e3e` used on Shopify/CRO surfaces.
+- Fonts: `--font-display 'Geist'`, `--font-body 'Inter'`, `--font-mono 'Geist Mono'`, `--font-hand 'Caveat'`.
+- `:root`: `--line` / `--line-soft` (subtle borders), `--maxw 1180px`, `--tabbar-h 64px`.
+**Visual language:** flat/minimal, white bg + ink text + blue accent, **pill** buttons (`border-radius: 9999px`), cards ~14–22px radius, **soft shadows, no outlines** (only thin `rgba(10,10,10,.08)` borders), dotted-grid hero motif. Motion = smooth ease (`cubic-bezier(.22,.61,.36,1)`), gentle. **Never hardcode a palette — use the tokens.**
+
+global.css is organized in clearly-labeled `/* ===== ... ===== */` sections (tokens, base, tab bar, hero, Shopify/CRO, components, mobile polish).
+
+## Client interactions (`src/scripts/main.ts`)
+Single module imported once by `Base.astro`; runs on `DOMContentLoaded`. Every feature is guarded by element presence (safe on every route) and respects `prefers-reduced-motion`. Init functions:
+`initSmoothScroll` (Lenis⇄ScrollTrigger + anchor glide, offset −24), `initNav`, `initWhatsAppFab` (tucks the FAB when the footer is in view), `initHeroTilt` (mouse-tilt the 3D stack via `--rx`/`--ry`; skipped when `#hv-stage[data-locked]`), `initShopifyStack`, `initBarGrow`, `initCroCalc` (ROI calculator), `initTabSpy` (scroll-spy for in-page anchor tabs), `initReveal`, `initHeroIntro`, `initCountUp`, `initRotatingWord`, `initProjectFilter`, `initModal`, `initBlogFilter`, `initStart`, `initResume`, `initClock`, `initBackToTop`.
+
+## The 3D hero card stack
+`index.astro` and `shopify.astro` heroes have `.hero > .hero-visual > .hv-stage#hv-stage > .hv-card`.
+CSS `preserve-3d`; each card is positioned with `translate3d(...)` and floats (`hvFloat`). The stage tilts toward the pointer via `--rx`/`--ry` (`initHeroTilt`). Hidden below 900px. Cards: code / browser / phone / shop (home), store / stat / cart / badge (shopify).
+
+## The Mascot (`Mascot.astro`) — autonomous roaming pet
+Reusable, drop-in, no libraries. Home only, **desktop only** (`display:none` ≤767px), bottom-left.
+- **Self-themes**: a `THEME` block in its scoped `<style>` reads the host's CSS vars (`--color-blue`, `--color-ink`, `--color-surface`, `--font-body`) with fallbacks.
+- **States/poses** via CSS keyframes (idle breathe + blink, walking, one-shot physics jump with anticipation → gravity arc → squash → settle).
+- **Autonomous roam loop** (JS): auto-starts ~1.6s after load, then every couple seconds picks a behaviour: wander to a random point, **interact** with any visible element across the whole page (`PLAY` selector → adds `.mascot-bonk`, a safe `translate`/`scale` dip), the **3D-stack play** (leap on → tilt the stack via `--rx`/`--ry` while locking the mouse-tilt → slide off; hero only), or an **idle act** (look-around / double-bounce / 360° spin). Travel uses the **Web Animations API** (`commitStyles` to bake each phase); body deformation uses CSS classes (`crouch/leaping/landing/sliding`). Flips to face travel direction (`.face-left`).
+- **Reduced-motion**: no roaming at all; click still does a single hop. Pauses when the tab is hidden / below 900px.
+- Plan/notes: `docs/mascot-journey-plan.md`.
+
+## Conventions & gotchas
+- **Floating chrome occupies the corners** — WhatsApp FAB (bottom-right, tucks near footer), back-to-top (`#b2t`, bottom-left; lifted above the mascot on `body.home`), Mascot (bottom-left, home). Keep new fixed UI clear of these and the bottom tab bar.
+- **Respect `prefers-reduced-motion`** everywhere — disable continuous loops (CSS) and guard autonomous JS motion. This is a hard requirement, verified per feature.
+- **Reusability:** when adding effects, read the host tokens; don't bake in colors. The mascot is meant to be droppable into other sites by editing only its `THEME` block.
+- **Verification:** there's a Puppeteer screenshot helper pattern (`.vt-shoot.mjs`, uses local Chrome at `/Applications/Google Chrome.app/...`, writes to `/tmp/vt`). Adapt the port to the running dev port. **Headless Chrome renders actively-animating, `filter`-composited layers pale/translucent** — to capture true colors, emulate `prefers-reduced-motion: reduce` or pause animations; `getComputedStyle` is the source of truth for debugging motion.
+- Sanity is optional; everything works offline against `src/data/content.ts`.

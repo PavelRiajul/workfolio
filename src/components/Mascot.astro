@@ -71,7 +71,9 @@ const { state = 'idle' } = Astro.props;
     padding: 0;
     border: 0;
     background: none;
-    cursor: pointer;
+    /* Decorative roaming pet — must never intercept clicks on real content
+       (it wanders over buttons, links, the footer, etc.). */
+    pointer-events: none;
     -webkit-tap-highlight-color: transparent;
     /* no fill-mode: the entrance must release the transform so the journey
        (Web Animations API) can drive the mascot freely afterwards */
