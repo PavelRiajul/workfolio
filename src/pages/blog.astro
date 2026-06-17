@@ -30,7 +30,7 @@ const categories = [
   <section style="max-width:var(--maxw);margin:0 auto;padding:0 clamp(20px,5vw,40px) clamp(28px,4vw,40px);">
     <div class="filters">
       {categories.map((c, i) => (
-        <button class={`chip ${i === 0 ? 'active' : ''}`} data-blog-filter={c.value}>{c.label}</button>
+        <button class={`chip ${i === 0 ? 'active' : ''}`} data-blog-filter={c.value} aria-pressed={i === 0 ? 'true' : 'false'}>{c.label}</button>
       ))}
     </div>
   </section>
@@ -87,7 +87,11 @@ const categories = [
     chips.forEach((chip) => {
       chip.addEventListener('click', () => {
         const f = chip.dataset.blogFilter;
-        chips.forEach((c) => c.classList.toggle('active', c === chip));
+        chips.forEach((c) => {
+          const on = c === chip;
+          c.classList.toggle('active', on);
+          c.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
         let shown = 0;
         cards.forEach((card) => {
           const show = f === 'all' || card.dataset.category === f;

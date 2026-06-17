@@ -6,6 +6,6 @@ const url = image?.asset?.url;
 ---
 <div class={`fill ${cls}`}>
   {url
-    ? <img src={url} alt={image?.alt || label} loading="lazy" />
+    ? <img src={url} alt={image?.alt || label} loading="lazy" decoding="async" />
     : <div class="placeholder"><span>{label}</span></div>}
 </div>

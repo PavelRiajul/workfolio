@@ -18,7 +18,14 @@ for (const p of projects) {
 }
 ---
 <div class="pm-overlay" id="pm-overlay">
-  <div class="pm-dialog" id="pm-dialog">
+  <div
+    class="pm-dialog"
+    id="pm-dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="pm-title"
+    tabindex="-1"
+  >
     <button class="pm-close" id="pm-close" aria-label="Close">✕</button>
     <div class="pm-eyebrow">— Project</div>
     <h3 id="pm-title">Project</h3>
@@ -40,6 +47,15 @@ for (const p of projects) {
     try { data = JSON.parse(dataEl.textContent || '{}'); } catch { data = {}; }
     const dialog = document.getElementById('pm-dialog');
     const closeBtn = document.getElementById('pm-close');
+    // Elements that can hold keyboard focus, for the focus trap.
+    const FOCUSABLE = 'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const focusables = () =>
+      [...(dialog?.querySelectorAll<HTMLElement>(FOCUSABLE) ?? [])].filter(
+        (el) => el.offsetWidth > 0 || el.offsetHeight > 0 || el === document.activeElement
+      );
+    // Remember who opened the modal so focus can return there on close.
+    let lastFocused: HTMLElement | null = null;
+    const isOpen = () => overlay.classList.contains('open');
     const open = (p: ModalProject) => {
       (document.getElementById('pm-title') as HTMLElement).textContent = p.name;
       (document.getElementById('pm-meta') as HTMLElement).textContent = `${p.stack}  ·  ${p.type}`;
@@ -48,10 +64,19 @@ for (const p of projects) {
         .map((o) => `<div><div class="out-num">${o[0]}</div><div class="out-lbl">${o[1]}</div></div>`)
         .join('');
       if (p.href) document.getElementById('pm-link')?.setAttribute('href', p.href);
+      lastFocused = document.activeElement as HTMLElement | null;
       overlay.classList.add('open');
       document.body.style.overflow = 'hidden';
+      // Move focus into the dialog so keyboard users start inside it.
+      (focusables()[0] ?? dialog)?.focus();
     };
-    const close = () => { overlay.classList.remove('open'); document.body.style.overflow = ''; };
+    const close = () => {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+      // Restore focus to the card (or whatever) that opened the modal.
+      lastFocused?.focus?.();
+      lastFocused = null;
+    };
     document.querySelectorAll<HTMLElement>('.work-card[data-project]').forEach((card) => {
       card.addEventListener('click', (e) => {
         const id = card.dataset.project || '';
@@ -65,7 +90,18 @@ for (const p of projects) {
     dialog?.addEventListener('click', (e) => e.stopPropagation());
     closeBtn?.addEventListener('click', close);
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && overlay.classList.contains('open')) close();
+      if (!isOpen()) return;
+      if (e.key === 'Escape') { close(); return; }
+      if (e.key !== 'Tab') return;
+      // Trap Tab/Shift+Tab so focus cycles inside the dialog, never behind it.
+      const items = focusables();
+      if (!items.length) { e.preventDefault(); return; }
+      const first = items[0];
+      const last = items[items.length - 1];
+      const active = document.activeElement as HTMLElement;
+      const inside = dialog?.contains(active);
+      if (e.shiftKey && (active === first || !inside)) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && (active === last || !inside)) { e.preventDefault(); first.focus(); }
     });
   }
 </script>

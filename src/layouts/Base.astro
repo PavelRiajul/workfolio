@@ -51,6 +51,7 @@ const chromeClass = printChrome ? 'no-print' : '';
     />
   </head>
   <body class={bodyClass}>
+    <a href="#main" class="skip-link">Skip to content</a>
     <div class={chromeClass}>
       <a href="/" class="brand-sig" aria-label={`${site.name} — home`}>{site.name}</a>
       {subpage && (
@@ -61,7 +62,9 @@ const chromeClass = printChrome ? 'no-print' : '';
       <Navbar site={site} onHome={onHome} subpage={subpage} />
     </div>
 
-    <slot />
+    <main id="main">
+      <slot />
+    </main>
 
     <div class={chromeClass}>
       <Footer site={site} />

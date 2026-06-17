@@ -16,7 +16,8 @@ const { state = 'idle' } = Astro.props;
   id="mascot"
   type="button"
   data-state={state}
-  aria-label="Blob mascot — hover to walk, click to jump"
+  tabindex="-1"
+  aria-hidden="true"
 >
   <span class="mascot-bubble" aria-hidden="true">let's ship!</span>
   <svg class="mascot-svg" viewBox="0 0 120 124" role="img" aria-hidden="true">

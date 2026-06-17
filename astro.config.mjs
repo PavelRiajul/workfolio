@@ -13,6 +13,8 @@ const {
 // https://astro.build/config
 export default defineConfig({
   site: 'https://riajulislam.dev',
+  // Secretly fetch a page on link hover so in-site navigation feels instant.
+  prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
   vite: {
     plugins: [tailwindcss()],
   },
