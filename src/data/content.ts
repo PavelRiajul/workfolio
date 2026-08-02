@@ -989,7 +989,7 @@ export const workPage: WorkPageContent = {
       "Selected products I've shipped — AI products and MVPs, headless Shopify, full-stack web apps and cross-platform mobile.",
   },
   hero: {
-    eyebrow: '— Selected Work',
+    eyebrow: 'Selected Work',
     headlineLines: ["Everything I've", 'built, in one place.'],
     lede:
       "A selection of products I've shipped — from AI MVPs and headless Shopify storefronts to full-stack web apps and cross-platform mobile. Each one built to make it ship.",
@@ -1017,7 +1017,7 @@ export const blogPage: BlogPageContent = {
       'Notes on building things — AI-accelerated development, Next.js, Shopify, the MERN stack and React Native.',
   },
   hero: {
-    eyebrow: '— Writing',
+    eyebrow: 'Writing',
     headlineLines: ['Notes on', 'building things.'],
     lede:
       'Short, practical write-ups on building with AI, Next.js, Shopify, the MERN stack and React Native — plus the occasional lesson from shipping on a deadline.',

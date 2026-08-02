@@ -6,17 +6,52 @@ import { getPosts, getBlogPage } from '../lib/content';
 const posts = await getPosts();
 const page = await getBlogPage();
 const heroLines = page.hero.headlineLines;
+// .hero-meta renders its own em-dash — don't double it up.
+const heroEyebrow = page.hero.eyebrow.replace(/^[—–-]\s*/, '');
 const closingLines = page.closing.title.split('\n');
 const featured = posts.find((p) => p.featured);
 const rest = posts.filter((p) => !p.featured);
 
 ---
 <Base title={page.seo.title} description={page.seo.description} subpage={true}>
-  <section class="section section-tight-bottom">
-    <div class="page-hero">
-      <div class="eyebrow">{page.hero.eyebrow}</div>
-      <h1>{heroLines.map((l, i) => (<>{l}{i < heroLines.length - 1 && <br />}</>))}</h1>
-      <p>{page.hero.lede}</p>
+  <!-- Hero — 3D stage: a post being written, one already out, and its tags. -->
+  <section class="hero hero-compact">
+    <div class="hero-grid"></div>
+    <div class="hero-inner shell" data-hero-intro>
+      <div class="hero-meta" data-hero-item>
+        <span>—</span>
+        <span>{heroEyebrow}</span>
+      </div>
+      <h1 data-hero-item>{heroLines.map((l, i) => (<>{l}{i < heroLines.length - 1 && <br />}</>))}</h1>
+      <div class="hero-lower">
+        <div class="hero-copy">
+          <p class="hero-lede" data-hero-item>{page.hero.lede}</p>
+        </div>
+        <div class="hero-visual" data-hero-item aria-hidden="true">
+          <div class="hv-stage" id="hv-stage">
+            <div class="hv-card bl-post"><div class="hv-inner">
+              <div class="bl-kicker">AI · 8 min read</div>
+              <div class="bl-title"><span></span><span class="w70"></span></div>
+              <div class="bl-body"><span></span><span></span><span class="w60"></span></div>
+            </div></div>
+
+            <div class="hv-card bl-editor"><div class="hv-inner">
+              <div class="bl-ed-bar"><em>draft.md</em></div>
+              <div class="bl-ed-body">
+                <div><span class="h">##</span> Where the weeks go</div>
+                <div><span class="d">Most bad answers are</span></div>
+                <div><span class="d">bad retrieval, not</span><span class="caret"></span></div>
+              </div>
+            </div></div>
+
+            <div class="hv-card bl-tags"><div class="hv-inner">
+              <span>AI</span><span>Shopify</span><span>Next.js</span><span>Career</span>
+            </div></div>
+
+            <div class="hv-card bl-badge"><div class="hv-inner"><i class="fa-solid fa-feather" aria-hidden="true"></i></div></div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 

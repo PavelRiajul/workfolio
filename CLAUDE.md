@@ -133,8 +133,14 @@ Single module imported once by `Base.astro`; runs on `DOMContentLoaded`. Every f
 `initSmoothScroll` (Lenis⇄ScrollTrigger + anchor glide, offset −24), `initTabBar` (tucks the bottom bar on scroll-down, restores it on scroll-up and at both ends of the page — it's `position:fixed`, so without this it covers body copy the whole way down), `initWhatsAppFab` (tucks the FAB when the footer is in view), `initHeroTilt` (mouse-tilt the 3D stack via `--rx`/`--ry`; skipped when `#hv-stage[data-locked]`), `initShopifyStack` (drives `#sstack`), `initBarGrow` (grows any `.bargrow` inside a `[data-bars]` group), `initTabSpy` (scroll-spy for in-page anchor tabs), `initReveal`, `initHeroIntro`, `initCountUp`, `initRotatingWord`, `initProjectFilter`, `initModal`, `initBlogFilter`, `initStart`, `initResume`, `initClock`, `initBackToTop`.
 
 ## The 3D hero card stack
-`index.astro` and `shopify.astro` heroes have `.hero > .hero-visual > .hv-stage#hv-stage > .hv-card`.
-CSS `preserve-3d`; each card is positioned with `translate3d(...)` and floats (`hvFloat`). The stage tilts toward the pointer via `--rx`/`--ry` (`initHeroTilt`). Hidden below 900px. Cards: code / browser / phone / shop (home), store / stat / cart / badge (shopify).
+Every landing page has one: `.hero > .hero-visual > .hv-stage#hv-stage > .hv-card`.
+CSS `preserve-3d`; each card is positioned with `translate3d(...)` and floats (`hvFloat`). The stage tilts toward the pointer via `--rx`/`--ry` (`initHeroTilt`). Hidden below 900px. One `#hv-stage` per page — `initHeroTilt` finds it by id, so a new scene needs no JS.
+Card sets: code/browser/phone/shop (home), store/stat/cart/badge (shopify), layers/db/deploy/badge (stack),
+case/stat/list/badge (work), post/editor/tags/badge (blog), msg/slot/reply/badge (talk).
+Index pages (work, blog, talk) add `.hero-compact` — same stage, no 100svh, so the grid below stays in reach.
+`.hero-meta` renders its own em-dash; eyebrow values are stripped of a leading one so the CMS can't double it.
+**Any looping animation inside a card must be named in the `prefers-reduced-motion` block** — `animation`
+doesn't inherit, so killing it on `.hv-inner` doesn't reach children (see `.bl-ed-body .caret`).
 
 ## The Mascot (`Mascot.astro`) — autonomous roaming pet
 Reusable, drop-in, no libraries. Home only, **desktop only** (`display:none` ≤767px), bottom-left.

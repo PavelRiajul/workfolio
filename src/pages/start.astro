@@ -5,16 +5,52 @@ import { getStartPage } from '../lib/content';
 
 const page = await getStartPage();
 const headlineLines = page.headlineLines;
+// .hero-meta renders its own em-dash — don't double it up.
+const heroEyebrow = page.eyebrow.replace(/^[—–-]\s*/, '');
 ---
 <Base title={page.seo.title} description={page.seo.description} subpage={true}>
-  <section class="start-wrap section section-tight-bottom">
-    <div class="eyebrow">{page.eyebrow}</div>
-    <h1 class="start-h1">{headlineLines.map((l, i) => (<>{l}{i < headlineLines.length - 1 && <br />}</>))}</h1>
-    <p class="start-lede">{page.lede}</p>
+  <!-- Hero — 3D stage: an incoming message, the slot it turns into, and
+       the promise attached to both. -->
+  <section class="hero hero-compact section-tight-bottom">
+    <div class="hero-grid"></div>
+    <div class="hero-inner shell" data-hero-intro>
+      <div class="hero-meta" data-hero-item>
+        <span>—</span>
+        <span>{heroEyebrow}</span>
+      </div>
+      <h1 data-hero-item>{headlineLines.map((l, i) => (<>{l}{i < headlineLines.length - 1 && <br />}</>))}</h1>
+      <div class="hero-lower">
+        <div class="hero-copy">
+          <p class="hero-lede" data-hero-item>{page.lede}</p>
+        </div>
+        <div class="hero-visual" data-hero-item aria-hidden="true">
+          <div class="hv-stage" id="hv-stage">
+            <div class="hv-card tk-msg"><div class="hv-inner">
+              <div class="tk-msg-head"><span class="tk-av">JD</span><b>New message</b></div>
+              <div class="tk-lines"><span></span><span class="w80"></span><span class="w50"></span></div>
+              <div class="tk-chips"><span>MVP</span><span>3 weeks</span></div>
+            </div></div>
 
-    <div class="start-tabs" role="tablist" aria-label="Contact method">
-      <button class="start-tab" data-tab="call" id="tab-call" role="tab" aria-selected="false" aria-controls="panel-call" tabindex="-1">{page.callTabLabel}</button>
-      <button class="start-tab active" data-tab="form" id="tab-form" role="tab" aria-selected="true" aria-controls="panel-form" tabindex="0">{page.formTabLabel}</button>
+            <div class="hv-card tk-slot"><div class="hv-inner">
+              <div class="tk-slot-top">Thursday</div>
+              <div class="tk-slot-time">9:30</div>
+              <div class="tk-slot-meta">30 min · video call</div>
+            </div></div>
+
+            <div class="hv-card tk-reply"><div class="hv-inner">
+              <i class="fa-solid fa-reply" aria-hidden="true"></i>
+              <span><b>&lt; 24h</b>reply, always</span>
+            </div></div>
+
+            <div class="hv-card tk-badge"><div class="hv-inner"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="start-tabs" role="tablist" aria-label="Contact method">
+        <button class="start-tab" data-tab="call" id="tab-call" role="tab" aria-selected="false" aria-controls="panel-call" tabindex="-1">{page.callTabLabel}</button>
+        <button class="start-tab active" data-tab="form" id="tab-form" role="tab" aria-selected="true" aria-controls="panel-form" tabindex="0">{page.formTabLabel}</button>
+      </div>
     </div>
   </section>
 

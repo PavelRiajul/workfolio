@@ -8,13 +8,50 @@ import { getProjects, getWorkPage } from '../lib/content';
 const projects = await getProjects();
 const page = await getWorkPage();
 const heroLines = page.hero.headlineLines;
+// .hero-meta renders its own em-dash — don't double it up.
+const heroEyebrow = page.hero.eyebrow.replace(/^[—–-]\s*/, '');
 ---
 <Base title={page.seo.title} description={page.seo.description} subpage={true}>
-  <section class="section section-tight-bottom">
-    <div class="page-hero" data-reveal>
-      <div class="eyebrow">{page.hero.eyebrow}</div>
-      <h1>{heroLines.map((l, i) => (<>{l}{i < heroLines.length - 1 && <br />}</>))}</h1>
-      <p>{page.hero.lede}</p>
+  <!-- Hero — the 3D stage from the home hero; cards stand in for a case
+       study, the numbers it moved, and the shortlist it sits in. -->
+  <section class="hero hero-compact">
+    <div class="hero-grid"></div>
+    <div class="hero-inner shell" data-hero-intro>
+      <div class="hero-meta" data-hero-item>
+        <span>—</span>
+        <span>{heroEyebrow}</span>
+      </div>
+      <h1 data-hero-item>{heroLines.map((l, i) => (<>{l}{i < heroLines.length - 1 && <br />}</>))}</h1>
+      <div class="hero-lower">
+        <div class="hero-copy">
+          <p class="hero-lede" data-hero-item>{page.hero.lede}</p>
+        </div>
+        <div class="hero-visual" data-hero-item aria-hidden="true">
+          <div class="hv-stage" id="hv-stage">
+            <div class="hv-card wk-case"><div class="hv-inner">
+              <div class="wk-cover"></div>
+              <div class="wk-case-body">
+                <b>Halo</b>
+                <span class="wk-pill">AI MVP</span>
+              </div>
+            </div></div>
+
+            <div class="hv-card wk-stat"><div class="hv-inner">
+              <div class="wk-stat-val">−58%</div>
+              <div class="wk-stat-lbl">page load time</div>
+              <div class="wk-spark"><i style="height:88%"></i><i style="height:64%"></i><i style="height:48%"></i><i style="height:30%"></i><i style="height:18%"></i></div>
+            </div></div>
+
+            <div class="hv-card wk-list"><div class="hv-inner">
+              <div class="wk-row"><span></span><em>2026</em></div>
+              <div class="wk-row"><span class="w70"></span><em>2026</em></div>
+              <div class="wk-row"><span class="w50"></span><em>2025</em></div>
+            </div></div>
+
+            <div class="hv-card wk-badge"><div class="hv-inner"><i class="fa-solid fa-folder-open" aria-hidden="true"></i></div></div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
