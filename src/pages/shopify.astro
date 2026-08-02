@@ -6,9 +6,8 @@ import ServiceVisual from '../components/ServiceVisual.astro';
 import CroDashboard from '../components/CroDashboard.astro';
 import Testimonials from '../components/Testimonials.astro';
 import Faq from '../components/Faq.astro';
-import { getSite, getProjects, getShopifyServices } from '../lib/content';
+import { getProjects, getShopifyServices } from '../lib/content';
 
-const site = await getSite();
 const projects = await getProjects();
 const services = await getShopifyServices();
 const shopifyProjects = projects.filter((p) => p.tags.includes('shopify'));
@@ -33,19 +32,57 @@ const croFeatures = [
   'Landing page optimization',
 ];
 
-
 const approach = [
   { n: '01', t: 'Audit & strategy', b: 'A Lighthouse audit and a funnel review, then a plan tied to revenue — not vanity metrics.' },
   { n: '02', t: 'Design & build', b: 'Theme or headless, built mobile-first with clean, documented, reviewable code.' },
   { n: '03', t: 'Speed & QA', b: 'Real-device testing, a performance budget, and a checkout that survives the edge cases.' },
-  { n: '04', t: 'Launch & grow', b: 'A zero-downtime cutover with redirects and analytics in place — then we iterate on data.' },
+  { n: '04', t: 'Launch & optimize', b: 'A zero-downtime cutover with analytics in place — then we test our way to a better conversion rate.' },
 ];
 
-const results = [
-  { s: '−58%', l: 'page load time' },
-  { s: '+24%', l: 'mobile conversion' },
-  { s: '98', l: 'Lighthouse score' },
-  { s: '0', l: 'downtime at launch' },
+// Build + CRO track record in one dark band.
+// Ordered so the headline money stat lands last — it becomes the big,
+// full-width "hero" cell when the grid collapses to 2×2 + 1 on mobile.
+const numbers = [
+  { v: 12, l: 'Shopify stores built & optimized' },
+  { v: 47, l: 'A/B tests shipped' },
+  { v: 58, prefix: '−', suffix: '%', l: 'Page load time' },
+  { v: 138, prefix: '+', suffix: '%', l: 'Best single-test lift' },
+  { v: 1.2, prefix: '$', decimals: 1, suffix: 'M+', l: 'Extra revenue generated' },
+];
+
+// Funnel leak (each stage count animates; drop-offs annotated)
+const funnel = [
+  { name: 'Sessions', count: 12480, w: '100%' },
+  { name: 'Product views', count: 7140, w: '72%', drop: '−43%', why: 'slow load · weak hero' },
+  { name: 'Add to cart', count: 3120, w: '48%', drop: '−56%', why: 'unclear PDP · no urgency' },
+  { name: 'Checkout', count: 1560, w: '33%', drop: '−50%', why: 'forced account · surprise fees' },
+  { name: 'Purchase', count: 998, w: '22%', drop: '−36%', why: 'long form · few pay options' },
+];
+
+// Fixes (impact bars grow on scroll)
+const fixes = [
+  { ic: 'fa-box-open', t: 'Product pages', b: 'Imagery, copy, reviews and a sticky add-to-cart.', w: '92%' },
+  { ic: 'fa-cart-shopping', t: 'Cart & checkout', b: 'Fewer steps, express pay, recovered carts.', w: '88%' },
+  { ic: 'fa-mobile-screen-button', t: 'Mobile UX', b: 'Speed and tap-friendly flows where most traffic is.', w: '80%' },
+  { ic: 'fa-gauge-high', t: 'Store speed', b: 'Core Web Vitals that pay back in orders.', w: '71%' },
+  { ic: 'fa-shield-halved', t: 'Trust & proof', b: 'Reviews, badges and guarantees at the point of doubt.', w: '64%' },
+];
+
+// CRO loop
+const croProcess = [
+  { n: '01', t: 'Audit & data review', b: 'GA4, Shopify analytics, heatmaps and session recordings pinpoint exactly where visitors hesitate and drop.' },
+  { n: '02', t: 'Hypotheses & prioritisation', b: 'Findings become testable hypotheses, ranked by impact, confidence and effort (ICE) — highest leverage first.' },
+  { n: '03', t: 'Design & build the variant', b: 'Built directly in your theme — pixel-clean, fast, and flicker-free.' },
+  { n: '04', t: 'A/B test to significance', b: 'Traffic is split and the test runs to 95%+ confidence. No guessing, no peeking.' },
+  { n: '05', t: 'Ship the winner', b: 'Winners roll out, the learning is documented, and the lift is banked.' },
+];
+
+// Experiments leaderboard (lift numbers animate)
+const experiments = [
+  { t: 'Sticky add-to-cart', area: 'PDP · mobile', metric: 'Add-to-cart rate', lift: 34 },
+  { t: 'One-page checkout', area: 'Checkout', metric: 'Checkout completion', lift: 19 },
+  { t: 'Trust badges at checkout', area: 'Checkout', metric: 'Completion rate', lift: 12 },
+  { t: 'Free-shipping threshold bar', area: 'Cart', metric: 'Average order value', lift: 9 },
 ];
 
 const testimonials = [
@@ -53,18 +90,22 @@ const testimonials = [
   { quote: 'He took our slow, app-stuffed theme and got it under a second on mobile. Conversion went up the first week.', name: 'Marcus Lee', role: 'Founder, Harborline', initials: 'ML', color: '#5e8e3e' },
 ];
 
+// Build questions and conversion questions, in one list — they are one service now.
 const faqs = [
   { q: 'Headless or a regular theme — which do I need?', a: "Most stores don't need headless. If a fast, well-built theme gets you there, I'll say so. Headless earns its keep once you've outgrown Liquid or want a fully custom front end — I'll be honest about which side you're on." },
-  { q: 'Can you work with my existing theme?', a: "Yes. A lot of the work is improving what's already there — speed, bug fixes, new sections — without a full rebuild." },
-  { q: 'How long does a Shopify build take?', a: "A focused theme build is usually 3–6 weeks; a headless storefront, 6–10. You get a real timeline after a short scoping call, not a guess." },
+  { q: 'Can you work with my existing theme?', a: "Yes. A lot of the work is improving what's already there — speed, bug fixes, new sections, conversion tests — without a full rebuild." },
+  { q: 'How long does a Shopify build take?', a: "A focused theme build is usually 3–6 weeks; a headless storefront, 6–10. An AI-accelerated workflow does a lot of the theme scaffolding, so more of that time goes into the conversion details. You get a real timeline after a short scoping call, not a guess." },
   { q: 'Do you handle migrations?', a: "WooCommerce, Magento, BigCommerce or a legacy Shopify theme — I migrate products, content and URLs with redirects so you don't lose rankings." },
-  { q: 'Will it actually be fast on mobile?', a: "That's the whole point. Most store traffic is mobile, so I build to a performance budget and test on real devices, not just a fast laptop." },
-  { q: 'What happens after launch?', a: "I don't vanish at handoff. You get docs, a clean repo, and support options if you want a hand once it's live." },
+  { q: 'How much can CRO realistically gain me?', a: "It depends on your starting point — a rough, app-heavy store has more headroom than a polished one. Single tests often land 5–30% on the metric they target, and because CRO compounds, those wins stack. I'll give you an honest read after the audit, not a fantasy number." },
+  { q: 'Do I need a lot of traffic for A/B testing?', a: "Some, yes — statistical significance needs volume. Under ~10k monthly visitors we lean on best-practice fixes, heatmaps and session recordings first, and save formal A/B tests for the pages that get enough traffic." },
+  { q: 'How long does a CRO test take?', a: 'Usually 2–4 weeks per test to reach 95%+ confidence, depending on traffic and effect size. Rushing it is how you ship false winners — so I let tests run their course.' },
+  { q: 'Will testing slow my store down?', a: "No. Variants are built into the theme and performance-budgeted — no third-party flicker, no layout shift. Speed and conversion pull the same direction here." },
+  { q: 'What happens after launch?', a: "I don't vanish at handoff. You get docs, a clean repo, and support options — including a steady cadence of conversion tests if you want to keep compounding the gains." },
 ];
 ---
 <Base
-  title="Shopify Development — Riajul Islam"
-  description="Headless Hydrogen builds, custom Liquid themes, migrations and speed work — Shopify stores that load fast and convert."
+  title="Shopify & CRO — Store Development and Conversion Optimization — Riajul Islam"
+  description="Headless Hydrogen builds, custom Liquid themes, speed work and conversion rate optimization — Shopify stores that load fast and actually sell."
   subpage={true}
 >
   <!-- Hero -->
@@ -73,16 +114,16 @@ const faqs = [
     <div class="hero-inner shell" data-hero-intro>
       <div class="hero-meta" data-hero-item>
         <span>—</span>
-        <span>Shopify Development</span>
+        <span>Shopify &amp; CRO</span>
         <span class="chip-open chip-shop"><span class="dot"></span>Open for builds</span>
       </div>
       <h1 data-hero-item>Shopify stores,<br>built to <span class="accent accent-shop">convert.</span></h1>
       <div class="hero-lower">
         <div class="hero-copy">
-          <p class="hero-lede" data-hero-item>From headless Hydrogen builds to custom Liquid themes and the odd rescue mission — I build Shopify stores that load in under a second and turn browsers into buyers. No bloated apps, no theme spaghetti.</p>
+          <p class="hero-lede" data-hero-item>Two halves of one job: build a store that loads in under a second, then test it into converting. Headless Hydrogen, custom Liquid themes, speed work and the CRO program that turns your existing traffic into orders. No bloated apps, no theme spaghetti.</p>
           <div class="hero-actions" data-hero-item>
             <a href="/start?tab=form" class="btn btn-dark">Start a Shopify project <span>↗</span></a>
-            <a href="#sh-work" class="btn btn-light">See Shopify work</a>
+            <a href="#cro" class="btn btn-light">Jump to CRO</a>
           </div>
           <div class="hero-stats" data-hero-item style="margin-top:40px;">
             {heroStats.map((s) => (
@@ -170,30 +211,6 @@ const faqs = [
     </div>
   </section>
 
-  <!-- CRO — the headline service -->
-  <section id="sh-cro" class="section section-bordered cro-sec" style="scroll-margin-top:24px;">
-    <div class="cro">
-      <div class="cro-copy" data-reveal>
-        <div class="eyebrow">— Conversion rate optimization</div>
-        <h2 class="section-h2">More revenue from the<br>traffic you already have.</h2>
-        <p class="cro-lede">A fast store is step one — CRO is how it actually <em>sells</em>. I run data-driven tests on your product pages, cart and checkout to turn more of your existing visitors into buyers. Same traffic, more orders, no extra ad spend.</p>
-        <div class="cro-pills">
-          {croFeatures.map((f) => (
-            <span class="cro-pill"><i class="fa-solid fa-check" aria-hidden="true"></i>{f}</span>
-          ))}
-        </div>
-        <div class="cro-actions">
-          <a href="/cro" class="btn btn-dark">Explore CRO in detail <span>↗</span></a>
-          <a href="/start?tab=form" class="btn btn-light">Get a CRO audit</a>
-        </div>
-      </div>
-
-      <div class="cro-viz" data-reveal data-bars aria-hidden="true">
-        <CroDashboard />
-      </div>
-    </div>
-  </section>
-
   <!-- Approach -->
   <section class="section section-bordered">
     <div style="max-width:var(--maxw);margin:0 auto;">
@@ -213,20 +230,161 @@ const faqs = [
     </div>
   </section>
 
-  <!-- Results -->
+  <!-- Track record (dark) -->
   <section class="section process">
     <div style="max-width:var(--maxw);margin:0 auto;">
-      <div class="eyebrow" data-reveal>— Results</div>
-      <h2 class="section-h2" data-reveal style="color:#fff;">Numbers from the last rebuild.</h2>
-      <div class="cs-out-grid" data-reveal>
-        {results.map((r) => (
+      <div class="eyebrow" data-reveal>— By the numbers</div>
+      <h2 class="section-h2" data-reveal style="color:#fff;">Built, then measured.</h2>
+      <div class="cs-out-grid bento-5" data-reveal>
+        {numbers.map((n) => (
           <div>
-            <div class="stat">{r.s}</div>
-            <div class="lbl">{r.l}</div>
+            <div class="stat" data-count={String(n.v)} data-prefix={n.prefix || ''} data-suffix={n.suffix || ''} data-decimals={String(n.decimals || 0)}>{(n.prefix || '') + '0' + (n.suffix || '')}</div>
+            <div class="lbl">{n.l}</div>
           </div>
         ))}
       </div>
-      <p class="cs-out-note" data-reveal>Measured against the previous Liquid theme over the first month after launch. Your mileage depends on your starting point — but the direction is always the same.</p>
+      <p class="cs-out-note" data-reveal>Figures across recent Shopify engagements. Your numbers depend on your starting point — the audit tells us where the headroom is.</p>
+    </div>
+  </section>
+
+  <!-- CRO — the second half of the service -->
+  <section id="cro" class="section section-bordered cro-sec" style="scroll-margin-top:24px;">
+    <div class="cro">
+      <div class="cro-copy" data-reveal>
+        <div class="eyebrow">— Conversion rate optimization</div>
+        <h2 class="section-h2">More revenue from the<br>traffic you already have.</h2>
+        <p class="cro-lede">A fast store is step one — CRO is how it actually <em>sells</em>. I run data-driven tests on your product pages, cart and checkout to turn more of your existing visitors into buyers. Same traffic, more orders, no extra ad spend.</p>
+        <div class="cro-pills">
+          {croFeatures.map((f) => (
+            <span class="cro-pill"><i class="fa-solid fa-check" aria-hidden="true"></i>{f}</span>
+          ))}
+        </div>
+        <div class="cro-actions">
+          <a href="/start?tab=form" class="btn btn-dark">Get a CRO audit <span>↗</span></a>
+          <a href="#cro-calc" class="btn btn-light">Do the math</a>
+        </div>
+      </div>
+
+      <div class="cro-viz" data-reveal data-bars aria-hidden="true">
+        <CroDashboard />
+      </div>
+    </div>
+  </section>
+
+  <!-- Funnel leak + fixes -->
+  <section class="section section-bordered">
+    <div style="max-width:var(--maxw);margin:0 auto;">
+      <div class="eyebrow" data-reveal>— Where the money leaks</div>
+      <h2 class="section-h2" data-reveal style="max-width:680px;">For every 100 visitors,<br>92 leave without buying.</h2>
+      <div class="lf">
+        <div class="leak" data-reveal>
+          {funnel.map((f, i) => (
+            <>
+              {i > 0 && (
+                <div class="leak-gap"><span class="leak-drop">{f.drop}</span><span class="leak-why">{f.why}</span></div>
+              )}
+              <div class="leak-stage" style={`--w:${f.w}`}>
+                <span class="leak-name">{f.name}</span>
+                <span class="leak-val" data-count={String(f.count)} data-sep="true">{f.count.toLocaleString('en-US')}</span>
+              </div>
+            </>
+          ))}
+        </div>
+        <div class="fixes" data-reveal data-bars>
+          {fixes.map((f) => (
+            <div class="fix">
+              <span class="fix-ic"><i class={`fa-solid ${f.ic}`} aria-hidden="true"></i></span>
+              <div class="fix-body"><h3>{f.t}</h3><p>{f.b}</p></div>
+              <div class="fix-impact"><span>Impact</span><div class="fix-bar"><i class="bargrow" style={`width:${f.w}`}></i></div></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CRO loop (dark) -->
+  <section id="cro-process" class="section process" style="scroll-margin-top:24px;">
+    <div style="max-width:var(--maxw);margin:0 auto;">
+      <div class="eyebrow" data-reveal>— The CRO process</div>
+      <h2 class="section-h2" data-reveal style="color:#fff;">A loop, not a one-off.</h2>
+      <div class="cyc" data-reveal>
+        {croProcess.map((s) => (
+          <div class="cyc-step">
+            <div class="cyc-node">{s.n}</div>
+            <div class="cyc-body"><h3>{s.t}</h3><p>{s.b}</p></div>
+          </div>
+        ))}
+        <div class="cyc-loop"><i class="fa-solid fa-arrow-rotate-left" aria-hidden="true"></i> Then back to 01 — at a higher baseline</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Revenue calculator -->
+  <section class="section section-bordered" style="scroll-margin-top:24px;">
+    <div style="max-width:var(--maxw);margin:0 auto;">
+      <div class="work-head" data-reveal>
+        <div>
+          <div class="eyebrow">— Do the math</div>
+          <h2 class="section-h2">What a better rate is worth.</h2>
+        </div>
+        <a href="/start?tab=form" class="btn btn-light btn-sm">Get your number ↗</a>
+      </div>
+      <div class="calc" id="cro-calc" data-reveal>
+        <div class="calc-controls">
+          <label class="calc-field">
+            <span class="calc-l">Monthly visitors <b id="cv-vis">20,000</b></span>
+            <input class="calc-range" type="range" id="ci-vis" min="2000" max="200000" step="1000" value="20000" aria-label="Monthly visitors" />
+          </label>
+          <label class="calc-field">
+            <span class="calc-l">Average order value <b id="cv-aov">$65</b></span>
+            <input class="calc-range" type="range" id="ci-aov" min="15" max="400" step="5" value="65" aria-label="Average order value" />
+          </label>
+          <label class="calc-field">
+            <span class="calc-l">Current conversion rate <b id="cv-cur">2.0%</b></span>
+            <input class="calc-range" type="range" id="ci-cur" min="0.5" max="8" step="0.1" value="2.0" aria-label="Current conversion rate" />
+          </label>
+          <label class="calc-field">
+            <span class="calc-l">Target conversion rate <b id="cv-tgt">3.0%</b></span>
+            <input class="calc-range" type="range" id="ci-tgt" min="0.5" max="10" step="0.1" value="3.0" aria-label="Target conversion rate" />
+          </label>
+        </div>
+        <div class="calc-out">
+          <span class="calc-out-k">Extra revenue / year</span>
+          <div class="calc-big" id="co-year">$0</div>
+          <div class="calc-sub" id="co-sub">from a +1.0 pt conversion change</div>
+          <div class="calc-rows">
+            <div><span>Revenue now</span><b id="co-now">$0/mo</b></div>
+            <div><span>After</span><b id="co-after">$0/mo</b></div>
+            <div class="up"><span>Monthly uplift</span><b id="co-mo">+$0</b></div>
+            <div class="up"><span>Extra orders / yr</span><b id="co-orders">0</b></div>
+          </div>
+        </div>
+      </div>
+      <p class="calc-note">Illustrative — drag the sliders to model your own store. Real projections come from your analytics.</p>
+    </div>
+  </section>
+
+  <!-- Experiments leaderboard -->
+  <section class="section section-bordered">
+    <div style="max-width:var(--maxw);margin:0 auto;">
+      <div class="eyebrow" data-reveal>— Tests that moved the needle</div>
+      <h2 class="section-h2" data-reveal>Real experiments, ranked by lift.</h2>
+      <div class="lead" data-reveal>
+        <div class="lead-row lead-head">
+          <span>#</span><span>Test</span><span class="lead-metric">Metric</span><span style="text-align:right;">Lift</span>
+        </div>
+        <div class="lead-body">
+          {experiments.map((e, i) => (
+            <div class="lead-row">
+              <span class="lead-rank">{String(i + 1).padStart(2, '0')}</span>
+              <span class="lead-test">{e.t}<span>{e.area}</span></span>
+              <span class="lead-metric">{e.metric}</span>
+              <span class="lead-lift" data-count={String(e.lift)} data-prefix="+" data-suffix="%">+{e.lift}%</span>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   </section>
 
@@ -264,7 +422,46 @@ const faqs = [
   <Testimonials eyebrow="— What clients say" title="Shipped, fast, and still standing." items={testimonials} />
 
   <!-- FAQ -->
-  <Faq eyebrow="— Shopify FAQ" title={"The questions\nI usually get."} items={faqs} />
+  <Faq eyebrow="— Shopify & CRO FAQ" title={"The questions\nI usually get."} items={faqs} />
 
-  <ClosingCta title={"Ready to make Shopify\nactually sell?"} bordered={true} secondaryLabel="See all work" secondaryHref="/work" />
+  <ClosingCta title={"Ready to make Shopify\nactually sell?"} bordered={true} secondaryLabel="See all services" secondaryHref="/services" />
 </Base>
+
+<script>
+  // Revenue calculator — Shopify/CRO page only.
+  const root = document.getElementById('cro-calc');
+  if (root) {
+    const ids = ['ci-vis', 'ci-aov', 'ci-cur', 'ci-tgt'] as const;
+    const [vis, aov, cur, tgt] = ids.map((id) => document.getElementById(id) as HTMLInputElement | null);
+    if (vis && aov && cur && tgt) {
+      const set = (id: string, txt: string) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+      const money = (n: number) => '$' + Math.round(n).toLocaleString('en-US');
+      const paint = (el: HTMLInputElement) => {
+        const min = +el.min; const max = +el.max;
+        const p = ((+el.value - min) / (max - min)) * 100;
+        el.style.background = `linear-gradient(to right, #5e8e3e ${p}%, rgba(10,10,10,0.1) ${p}%)`;
+      };
+      const update = () => {
+        const v = +vis.value, a = +aov.value, c = +cur.value, t = +tgt.value;
+        const now = v * (c / 100) * a;
+        const after = v * (t / 100) * a;
+        const extraMo = after - now;
+        const extraOrdersYr = v * ((t - c) / 100) * 12;
+        set('cv-vis', v.toLocaleString('en-US'));
+        set('cv-aov', '$' + a.toLocaleString('en-US'));
+        set('cv-cur', c.toFixed(1) + '%');
+        set('cv-tgt', t.toFixed(1) + '%');
+        set('co-year', money(Math.max(extraMo * 12, 0)));
+        const delta = (t - c).toFixed(1);
+        set('co-sub', `from a ${t >= c ? '+' : ''}${delta} pt conversion change`);
+        set('co-now', money(now) + '/mo');
+        set('co-after', money(after) + '/mo');
+        set('co-mo', (extraMo >= 0 ? '+' : '−') + money(Math.abs(extraMo)) + '/mo');
+        set('co-orders', (extraOrdersYr >= 0 ? '+' : '−') + Math.round(Math.abs(extraOrdersYr)).toLocaleString('en-US'));
+        [vis, aov, cur, tgt].forEach(paint);
+      };
+      [vis, aov, cur, tgt].forEach((el) => el.addEventListener('input', update));
+      update();
+    }
+  }
+</script>

@@ -5,15 +5,15 @@ import WorkCard from '../components/WorkCard.astro';
 import ClosingCta from '../components/ClosingCta.astro';
 import ProjectModal from '../components/ProjectModal.astro';
 import Mascot from '../components/Mascot.astro';
-import ShopifyStack from '../components/ShopifyStack.astro';
+import ServiceStack from '../components/ServiceStack.astro';
 import Testimonials from '../components/Testimonials.astro';
 import Faq from '../components/Faq.astro';
-import { getSite, getHome, getProjects, getShopifyServices } from '../lib/content';
+import { getSite, getHome, getProjects, getServices } from '../lib/content';
 
 const site = await getSite();
 const home = await getHome();
 const projects = await getProjects();
-const shopifyServices = await getShopifyServices();
+const services = await getServices();
 ---
 <Base title={`${site.name} — ${site.role}`} description={home.lede} onHome={true} bodyClass="home">
   <!-- Hero -->
@@ -34,7 +34,7 @@ const shopifyServices = await getShopifyServices();
           <p class="hero-lede" data-hero-item>{home.lede}</p>
           <div class="hero-actions" data-hero-item>
             <a href="/start?tab=form" class="btn btn-dark">{home.primaryCta} <span>↗</span></a>
-            <a href="/shopify" class="btn btn-light">{home.secondaryCta}</a>
+            <a href="/services" class="btn btn-light">{home.secondaryCta}</a>
           </div>
           <div class="hero-avail" data-hero-item>
             <span class="pulse"></span>{home.availabilityNote}
@@ -55,12 +55,12 @@ const shopifyServices = await getShopifyServices();
           <div class="hv-stage" id="hv-stage">
             <div class="hv-card hv-code"><div class="hv-inner">
               <div class="hv-code-body mono">
-                <div><span class="t-key">const</span> <span class="t-fn">ship</span> = () <span class="t-key">=&gt;</span> {'{'}</div>
-                <div>  <span class="t-fn">build</span>();</div>
-                <div>  <span class="t-fn">deploy</span>();</div>
-                <div>{'}'}</div>
+                <div><span class="t-dim">›</span> <span class="t-key">build</span> the checkout</div>
+                <div><span class="t-fn">✓</span> 14 files generated</div>
+                <div><span class="t-fn">✓</span> tests passing</div>
+                <div><span class="t-dim">›</span> reviewed by me</div>
               </div>
-              <span class="hv-tag dark">TypeScript</span>
+              <span class="hv-tag dark">AI-assisted</span>
             </div></div>
             <div class="hv-card hv-browser"><div class="hv-inner">
               <div class="hv-bar"><span></span><span></span><span></span><em>riajulislam.dev</em></div>
@@ -95,47 +95,48 @@ const shopifyServices = await getShopifyServices();
 
   <Marquee items={site.techStack} />
 
-  <!-- What I do — Shopify (the offer) -->
-  <ShopifyStack services={shopifyServices} />
+  <!-- What I do — the four offers -->
+  <ServiceStack services={services} />
 
-  <!-- Shopify CRO highlight (teaser → /cro) -->
+  <!-- The AI-accelerated method (dark band) -->
   <section class="section section-bordered">
     <div class="shell" style="padding:0;">
-      <div class="croh" data-reveal>
+      <div class="croh croh-ai" data-reveal>
         <div class="croh-bg" aria-hidden="true"></div>
         <div class="croh-grid">
           <div class="croh-copy">
-            <div class="eyebrow">— Conversion-first</div>
-            <h2 class="croh-h">Stores built to<br><span class="accent">convert</span>, not just look good.</h2>
-            <p class="croh-p">CRO sits at the heart of every Shopify build I ship — audits, A/B tests and checkout tuning that grow revenue from the traffic you already have. Same visitors, more orders.</p>
-            <a href="/cro" class="croh-link">Explore Shopify CRO <span aria-hidden="true">→</span></a>
+            <div class="eyebrow">— The method</div>
+            <h2 class="croh-h">AI writes the boilerplate.<br>I own the <span class="accent">engineering.</span></h2>
+            <p class="croh-p">The mechanical 60% of a build — scaffolding, CRUD, types, test fixtures — gets generated in minutes. The saved weeks go into architecture, performance and the details that decide whether people actually use the thing.</p>
+            <a href="/services" class="croh-link">How the workflow runs <span aria-hidden="true">→</span></a>
           </div>
           <div class="croh-stats" data-bars aria-hidden="true">
             <div class="croh-stat">
-              <div class="croh-num"><span class="pre">+</span><span data-count="62" data-suffix="%">0%</span></div>
-              <div class="croh-bar"><i class="bargrow" style="width:84%"></i></div>
-              <div class="croh-lbl">avg. conversion uplift</div>
+              <div class="croh-num"><span data-count="3" data-suffix=" wk">0 wk</span></div>
+              <div class="croh-bar"><i class="bargrow" style="width:38%"></i></div>
+              <div class="croh-lbl">typical MVP, start to live</div>
             </div>
             <div class="croh-stat">
-              <div class="croh-num"><span class="pre">−</span><span data-count="41" data-suffix="%">0%</span></div>
-              <div class="croh-bar"><i class="bargrow" style="width:58%"></i></div>
-              <div class="croh-lbl">cart abandonment</div>
+              <div class="croh-num"><span class="pre">−</span><span data-count="60" data-suffix="%">0%</span></div>
+              <div class="croh-bar"><i class="bargrow" style="width:72%"></i></div>
+              <div class="croh-lbl">time on mechanical work</div>
             </div>
             <div class="croh-stat">
-              <div class="croh-num"><span data-count="98" data-suffix="%">0%</span></div>
-              <div class="croh-bar"><i class="bargrow" style="width:93%"></i></div>
-              <div class="croh-lbl">A/B test confidence</div>
+              <div class="croh-num"><span data-count="100" data-suffix="%">0%</span></div>
+              <div class="croh-bar"><i class="bargrow" style="width:100%"></i></div>
+              <div class="croh-lbl">of it reviewed by a human</div>
             </div>
           </div>
         </div>
       </div>
+      <p class="ai-caveat" data-reveal style="margin-top:32px;">{home.aiCaveat}</p>
     </div>
   </section>
 
   <!-- Proof: what clients say -->
   <Testimonials eyebrow="— What clients say" title="Don't take my word for it." items={home.testimonials} />
 
-  <!-- Proof of delivery — Shopify first, generalist demoted to a link -->
+  <!-- Proof of delivery -->
   <section id="work" class="section section-bordered">
     <div class="work-head" data-reveal>
       <div>
@@ -147,7 +148,7 @@ const shopifyServices = await getShopifyServices();
     <div class="work-grid" style="margin-top:40px;">
       {projects.map((p) => <WorkCard project={p} />)}
     </div>
-    <p class="work-note" data-reveal>Mostly Shopify &amp; commerce lately — I also build Next.js web apps and React Native mobile apps. <a href="/work">See the full range →</a></p>
+    <p class="work-note" data-reveal>AI products and MVPs lately — plus Shopify commerce, Next.js web apps and React Native mobile. <a href="/work">See the full range →</a></p>
   </section>
 
   <!-- How we'll work together -->
@@ -156,7 +157,7 @@ const shopifyServices = await getShopifyServices();
       <div data-reveal>
         <div class="eyebrow">— Process</div>
         <h2 class="section-h2">Built<br>for speed.</h2>
-        <p class="split-lede">Six steps from first message to live store. No bloat, no ceremony — just momentum and clean commits.</p>
+        <p class="split-lede">Six steps from first message to production. No bloat, no ceremony — just momentum and clean commits.</p>
       </div>
       <div data-reveal>
         {home.process.map((s, i) => (

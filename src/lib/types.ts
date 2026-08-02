@@ -35,6 +35,9 @@ export interface Faq {
   answer: string;
 }
 
+/** Visual tone key for stack/showcase cards (see .tone-* in global.css). */
+export type Tone = 'indigo' | 'terracotta' | 'amber' | 'sage' | 'ink' | 'ai';
+
 export interface ShopifyService {
   number: string;
   title: string;
@@ -43,8 +46,34 @@ export interface ShopifyService {
   /** Fuller description used on the Shopify services page. */
   description: string;
   features: string[];
-  /** Visual tone key for the home stack card (see .tone-* in global.css). */
-  tone: 'indigo' | 'terracotta' | 'amber' | 'sage' | 'ink';
+  tone: Tone;
+}
+
+/**
+ * A top-level offering (AI web development, MVP engineering, commerce, APIs).
+ * Rendered by the home ServiceStack and the /services showcase.
+ */
+export interface Service {
+  number: string;
+  /** Anchor id on /services. */
+  slug: string;
+  title: string;
+  /** Short punchy line used for the home stack glimpse. */
+  tagline: string;
+  /** Fuller description used on the services page. */
+  description: string;
+  features: string[];
+  /** Font Awesome class for the kicker icon. */
+  icon: string;
+  /** Kicker label above the title. */
+  kicker: string;
+  /** Typical turnaround, shown as a chip on the services page. */
+  timeline: string;
+  /** Which mockup OfferVisual renders. */
+  visual: 'ai' | 'mvp' | 'commerce' | 'api';
+  /** Optional deep-link to a dedicated landing page. */
+  href?: string;
+  tone: Tone;
 }
 
 export interface SiteSettings {
@@ -85,6 +114,10 @@ export interface HomeContent {
   approachLede: string;
   principles: Numbered[];
   services: Numbered[];
+  /** "How the AI-accelerated workflow runs" cards on the home page. */
+  aiWorkflow: Numbered[];
+  /** Honest counterweight to the AI copy — what the workflow does *not* change. */
+  aiCaveat: string;
   process: Numbered[];
   testimonials: Testimonial[];
   faqs: Faq[];

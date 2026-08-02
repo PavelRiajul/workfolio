@@ -1,9 +1,11 @@
 # CLAUDE.md — workfolio
 
-Riajul Islam's portfolio. Editorial, minimal, white-on-ink with a single blue accent;
-heavy on tasteful motion (GSAP reveals, Lenis smooth scroll, CSS 3D, an autonomous
-SVG mascot). Built from a design handoff. Static Astro site with an optional embedded
-Sanity CMS.
+Riajul Islam's portfolio, positioned as an **AI-powered full-stack developer** —
+AI-accelerated delivery (AI writes the boilerplate, he owns the architecture and review),
+not "AI consultancy". Every speed claim on the site is followed by an honest counterweight
+(`home.aiCaveat`, rendered as `.ai-caveat`). Editorial, minimal, white-on-ink with a single
+blue accent; heavy on tasteful motion (GSAP reveals, Lenis smooth scroll, CSS 3D, an
+autonomous SVG mascot). Static Astro site with an optional embedded Sanity CMS.
 
 ## Stack
 - **Astro 5** (static output) — `.astro` components + islands. React integration is installed (for Sanity Studio) but the UI is plain Astro + vanilla TS.
@@ -19,8 +21,20 @@ npm run dev      # astro dev — local server (port 4321, or 4322+ if busy)
 npm run build    # astro build → dist/
 npm run preview  # serve the built site
 ```
-`.env` (see `.env.example`): `PUBLIC_SANITY_PROJECT_ID`, `PUBLIC_SANITY_DATASET`. When the
-project id is `placeholder` (default), the site uses seeded content from `src/data/content.ts`.
+```bash
+npm run seed:build    # src/data/content.ts → sanity/seed.ndjson
+npm run seed:import   # ...then import it into the production dataset (needs `sanity login`)
+npm run schema:deploy # push the schema to the Content Lake (needs `sanity login`)
+```
+`.env` (see `.env.example`): `PUBLIC_SANITY_PROJECT_ID=1tfx8i80`, `PUBLIC_SANITY_DATASET=production`.
+Set the project id to `placeholder` to run fully offline against `src/data/content.ts`.
+
+**The Studio stays embedded at `/admin`** (single package, `studioBasePath` in `astro.config.mjs`) —
+deliberately not split into `studio/` + `web/`. Note this means the Studio bundle builds with the
+site (~12s of the build).
+
+**The dataset is empty until seeded**, so the site still renders from `src/data/content.ts` via
+`safeFetch`'s fallback. Live content takes over per-query the moment matching documents exist.
 
 ## Architecture / data flow
 Pages **never** hardcode content or query Sanity directly. The flow is:
@@ -32,18 +46,27 @@ src/lib/sanity.ts     ← safeFetch(): query Sanity, fall back to seeded content
 src/lib/content.ts    ← one loader per content type (GROQ query + fallback). Pages import ONLY from here.
 ```
 
+**Keep four things in sync** when adding a content type: `src/data/content.ts` (seed),
+`src/lib/types.ts` (interface), `src/lib/content.ts` (loader + GROQ), and `schemaTypes/` (Studio).
+Miss the last one and editors can't author what the site queries.
+
 **To add/change content:** edit `src/data/content.ts`, add/update the type in `src/lib/types.ts`,
 and (if it's a new type) add a loader + GROQ projection in `src/lib/content.ts`. Loaders:
-`getSite, getHome, getShopifyServices, getProjects, getProject, getPosts, getAbout, getResume`.
+`getSite, getHome, getServices, getShopifyServices, getProjects, getProject, getPosts, getAbout, getResume`.
+
+Two service datasets, deliberately separate:
+- `services` (`Service[]`) — the four top-level offers: **AI Web Development, MVP Engineering, Shopify & CRO, Full-Stack & APIs**. Drives the home stack and `/services`.
+- `shopifyServices` (`ShopifyService[]`) — the five Shopify sub-services shown only on `/shopify`.
 
 ## Routes (`src/pages/`)
 | Path | File | Notes |
 | --- | --- | --- |
-| `/` | `index.astro` | Hero (3D card stack), tech marquee, work grid, Shopify service scroll-stack, CRO highlight band, how-I-work, process, testimonials, FAQ, closing CTA. **Hosts the Mascot.** |
+| `/` | `index.astro` | Hero (3D card stack), tech marquee, service scroll-stack (4 offers), AI-method dark band + caveat, testimonials, work grid, process, FAQ, closing CTA. **Hosts the Mascot.** |
 | `/work` | `work.astro` | Filterable project grid + case-study modal |
-| `/work/[slug]` | `work/[slug].astro` | Case study — `vellum`, `northwind`, `pulse`, `anchor` |
-| `/shopify` | `shopify.astro` | Shopify service landing — hero (Shopify 3D scene), brands, services explorer (`ServiceVisual`), approach, CRO section (`CroDashboard`), results, featured work, testimonials, FAQ |
-| `/cro` | `cro.astro` | Conversion-rate-optimization landing — KPI count-ups, funnel-leak viz, `CroDashboard`, a small interactive ROI calculator (`initCroCalc`) |
+| `/work/[slug]` | `work/[slug].astro` | Case study — `halo`, `vellum`, `northwind`, `pulse`, `anchor` |
+| `/services` | `services.astro` | Services landing — hero (velocity card `.velo`), AI-method cards + caveat, the four services as `svcf` rows (`OfferVisual`), engagement models, process, FAQ |
+| `/shopify` | `shopify.astro` | **Shopify + CRO merged.** Hero (Shopify 3D scene), brands, 5 Shopify services (`ServiceVisual`), approach, dark by-the-numbers, then the CRO half at `#cro`: `CroDashboard`, funnel leak + fixes, CRO loop (`#cro-process`), ROI calculator (`#cro-calc`, inline script), experiments leaderboard, featured work, testimonials, merged FAQ |
+| `/cro` | — | Retired; redirects to `/shopify#cro` via `redirects` in `astro.config.mjs` |
 | `/about` | `about.astro` | Bio, photo gallery, traits |
 | `/blog` | `blog.astro` | Featured post + category-filtered grid |
 | `/resume` | `resume.astro` | ATS résumé; copy-email, print, real downloadable PDF (jsPDF, lazy-loaded `resume-pdf.ts`) |
@@ -51,13 +74,14 @@ and (if it's a new type) add a loader + GROQ projection in `src/lib/content.ts`.
 | `/admin` | (Sanity) | Embedded Studio |
 
 ## Components (`src/components/`)
-- `Navbar.astro` — **bottom tab bar** (not a top navbar). Floating pill on desktop, full-width bar on mobile. Tabs: Home · Work · Shopify · CRO · Blog · About · Talk. Supports `fa-solid`/`fa-brands` icons via full icon class. Has `id="nav"`.
+- `Navbar.astro` — **bottom tab bar** (not a top navbar). Floating pill on desktop, full-width bar on mobile. Tabs: Home · Work · Services · Shopify · Blog · About · Talk. Supports `fa-solid`/`fa-brands` icons via full icon class. Has `id="nav"`.
 - `Footer.astro`, `WhatsApp.astro` (floating FAB, bottom-right), `BackToTop.astro` (`#b2t`, bottom-left).
 - `Mascot.astro` — autonomous animated SVG blob pet (see below). Home only.
 - `WorkCard.astro`, `ProjectModal.astro`, `Placeholder.astro` (hatch placeholder for missing imagery), `Marquee.astro`, `ClosingCta.astro`.
-- `ShopifyStack.astro` — home scroll-stacking glimpse of Shopify services (sticky cards + GSAP settle). Pairs copy with `ServiceVisual`.
-- `ServiceVisual.astro` — tone-matched mockup of each Shopify service (`tone`: indigo/terracotta/amber/sage/ink). Shared by `ShopifyStack` and `/shopify`.
-- `CroDashboard.astro` — CRO visual (uplift card + live A/B test + checkout funnel). Wrap in an element with `data-bars` so bars grow on scroll. Shared by `/shopify` and `/cro`.
+- `ServiceStack.astro` — home scroll-stacking glimpse of the four services (sticky cards + GSAP settle, still `#sstack`). Pairs copy with `OfferVisual`.
+- `OfferVisual.astro` — mockup per top-level service, keyed by `service.visual` (`ai` prompt→reviewed-code, `mvp` sprint timeline, `commerce` storefront+uplift, `api` endpoints). Shared by `ServiceStack` and `/services`. Uses the `.sv`/`.sv-panel` shell plus `.ov-*` internals.
+- `ServiceVisual.astro` — tone-matched mockup of each **Shopify** sub-service (`tone`: indigo/terracotta/amber/sage/ink). Used by `/shopify` only.
+- `CroDashboard.astro` — CRO visual (uplift card + live A/B test + checkout funnel). Wrap in an element with `data-bars` so bars grow on scroll. Used by `/shopify`.
 
 ## Layout — `src/layouts/Base.astro`
 Wraps every page. Renders: handwritten brand signature (`.brand-sig`, Caveat font, fixed top-left, links home), a "← Home" pill (`.back-home`, fixed top-right, only when `subpage`), `Navbar`, `<slot/>`, `Footer`, `WhatsApp`, `BackToTop` (unless `backToTop={false}`), and imports `src/scripts/main.ts`.
@@ -72,11 +96,13 @@ Tokens in `@theme` (also exposed as CSS vars):
 - `:root`: `--line` / `--line-soft` (subtle borders), `--maxw 1180px`, `--tabbar-h 64px`.
 **Visual language:** flat/minimal, white bg + ink text + blue accent, **pill** buttons (`border-radius: 9999px`), cards ~14–22px radius, **soft shadows, no outlines** (only thin `rgba(10,10,10,.08)` borders), dotted-grid hero motif. Motion = smooth ease (`cubic-bezier(.22,.61,.36,1)`), gentle. **Never hardcode a palette — use the tokens.**
 
-global.css is organized in clearly-labeled `/* ===== ... ===== */` sections (tokens, base, tab bar, hero, Shopify/CRO, components, mobile polish).
+global.css is organized in clearly-labeled `/* ===== ... ===== */` sections (tokens, base, tab bar, hero, Shopify/CRO, AI/services surfaces, components, mobile polish).
+Tone keys (`.tone-*`) set `--sbg/--sfg/--smut/--spill*` for stack + showcase cards: `indigo, terracotta, amber, sage, ink` (Shopify) and `ai` (dark with a blue spill).
+`svcf` showcase rows take a per-row `--acc` accent (blue by default; the commerce row passes Shopify green).
 
 ## Client interactions (`src/scripts/main.ts`)
 Single module imported once by `Base.astro`; runs on `DOMContentLoaded`. Every feature is guarded by element presence (safe on every route) and respects `prefers-reduced-motion`. Init functions:
-`initSmoothScroll` (Lenis⇄ScrollTrigger + anchor glide, offset −24), `initNav`, `initWhatsAppFab` (tucks the FAB when the footer is in view), `initHeroTilt` (mouse-tilt the 3D stack via `--rx`/`--ry`; skipped when `#hv-stage[data-locked]`), `initShopifyStack`, `initBarGrow`, `initCroCalc` (ROI calculator), `initTabSpy` (scroll-spy for in-page anchor tabs), `initReveal`, `initHeroIntro`, `initCountUp`, `initRotatingWord`, `initProjectFilter`, `initModal`, `initBlogFilter`, `initStart`, `initResume`, `initClock`, `initBackToTop`.
+`initSmoothScroll` (Lenis⇄ScrollTrigger + anchor glide, offset −24), `initNav`, `initWhatsAppFab` (tucks the FAB when the footer is in view), `initHeroTilt` (mouse-tilt the 3D stack via `--rx`/`--ry`; skipped when `#hv-stage[data-locked]`), `initShopifyStack` (drives `#sstack`), `initBarGrow` (grows any `.bargrow` inside a `[data-bars]` group), `initTabSpy` (scroll-spy for in-page anchor tabs), `initReveal`, `initHeroIntro`, `initCountUp`, `initRotatingWord`, `initProjectFilter`, `initModal`, `initBlogFilter`, `initStart`, `initResume`, `initClock`, `initBackToTop`.
 
 ## The 3D hero card stack
 `index.astro` and `shopify.astro` heroes have `.hero > .hero-visual > .hv-stage#hv-stage > .hv-card`.

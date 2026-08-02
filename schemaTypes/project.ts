@@ -24,7 +24,7 @@ export default defineType({
       type: 'array',
       of: [{ type: 'string' }],
       options: {
-        list: ['shopify', 'nextjs', 'reactnative', 'mern', 'react'],
+        list: ['ai', 'shopify', 'nextjs', 'reactnative', 'mern', 'react'],
       },
       group: 'card',
     }),

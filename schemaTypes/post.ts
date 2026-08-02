@@ -19,6 +19,7 @@ export default defineType({
       type: 'string',
       options: {
         list: [
+          { title: 'AI', value: 'ai' },
           { title: 'E-commerce', value: 'ecommerce' },
           { title: 'Mobile', value: 'mobile' },
           { title: 'Full-Stack', value: 'fullstack' },

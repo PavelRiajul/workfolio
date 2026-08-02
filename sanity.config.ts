@@ -34,6 +34,9 @@ export default defineConfig({
                 .child(S.document().schemaType(type).documentId(type))
             ),
             S.divider(),
+            S.documentTypeListItem('service').title('Services'),
+            S.documentTypeListItem('shopifyService').title('Shopify Services'),
+            S.divider(),
             S.documentTypeListItem('project').title('Projects'),
             S.documentTypeListItem('post').title('Blog Posts'),
           ]),

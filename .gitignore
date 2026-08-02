@@ -11,6 +11,8 @@ node_modules/
 # sanity
 .sanity/
 sanity/dist/
+# generated from src/data/content.ts by `npm run seed:build`
+sanity/seed.ndjson
 
 # env
 .env

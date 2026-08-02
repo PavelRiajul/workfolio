@@ -8,7 +8,10 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "seed:build": "node --experimental-strip-types scripts/seed-sanity.mts",
+    "seed:import": "npm run seed:build && sanity dataset import sanity/seed.ndjson production --replace",
+    "schema:deploy": "sanity schemas deploy"
   },
   "dependencies": {
     "@astrojs/react": "^4.2.3",

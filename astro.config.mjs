@@ -15,6 +15,10 @@ export default defineConfig({
   site: 'https://riajulislam.dev',
   // Secretly fetch a page on link hover so in-site navigation feels instant.
   prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
+  // CRO used to be its own page; it now lives inside /shopify.
+  redirects: {
+    '/cro': '/shopify#cro',
+  },
   vite: {
     plugins: [tailwindcss()],
   },

@@ -293,20 +293,28 @@ html.lenis, html.lenis body { height: auto; }
 }
 .svcf-media { position: relative; display: flex; align-items: center; justify-content: center; min-height: clamp(300px,30vw,378px); padding: clamp(28px,4vw,52px); border-radius: 24px; background: color-mix(in srgb, var(--sbg) 13%, #fff); border: 1px solid var(--line-soft); overflow: hidden; }
 .svcf-media .sv { position: relative; z-index: 1; margin: 0; width: 100%; max-width: 358px; transition: transform .45s cubic-bezier(.22,.61,.36,1); }
+/* Captions/chips are authored for the dark stack cards — recolour them for
+   the light tinted media panel so they stay readable. */
+.svcf-media .sv-cap, .svcf-media .sv-ba-lab { color: var(--color-grey-2); }
+.svcf-media .sv-chips span { background: color-mix(in srgb, var(--sbg) 10%, #fff); color: color-mix(in srgb, var(--sbg) 78%, #000); border-color: color-mix(in srgb, var(--sbg) 28%, #fff); }
 .svcf:hover .svcf-media .sv { transform: translateY(-5px); }
 .svcf-ghost { position: absolute; top: clamp(-30px,-2vw,-12px); right: clamp(2px,1.5vw,18px); font-family: var(--font-display); font-weight: 700; font-size: clamp(120px,16vw,196px); line-height: 0.8; letter-spacing: -0.05em; color: var(--sbg); opacity: 0.08; pointer-events: none; user-select: none; }
 .svcf-top { display: flex; align-items: center; gap: 14px; }
-.svcf-tag { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 500; color: #4a7a30; background: rgba(94,142,62,0.08); border: 1px solid rgba(94,142,62,0.2); padding: 6px 12px; border-radius: 9999px; }
+.svcf-top { flex-wrap: wrap; gap: 10px 14px; }
+.svcf-tag { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 500; color: var(--acc, #4a7a30); background: color-mix(in srgb, var(--acc, #5e8e3e) 8%, #fff); border: 1px solid color-mix(in srgb, var(--acc, #5e8e3e) 26%, #fff); padding: 6px 12px; border-radius: 9999px; }
+.svcf-time { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--color-grey-2); background: var(--color-surface); border: 1px solid var(--line-soft); padding: 6px 12px; border-radius: 9999px; }
 .svcf-no { font-family: var(--font-mono); font-size: 13px; color: var(--color-grey-3); }
 .svcf-copy h3 { font-family: var(--font-display); font-weight: 600; font-size: clamp(26px,3.6vw,40px); letter-spacing: -0.03em; line-height: 1.04; margin: 18px 0 0; max-width: 16ch; }
 .svcf-copy > p { font-size: 17px; line-height: 1.6; color: var(--color-grey-1); margin: 16px 0 0; max-width: 46ch; }
 .svcf-feats { list-style: none; padding: 0; margin: 24px 0 0; display: grid; grid-template-columns: repeat(2,1fr); gap: 11px 18px; }
 @media (max-width: 480px) { .svcf-feats { grid-template-columns: 1fr; } }
 .svcf-feats li { display: flex; align-items: flex-start; gap: 9px; font-size: 14.5px; line-height: 1.4; color: var(--color-grey-1); }
-.svcf-feats i { color: #5e8e3e; font-size: 11px; margin-top: 4px; flex: none; }
+.svcf-feats i { color: var(--acc, #5e8e3e); font-size: 11px; margin-top: 4px; flex: none; }
 .svcf-cta { display: inline-flex; align-items: center; gap: 8px; margin-top: 28px; font-size: 15px; font-weight: 500; color: var(--color-ink); text-decoration: none; border-bottom: 1px solid rgba(10,10,10,0.18); padding-bottom: 3px; transition: border-color .2s ease; }
 .svcf-cta span { transition: transform .2s ease; }
-.svcf-cta:hover { border-color: #5e8e3e; }
+.svcf-cta:hover { border-color: var(--acc, #5e8e3e); }
+.svcf-ctas { display: flex; flex-wrap: wrap; align-items: center; gap: 0 26px; }
+.svcf-cta.ghost { color: var(--color-grey-2); }
 .svcf-cta:hover span { transform: translate(2px,-2px); }
 
 /* ===== Shopify CRO section (Shopify page) ============================= */
@@ -449,7 +457,7 @@ html.lenis, html.lenis body { height: auto; }
 .sstack-go { position: absolute; top: clamp(22px,3vw,32px); right: clamp(22px,3vw,32px); z-index: 2; display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 9999px; border: 1px solid var(--spillline); color: var(--sfg); font-size: 15px; transition: transform .25s ease, background .25s ease; }
 .sstack-card:hover .sstack-go { transform: translate(2px,-2px); background: var(--spill); }
 .sstack-kicker { display: inline-flex; align-items: center; gap: 9px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500; color: var(--smut); }
-.sstack-kicker .fa-shopify { font-size: 15px; }
+.sstack-kicker i { font-size: 15px; }
 .sstack-card h3 { font-family: var(--font-display); font-weight: 600; font-size: clamp(26px,3.4vw,40px); letter-spacing: -0.03em; line-height: 1.03; margin: clamp(18px,2.4vw,26px) 0 0; max-width: 16ch; }
 .sstack-card .sstack-lede { font-size: clamp(15px,1.4vw,17px); line-height: 1.55; color: var(--smut); margin: 14px 0 0; max-width: 44ch; }
 .sstack-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: clamp(20px,2.6vw,28px); }
@@ -545,6 +553,7 @@ html.lenis, html.lenis body { height: auto; }
 .tone-amber      { --sbg:#f4c43a; --sfg:#0a0a0a; --smut:rgba(10,10,10,0.66); --spill:rgba(10,10,10,0.06); --spilltext:#0a0a0a; --spillline:rgba(10,10,10,0.18); --sline:transparent; }
 .tone-sage       { --sbg:#e7ece1; --sfg:#0a0a0a; --smut:rgba(10,10,10,0.6); --spill:rgba(10,10,10,0.05); --spilltext:#26331c; --spillline:rgba(10,10,10,0.14); --sline:rgba(10,10,10,0.08); }
 .tone-ink        { --sbg:#0a0a0a; --sfg:#fff; --smut:rgba(255,255,255,0.66); --spill:rgba(132,185,79,0.16); --spilltext:#a8d977; --spillline:rgba(132,185,79,0.32); --sline:rgba(255,255,255,0.08); }
+.tone-ai         { --sbg:#0a0a0a; --sfg:#fff; --smut:rgba(255,255,255,0.66); --spill:rgba(107,155,255,0.15); --spilltext:#a9c3ff; --spillline:rgba(107,155,255,0.34); --sline:rgba(255,255,255,0.08); }
 
 /* Marquee styles → co-located in Marquee.astro */
 
@@ -833,6 +842,97 @@ textarea.field { resize: vertical; }
 .resume-edu .row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; font-size: 14.5px; }
 .resume-edu .et { font-weight: 600; color: var(--color-ink); }
 .resume-edu .ey { color: var(--color-grey-3); }
+
+/* ===== AI / services surfaces ==========================================
+   The AI-accelerated positioning: the velocity card, the honest caveat
+   line that follows every speed claim, and the service-offer mockups. */
+
+/* Hero code card — AI prompt lines */
+.hv-code-body .t-dim { color: #6f6f7d; }
+
+/* The counterweight paragraph that follows any "we're fast" claim. */
+.ai-caveat { max-width: 720px; margin-top: 36px; font-size: 15.5px; line-height: 1.62; color: var(--color-grey-2); border-left: 2px solid var(--color-blue); padding-left: 20px; }
+.split-lede a { color: var(--color-blue); text-decoration: none; font-weight: 500; }
+.split-lede a:hover { text-decoration: underline; }
+
+/* Home AI band — recolour the (green) CRO band to the brand accent */
+.croh-ai .croh-h .accent { color: #6b9bff; }
+.croh-ai .croh-num { color: #6b9bff; }
+.croh-ai .croh-bar i { background: linear-gradient(90deg, var(--color-blue), #6b9bff); }
+.croh-ai .croh-link:hover { border-color: #6b9bff; }
+
+/* Velocity comparison (services hero visual) */
+.velo-wrap { height: auto; perspective: none; display: flex; align-items: center; }
+.velo { width: 100%; background: var(--color-ink); color: #fff; border-radius: 22px; padding: clamp(22px,2.4vw,28px); box-shadow: 0 30px 60px -30px rgba(10,10,10,0.5); }
+.velo-k { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.5); font-weight: 500; }
+.velo-row { margin-top: 22px; }
+.velo-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 13.5px; color: rgba(255,255,255,0.72); }
+.velo-top b { font-family: var(--font-display); font-weight: 600; font-size: 18px; letter-spacing: -0.02em; color: #fff; }
+.velo-row.muted .velo-top, .velo-row.muted .velo-top b { color: rgba(255,255,255,0.42); }
+.velo-bar { height: 10px; border-radius: 6px; background: rgba(255,255,255,0.09); margin-top: 10px; overflow: hidden; }
+.velo-bar i { display: block; height: 100%; border-radius: 6px; background: linear-gradient(90deg, var(--color-blue), #6b9bff); transform-origin: left center; }
+.velo-row.muted .velo-bar i { background: rgba(255,255,255,0.3); }
+.velo-foot { display: flex; align-items: flex-start; gap: 9px; margin-top: 24px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.12); font-size: 12.5px; line-height: 1.45; color: rgba(255,255,255,0.55); }
+.velo-foot i { color: #6b9bff; margin-top: 2px; }
+
+/* Engagement models */
+.eng-grid { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 900px) { .eng-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 680px) { .eng-grid { grid-template-columns: 1fr; } }
+.eng-meta { display: inline-block; margin-top: 16px; font-family: var(--font-mono); font-size: 12.5px; color: var(--color-grey-3); }
+.appr-card:hover .eng-meta { color: rgba(255,255,255,0.6); }
+
+/* ---- Offer mockups (OfferVisual) ---- */
+/* 01 — AI: prompt in, reviewed code out */
+.ov-ai { background: #15151a; border-color: rgba(255,255,255,0.08); }
+.ov-prompt { display: flex; align-items: center; gap: 9px; padding: 13px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); font-family: var(--font-mono); font-size: 11px; }
+.ov-caret { color: #6b9bff; }
+.ov-typed { color: #e7e7ea; }
+.ov-gen { padding: 13px 14px; display: flex; flex-direction: column; gap: 9px; }
+.ov-genrow { display: flex; align-items: center; gap: 9px; font-family: var(--font-mono); font-size: 10.5px; color: #c9c9d2; }
+.ov-genrow i { color: #5ad19a; font-size: 9px; }
+.ov-genrow em { margin-left: auto; font-style: normal; color: #6f6f7d; }
+.ov-genrow.warn i, .ov-genrow.warn em { color: #f0b355; }
+.ov-foot { display: flex; align-items: center; gap: 8px; padding: 11px 14px; border-top: 1px solid rgba(255,255,255,0.08); background: rgba(107,155,255,0.1); font-size: 10.5px; color: #a9c3ff; }
+.ov-dot { width: 7px; height: 7px; border-radius: 50%; background: #6b9bff; }
+
+/* 02 — MVP: a three-week sprint */
+.ov-mvp, .ov-api { padding: 16px 15px; }
+.ov-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 15px; }
+.ov-head b { font-family: var(--font-display); font-weight: 600; font-size: 13px; color: var(--color-ink); }
+.ov-live { display: inline-flex; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 600; color: #4f46e5; background: rgba(79,70,229,0.1); padding: 4px 9px; border-radius: 9999px; }
+.ov-live i { width: 6px; height: 6px; border-radius: 50%; background: #4f46e5; display: block; }
+.ov-week { display: grid; grid-template-columns: 46px 1fr; gap: 6px 10px; align-items: center; margin-bottom: 12px; }
+.ov-week em { font-style: normal; font-family: var(--font-mono); font-size: 10px; color: var(--color-grey-3); }
+.ov-week b { grid-column: 2; font-size: 11px; font-weight: 600; color: var(--color-grey-1); }
+.ov-track { display: block; height: 8px; border-radius: 5px; background: rgba(10,10,10,0.08); overflow: hidden; }
+.ov-track i { display: block; height: 100%; border-radius: 5px; background: linear-gradient(90deg, #4f46e5, #8b85f0); }
+.ov-ship { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(10,10,10,0.08); font-size: 11.5px; color: var(--color-grey-2); }
+.ov-ship b { font-family: var(--font-display); font-weight: 700; font-size: 15px; color: #4f46e5; }
+
+/* 03 — commerce: storefront + the numbers that follow */
+.ov-store { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 13px 14px; }
+.ov-tile span { display: block; height: 40px; border-radius: 8px; background: rgba(10,10,10,0.06); }
+.ov-tile b { display: block; margin-top: 6px; font-family: var(--font-display); font-weight: 600; font-size: 11px; color: #4a7a30; }
+.ov-conv { padding: 0 14px 16px; }
+.ov-convrow { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; font-size: 11px; color: var(--color-grey-2); margin-top: 11px; }
+.ov-convrow em { font-style: normal; }
+.ov-convrow s { color: var(--color-grey-3); }
+.ov-convrow b { font-family: var(--font-display); font-weight: 600; font-size: 13px; color: #2e7d32; }
+.ov-conv .ov-track { margin-top: 7px; }
+.ov-conv .ov-track i { background: linear-gradient(90deg, #5e8e3e, #9bc35f); }
+
+/* 04 — API: endpoints and the chain behind them */
+.ov-ok { font-size: 10.5px; font-weight: 600; color: #1f8f4e; background: rgba(31,143,78,0.1); padding: 4px 9px; border-radius: 9999px; }
+.ov-ep { display: flex; align-items: center; gap: 9px; padding: 9px 0; border-top: 1px solid rgba(10,10,10,0.06); font-family: var(--font-mono); font-size: 10.5px; color: var(--color-grey-1); }
+.ov-ep code { flex: 1; min-width: 0; }
+.ov-ep em { font-style: normal; color: var(--color-grey-3); }
+.ov-m { font-size: 9px; font-weight: 700; letter-spacing: 0.04em; padding: 3px 7px; border-radius: 5px; }
+.ov-m.get { color: #1f6feb; background: rgba(31,111,235,0.1); }
+.ov-m.post { color: #a1670a; background: rgba(161,103,10,0.1); }
+.ov-chain { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 13px; padding-top: 13px; border-top: 1px solid rgba(10,10,10,0.06); font-size: 10.5px; color: var(--color-grey-2); }
+.ov-chain span { padding: 5px 10px; border-radius: 7px; background: rgba(10,10,10,0.05); font-weight: 600; }
+.ov-chain i { font-style: normal; color: var(--color-grey-3); }
 
 /* ===== Site-wide mobile polish ========================================
    Centrish layout, compact grids and tighter rhythm so phones scroll less.

@@ -67,12 +67,32 @@ export default defineType({
       group: 'sections',
     }),
 
-    // Services
+    // Services (short list — the full offers live in the Service documents)
     defineField({
       name: 'services',
-      title: 'Services',
+      title: 'Services (short list)',
+      description: 'Used on the About page. The four full offers are Service documents.',
       type: 'array',
-      of: [numberedItem('service')],
+      of: [numberedItem('homeService')],
+      group: 'sections',
+    }),
+
+    // The AI-accelerated method
+    defineField({
+      name: 'aiWorkflow',
+      title: 'AI workflow steps',
+      description: 'The four "where the weeks go" cards on /services.',
+      type: 'array',
+      of: [numberedItem('aiWorkflowStep')],
+      group: 'sections',
+    }),
+    defineField({
+      name: 'aiCaveat',
+      title: 'AI caveat',
+      description:
+        'The honest counterweight shown under every speed claim (home + /services). Keep it candid — it is what stops the AI copy reading as hype.',
+      type: 'text',
+      rows: 3,
       group: 'sections',
     }),
 

@@ -1,13 +1,13 @@
 ---
-// A scroll-stacking glimpse of the Shopify services. Cards pin and stack as
+// A scroll-stacking glimpse of the top-level services. Cards pin and stack as
 // you scroll (pure CSS sticky; GSAP adds a subtle settle-back scale).
-// Each card pairs its copy with a tone-matched mockup of what the service
-// actually delivers. Full detail lives on /shopify.
-import type { ShopifyService } from '../lib/types';
-import ServiceVisual from './ServiceVisual.astro';
+// Each card pairs its copy with a mockup of what the service actually
+// delivers. Full detail lives on /services.
+import type { Service } from '../lib/types';
+import OfferVisual from './OfferVisual.astro';
 
 interface Props {
-  services: ShopifyService[];
+  services: Service[];
 }
 const { services } = Astro.props;
 // Keep the home glimpse tight — a few key features per card.
@@ -16,26 +16,26 @@ const PEEK = 4;
 <section class="section section-bordered">
   <div class="sstack-head" data-reveal>
     <div>
-      <div class="eyebrow">— Shopify services</div>
-      <h2>Shopify, end to end.</h2>
+      <div class="eyebrow">— What I do</div>
+      <h2>Four ways I ship.</h2>
     </div>
-    <a href="/shopify" class="btn btn-light btn-sm">Explore Shopify ↗</a>
+    <a href="/services" class="btn btn-light btn-sm">All services ↗</a>
   </div>
 
   <div class="sstack" id="sstack">
     {services.map((s, i) => (
       <a
-        href="/shopify"
+        href={s.href || `/services#${s.slug}`}
         class={`sstack-card tone-${s.tone}`}
         style={`--i:${i}`}
-        aria-label={`${s.title} — see Shopify services`}
+        aria-label={`${s.title} — see the full service`}
       >
         <span class="sstack-go" aria-hidden="true">↗</span>
 
         <div class="sstack-main">
           <span class="sstack-kicker">
-            <i class="fa-brands fa-shopify" aria-hidden="true"></i>
-            Shopify · {s.number}
+            <i class={s.icon} aria-hidden="true"></i>
+            {s.kicker} · {s.number}
           </span>
           <h3>{s.title}</h3>
           <p class="sstack-lede">{s.tagline}</p>
@@ -48,7 +48,7 @@ const PEEK = 4;
         </div>
 
         <div class="sstack-visual" aria-hidden="true">
-          <ServiceVisual service={s} />
+          <OfferVisual service={s} />
         </div>
       </a>
     ))}

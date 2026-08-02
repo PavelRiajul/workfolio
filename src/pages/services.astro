@@ -1,0 +1,214 @@
+---
+import Base from '../layouts/Base.astro';
+import ClosingCta from '../components/ClosingCta.astro';
+import OfferVisual from '../components/OfferVisual.astro';
+import Faq from '../components/Faq.astro';
+import { getHome, getServices } from '../lib/content';
+
+const home = await getHome();
+const services = await getServices();
+
+// Blue is the house accent; the commerce row borrows the Shopify green,
+// matching the rest of the commerce surfaces.
+const accentFor = (visual: string) => (visual === 'commerce' ? '#5e8e3e' : 'var(--color-blue)');
+
+const heroStats = [
+  { v: '3 wk', l: 'Typical MVP build' },
+  { v: '~2×', l: 'Faster than a hand-typed build' },
+  { v: '100%', l: 'Code reviewed by a human' },
+];
+
+// What the AI-accelerated workflow costs and buys, side by side.
+const velocity = [
+  { label: 'Traditional build', weeks: '10–12 weeks', w: '100%', muted: true },
+  { label: 'AI-accelerated', weeks: '3–5 weeks', w: '38%', muted: false },
+];
+
+const engagements = [
+  {
+    n: '01',
+    t: 'Fixed-scope sprint',
+    b: 'One clear outcome — a feature, an integration, an audit — scoped, quoted and delivered in one to two weeks.',
+    meta: '1–2 weeks · fixed price',
+  },
+  {
+    n: '02',
+    t: 'Product build',
+    b: 'An MVP or a full application, from schema to launch. Weekly demo builds, a fixed scope and a real launch date.',
+    meta: '3–8 weeks · fixed scope',
+  },
+  {
+    n: '03',
+    t: 'Ongoing partner',
+    b: 'A reserved slice of my week for teams that keep shipping — features, fixes, experiments and the odd fire.',
+    meta: 'Monthly · rolling',
+  },
+];
+
+const faqs = [
+  { q: 'Which service do I actually need?', a: "If you have an idea and no product, that's MVP Engineering. If you have a product and a backlog, that's AI Web Development. If you have a store and traffic that isn't converting, that's Shopify & CRO. Tell me the situation and I'll say which one — including if the answer is none of them." },
+  { q: 'How do you price this?', a: 'Fixed price against a fixed scope for sprints and product builds, and a monthly rate for ongoing work. You get the number before anything starts, and it does not move unless the scope does.' },
+  { q: 'Can you add AI features to an existing app?', a: 'Yes — assistants, semantic search over your own content, extraction and workflow automation, wired into what you already have with cost and latency budgets agreed up front.' },
+  { q: 'What if the AI-generated code is wrong?', a: "Then it gets rewritten before you ever see it. Generated code is a first draft, not a deliverable — everything goes through tests, review and my own read before it reaches your repo." },
+  { q: 'Do I own the code?', a: 'Entirely. Your repo, your accounts, your infrastructure from day one — plus docs and a handoff walkthrough at the end.' },
+  { q: 'How fast can you start?', a: 'Usually within a week or two, sometimes sooner for small sprints. Send the details and I will tell you the honest next opening.' },
+];
+---
+<Base
+  title="Services — AI Web Development, MVP Engineering, Shopify & CRO — Riajul Islam"
+  description="AI web development, MVP engineering, Shopify & CRO, and full-stack APIs — production software built with an AI-accelerated workflow and shipped in weeks."
+  subpage={true}
+>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-inner shell" data-hero-intro>
+      <div class="hero-meta" data-hero-item>
+        <span>—</span>
+        <span>Services</span>
+        <span class="chip-open"><span class="dot"></span>Taking projects</span>
+      </div>
+      <h1 data-hero-item>What I build,<br>and how <span class="accent">fast.</span></h1>
+      <div class="hero-lower">
+        <div class="hero-copy">
+          <p class="hero-lede" data-hero-item>Four services, one method: AI does the mechanical work, I do the engineering. You get production software on a timeline that used to require a team — without the codebase you'd have to apologise for later.</p>
+          <div class="hero-actions" data-hero-item>
+            <a href="/start?tab=form" class="btn btn-dark">Start a project <span>↗</span></a>
+            <a href="#svc-list" class="btn btn-light">See the services</a>
+          </div>
+          <div class="hero-stats" data-hero-item style="margin-top:40px;">
+            {heroStats.map((s) => (
+              <div>
+                <div class="num">{s.v}</div>
+                <div class="lbl">{s.l}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div class="hero-visual velo-wrap" data-hero-item aria-hidden="true">
+          <div class="velo" data-bars>
+            <div class="velo-k">Same scope, two timelines</div>
+            {velocity.map((v) => (
+              <div class={`velo-row ${v.muted ? 'muted' : ''}`}>
+                <div class="velo-top"><span>{v.label}</span><b>{v.weeks}</b></div>
+                <div class="velo-bar"><i class="bargrow" style={`width:${v.w}`}></i></div>
+              </div>
+            ))}
+            <div class="velo-foot"><i class="fa-solid fa-bolt" aria-hidden="true"></i>The difference is generated boilerplate, not skipped steps.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How the AI workflow actually runs -->
+  <section class="section section-bordered">
+    <div style="max-width:var(--maxw);margin:0 auto;">
+      <div class="eyebrow" data-reveal>— The method</div>
+      <h2 class="section-h2" data-reveal style="max-width:720px;">Where the weeks actually go.</h2>
+      <div class="appr-grid">
+        {home.aiWorkflow.map((a) => (
+          <div class="appr-card" data-reveal>
+            <div class="appr-top">
+              <h3>{a.title}</h3>
+              <span class="appr-num">{a.number}/04</span>
+            </div>
+            <div class="appr-desc"><p>{a.body}</p></div>
+          </div>
+        ))}
+      </div>
+      <p class="ai-caveat" data-reveal>{home.aiCaveat}</p>
+    </div>
+  </section>
+
+  <!-- The four services -->
+  <section id="svc-list" class="section section-bordered" style="scroll-margin-top:24px;">
+    <div style="max-width:var(--maxw);margin:0 auto;">
+      <div class="work-head" data-reveal>
+        <div>
+          <div class="eyebrow">— Services</div>
+          <h2 class="section-h2" style="max-width:560px;">Four ways I can help.</h2>
+        </div>
+        <a href="/start?tab=form" class="btn btn-light btn-sm">Start a project ↗</a>
+      </div>
+
+      <div class="svc-showcase">
+        {services.map((s, i) => (
+          <div
+            class={`svcf ${i % 2 === 1 ? 'rev' : ''}`}
+            id={s.slug}
+            style={`--acc:${accentFor(s.visual)};scroll-margin-top:90px;`}
+            data-reveal
+          >
+            <div class={`svcf-media tone-${s.tone}`}>
+              <span class="svcf-ghost" aria-hidden="true">{s.number}</span>
+              <OfferVisual service={s} />
+            </div>
+            <div class="svcf-copy">
+              <div class="svcf-top">
+                <span class="svcf-tag"><i class={s.icon} aria-hidden="true"></i> {s.kicker}</span>
+                <span class="svcf-no">{s.number} / 0{services.length}</span>
+                <span class="svcf-time"><i class="fa-regular fa-clock" aria-hidden="true"></i>{s.timeline}</span>
+              </div>
+              <h3>{s.title}</h3>
+              <p>{s.description}</p>
+              <ul class="svcf-feats">
+                {s.features.map((f) => <li><i class="fa-solid fa-check" aria-hidden="true"></i>{f}</li>)}
+              </ul>
+              <div class="svcf-ctas">
+                <a class="svcf-cta" href="/start?tab=form">Start a project <span aria-hidden="true">↗</span></a>
+                {s.href && <a class="svcf-cta ghost" href={s.href}>See the detail <span aria-hidden="true">→</span></a>}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Engagement models -->
+  <section class="section section-bordered">
+    <div style="max-width:var(--maxw);margin:0 auto;">
+      <div class="eyebrow" data-reveal>— How we work together</div>
+      <h2 class="section-h2" data-reveal>Three ways to buy the time.</h2>
+      <div class="appr-grid eng-grid">
+        {engagements.map((e) => (
+          <div class="appr-card" data-reveal>
+            <div class="appr-top">
+              <h3>{e.t}</h3>
+              <span class="appr-num">{e.n}/03</span>
+            </div>
+            <div class="appr-desc">
+              <p>{e.b}</p>
+              <span class="eng-meta">{e.meta}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section class="section process">
+    <div class="split">
+      <div data-reveal>
+        <div class="eyebrow">— Process</div>
+        <h2 class="section-h2">Built<br>for speed.</h2>
+        <p class="split-lede">Six steps from first message to production. No bloat, no ceremony — just momentum and clean commits.</p>
+      </div>
+      <div data-reveal>
+        {home.process.map((s, i) => (
+          <details class="acc" open={i === 0}>
+            <summary><span class="acc-label"><span class="acc-num">{s.number}</span><span class="acc-title sm">{s.title}</span></span><span class="acc-ic">+</span></summary>
+            <p>{s.body}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <Faq eyebrow="— Services FAQ" title={"The questions\nI usually get."} items={faqs} />
+
+  <ClosingCta title={"Know what you need —\nor need help deciding?"} bordered={true} secondaryLabel="See the work" secondaryHref="/work" />
+</Base>
