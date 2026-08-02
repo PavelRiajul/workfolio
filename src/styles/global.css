@@ -386,6 +386,10 @@ html.lenis, html.lenis body { height: auto; }
 .svcf-copy h3 { font-family: var(--font-display); font-weight: 600; font-size: clamp(26px,3.6vw,40px); letter-spacing: -0.03em; line-height: 1.04; margin: 18px 0 0; max-width: 16ch; }
 .svcf-copy > p { font-size: 17px; line-height: 1.6; color: var(--color-grey-1); margin: 16px 0 0; max-width: 46ch; }
 .svcf-feats { list-style: none; padding: 0; margin: 24px 0 0; display: grid; grid-template-columns: repeat(2,1fr); gap: 11px 18px; }
+/* The list is always open on desktop — the summary only exists so phones can
+   collapse five consecutive 8-item lists (main.ts closes them ≤640px). */
+.feats > summary { display: none; }
+.feats > summary::-webkit-details-marker { display: none; }
 @media (max-width: 480px) { .svcf-feats { grid-template-columns: 1fr; } }
 .svcf-feats li { display: flex; align-items: flex-start; gap: 9px; font-size: 14.5px; line-height: 1.4; color: var(--color-grey-1); }
 .svcf-feats i { color: var(--acc, #5e8e3e); font-size: 11px; margin-top: 4px; flex: none; }
@@ -1269,6 +1273,17 @@ textarea.field { resize: vertical; }
   .calc-range::-moz-range-track { height: 8px; border-radius: 9999px;
     background: linear-gradient(to right, #5e8e3e var(--fill,0%), rgba(10,10,10,0.12) var(--fill,0%)); }
   .calc-range::-moz-range-thumb { width: 28px; height: 28px; }
+
+  /* The service-row mockups are decorative (aria-hidden) and squeeze to
+     illegible at this width, while costing ~1,800px of scrolling per page.
+     The home stack already drops its equivalent below 560px. */
+  .svcf-media { display: none; }
+  .feats > summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: var(--space-md); padding: 12px 0; min-height: 44px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); cursor: pointer; list-style: none; font-size: 14.5px; font-weight: 500; color: var(--color-ink); }
+  .feats > summary i { font-size: 20px; font-style: normal; color: var(--acc, var(--color-blue)); transition: transform .25s ease; }
+  .feats[open] > summary i { transform: rotate(45deg); }
+  .feats .svcf-feats { margin-top: var(--space-sm); }
+  .svcf { padding-block: var(--space-xl); }
+  .svcf-copy h3 { margin-top: 0; }
 
   /* Nothing informative below 12px on a phone. */
   .svcf-no, .eng-meta { font-size: 12px; }

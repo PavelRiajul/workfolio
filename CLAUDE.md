@@ -121,6 +121,7 @@ Tokens in `@theme` (also exposed as CSS vars):
 - Heroes get extra top padding on mobile to clear the fixed wordmark, which otherwise lands on the eyebrow.
 - **Headings centre on mobile; body copy stays left-aligned.** Centring a nine-line paragraph gives every line a different start and wrecks readability.
 - The calculator's fill is a `--fill` custom property, not an inline `background`, so the track can be restyled for touch.
+- **Mobile page length is a design constraint.** `/shopify` and `/services` were 26 and 18 screens tall. The `.svcf-media` mockups are hidden ≤640px (decorative, and the home stack already drops its equivalent), and each service's feature list ships inside `<details class="feats" open>` — `initFeatureLists` closes them ≤640px only, so desktop and no-JS are unchanged and the content stays in the DOM for search. Now 22 and 13 screens.
 
 **Spacing & layout system (use it — do not invent values):**
 - One fluid scale: `--space-2xs … --space-3xl`, plus `--gutter` (page inset) and `--section-y` / `--section-y-tight` (band rhythm). Every gap, pad and margin picks a step. **Never write a bare `clamp()` for spacing** and never write a token as `--x: var(--x)` — a self-referential custom property is invalid and silently drops the whole declaration (it once flattened every section's padding to zero).

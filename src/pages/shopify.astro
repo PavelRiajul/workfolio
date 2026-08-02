@@ -126,9 +126,12 @@ const featuredTitle = page.featuredHeading.title.split('\n');
               </div>
               <h3>{s.title}</h3>
               <p>{s.description}</p>
-              <ul class="svcf-feats">
-                {s.features.map((f) => <li><i class="fa-solid fa-check" aria-hidden="true"></i>{f}</li>)}
-              </ul>
+              <details class="feats" open>
+                <summary><span>{s.features.length} capabilities</span><i aria-hidden="true">+</i></summary>
+                <ul class="svcf-feats">
+                  {s.features.map((f) => <li><i class="fa-solid fa-check" aria-hidden="true"></i>{f}</li>)}
+                </ul>
+              </details>
               <a class="svcf-cta" href={page.serviceCta.href}>{page.serviceCta.label} <span aria-hidden="true">↗</span></a>
             </div>
           </div>

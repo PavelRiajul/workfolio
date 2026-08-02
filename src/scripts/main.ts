@@ -330,6 +330,19 @@ function initShopifyStack() {
   });
 }
 
+/* ---- Long feature lists: collapsed on phones --------------------------
+   Five consecutive eight-item lists is a wall on a 375px screen. They ship
+   open so the content is there without JS (and on desktop, where the summary
+   is hidden); this closes them only where the space is tight. */
+function initFeatureLists() {
+  const lists = document.querySelectorAll<HTMLDetailsElement>('details.feats');
+  if (!lists.length) return;
+  const narrow = window.matchMedia('(max-width: 640px)');
+  const apply = () => lists.forEach((d) => { d.open = !narrow.matches; });
+  apply();
+  narrow.addEventListener('change', apply);
+}
+
 /* ---- Metric bars: grow from zero when their group scrolls in ----------- */
 function initBarGrow() {
   if (prefersReduced) return;
@@ -414,6 +427,7 @@ ready(() => {
   initWhatsAppFab();
   initHeroTilt();
   initShopifyStack();
+  initFeatureLists();
   initBarGrow();
   initTabSpy();
   initReveal();
