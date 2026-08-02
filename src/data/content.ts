@@ -92,6 +92,8 @@ export const home: HomeContent = {
   accentWord: 'AI speed.',
   lede:
     "I'm a full-stack developer with an AI-accelerated workflow: AI writes the boilerplate, I own the architecture, the review and the quality bar. The result is MVPs in weeks instead of quarters — Next.js, Node and Shopify, built properly and shipped fast.",
+  ledeShort:
+    'AI writes the boilerplate. I own the architecture — so your MVP ships in weeks, not quarters.',
   primaryCta: { label: 'Start a project', href: '/start?tab=form' },
   secondaryCta: { label: 'See what I build', href: '/services' },
   availabilityNote: 'Available for new projects · working remotely, worldwide',
@@ -752,6 +754,7 @@ export const servicesPage: ServicesPageContent = {
     accentWord: 'fast.',
     lede:
       "Five services, one method: AI does the mechanical work, I do the engineering. You get production software on a timeline that used to require a team — without the codebase you'd have to apologise for later.",
+    ledeShort: 'Five services, one method: AI does the mechanical work, I do the engineering.',
     primaryCta: { label: 'Start a project', href: '/start?tab=form' },
     secondaryCta: { label: 'See the services', href: '#svc-list' },
     stats: [
@@ -829,6 +832,7 @@ export const shopifyPage: ShopifyPageContent = {
     accentWord: 'convert.',
     lede:
       'Two halves of one job: build a store that loads in under a second, then test it into converting. Headless Hydrogen, custom Liquid themes, speed work and the CRO program that turns your existing traffic into orders. No bloated apps, no theme spaghetti.',
+    ledeShort: 'Build a store that loads in under a second — then test it into converting.',
     primaryCta: { label: 'Start a Shopify project', href: '/start?tab=form' },
     secondaryCta: { label: 'Jump to CRO', href: '#cro' },
     stats: [

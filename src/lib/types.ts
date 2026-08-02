@@ -173,6 +173,9 @@ export interface HomeContent {
   headlineLines: string[];
   accentWord: string;
   lede: string;
+  /** Punchier lede for phones. Cold visitors give you seconds — the full
+   *  paragraph pushes the CTA below the fold. Falls back to `lede`. */
+  ledeShort?: string;
   primaryCta: Cta;
   secondaryCta: Cta;
   availabilityNote: string;
@@ -214,6 +217,8 @@ export interface PageHero {
   headlineLines: string[];
   accentWord: string;
   lede: string;
+  /** Punchier lede for phones; falls back to `lede`. */
+  ledeShort?: string;
   primaryCta: Cta;
   secondaryCta: Cta;
   stats: TextStat[];

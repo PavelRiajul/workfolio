@@ -236,6 +236,7 @@ html.lenis, html.lenis body { height: auto; }
 .hero h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(34px,8.4vw,77px); line-height: 0.95; letter-spacing: -0.035em; margin: 26px 0 0; max-width: 960px; }
 .hero h1 .accent { color: var(--color-blue); }
 .hero-lede { font-size: 19px; line-height: 1.55; color: var(--color-grey-1); max-width: 580px; margin: 30px 0 0; }
+.hero-lede-short { display: none; }
 .hero-actions { display: flex; gap: 14px; margin-top: 36px; flex-wrap: wrap; }
 .hero-avail { display: flex; align-items: center; gap: 9px; margin-top: 26px; font-size: 14px; color: var(--color-grey-2); }
 .hero-avail .pulse { width: 9px; height: 9px; border-radius: 9999px; background: var(--color-blue); display: inline-block; box-shadow: 0 0 0 4px rgba(37,99,235,0.15); }
@@ -1319,7 +1320,15 @@ textarea.field { resize: vertical; }
   .hero-inner .cro-viz { text-align: left; } /* keep the dashboard internals aligned */
 
   .eyebrow { text-align: center; }
-  .section-h2 { text-align: center; margin-left: auto; margin-right: auto; }
+  /* Every section heading centres with its eyebrow. These four aren't
+     .section-h2, so they used to sit left under a centred eyebrow — the same
+     mismatch the method band had. (.croh-h stays left: its whole band is
+     left-aligned, so its eyebrow is left too.) */
+  .section-h2, .sstack-head h2, .about-h2, .cs-h2, .next-name, .cs-outcomes h2 {
+    text-align: center; margin-left: auto; margin-right: auto;
+  }
+  .sstack-head { align-items: center; text-align: center; }
+  .about-intro-grid h1 { text-align: center; }
   .split-lede, .cs-out-note { margin-left: auto; margin-right: auto; }
   .work-head { flex-direction: column; align-items: center; text-align: center; gap: 14px; }
 
@@ -1335,6 +1344,34 @@ textarea.field { resize: vertical; }
   .appr-card .appr-desc, .appr-card .appr-desc p, .trait-card p { margin-top: 10px; font-size: 13px; line-height: 1.45; }
   .appr-card.dark { grid-column: 1 / -1; }
   .appr-card.dark p { margin-top: 12px; font-size: 13.5px; }
+
+  /* Cold traffic gives you seconds. The full lede pushed the primary CTA to
+     0.8 screens — below the fold — so phones get the short one and the hero
+     tightens up around it. */
+  .hero-lede-full { display: none; }
+  .hero-lede-short { display: block; font-size: 16.5px; line-height: 1.5; margin-top: 16px; }
+  .hero h1 { margin-top: 16px; }
+  .hero-actions { margin-top: 22px; gap: 10px; }
+  /* Redundant on a phone: the chip above the headline already says
+     "Available for projects". Dropping it pulls the stats up clear of the
+     floating WhatsApp button. */
+  .hero-avail { display: none; }
+  .hero-building { margin-top: 14px; font-size: 14px; }
+  .hero-stats { margin-top: 22px; gap: 18px; justify-content: space-between; }
+  .hero-stats .num { font-size: 27px; }
+  .hero-stats .lbl { font-size: 12.5px; margin-top: 4px; }
+  .hero-stats > div { flex: 1 1 0; min-width: 0; }
+
+  /* Headings that never scaled down for the viewport. */
+  .svcf-copy h3 { font-size: 21px; }
+  .post-feature .post-title { font-size: 21px; }
+  .next-name { font-size: 30px; }
+  .cs-insight h3, .cs-proc h3 { font-size: 19px; }
+
+  /* Bordered pills must not wrap — same lumpy two-line look the work cards
+     had. Truncate instead; the full text is in the section beneath. */
+  .tpl-stack li, .pc-tag, .svcf-time { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cs-screens .placeholder span, .cs-proc .placeholder span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 88%; }
 
   /* The method band ran 866px — a full screen before the stats start —
      because it inherited desktop type and padding. Its heading isn't a

@@ -35,5 +35,9 @@ const href = `https://wa.me/${phone}?text=${encodeURIComponent(site.whatsappMess
     .wa-ring { display: none; }
     .wa-btn { width: 56px; height: 56px; }
     .wa-btn i { font-size: 28px; }
+    /* Joins the chrome tuck (see initTabBar): on a 375px screen a permanent
+       floating button covers real content — here it was sitting on top of a
+       hero stat. Desktop keeps it visible at all times. */
+    .wa-fab.tucked { opacity: 0; transform: scale(0.6) translateY(12px); pointer-events: none; }
   }
 </style>

@@ -26,7 +26,7 @@ export function getSite(): Promise<SiteSettings> {
 export function getHome(): Promise<HomeContent> {
   return safeFetch<HomeContent>(
     `*[_type == "homePage"][0]{
-      seo, badge, availabilityChip, headlineLines, accentWord, lede,
+      seo, badge, availabilityChip, headlineLines, accentWord, lede, ledeShort,
       primaryCta, secondaryCta, availabilityNote, buildingWithLabel, rotatingWords, stats,
       stackCta, servicesStackHeading, servicesStackCta, aiBand,
       testimonialsHeading, workHeading, workCta, workNote, workNoteLink,

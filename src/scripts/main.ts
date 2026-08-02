@@ -196,7 +196,16 @@ function initTabBar() {
   // The wordmark and back-link are fixed to the top corners, so they collide
   // with headings exactly like the bar collides with body copy. Same rule.
   const chrome = [bar, ...document.querySelectorAll<HTMLElement>('.brand-sig, .back-home')];
-  const tuck = (on: boolean) => chrome.forEach((el) => el.classList.toggle('tucked', on));
+  // The floating WhatsApp button covers the bottom-right corner. On a phone
+  // that lands on real content (it was sitting on a hero stat), and at the
+  // top of the page it's redundant anyway — the hero's own CTA is right
+  // there. So it waits until the reader is past the hero.
+  const fab = document.querySelector<HTMLElement>('.wa-fab');
+  const HERO_ZONE = 560;
+  const tuck = (on: boolean, y = 0) => {
+    chrome.forEach((el) => el.classList.toggle('tucked', on));
+    fab?.classList.toggle('tucked', on || y < HERO_ZONE);
+  };
 
   const JITTER = 6;    // ignore sub-pixel wobble and momentum noise
   const TOP_ZONE = 140; // always visible near the top of the page
@@ -211,13 +220,13 @@ function initTabBar() {
     // Zone checks come first: near the ends the deltas go sub-jitter as the
     // scroll settles, and bailing early there would strand the bar hidden.
     if (y < TOP_ZONE || atEnd) {
-      tuck(false);
+      tuck(false, y);
       last = y;
       return;
     }
     const dy = y - last;
     if (Math.abs(dy) < JITTER) return;
-    tuck(dy > 0);
+    tuck(dy > 0, y);
     last = y;
   };
 
@@ -231,6 +240,7 @@ function initTabBar() {
     },
     { passive: true }
   );
+  update(); // set the initial state (FAB hidden while the hero is on screen)
 }
 
 /* ---- Footer clock ------------------------------------------------------ */

@@ -33,7 +33,8 @@ const processTitle = home.processHeading.title.split('\n');
       </h1>
       <div class="hero-lower">
         <div class="hero-copy">
-          <p class="hero-lede" data-hero-item>{home.lede}</p>
+          <p class="hero-lede hero-lede-full" data-hero-item>{home.lede}</p>
+          {home.ledeShort && <p class="hero-lede hero-lede-short" data-hero-item>{home.ledeShort}</p>}
           <div class="hero-actions" data-hero-item>
             <a href={home.primaryCta.href} class="btn btn-dark">{home.primaryCta.label} <span>↗</span></a>
             <a href={home.secondaryCta.href} class="btn btn-light">{home.secondaryCta.label}</a>

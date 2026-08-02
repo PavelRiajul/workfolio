@@ -114,6 +114,16 @@ Tokens in `@theme` (also exposed as CSS vars):
 - **Contrast is a constraint, not a preference.** `--color-grey-3` is `#767676` — the lightest grey that clears WCAG AA (4.54:1) on white. It was `#9a9a9a` (2.81:1) and failed across ~300 elements. On `--color-surface` panels grey-3 only reaches 4.13:1, so muted text *on a grey panel* uses `--color-grey-2`. Don't lighten either one back. The only text still under AA is inside the decorative mockups (`hv-*`, `sv-*`, `ov-*`, `sh-*`), which are `aria-hidden` illustrations.
 - Fonts: `--font-display 'Geist'`, `--font-body 'Inter'`, `--font-mono 'Geist Mono'`, `--font-hand 'Caveat'`.
 - `:root`: `--line` / `--line-soft` (subtle borders), `--maxw 1180px`, `--tabbar-h 64px`.
+**Mobile-first is the priority — most visitors arrive on a phone, much of it
+from cold outreach.** That traffic gives you seconds, so the top of the page
+carries the whole pitch: on the home page the primary CTA lands at 0.5 screens
+and the first project at 1.4. Heroes therefore have a `ledeShort` for phones
+(a genuinely shorter sentence, not a truncation — the full lede still renders
+on desktop), and anything redundant on mobile is dropped rather than shrunk
+(`.hero-avail` duplicates the availability chip above it). The WhatsApp FAB
+stays hidden until the reader is past the hero: at the top it covered a hero
+stat, and the hero's own CTA is right there.
+
 **Mobile (audited on iPhone SE, 375×667 portrait):**
 - Touch targets are **≥44px** — chips, tabs, footer links, accordion summaries, standalone text links and the range sliders all have explicit mobile sizing. Don't ship a control smaller than that.
 - **No informative text below 12px.** The one exception is the bottom tab-bar label (10px ≤400px): seven tabs can't hold 12px type at 375px, and 10px matches the iOS tab-bar convention.
