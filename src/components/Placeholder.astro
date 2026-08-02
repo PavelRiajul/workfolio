@@ -1,11 +1,28 @@
 ---
+// Renders an image when there is one, a hatched placeholder when there isn't.
+// Source order: Sanity upload → a file in /public → placeholder.
+//
+// A `src` pointing at a file that hasn't landed yet falls back to the
+// placeholder instead of a broken image, so captions can be wired up before
+// the photos exist. Checked at build time (the site is statically rendered).
+import { existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import type { SanityImage } from '../lib/types';
-interface Props { label: string; image?: SanityImage | null; class?: string; }
-const { label, image, class: cls = '' } = Astro.props;
-const url = image?.asset?.url;
+
+interface Props { label: string; image?: SanityImage | null; src?: string; alt?: string; class?: string; }
+const { label, image, src, alt, class: cls = '' } = Astro.props;
+
+function publicFileExists(path: string) {
+  if (!path.startsWith('/')) return true; // remote or relative — trust it
+  return existsSync(fileURLToPath(new URL(`../../public${path}`, import.meta.url)));
+}
+
+const localSrc = src && publicFileExists(src) ? src : undefined;
+const url = image?.asset?.url || localSrc;
+const altText = alt ?? image?.alt ?? label;
 ---
 <div class={`fill ${cls}`}>
   {url
-    ? <img src={url} alt={image?.alt || label} loading="lazy" decoding="async" />
+    ? <img src={url} alt={altText} loading="lazy" decoding="async" />
     : <div class="placeholder"><span>{label}</span></div>}
 </div>

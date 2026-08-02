@@ -17,8 +17,8 @@ interface Props {
 }
 
 const {
-  title = 'Riajul Islam — Full-Stack & Shopify Developer',
-  description = 'Full-stack & Shopify developer building fast, accessible web and mobile products with Next.js, the MERN stack and React Native.',
+  title,
+  description,
   onHome = false,
   subpage = false,
   bodyClass = '',
@@ -28,6 +28,10 @@ const {
 
 const site = await getSite();
 const chromeClass = printChrome ? 'no-print' : '';
+// Pages set their own SEO; Site Settings supplies the fallback.
+const pageTitle = title || site.seo.title;
+const pageDescription = description || site.seo.description;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
 ---
 
 <!doctype html>
@@ -36,8 +40,20 @@ const chromeClass = printChrome ? 'no-print' : '';
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Sharing cards. og:image is deliberately absent until there's a real
+         1200×630 asset — a missing image beats a stretched favicon. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -51,12 +67,12 @@ const chromeClass = printChrome ? 'no-print' : '';
     />
   </head>
   <body class={bodyClass}>
-    <a href="#main" class="skip-link">Skip to content</a>
+    <a href="#main" class="skip-link">{site.skipLinkLabel}</a>
     <div class={chromeClass}>
       <a href="/" class="brand-sig" aria-label={`${site.name} — home`}>{site.name}</a>
       {subpage && (
         <a href="/" class="back-home" aria-label="Back to home">
-          <span aria-hidden="true">←</span> Home
+          <span aria-hidden="true">←</span> {site.backHomeLabel}
         </a>
       )}
       <Navbar site={site} onHome={onHome} subpage={subpage} />

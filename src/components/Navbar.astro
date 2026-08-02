@@ -1,17 +1,15 @@
 ---
 import type { SiteSettings } from '../lib/types';
 interface Props { site: SiteSettings; onHome?: boolean; subpage?: boolean; }
+const { site } = Astro.props;
 const path = Astro.url.pathname;
 
-const tabs = [
-  { label: 'Home', href: '/', icon: 'fa-solid fa-house', active: path === '/' },
-  { label: 'Work', href: '/work', icon: 'fa-solid fa-folder-open', active: path.startsWith('/work') },
-  { label: 'Services', href: '/services', icon: 'fa-solid fa-wand-magic-sparkles', active: path.startsWith('/services') },
-  { label: 'Shopify', href: '/shopify', icon: 'fa-brands fa-shopify', active: path.startsWith('/shopify') },
-  { label: 'Blog', href: '/blog', icon: 'fa-solid fa-feather', active: path.startsWith('/blog') },
-  { label: 'About', href: '/about', icon: 'fa-solid fa-user', active: path.startsWith('/about') },
-  { label: 'Talk', href: '/start?tab=form', icon: 'fa-solid fa-paper-plane', active: path.startsWith('/start') },
-];
+// A tab is active when the path matches its `match` prefix (or its href).
+// "/" only matches exactly, so it doesn't light up on every page.
+const tabs = site.nav.map((t) => {
+  const prefix = t.match || t.href.split('?')[0];
+  return { ...t, active: prefix === '/' ? path === '/' : path.startsWith(prefix) };
+});
 ---
 <nav class="tabbar" id="nav" aria-label="Primary">
   <div class="tabbar-inner">

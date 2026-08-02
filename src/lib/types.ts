@@ -10,6 +10,51 @@ export interface Cta {
   href: string;
 }
 
+/** Eyebrow + title (+ optional lede) for a section. `\n` in a title breaks the line. */
+export interface Heading {
+  eyebrow: string;
+  title: string;
+  lede?: string;
+}
+
+/** A pre-formatted stat — the value is a string, so "−58%" and "3 wk" both work. */
+export interface TextStat {
+  value: string;
+  label: string;
+}
+
+/** A stat that counts up on scroll (see initCountUp). */
+export interface CountStat {
+  value: number;
+  prefix?: string;
+  suffix?: string;
+  decimals?: number;
+  label: string;
+  /** Width of the accompanying bar, e.g. "84%". Only used where a bar is drawn. */
+  barWidth?: string;
+}
+
+export interface SeoMeta {
+  title: string;
+  description: string;
+}
+
+export interface NavItem {
+  label: string;
+  href: string;
+  /** Full Font Awesome class, e.g. "fa-solid fa-house". */
+  icon: string;
+  /** Path prefix that marks this tab active (defaults to href). */
+  match?: string;
+}
+
+/** The closing call-to-action band that ends most pages. */
+export interface ClosingCtaContent {
+  title: string;
+  primary: Cta;
+  secondary: Cta;
+}
+
 export interface Stat {
   value: number;
   suffix?: string;
@@ -70,7 +115,7 @@ export interface Service {
   /** Typical turnaround, shown as a chip on the services page. */
   timeline: string;
   /** Which mockup OfferVisual renders. */
-  visual: 'ai' | 'mvp' | 'commerce' | 'api';
+  visual: 'ai' | 'mvp' | 'commerce' | 'api' | 'booking';
   /** Optional deep-link to a dedicated landing page. */
   href?: string;
   tone: Tone;
@@ -79,6 +124,18 @@ export interface Service {
 export interface SiteSettings {
   name: string;
   role: string;
+  /** Fallback <title>/<meta description> for pages that don't set their own. */
+  seo: SeoMeta;
+  /** Bottom tab bar. */
+  nav: NavItem[];
+  footerLinks: Cta[];
+  /** Copyright year shown in the footer. */
+  copyrightYear: string;
+  openToWorkLabel: string;
+  skipLinkLabel: string;
+  backHomeLabel: string;
+  /** Defaults for the closing CTA band; pages may override the title. */
+  closingCta: { primary: Cta; secondary: Cta };
   email: string;
   phone: string;
   location: string;
@@ -99,16 +156,42 @@ export interface SiteSettings {
   techStack: string[];
 }
 
+/** The dark band on the home page that explains the AI-accelerated method. */
+export interface AiBand {
+  eyebrow: string;
+  title: string;
+  accentWord: string;
+  body: string;
+  link: Cta;
+  stats: CountStat[];
+}
+
 export interface HomeContent {
+  seo: SeoMeta;
   badge: string;
+  availabilityChip: string;
   headlineLines: string[];
   accentWord: string;
   lede: string;
-  primaryCta: string;
-  secondaryCta: string;
+  primaryCta: Cta;
+  secondaryCta: Cta;
   availabilityNote: string;
+  buildingWithLabel: string;
   rotatingWords: string[];
   stats: Stat[];
+  /** Section headings, in page order. */
+  /** Turns the tech marquee into the entry point for /stack. */
+  stackCta: Cta;
+  servicesStackHeading: Heading;
+  servicesStackCta: Cta;
+  aiBand: AiBand;
+  testimonialsHeading: Heading;
+  workHeading: Heading;
+  workCta: Cta;
+  workNote: string;
+  workNoteLink: Cta;
+  processHeading: Heading;
+  faqHeading: Heading;
   approachEyebrow: string;
   approachTitle: string;
   approachLede: string;
@@ -122,6 +205,198 @@ export interface HomeContent {
   testimonials: Testimonial[];
   faqs: Faq[];
   closingTitle: string;
+}
+
+/** Hero shared by the Services and Shopify landing pages. */
+export interface PageHero {
+  eyebrow: string;
+  chip: string;
+  headlineLines: string[];
+  accentWord: string;
+  lede: string;
+  primaryCta: Cta;
+  secondaryCta: Cta;
+  stats: TextStat[];
+}
+
+export interface ServicesPageContent {
+  seo: SeoMeta;
+  hero: PageHero;
+  /** The "same scope, two timelines" card in the hero. */
+  velocity: {
+    kicker: string;
+    rows: { label: string; value: string; barWidth: string; muted: boolean }[];
+    foot: string;
+  };
+  methodHeading: Heading;
+  listHeading: Heading;
+  listCta: Cta;
+  serviceCta: Cta;
+  serviceDeepLinkCta: Cta;
+  /** Pointer to the /stack detail page. */
+  stackLink: Cta;
+  engagementsHeading: Heading;
+  engagements: { number: string; title: string; body: string; meta: string }[];
+  processHeading: Heading;
+  faqHeading: Heading;
+  faqs: Faq[];
+  closing: ClosingCtaContent;
+}
+
+export interface ShopifyPageContent {
+  seo: SeoMeta;
+  hero: PageHero;
+  brandsHeading: Heading;
+  brands: string[];
+  servicesHeading: Heading;
+  servicesCta: Cta;
+  serviceTagLabel: string;
+  serviceCta: Cta;
+  approachHeading: Heading;
+  approach: { number: string; title: string; body: string }[];
+  numbersHeading: Heading;
+  numbers: CountStat[];
+  numbersNote: string;
+  /** The CRO half of the page. */
+  cro: {
+    heading: Heading;
+    lede: string;
+    features: string[];
+    primaryCta: Cta;
+    secondaryCta: Cta;
+  };
+  /** Values rendered inside the CroDashboard visual. */
+  croDashboard: {
+    rateLabel: string;
+    rateBefore: string;
+    rateAfter: string;
+    rateBadge: string;
+    abTitle: string;
+    abStatus: string;
+    abVariants: { name: string; value: string; barWidth: string; winner: boolean; winnerLabel?: string }[];
+    abFoot: string;
+    funnelLabel: string;
+    funnel: { step: string; value: string; barWidth: string }[];
+  };
+  leakHeading: Heading;
+  funnel: { name: string; count: number; width: string; drop?: string; why?: string }[];
+  fixes: { icon: string; title: string; body: string; barWidth: string }[];
+  croProcessHeading: Heading;
+  croProcess: { number: string; title: string; body: string }[];
+  croProcessLoopNote: string;
+  calcHeading: Heading;
+  calcCta: Cta;
+  calcLabels: {
+    visitors: string;
+    aov: string;
+    current: string;
+    target: string;
+    outKicker: string;
+    revenueNow: string;
+    revenueAfter: string;
+    monthlyUplift: string;
+    extraOrders: string;
+  };
+  calcNote: string;
+  experimentsHeading: Heading;
+  experimentsColumns: { test: string; metric: string; lift: string };
+  experiments: { title: string; area: string; metric: string; lift: number }[];
+  featuredHeading: Heading;
+  featuredCta: Cta;
+  testimonialsHeading: Heading;
+  testimonials: Testimonial[];
+  faqHeading: Heading;
+  faqs: Faq[];
+  closing: ClosingCtaContent;
+}
+
+/** The /stack page — what gets built, and with what. */
+export interface StackPageContent {
+  seo: SeoMeta;
+  hero: { eyebrow: string; headlineLines: string[]; accentWord: string; lede: string; primaryCta: Cta; secondaryCta: Cta };
+  templatesHeading: Heading;
+  templates: {
+    number: string;
+    title: string;
+    tagline: string;
+    bestFor: string;
+    stack: string[];
+    note: string;
+    tone: Tone;
+  }[];
+  toolsHeading: Heading;
+  toolGroups: { title: string; tools: { name: string; role: string }[] }[];
+  everyBuildHeading: Heading;
+  everyBuild: string[];
+  everyBuildNote: string;
+  closing: ClosingCtaContent;
+}
+
+export interface WorkPageContent {
+  seo: SeoMeta;
+  hero: { eyebrow: string; headlineLines: string[]; lede: string };
+  filters: Cta[];
+  /** Label on the "view full case study" link inside the project modal. */
+  modalCtaLabel: string;
+  closing: ClosingCtaContent;
+}
+
+export interface BlogPageContent {
+  seo: SeoMeta;
+  hero: { eyebrow: string; headlineLines: string[]; lede: string };
+  categories: Cta[];
+  featuredBadge: string;
+  emptyMessage: string;
+  closing: ClosingCtaContent;
+}
+
+export interface StartPageContent {
+  seo: SeoMeta;
+  eyebrow: string;
+  headlineLines: string[];
+  lede: string;
+  callTabLabel: string;
+  formTabLabel: string;
+  call: {
+    title: string;
+    body: string;
+    points: string[];
+    embedLabel: string;
+    /** Calendly / Cal.com booking URL. Empty falls back to a placeholder. */
+    schedulerUrl: string;
+    schedulerFallbackLabel: string;
+  };
+  form: {
+    nameLabel: string;
+    namePlaceholder: string;
+    emailLabel: string;
+    emailPlaceholder: string;
+    needsLabel: string;
+    needs: string[];
+    budgetLabel: string;
+    budgetPlaceholder: string;
+    budgets: string[];
+    timelineLabel: string;
+    timelinePlaceholder: string;
+    timelines: string[];
+    messageLabel: string;
+    messagePlaceholder: string;
+    submitLabel: string;
+    note: string;
+  };
+  success: { title: string; body: string; backLabel: string };
+}
+
+/** Section labels for the case-study template (/work/[slug]). */
+export interface CaseStudyContent {
+  challengeHeading: Heading;
+  approachHeading: Heading;
+  insightsHeading: Heading;
+  processHeading: Heading;
+  screensHeading: Heading;
+  mobileHeading: Heading;
+  outcomesHeading: Heading;
+  nextHeading: Heading;
 }
 
 export interface Outcome {
@@ -184,15 +459,35 @@ export interface Post {
   image?: SanityImage | null;
 }
 
+/** One photo in the About strip. Falls back to a hatched placeholder until
+ *  either `src` (a file in /public) or `image` (a Sanity upload) is set. */
+export interface GalleryPhoto {
+  /** Caption under the photo — also the placeholder label. */
+  caption: string;
+  /** Alt text. Defaults to the caption; set "" for purely decorative shots. */
+  alt?: string;
+  /** Path to a file in /public, e.g. "/about/desk.jpg". */
+  src?: string;
+  /** Uploaded in the Studio — wins over `src` when present. */
+  image?: SanityImage | null;
+}
+
 export interface AboutContent {
+  seo: SeoMeta;
+  eyebrow: string;
   heading: string;
   leadParagraph: string;
   secondParagraph: string;
   tags: string[];
-  gallery: string[];
+  gallery: GalleryPhoto[];
+  outsideEyebrow: string;
   outsideTitle: string;
   outsideBody: string;
+  traitsHeading: Heading;
   traits: { title: string; body: string }[];
+  buildHeading: Heading;
+  buildLink: Cta;
+  stackLink: Cta;
   closingTitle: string;
 }
 

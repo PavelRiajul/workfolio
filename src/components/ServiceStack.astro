@@ -3,23 +3,26 @@
 // you scroll (pure CSS sticky; GSAP adds a subtle settle-back scale).
 // Each card pairs its copy with a mockup of what the service actually
 // delivers. Full detail lives on /services.
-import type { Service } from '../lib/types';
+import type { Cta, Heading, Service } from '../lib/types';
 import OfferVisual from './OfferVisual.astro';
 
 interface Props {
   services: Service[];
+  heading: Heading;
+  cta: Cta;
 }
-const { services } = Astro.props;
+const { services, heading, cta } = Astro.props;
+const headingLines = heading.title.split('\n');
 // Keep the home glimpse tight — a few key features per card.
 const PEEK = 4;
 ---
 <section class="section section-bordered">
   <div class="sstack-head" data-reveal>
     <div>
-      <div class="eyebrow">— What I do</div>
-      <h2>Four ways I ship.</h2>
+      <div class="eyebrow">{heading.eyebrow}</div>
+      <h2>{headingLines.map((l, i) => (<>{l}{i < headingLines.length - 1 && <br />}</>))}</h2>
     </div>
-    <a href="/services" class="btn btn-light btn-sm">All services ↗</a>
+    <a href={cta.href} class="btn btn-light btn-sm">{cta.label}</a>
   </div>
 
   <div class="sstack" id="sstack">

@@ -50,9 +50,24 @@ src/lib/content.ts    ← one loader per content type (GROQ query + fallback). P
 `src/lib/types.ts` (interface), `src/lib/content.ts` (loader + GROQ), and `schemaTypes/` (Studio).
 Miss the last one and editors can't author what the site queries.
 
+**Pages hold no copy.** Every heading, label, list, stat, chip and CTA comes from a loader —
+`.astro` files contain layout only. A hardcoded string in a page is a bug. Each landing page has
+its own singleton (`servicesPage`, `shopifyPage`, `workPage`, `blogPage`, `startPage`,
+`caseStudyPage`); site-wide chrome (nav, footer links, skip link, default SEO, default closing-CTA
+buttons) lives in `siteSettings`. Shared shapes — `Heading`, `Cta`, `TextStat`, `CountStat`,
+`PageHero`, `ClosingCtaContent` — are defined once in `types.ts` and registered as reusable Studio
+objects in `schemaTypes/objects.ts`.
+
+Conventions worth knowing: a `\n` inside a `Heading.title` (or any headline field) renders as a
+line break; `headlineLines[]` does the same for heroes; filter/category chips reuse `Cta` where
+`label` is the visible text and `href` holds the filter value ("all", "ai", "shopify").
+**Not editable by design:** the decorative mockup internals (`OfferVisual`, `ServiceVisual`, the
+3D hero cards) — they're illustrations tied to specific layouts, not copy.
+
 **To add/change content:** edit `src/data/content.ts`, add/update the type in `src/lib/types.ts`,
 and (if it's a new type) add a loader + GROQ projection in `src/lib/content.ts`. Loaders:
-`getSite, getHome, getServices, getShopifyServices, getProjects, getProject, getPosts, getAbout, getResume`.
+`getSite, getHome, getServicesPage, getShopifyPage, getWorkPage, getBlogPage, getStartPage,
+getCaseStudy, getAbout, getResume, getServices, getShopifyServices, getProjects, getProject, getPosts`.
 
 Two service datasets, deliberately separate:
 - `services` (`Service[]`) — the four top-level offers: **AI Web Development, MVP Engineering, Shopify & CRO, Full-Stack & APIs**. Drives the home stack and `/services`.
@@ -65,19 +80,23 @@ Two service datasets, deliberately separate:
 | `/work` | `work.astro` | Filterable project grid + case-study modal |
 | `/work/[slug]` | `work/[slug].astro` | Case study — `halo`, `vellum`, `northwind`, `pulse`, `anchor` |
 | `/services` | `services.astro` | Services landing — hero (velocity card `.velo`), AI-method cards + caveat, the four services as `svcf` rows (`OfferVisual`), engagement models, process, FAQ |
+| `/stack` | `stack.astro` | The toolbox and the four locked build templates (Landing · Web App · B2B · AI). Linked from `/services` and the footer, not the tab bar. Source: `docs/mvp-stack-reference.md` — **only the publishable parts**; pricing, market strategy and studio gaps stay in that doc. |
 | `/shopify` | `shopify.astro` | **Shopify + CRO merged.** Hero (Shopify 3D scene), brands, 5 Shopify services (`ServiceVisual`), approach, dark by-the-numbers, then the CRO half at `#cro`: `CroDashboard`, funnel leak + fixes, CRO loop (`#cro-process`), ROI calculator (`#cro-calc`, inline script), experiments leaderboard, featured work, testimonials, merged FAQ |
 | `/cro` | — | Retired; redirects to `/shopify#cro` via `redirects` in `astro.config.mjs` |
 | `/about` | `about.astro` | Bio, photo gallery, traits |
 | `/blog` | `blog.astro` | Featured post + category-filtered grid |
 | `/resume` | `resume.astro` | ATS résumé; copy-email, print, real downloadable PDF (jsPDF, lazy-loaded `resume-pdf.ts`) |
-| `/start` | `start.astro` | Contact — "book a call" / "send a message" tabs |
+| `/start` | `start.astro` | Contact — "book a call" (inline Calendly iframe, URL from `startPage.call.schedulerUrl`) / "send a message" tabs |
 | `/admin` | (Sanity) | Embedded Studio |
 
 ## Components (`src/components/`)
 - `Navbar.astro` — **bottom tab bar** (not a top navbar). Floating pill on desktop, full-width bar on mobile. Tabs: Home · Work · Services · Shopify · Blog · About · Talk. Supports `fa-solid`/`fa-brands` icons via full icon class. Has `id="nav"`.
 - `Footer.astro`, `WhatsApp.astro` (floating FAB, bottom-right), `BackToTop.astro` (`#b2t`, bottom-left).
 - `Mascot.astro` — autonomous animated SVG blob pet (see below). Home only.
-- `WorkCard.astro`, `ProjectModal.astro`, `Placeholder.astro` (hatch placeholder for missing imagery), `Marquee.astro`, `ClosingCta.astro`.
+- `WorkCard.astro`, `ProjectModal.astro`, `Marquee.astro`, `ClosingCta.astro`.
+- `Placeholder.astro` — image with a hatched fallback. Source order: Sanity upload → `src` file in `/public` → placeholder. A `src` whose file doesn't exist yet falls back to the placeholder (checked with `fs` at build time), so captions can be wired before photos land.
+- **Project covers:** drop `public/work/<slug>.jpg` (e.g. `halo.jpg`, `vellum.jpg`) and it fills the work card, the case-study hero and the Shopify featured card. A Sanity upload on the project wins over the file.
+- **About photos:** drop files into `public/about/` matching the paths in `about.gallery` (`me.jpg`, `setup.jpg`, `project.jpg`, `coffee.jpg`, `gaming.jpg`, `books.jpg`, `outdoors.jpg`) — they appear with no code change. Or upload per-photo in the Studio (About Page → Photo gallery), which wins over the file. Frames are 4:5, so crop portrait.
 - `ServiceStack.astro` — home scroll-stacking glimpse of the four services (sticky cards + GSAP settle, still `#sstack`). Pairs copy with `OfferVisual`.
 - `OfferVisual.astro` — mockup per top-level service, keyed by `service.visual` (`ai` prompt→reviewed-code, `mvp` sprint timeline, `commerce` storefront+uplift, `api` endpoints). Shared by `ServiceStack` and `/services`. Uses the `.sv`/`.sv-panel` shell plus `.ov-*` internals.
 - `ServiceVisual.astro` — tone-matched mockup of each **Shopify** sub-service (`tone`: indigo/terracotta/amber/sage/ink). Used by `/shopify` only.
@@ -92,8 +111,17 @@ Props: `title, description, onHome, subpage, bodyClass, printChrome, backToTop`.
 ## Design system (`src/styles/global.css`)
 Tokens in `@theme` (also exposed as CSS vars):
 - Colors: `--color-ink #0a0a0a`, `--color-grey-1/2/3`, `--color-surface #f4f4f5`, `--color-blue #2563eb` (the single brand accent). Shopify green `#5e8e3e` used on Shopify/CRO surfaces.
+- **Contrast is a constraint, not a preference.** `--color-grey-3` is `#767676` — the lightest grey that clears WCAG AA (4.54:1) on white. It was `#9a9a9a` (2.81:1) and failed across ~300 elements. On `--color-surface` panels grey-3 only reaches 4.13:1, so muted text *on a grey panel* uses `--color-grey-2`. Don't lighten either one back. The only text still under AA is inside the decorative mockups (`hv-*`, `sv-*`, `ov-*`, `sh-*`), which are `aria-hidden` illustrations.
 - Fonts: `--font-display 'Geist'`, `--font-body 'Inter'`, `--font-mono 'Geist Mono'`, `--font-hand 'Caveat'`.
 - `:root`: `--line` / `--line-soft` (subtle borders), `--maxw 1180px`, `--tabbar-h 64px`.
+**Spacing & layout system (use it — do not invent values):**
+- One fluid scale: `--space-2xs … --space-3xl`, plus `--gutter` (page inset) and `--section-y` / `--section-y-tight` (band rhythm). Every gap, pad and margin picks a step. **Never write a bare `clamp()` for spacing** and never write a token as `--x: var(--x)` — a self-referential custom property is invalid and silently drops the whole declaration (it once flattened every section's padding to zero).
+- Layout primitives: `.section` (full-bleed band = rhythm + gutter), `.shell` (centred column *with* gutter), `.wrap` (centred column *inside* a section). Modifiers instead of inline padding: `.section-tight`, `.section-tight-top/-bottom`, `.section-flush-top/-bottom`, `.section-bleed`.
+- Stacking helpers `.stack-sm/-md/-lg`, measure helpers `.measure` / `.measure-wide` (ch-based), anchor offsets `.anchor` / `.anchor-deep`.
+- **Four breakpoints only — 480 / 640 / 768 / 900.** Nothing else. (Was 10 ad-hoc values.)
+- Pages carry no inline `style` for spacing. If you reach for one, add a modifier instead.
+- **Don't put two accordion sections back to back** — Process uses the `.cyc` timeline (`.cyc-blue` off commerce pages) precisely so it doesn't read as a second FAQ.
+
 **Visual language:** flat/minimal, white bg + ink text + blue accent, **pill** buttons (`border-radius: 9999px`), cards ~14–22px radius, **soft shadows, no outlines** (only thin `rgba(10,10,10,.08)` borders), dotted-grid hero motif. Motion = smooth ease (`cubic-bezier(.22,.61,.36,1)`), gentle. **Never hardcode a palette — use the tokens.**
 
 global.css is organized in clearly-labeled `/* ===== ... ===== */` sections (tokens, base, tab bar, hero, Shopify/CRO, AI/services surfaces, components, mobile polish).

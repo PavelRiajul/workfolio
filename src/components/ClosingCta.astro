@@ -1,19 +1,27 @@
 ---
-interface Props { title: string; bordered?: boolean; secondaryLabel?: string; secondaryHref?: string; }
-const {
-  title,
-  bordered = false,
-  secondaryLabel = 'View résumé',
-  secondaryHref = '/resume',
-} = Astro.props;
+// Closing call-to-action band. Buttons fall back to the site-wide defaults in
+// Site Settings; pages pass their own when they want different wording.
+import type { Cta } from '../lib/types';
+import { getSite } from '../lib/content';
+
+interface Props {
+  title: string;
+  bordered?: boolean;
+  primary?: Cta;
+  secondary?: Cta;
+}
+const { title, bordered = false, primary, secondary } = Astro.props;
+const site = await getSite();
+const primaryCta = primary || site.closingCta.primary;
+const secondaryCta = secondary || site.closingCta.secondary;
 const lines = title.split('\n');
 ---
 <section class={`closing ${bordered ? 'bordered' : ''}`}>
   <div class="closing-card" data-reveal>
     <h2>{lines.map((l, i) => (<>{l}{i < lines.length - 1 && <br />}</>))}</h2>
     <div class="closing-actions">
-      <a href="/start?tab=form" class="btn btn-dark btn-cta">Get in touch <span>↗</span></a>
-      <a href={secondaryHref} class="btn btn-light btn-cta">{secondaryLabel}</a>
+      <a href={primaryCta.href} class="btn btn-dark btn-cta">{primaryCta.label} <span>↗</span></a>
+      <a href={secondaryCta.href} class="btn btn-light btn-cta">{secondaryCta.label}</a>
     </div>
   </div>
 </section>

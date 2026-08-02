@@ -7,11 +7,13 @@ import { getAbout, getHome } from '../lib/content';
 const about = await getAbout();
 const home = await getHome();
 const headingLines = about.heading.split('\n');
+const traitsTitle = about.traitsHeading.title.split('\n');
+const buildTitle = about.buildHeading.title.split('\n');
 ---
-<Base title="About — Riajul Islam" description={about.leadParagraph} subpage={true}>
-  <section class="section" style="padding-bottom:0;">
-    <div style="max-width:var(--maxw);margin:0 auto;">
-      <div class="eyebrow" data-reveal>— About Me</div>
+<Base title={about.seo.title} description={about.seo.description} subpage={true}>
+  <section class="section section-flush-bottom">
+    <div class="wrap">
+      <div class="eyebrow" data-reveal>{about.eyebrow}</div>
       <div class="about-intro-grid">
         <div data-reveal>
           <h1>{headingLines.map((l, i) => (<>{l}{i < headingLines.length - 1 && <br />}</>))}</h1>
@@ -27,12 +29,14 @@ const headingLines = about.heading.split('\n');
     </div>
   </section>
 
-  <section data-reveal style="padding:40px 0 110px;">
+  <section class="section section-bleed section-tight-top" data-reveal>
     <div class="gallery">
-      {about.gallery.map((cap) => (
+      {about.gallery.map((photo) => (
         <figure>
-          <div class="frame"><Placeholder label={cap} /></div>
-          <figcaption>{cap}</figcaption>
+          <div class="frame">
+            <Placeholder label={photo.caption} src={photo.src} alt={photo.alt} image={photo.image} />
+          </div>
+          <figcaption>{photo.caption}</figcaption>
         </figure>
       ))}
     </div>
@@ -41,20 +45,20 @@ const headingLines = about.heading.split('\n');
   <section class="section section-bordered">
     <div class="split">
       <div data-reveal>
-        <div class="eyebrow">— Outside the code</div>
+        <div class="eyebrow">{about.outsideEyebrow}</div>
         <h2 class="about-h2">{about.outsideTitle}</h2>
       </div>
-      <div data-reveal style="align-self:center;">
+      <div class="self-center" data-reveal>
         <p class="about-outside-body">{about.outsideBody}</p>
       </div>
     </div>
   </section>
 
   <section class="section section-bordered">
-    <div style="max-width:var(--maxw);margin:0 auto;">
+    <div class="wrap">
       <div data-reveal>
-        <div class="eyebrow">— Me as a developer</div>
-        <h2 class="about-h2">4 things that make me me.</h2>
+        <div class="eyebrow">{about.traitsHeading.eyebrow}</div>
+        <h2 class="about-h2">{traitsTitle.map((l, i) => (<>{l}{i < traitsTitle.length - 1 && <br />}</>))}</h2>
       </div>
       <div class="trait-grid">
         {about.traits.map((t) => (
@@ -69,11 +73,11 @@ const headingLines = about.heading.split('\n');
 
   <!-- How I work (the craft standards — moved here from Home) -->
   <section class="section section-bordered">
-    <div class="shell" style="padding:0;">
+    <div class="wrap">
       <div data-reveal>
         <div class="eyebrow">{home.approachEyebrow}</div>
-        <h2 class="about-h2" style="max-width:640px;">{home.approachTitle}</h2>
-        <p class="split-lede" style="max-width:520px;">{home.approachLede}</p>
+        <h2 class="about-h2 measure-wide">{home.approachTitle}</h2>
+        <p class="split-lede">{home.approachLede}</p>
       </div>
       <div class="appr-grid">
         {home.principles.map((p, i) => (
@@ -92,9 +96,9 @@ const headingLines = about.heading.split('\n');
   <section class="section section-bordered">
     <div class="split">
       <div data-reveal>
-        <div class="eyebrow">— What I build</div>
-        <h2 class="about-h2">The full range.</h2>
-        <p class="split-lede">AI products and fast MVPs are where most of my work lands lately, but I build across the stack. Most projects blend two or three. <a href="/services">See the services →</a></p>
+        <div class="eyebrow">{about.buildHeading.eyebrow}</div>
+        <h2 class="about-h2">{buildTitle.map((l, i) => (<>{l}{i < buildTitle.length - 1 && <br />}</>))}</h2>
+        <p class="split-lede">{about.buildHeading.lede} <a href={about.buildLink.href}>{about.buildLink.label}</a> <a href={about.stackLink.href}>{about.stackLink.label}</a></p>
       </div>
       <div data-reveal>
         {home.services.map((s, i) => (

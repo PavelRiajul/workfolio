@@ -1,0 +1,106 @@
+---
+import Base from '../layouts/Base.astro';
+import ClosingCta from '../components/ClosingCta.astro';
+import { getStackPage } from '../lib/content';
+
+const page = await getStackPage();
+const heroLines = page.hero.headlineLines;
+const templatesTitle = page.templatesHeading.title.split('\n');
+const toolsTitle = page.toolsHeading.title.split('\n');
+const everyTitle = page.everyBuildHeading.title.split('\n');
+---
+<Base title={page.seo.title} description={page.seo.description} subpage={true}>
+  <!-- Hero -->
+  <section class="section section-tight">
+    <div class="page-hero" data-reveal>
+      <div class="eyebrow">{page.hero.eyebrow}</div>
+      <h1>
+        {heroLines.map((l, i) => (<>{l}{i < heroLines.length - 1 && <br />}</>))}
+        {page.hero.accentWord && <> <span class="accent">{page.hero.accentWord}</span></>}
+      </h1>
+      <p>{page.hero.lede}</p>
+      <div class="hero-actions">
+        <a href={page.hero.primaryCta.href} class="btn btn-dark">{page.hero.primaryCta.label} <span>↗</span></a>
+        <a href={page.hero.secondaryCta.href} class="btn btn-light">{page.hero.secondaryCta.label}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Build templates -->
+  <section class="section section-bordered">
+    <div class="wrap">
+      <div class="eyebrow" data-reveal>{page.templatesHeading.eyebrow}</div>
+      <h2 class="section-h2 measure-wide" data-reveal>
+        {templatesTitle.map((l, i) => (<>{l}{i < templatesTitle.length - 1 && <br />}</>))}
+      </h2>
+      <p class="split-lede" data-reveal>{page.templatesHeading.lede}</p>
+
+      <div class="tpl-grid">
+        {page.templates.map((t) => (
+          <article class={`tpl tone-${t.tone}`} data-reveal>
+            <div class="tpl-top">
+              <span class="tpl-num">{t.number}</span>
+              <h3>{t.title}</h3>
+            </div>
+            <p class="tpl-lede">{t.tagline}</p>
+            <div class="tpl-best"><span>Best for</span>{t.bestFor}</div>
+            <ul class="tpl-stack">
+              {t.stack.map((tool) => <li>{tool}</li>)}
+            </ul>
+            <p class="tpl-note">{t.note}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Toolbox -->
+  <section class="section section-bordered">
+    <div class="wrap">
+      <div class="eyebrow" data-reveal>{page.toolsHeading.eyebrow}</div>
+      <h2 class="section-h2 measure-wide" data-reveal>
+        {toolsTitle.map((l, i) => (<>{l}{i < toolsTitle.length - 1 && <br />}</>))}
+      </h2>
+      <p class="split-lede" data-reveal>{page.toolsHeading.lede}</p>
+
+      <div class="tool-grid">
+        {page.toolGroups.map((g) => (
+          <div class="tool-group" data-reveal>
+            <h3>{g.title}</h3>
+            <dl>
+              {g.tools.map((t) => (
+                <div class="tool-row">
+                  <dt>{t.name}</dt>
+                  <dd>{t.role}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- In every build (dark) -->
+  <section class="section process">
+    <div class="wrap">
+      <div class="eyebrow" data-reveal>{page.everyBuildHeading.eyebrow}</div>
+      <h2 class="section-h2" data-reveal>
+        {everyTitle.map((l, i) => (<>{l}{i < everyTitle.length - 1 && <br />}</>))}
+      </h2>
+      <ul class="every-list" data-reveal>
+        {page.everyBuild.map((item) => (
+          <li><i class="fa-solid fa-check" aria-hidden="true"></i>{item}</li>
+        ))}
+      </ul>
+      <p class="every-note" data-reveal>{page.everyBuildNote}</p>
+    </div>
+  </section>
+
+  <ClosingCta
+    title={page.closing.title}
+    bordered={true}
+    primary={page.closing.primary}
+    secondary={page.closing.secondary}
+  />
+</Base>

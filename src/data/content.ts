@@ -13,11 +13,50 @@ import type {
   ResumeContent,
   Service,
   ShopifyService,
+  ServicesPageContent,
+  StackPageContent,
+  ShopifyPageContent,
+  WorkPageContent,
+  BlogPageContent,
+  StartPageContent,
+  CaseStudyContent,
 } from '../lib/types';
 
 export const site: SiteSettings = {
   name: 'Riajul Islam',
   role: 'AI-Powered Full-Stack Developer',
+  seo: {
+    title: 'Riajul Islam — AI-Powered Full-Stack Developer',
+    description:
+      'AI-powered full-stack developer building fast, accessible web and mobile products with Next.js, the MERN stack, React Native and Shopify.',
+  },
+  nav: [
+    { label: 'Home', href: '/', icon: 'fa-solid fa-house' },
+    { label: 'Work', href: '/work', icon: 'fa-solid fa-folder-open' },
+    { label: 'Services', href: '/services', icon: 'fa-solid fa-wand-magic-sparkles' },
+    { label: 'Shopify', href: '/shopify', icon: 'fa-brands fa-shopify' },
+    { label: 'Blog', href: '/blog', icon: 'fa-solid fa-feather' },
+    { label: 'About', href: '/about', icon: 'fa-solid fa-user' },
+    { label: 'Talk', href: '/start?tab=form', icon: 'fa-solid fa-paper-plane', match: '/start' },
+  ],
+  footerLinks: [
+    { label: 'Home', href: '/' },
+    { label: 'Work', href: '/work' },
+    { label: 'Services', href: '/services' },
+    { label: 'Shopify', href: '/shopify' },
+    { label: 'Stack', href: '/stack' },
+    { label: 'Blog', href: '/blog' },
+    { label: 'About', href: '/about' },
+    { label: 'Résumé', href: '/resume' },
+  ],
+  copyrightYear: '2026',
+  openToWorkLabel: 'Open to work',
+  skipLinkLabel: 'Skip to content',
+  backHomeLabel: 'Home',
+  closingCta: {
+    primary: { label: 'Get in touch', href: '/start?tab=form' },
+    secondary: { label: 'View résumé', href: '/resume' },
+  },
   email: 'hello@riajulislam.dev',
   phone: '+880 1XXX-XXXXXX',
   location: 'Dhaka, Bangladesh',
@@ -42,20 +81,54 @@ export const site: SiteSettings = {
 };
 
 export const home: HomeContent = {
+  seo: {
+    title: 'Riajul Islam — AI-Powered Full-Stack Developer',
+    description:
+      "I'm a full-stack developer with an AI-accelerated workflow — production web apps and MVPs shipped in weeks, not quarters.",
+  },
   badge: 'AI-powered full-stack developer',
+  availabilityChip: 'Available for projects',
   headlineLines: ['Production software,', 'shipped at'],
   accentWord: 'AI speed.',
   lede:
     "I'm a full-stack developer with an AI-accelerated workflow: AI writes the boilerplate, I own the architecture, the review and the quality bar. The result is MVPs in weeks instead of quarters — Next.js, Node and Shopify, built properly and shipped fast.",
-  primaryCta: 'Start a project',
-  secondaryCta: 'See what I build',
+  primaryCta: { label: 'Start a project', href: '/start?tab=form' },
+  secondaryCta: { label: 'See what I build', href: '/services' },
   availabilityNote: 'Available for new projects · working remotely, worldwide',
+  buildingWithLabel: 'Currently building with',
   rotatingWords: ['Next.js', 'Claude Code', 'TypeScript', 'Shopify', 'Node.js', 'Cursor'],
   stats: [
     { value: 3, suffix: ' wk', label: 'Typical MVP build' },
     { value: 15, suffix: '+', label: 'Products shipped' },
     { value: 24, suffix: 'h', label: 'Avg. response time' },
   ],
+  stackCta: { label: 'What I build with', href: '/stack' },
+  servicesStackHeading: { eyebrow: '— What I do', title: 'Five ways I ship.' },
+  servicesStackCta: { label: 'All services ↗', href: '/services' },
+  aiBand: {
+    eyebrow: '— The method',
+    title: 'AI writes the boilerplate.\nI own the',
+    accentWord: 'engineering.',
+    body: 'The mechanical 60% of a build — scaffolding, CRUD, types, test fixtures — gets generated in minutes. The saved weeks go into architecture, performance and the details that decide whether people actually use the thing.',
+    link: { label: 'How the workflow runs', href: '/services' },
+    stats: [
+      { value: 3, suffix: ' wk', label: 'typical MVP, start to live', barWidth: '38%' },
+      { value: 60, prefix: '−', suffix: '%', label: 'time on mechanical work', barWidth: '72%' },
+      { value: 100, suffix: '%', label: 'of it reviewed by a human', barWidth: '100%' },
+    ],
+  },
+  testimonialsHeading: { eyebrow: '— What clients say', title: "Don't take my word for it." },
+  workHeading: { eyebrow: '— Selected work', title: 'Proof it ships.' },
+  workCta: { label: 'All projects ↗', href: '/work' },
+  workNote:
+    'AI products and MVPs lately — plus Shopify commerce, Next.js web apps and React Native mobile.',
+  workNoteLink: { label: 'See the full range →', href: '/work' },
+  processHeading: {
+    eyebrow: '— Process',
+    title: 'Built\nfor speed.',
+    lede: 'Six steps from first message to production. No bloat, no ceremony — just momentum and clean commits.',
+  },
+  faqHeading: { eyebrow: '— FAQ', title: 'Questions,\nanswered.' },
   approachEyebrow: '— How I Work',
   approachTitle: "Fast, but not careless.",
   approachLede:
@@ -179,6 +252,29 @@ export const services: Service[] = [
   },
   {
     number: '04',
+    slug: 'ai-booking-systems',
+    title: 'AI Booking Systems',
+    kicker: 'Flagship build',
+    tagline: 'A chat that books the appointment — and never guesses.',
+    description:
+      'A conversational booking system for clinics, salons and trades: customers chat on WhatsApp or your site, the assistant checks real availability and books the slot. The scheduler owns scheduling correctness; the model only handles the conversation, and it never writes to your database directly.',
+    features: [
+      'WhatsApp & on-site chat booking',
+      'Real availability via Cal.com',
+      'Confirmations and reminders',
+      'Owner alerts on every booking',
+      'Admin view to edit or cancel',
+      'Guardrails and a human fallback',
+      'Multi-language (English & Bangla)',
+      'Live in about 3 weeks',
+    ],
+    icon: 'fa-solid fa-calendar-check',
+    timeline: '3–5 weeks',
+    visual: 'booking',
+    tone: 'terracotta',
+  },
+  {
+    number: '05',
     slug: 'full-stack-apis',
     title: 'Full-Stack & APIs',
     kicker: 'The engine room',
@@ -550,16 +646,41 @@ export const posts: Post[] = [
 ];
 
 export const about: AboutContent = {
+  seo: {
+    title: 'About — Riajul Islam',
+    description:
+      "I'm an AI-powered full-stack developer based in Dhaka, building web and mobile products for founders and teams worldwide.",
+  },
+  eyebrow: '— About Me',
   heading: "Hey, I'm\nRiajul.",
   leadParagraph:
     "I'm an AI-powered full-stack developer based in Dhaka, building web and mobile products for founders and teams worldwide. AI does the typing; I do the thinking — which means clients get production software in weeks without giving up the parts that make it maintainable.",
   secondParagraph:
     "With 1–2 years building production apps on Next.js, the MERN stack, React Native and Shopify — and an AI-accelerated workflow layered on top — I'm now open to a full-time role and a few freelance projects. I like owning features end to end and shipping things that actually go live.",
   tags: ['Clean, typed code', 'AI-assisted, human-reviewed', 'Lo-fi while coding', 'Open source', 'Reading'],
-  gallery: ['Me', 'My setup', 'On a project', 'Coffee & code', 'Gaming', 'Books I read', 'Outdoors'],
+  // Drop matching files into public/about/ (or upload in the Studio) and the
+  // placeholders become real photos — no code change needed.
+  gallery: [
+    { caption: 'Me', alt: 'Riajul Islam', src: '/about/me.jpg' },
+    { caption: 'My setup', alt: 'My desk and monitor setup', src: '/about/setup.jpg' },
+    { caption: 'On a project', alt: 'Working on a client project', src: '/about/project.jpg' },
+    { caption: 'Coffee & code', alt: 'Coffee beside a laptop', src: '/about/coffee.jpg' },
+    { caption: 'Gaming', alt: 'Gaming setup', src: '/about/gaming.jpg' },
+    { caption: 'Books I read', alt: 'A shelf of books', src: '/about/books.jpg' },
+    { caption: 'Outdoors', alt: 'Outdoors', src: '/about/outdoors.jpg' },
+  ],
+  outsideEyebrow: '— Outside the code',
   outsideTitle: 'The stuff that makes the work better.',
   outsideBody:
     "Long reading sessions, football, gaming with friends, and tinkering with side projects nobody asked for. They're not breaks from building — they're where the curiosity comes from. Most of what I bring to a codebase is just being interested in how things work and refusing to leave them half-done.",
+  traitsHeading: { eyebrow: '— Me as a developer', title: '4 things that make me me.' },
+  buildHeading: {
+    eyebrow: '— What I build',
+    title: 'The full range.',
+    lede: 'AI products and fast MVPs are where most of my work lands lately, but I build across the stack. Most projects blend two or three.',
+  },
+  buildLink: { label: 'See the services →', href: '/services' },
+  stackLink: { label: 'What I build with →', href: '/stack' },
   traits: [
     { title: 'I read the docs, then the source', body: "When something breaks, I'd rather understand why than paste a fix — and that goes double for code an AI wrote. Understanding it is the job." },
     { title: 'My best work happens late', body: 'The world goes quiet, notifications stop, and the hard problems finally hold still long enough to solve.' },
@@ -616,4 +737,528 @@ export const resume: ResumeContent = {
     { title: 'Meta Front-End Developer Certificate — Coursera', year: '2023' },
   ],
   languages: 'English (professional) · Bangla (native)',
+};
+
+export const servicesPage: ServicesPageContent = {
+  seo: {
+    title: 'Services — AI, MVP & Shopify Development — Riajul Islam',
+    description:
+      'AI web development, MVP engineering, Shopify & CRO, and full-stack APIs — production software built with an AI-accelerated workflow and shipped in weeks.',
+  },
+  hero: {
+    eyebrow: 'Services',
+    chip: 'Taking projects',
+    headlineLines: ['What I build,', 'and how'],
+    accentWord: 'fast.',
+    lede:
+      "Five services, one method: AI does the mechanical work, I do the engineering. You get production software on a timeline that used to require a team — without the codebase you'd have to apologise for later.",
+    primaryCta: { label: 'Start a project', href: '/start?tab=form' },
+    secondaryCta: { label: 'See the services', href: '#svc-list' },
+    stats: [
+      { value: '3 wk', label: 'Typical MVP build' },
+      { value: '~2×', label: 'Faster than a hand-typed build' },
+      { value: '100%', label: 'Code reviewed by a human' },
+    ],
+  },
+  velocity: {
+    kicker: 'Same scope, two timelines',
+    rows: [
+      { label: 'Traditional build', value: '10–12 weeks', barWidth: '100%', muted: true },
+      { label: 'AI-accelerated', value: '3–5 weeks', barWidth: '38%', muted: false },
+    ],
+    foot: 'The difference is generated boilerplate, not skipped steps.',
+  },
+  methodHeading: { eyebrow: '— The method', title: 'Where the weeks actually go.' },
+  listHeading: { eyebrow: '— Services', title: 'Five ways I can help.' },
+  listCta: { label: 'Start a project ↗', href: '/start?tab=form' },
+  serviceCta: { label: 'Start a project', href: '/start?tab=form' },
+  serviceDeepLinkCta: { label: 'See the detail', href: '' },
+  stackLink: { label: 'See what I build with →', href: '/stack' },
+  engagementsHeading: { eyebrow: '— How we work together', title: 'Three ways to start.' },
+  engagements: [
+    {
+      number: '01',
+      title: 'Fixed-scope sprint',
+      body: 'One clear outcome — a feature, an integration, an audit — scoped, quoted and delivered in one to two weeks.',
+      meta: '1–2 weeks · fixed price',
+    },
+    {
+      number: '02',
+      title: 'Product build',
+      body: 'An MVP or a full application, from schema to launch. Weekly demo builds, a fixed scope and a real launch date.',
+      meta: '3–8 weeks · fixed scope',
+    },
+    {
+      number: '03',
+      title: 'Ongoing partner',
+      body: 'A reserved slice of my week for teams that keep shipping — features, fixes, experiments and the odd fire.',
+      meta: 'Monthly · rolling',
+    },
+  ],
+  processHeading: {
+    eyebrow: '— Process',
+    title: 'Built\nfor speed.',
+    lede: 'Six steps from first message to production. No bloat, no ceremony — just momentum and clean commits.',
+  },
+  faqHeading: { eyebrow: '— Services FAQ', title: 'The questions\nI usually get.' },
+  faqs: [
+    { question: 'Which service do I actually need?', answer: "If you have an idea and no product, that's MVP Engineering. If you have a product and a backlog, that's AI Web Development. If you have a store and traffic that isn't converting, that's Shopify & CRO. Tell me the situation and I'll say which one — including if the answer is none of them." },
+    { question: 'How do you price this?', answer: 'Fixed price against a fixed scope for sprints and product builds, and a monthly rate for ongoing work. You get the number before anything starts, and it does not move unless the scope does.' },
+    { question: 'Can you add AI features to an existing app?', answer: 'Yes — assistants, semantic search over your own content, extraction and workflow automation, wired into what you already have with cost and latency budgets agreed up front.' },
+    { question: 'What if the AI-generated code is wrong?', answer: "Then it gets rewritten before you ever see it. Generated code is a first draft, not a deliverable — everything goes through tests, review and my own read before it reaches your repo." },
+    { question: 'Do I own the code?', answer: 'Entirely. Your repo, your accounts, your infrastructure from day one — plus docs and a handoff walkthrough at the end.' },
+    { question: 'How fast can you start?', answer: 'Usually within a week or two, sometimes sooner for small sprints. Send the details and I will tell you the honest next opening.' },
+  ],
+  closing: {
+    title: 'Know what you need —\nor need help deciding?',
+    primary: { label: 'Get in touch', href: '/start?tab=form' },
+    secondary: { label: 'See the work', href: '/work' },
+  },
+};
+
+export const shopifyPage: ShopifyPageContent = {
+  seo: {
+    title: 'Shopify & CRO — Fast Stores That Convert — Riajul Islam',
+    description:
+      'Headless Hydrogen builds, custom Liquid themes, speed work and conversion rate optimization — Shopify stores that load fast and actually sell.',
+  },
+  hero: {
+    eyebrow: 'Shopify & CRO',
+    chip: 'Open for builds',
+    headlineLines: ['Shopify stores,', 'built to'],
+    accentWord: 'convert.',
+    lede:
+      'Two halves of one job: build a store that loads in under a second, then test it into converting. Headless Hydrogen, custom Liquid themes, speed work and the CRO program that turns your existing traffic into orders. No bloated apps, no theme spaghetti.',
+    primaryCta: { label: 'Start a Shopify project', href: '/start?tab=form' },
+    secondaryCta: { label: 'Jump to CRO', href: '#cro' },
+    stats: [
+      { value: '−58%', label: 'Faster load times' },
+      { value: '+24%', label: 'Mobile conversion' },
+      { value: '12', label: 'Shopify builds shipped' },
+    ],
+  },
+  brandsHeading: {
+    eyebrow: "— Brands I've worked with",
+    title: 'Stores that needed to be fast — and stay that way.',
+  },
+  brands: ['Vellum', 'Harborline', 'Northwind', 'Brightlane', 'Kettle & Co.', 'Field Notes', 'Lumen', 'Atlas Supply'],
+  servicesHeading: { eyebrow: '— What I do on Shopify', title: 'Five ways I help your store.' },
+  servicesCta: { label: 'Start a project ↗', href: '/start?tab=form' },
+  serviceTagLabel: 'Shopify service',
+  serviceCta: { label: 'Start a project', href: '/start?tab=form' },
+  approachHeading: { eyebrow: '— My approach', title: 'How a build actually goes.' },
+  approach: [
+    { number: '01', title: 'Audit & strategy', body: 'A Lighthouse audit and a funnel review, then a plan tied to revenue — not vanity metrics.' },
+    { number: '02', title: 'Design & build', body: 'Theme or headless, built mobile-first with clean, documented, reviewable code.' },
+    { number: '03', title: 'Speed & QA', body: 'Real-device testing, a performance budget, and a checkout that survives the edge cases.' },
+    { number: '04', title: 'Launch & optimize', body: 'A zero-downtime cutover with analytics in place — then we test our way to a better conversion rate.' },
+  ],
+  numbersHeading: { eyebrow: '— By the numbers', title: 'Built, then measured.' },
+  // Ordered so the headline money stat lands last — it becomes the big,
+  // full-width "hero" cell when the grid collapses to 2×2 + 1 on mobile.
+  numbers: [
+    { value: 12, label: 'Shopify stores built & optimized' },
+    { value: 47, label: 'A/B tests shipped' },
+    { value: 58, prefix: '−', suffix: '%', label: 'Page load time' },
+    { value: 138, prefix: '+', suffix: '%', label: 'Best single-test lift' },
+    { value: 1.2, prefix: '$', decimals: 1, suffix: 'M+', label: 'Extra revenue generated' },
+  ],
+  numbersNote:
+    'Figures across recent Shopify engagements. Your numbers depend on your starting point — the audit tells us where the headroom is.',
+  cro: {
+    heading: {
+      eyebrow: '— Conversion rate optimization',
+      title: 'More revenue from the\ntraffic you already have.',
+    },
+    lede:
+      'A fast store is step one — CRO is how it actually sells. I run data-driven tests on your product pages, cart and checkout to turn more of your existing visitors into buyers. Same traffic, more orders, no extra ad spend.',
+    features: [
+      'Conversion audit & funnel analysis',
+      'A/B & multivariate testing',
+      'Product page (PDP) optimization',
+      'Cart & checkout optimization',
+      'Mobile conversion optimization',
+      'Trust, urgency & social proof',
+      'Heatmaps & session recordings',
+      'Landing page optimization',
+    ],
+    primaryCta: { label: 'Get a CRO audit', href: '/start?tab=form' },
+    secondaryCta: { label: 'Do the math', href: '#cro-calc' },
+  },
+  croDashboard: {
+    rateLabel: 'Conversion rate',
+    rateBefore: '2.1%',
+    rateAfter: '3.4%',
+    rateBadge: '+62%',
+    abTitle: 'A/B Test · Product page',
+    abStatus: 'Running',
+    abVariants: [
+      { name: 'A · Control', value: '2.4%', barWidth: '60%', winner: false },
+      { name: 'B · Sticky add-to-cart', value: '3.2%', barWidth: '80%', winner: true, winnerLabel: 'Winner' },
+    ],
+    abFoot: '+34% uplift · 98% confidence · 14-day test',
+    funnelLabel: 'Checkout funnel',
+    funnel: [
+      { step: 'Sessions', value: '12,480', barWidth: '100%' },
+      { step: 'Product views', value: '7,140', barWidth: '74%' },
+      { step: 'Add to cart', value: '3,120', barWidth: '48%' },
+      { step: 'Checkout', value: '1,560', barWidth: '32%' },
+      { step: 'Purchase', value: '998', barWidth: '22%' },
+    ],
+  },
+  leakHeading: {
+    eyebrow: '— Where the money leaks',
+    title: 'For every 100 visitors,\n92 leave without buying.',
+  },
+  funnel: [
+    { name: 'Sessions', count: 12480, width: '100%' },
+    { name: 'Product views', count: 7140, width: '72%', drop: '−43%', why: 'slow load · weak hero' },
+    { name: 'Add to cart', count: 3120, width: '48%', drop: '−56%', why: 'unclear PDP · no urgency' },
+    { name: 'Checkout', count: 1560, width: '33%', drop: '−50%', why: 'forced account · surprise fees' },
+    { name: 'Purchase', count: 998, width: '22%', drop: '−36%', why: 'long form · few pay options' },
+  ],
+  fixes: [
+    { icon: 'fa-box-open', title: 'Product pages', body: 'Imagery, copy, reviews and a sticky add-to-cart.', barWidth: '92%' },
+    { icon: 'fa-cart-shopping', title: 'Cart & checkout', body: 'Fewer steps, express pay, recovered carts.', barWidth: '88%' },
+    { icon: 'fa-mobile-screen-button', title: 'Mobile UX', body: 'Speed and tap-friendly flows where most traffic is.', barWidth: '80%' },
+    { icon: 'fa-gauge-high', title: 'Store speed', body: 'Core Web Vitals that pay back in orders.', barWidth: '71%' },
+    { icon: 'fa-shield-halved', title: 'Trust & proof', body: 'Reviews, badges and guarantees at the point of doubt.', barWidth: '64%' },
+  ],
+  croProcessHeading: { eyebrow: '— The CRO process', title: 'A loop, not a one-off.' },
+  croProcess: [
+    { number: '01', title: 'Audit & data review', body: 'GA4, Shopify analytics, heatmaps and session recordings pinpoint exactly where visitors hesitate and drop.' },
+    { number: '02', title: 'Hypotheses & prioritisation', body: 'Findings become testable hypotheses, ranked by impact, confidence and effort (ICE) — highest leverage first.' },
+    { number: '03', title: 'Design & build the variant', body: 'Built directly in your theme — pixel-clean, fast, and flicker-free.' },
+    { number: '04', title: 'A/B test to significance', body: 'Traffic is split and the test runs to 95%+ confidence. No guessing, no peeking.' },
+    { number: '05', title: 'Ship the winner', body: 'Winners roll out, the learning is documented, and the lift is banked.' },
+  ],
+  croProcessLoopNote: 'Then back to 01 — at a higher baseline',
+  calcHeading: { eyebrow: '— Do the math', title: 'What a better rate is worth.' },
+  calcCta: { label: 'Get your number ↗', href: '/start?tab=form' },
+  calcLabels: {
+    visitors: 'Monthly visitors',
+    aov: 'Average order value',
+    current: 'Current conversion rate',
+    target: 'Target conversion rate',
+    outKicker: 'Extra revenue / year',
+    revenueNow: 'Revenue now',
+    revenueAfter: 'After',
+    monthlyUplift: 'Monthly uplift',
+    extraOrders: 'Extra orders / yr',
+  },
+  calcNote:
+    'Illustrative — drag the sliders to model your own store. Real projections come from your analytics.',
+  experimentsHeading: { eyebrow: '— Tests that moved the needle', title: 'Real experiments, ranked by lift.' },
+  experimentsColumns: { test: 'Test', metric: 'Metric', lift: 'Lift' },
+  experiments: [
+    { title: 'Sticky add-to-cart', area: 'PDP · mobile', metric: 'Add-to-cart rate', lift: 34 },
+    { title: 'One-page checkout', area: 'Checkout', metric: 'Checkout completion', lift: 19 },
+    { title: 'Trust badges at checkout', area: 'Checkout', metric: 'Completion rate', lift: 12 },
+    { title: 'Free-shipping threshold bar', area: 'Cart', metric: 'Average order value', lift: 9 },
+  ],
+  featuredHeading: { eyebrow: '— Featured Shopify work', title: 'A headless rebuild, in detail.' },
+  featuredCta: { label: 'All projects ↗', href: '/work' },
+  testimonialsHeading: { eyebrow: '— What clients say', title: 'Shipped, fast, and still standing.' },
+  testimonials: [
+    { quote: 'Riajul shipped our Shopify rebuild ahead of schedule and our store has never been faster. Clean code, clear updates, zero drama.', name: 'Sarah Whitfield', role: 'Founder, Vellum', initials: 'SW', color: '#0F766E' },
+    { quote: 'He took our slow, app-stuffed theme and got it under a second on mobile. Conversion went up the first week.', name: 'Marcus Lee', role: 'Founder, Harborline', initials: 'ML', color: '#5e8e3e' },
+  ],
+  faqHeading: { eyebrow: '— Shopify & CRO FAQ', title: 'The questions\nI usually get.' },
+  faqs: [
+    { question: 'Headless or a regular theme — which do I need?', answer: "Most stores don't need headless. If a fast, well-built theme gets you there, I'll say so. Headless earns its keep once you've outgrown Liquid or want a fully custom front end — I'll be honest about which side you're on." },
+    { question: 'Can you work with my existing theme?', answer: "Yes. A lot of the work is improving what's already there — speed, bug fixes, new sections, conversion tests — without a full rebuild." },
+    { question: 'How long does a Shopify build take?', answer: "A focused theme build is usually 3–6 weeks; a headless storefront, 6–10. An AI-accelerated workflow does a lot of the theme scaffolding, so more of that time goes into the conversion details. You get a real timeline after a short scoping call, not a guess." },
+    { question: 'Do you handle migrations?', answer: "WooCommerce, Magento, BigCommerce or a legacy Shopify theme — I migrate products, content and URLs with redirects so you don't lose rankings." },
+    { question: 'How much can CRO realistically gain me?', answer: "It depends on your starting point — a rough, app-heavy store has more headroom than a polished one. Single tests often land 5–30% on the metric they target, and because CRO compounds, those wins stack. I'll give you an honest read after the audit, not a fantasy number." },
+    { question: 'Do I need a lot of traffic for A/B testing?', answer: "Some, yes — statistical significance needs volume. Under ~10k monthly visitors we lean on best-practice fixes, heatmaps and session recordings first, and save formal A/B tests for the pages that get enough traffic." },
+    { question: 'How long does a CRO test take?', answer: 'Usually 2–4 weeks per test to reach 95%+ confidence, depending on traffic and effect size. Rushing it is how you ship false winners — so I let tests run their course.' },
+    { question: 'Will testing slow my store down?', answer: "No. Variants are built into the theme and performance-budgeted — no third-party flicker, no layout shift. Speed and conversion pull the same direction here." },
+    { question: 'What happens after launch?', answer: "I don't vanish at handoff. You get docs, a clean repo, and support options — including a steady cadence of conversion tests if you want to keep compounding the gains." },
+  ],
+  closing: {
+    title: 'Ready to make Shopify\nactually sell?',
+    primary: { label: 'Get in touch', href: '/start?tab=form' },
+    secondary: { label: 'See all services', href: '/services' },
+  },
+};
+
+export const workPage: WorkPageContent = {
+  seo: {
+    title: 'Work — Riajul Islam',
+    description:
+      "Selected products I've shipped — AI products and MVPs, headless Shopify, full-stack web apps and cross-platform mobile.",
+  },
+  hero: {
+    eyebrow: '— Selected Work',
+    headlineLines: ["Everything I've", 'built, in one place.'],
+    lede:
+      "A selection of products I've shipped — from AI MVPs and headless Shopify storefronts to full-stack web apps and cross-platform mobile. Each one built to make it ship.",
+  },
+  filters: [
+    { label: 'All', href: 'all' },
+    { label: 'AI', href: 'ai' },
+    { label: 'Shopify', href: 'shopify' },
+    { label: 'Next.js', href: 'nextjs' },
+    { label: 'React Native', href: 'reactnative' },
+    { label: 'MERN', href: 'mern' },
+  ],
+  modalCtaLabel: 'View full case study →',
+  closing: {
+    title: "Like what you see?\nLet's build the next one.",
+    primary: { label: 'Get in touch', href: '/start?tab=form' },
+    secondary: { label: 'View résumé', href: '/resume' },
+  },
+};
+
+export const blogPage: BlogPageContent = {
+  seo: {
+    title: 'Blog — Riajul Islam',
+    description:
+      'Notes on building things — AI-accelerated development, Next.js, Shopify, the MERN stack and React Native.',
+  },
+  hero: {
+    eyebrow: '— Writing',
+    headlineLines: ['Notes on', 'building things.'],
+    lede:
+      'Short, practical write-ups on building with AI, Next.js, Shopify, the MERN stack and React Native — plus the occasional lesson from shipping on a deadline.',
+  },
+  categories: [
+    { label: 'All', href: 'all' },
+    { label: 'AI', href: 'ai' },
+    { label: 'E-commerce', href: 'ecommerce' },
+    { label: 'Mobile', href: 'mobile' },
+    { label: 'Full-Stack', href: 'fullstack' },
+    { label: 'Frontend', href: 'frontend' },
+    { label: 'Backend', href: 'backend' },
+    { label: 'Performance', href: 'performance' },
+    { label: 'Career', href: 'career' },
+  ],
+  featuredBadge: 'Featured',
+  emptyMessage: 'No posts in this category yet — check back soon.',
+  closing: {
+    title: 'Got a project worth\nwriting about?',
+    primary: { label: 'Get in touch', href: '/start?tab=form' },
+    secondary: { label: 'See my work', href: '/work' },
+  },
+};
+
+export const startPage: StartPageContent = {
+  seo: {
+    title: "Let's work together — Riajul Islam",
+    description: 'Hiring for a role or have a project in mind? Book a call or send the details.',
+  },
+  eyebrow: "— Hiring or building? Let's talk",
+  headlineLines: ["Let's work", 'together.'],
+  lede:
+    "Hiring for a role or have a project in mind? Book a quick call, or send the details and I'll come back to you with next steps. Either way, you'll hear from me within 24 hours.",
+  callTabLabel: 'Book a call',
+  formTabLabel: 'Send a message',
+  call: {
+    title: '30-minute intro call',
+    body: "No pitch, no pressure. We'll talk through the role or project, the stack and timeline, and whether we're a good match.",
+    points: [
+      '30 minutes · video call',
+      'Dhaka time (GMT+6), flexible across zones',
+      'Reply within 24 hours',
+    ],
+    embedLabel: 'Scheduler embed — Cal.com / Calendly',
+    schedulerUrl: 'https://calendly.com/riajulpislam/30min',
+    schedulerFallbackLabel: 'Open the booking page ↗',
+  },
+  form: {
+    nameLabel: 'Your name *',
+    namePlaceholder: 'Jane Doe',
+    emailLabel: 'Work email *',
+    emailPlaceholder: 'jane@company.com',
+    needsLabel: "What's this about? *",
+    needs: [
+      'AI web development',
+      'MVP engineering (0 → 1)',
+      'Shopify & CRO',
+      'Web app (Next.js / React)',
+      'Full-stack / API work (MERN)',
+      'Mobile app (React Native)',
+      'A full-time / contract role',
+    ],
+    budgetLabel: 'Budget',
+    budgetPlaceholder: 'Select a range',
+    budgets: ['Under $2k', '$2k–5k', '$5k–10k', '$10k–25k', '$25k+', 'Not sure yet'],
+    timelineLabel: 'Timeline',
+    timelinePlaceholder: 'Select a timeline',
+    timelines: ['ASAP', 'Within 1 month', '1–3 months', '3+ months / flexible'],
+    messageLabel: 'Anything else? (optional)',
+    messagePlaceholder:
+      "A few lines about the product, the team, or what's keeping you up at night.",
+    submitLabel: 'Send message',
+    note: "I'll get back to you within 24 hours.",
+  },
+  success: {
+    title: 'Got it — thank you.',
+    body: "Your details are in. I'll review and reply within 24 hours with next steps. Talk soon.",
+    backLabel: 'Back to home',
+  },
+};
+
+export const caseStudy: CaseStudyContent = {
+  challengeHeading: { eyebrow: '— The Challenge', title: 'What needed\nsolving.' },
+  approachHeading: { eyebrow: '— The Approach', title: 'How I\nbuilt it.' },
+  insightsHeading: { eyebrow: '— Key Decisions', title: 'The calls that shaped it.' },
+  processHeading: { eyebrow: '— Process', title: 'How the work got done.' },
+  screensHeading: { eyebrow: '— Selected Screens', title: 'A closer look.' },
+  mobileHeading: { eyebrow: '— Mobile Companion', title: 'The app, up close.' },
+  outcomesHeading: { eyebrow: '— Outcomes', title: 'The work moved the numbers.' },
+  nextHeading: { eyebrow: '— Next Project', title: '' },
+};
+
+export const stackPage: StackPageContent = {
+  seo: {
+    title: 'What I Build With — Stack & Setup — Riajul Islam',
+    description:
+      'The tools I actually use — Astro, Next.js, Supabase, Prisma, Stripe, Sanity, Cloudflare — and the four setups I start projects from.',
+  },
+  hero: {
+    eyebrow: 'What I build with',
+    headlineLines: ['The tools, and', 'why I picked'],
+    accentWord: 'them.',
+    lede:
+      "I start from a setup I already trust rather than re-litigating the stack every project. Here's what I reach for, what each piece is actually doing, and what goes into a build whether or not anyone asks for it.",
+    primaryCta: { label: 'Start a project', href: '/start?tab=form' },
+    secondaryCta: { label: 'See the services', href: '/services' },
+  },
+  templatesHeading: {
+    eyebrow: '— How I start',
+    title: 'Four setups I\nbuild from.',
+    lede: 'Which one a project gets depends on whether it needs a login, a database and money changing hands. When it is borderline I take the heavier one — switching mid-build is the expensive mistake.',
+  },
+  templates: [
+    {
+      number: '01',
+      title: 'Landing / Marketing',
+      tagline: 'Content-driven sites with no login and no database.',
+      bestFor: 'Marketing sites, landing pages, portfolios, blogs',
+      stack: ['Astro', 'Tailwind', 'GSAP', 'Sanity', 'Resend', 'Cloudflare Pages', 'Turnstile', 'PostHog'],
+      note: 'Ships in days and costs almost nothing to run.',
+      tone: 'sage',
+    },
+    {
+      number: '02',
+      title: 'Standard Web App',
+      tagline: 'The default the moment someone says portal, dashboard or booking.',
+      bestFor: 'Customer portals, dashboards, booking systems, SaaS v1',
+      stack: ['Next.js', 'Tailwind', 'Supabase', 'Prisma', 'Stripe', 'Resend', 'Vercel', 'Sentry', 'PostHog'],
+      note: 'One vendor for database, auth and storage keeps the moving parts low.',
+      tone: 'indigo',
+    },
+    {
+      number: '03',
+      title: 'B2B / Multi-Tenant',
+      tagline: 'When organizations, roles and SSO are real requirements.',
+      bestFor: 'Team accounts, role hierarchies, invites, single sign-on',
+      stack: ['Next.js', 'Tailwind', 'Neon', 'Prisma', 'Clerk', 'Cloudflare R2', 'Stripe', 'Sentry', 'PostHog'],
+      note: 'Only when the org model genuinely needs it — it costs more to run.',
+      tone: 'ink',
+    },
+    {
+      number: '04',
+      title: 'AI Feature App',
+      tagline: 'Template 02 or 03 with an AI module bolted on properly.',
+      bestFor: 'Assistants, semantic search, extraction, chat booking',
+      stack: ['Provider-agnostic SDK', 'Validated tool calls', 'Job queue', 'Streaming UI', 'Per-user cost logging', 'Rate limiting'],
+      note: 'AI is a module on a real app, never a stack of its own.',
+      tone: 'amber',
+    },
+  ],
+  toolsHeading: {
+    eyebrow: '— The toolbox',
+    title: 'The toolbox.',
+    lede: 'Chosen once and used consistently, so I get faster with them rather than starting over each time. The boring, proven option wins unless there is a specific reason it cannot.',
+  },
+  toolGroups: [
+    {
+      title: 'Frontend',
+      tools: [
+        { name: 'Astro', role: 'Static & content sites' },
+        { name: 'Next.js', role: 'Apps with auth and server logic' },
+        { name: 'Tailwind CSS', role: 'Styling' },
+        { name: 'GSAP', role: 'Animation' },
+      ],
+    },
+    {
+      title: 'Mobile',
+      tools: [{ name: 'React Native (Expo)', role: 'Cross-platform apps' }],
+    },
+    {
+      title: 'Backend & data',
+      tools: [
+        { name: 'Supabase', role: 'Postgres, auth, storage, realtime' },
+        { name: 'Neon', role: 'Postgres with branching' },
+        { name: 'Prisma', role: 'ORM' },
+        { name: 'Clerk', role: 'Orgs, roles and SSO' },
+      ],
+    },
+    {
+      title: 'Hosting & storage',
+      tools: [
+        { name: 'Cloudflare Pages', role: 'Static sites and workers' },
+        { name: 'Vercel', role: 'Next.js apps' },
+        { name: 'Render', role: 'Long-running services and cron' },
+        { name: 'Cloudflare R2', role: 'Object storage' },
+      ],
+    },
+    {
+      title: 'Content & commerce',
+      tools: [
+        { name: 'Sanity', role: 'Structured content' },
+        { name: 'Shopify', role: 'Commerce (Liquid & Hydrogen)' },
+        { name: 'Stripe', role: 'Payments' },
+        { name: 'Resend', role: 'Transactional email' },
+      ],
+    },
+    {
+      title: 'AI',
+      tools: [
+        { name: 'Claude & GPT', role: 'Assistants and reasoning' },
+        { name: 'Groq', role: 'Latency-critical inference' },
+        { name: 'Zod', role: 'Validating every tool call' },
+      ],
+    },
+    {
+      title: 'Booking & automation',
+      tools: [
+        { name: 'Cal.com', role: 'Scheduling engine' },
+        { name: 'n8n', role: 'Workflow automation' },
+        { name: 'WhatsApp API', role: 'Conversations and reminders' },
+      ],
+    },
+    {
+      title: 'Quality & insight',
+      tools: [
+        { name: 'Sentry', role: 'Error tracking' },
+        { name: 'PostHog', role: 'Analytics, replay, funnels' },
+        { name: 'Turnstile', role: 'Form spam protection' },
+        { name: 'Vitest & Playwright', role: 'Tests on the paths that matter' },
+      ],
+    },
+  ],
+  everyBuildHeading: {
+    eyebrow: '— In every build',
+    title: 'What I set up\nwithout being asked.',
+  },
+  everyBuild: [
+    'A staging environment as well as production',
+    'CI that type-checks and tests on every push',
+    'Error tracking wired up before launch',
+    'Uptime monitoring, not just app errors',
+    'Automated backups with a tested restore',
+    'Spam protection on every public form',
+    'Email domain records (SPF, DKIM, DMARC) set up',
+    'Your own accounts — you own the infrastructure',
+  ],
+  everyBuildNote:
+    'None of this is an upsell. It is the difference between a site that launches and a site that keeps running after I hand it over.',
+  closing: {
+    title: 'Want to talk\nthrough a build?',
+    primary: { label: 'Get in touch', href: '/start?tab=form' },
+    secondary: { label: 'See the services', href: '/services' },
+  },
 };

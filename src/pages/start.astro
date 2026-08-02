@@ -1,47 +1,52 @@
 ---
 import Base from '../layouts/Base.astro';
 import Placeholder from '../components/Placeholder.astro';
+import { getStartPage } from '../lib/content';
 
-const needs = [
-  'AI web development',
-  'MVP engineering (0 → 1)',
-  'Shopify & CRO',
-  'Web app (Next.js / React)',
-  'Full-stack / API work (MERN)',
-  'Mobile app (React Native)',
-  'A full-time / contract role',
-];
-const budgets = ['Under $2k', '$2k–5k', '$5k–10k', '$10k–25k', '$25k+', 'Not sure yet'];
-const timelines = ['ASAP', 'Within 1 month', '1–3 months', '3+ months / flexible'];
+const page = await getStartPage();
+const headlineLines = page.headlineLines;
 ---
-<Base title="Let's work together — Riajul Islam" description="Hiring for a role or have a project in mind? Book a call or send the details." subpage={true}>
-  <section class="start-wrap section" style="padding-bottom:clamp(40px,8vw,60px);">
-    <div class="eyebrow">— Hiring or building? Let's talk</div>
-    <h1 style="font-family:var(--font-display);font-weight:600;font-size:clamp(32px,7vw,62px);line-height:0.98;letter-spacing:-0.035em;margin:18px 0 0;">Let's work<br>together.</h1>
-    <p style="font-size:19px;line-height:1.55;color:var(--color-grey-1);max-width:560px;margin:26px 0 0;">Hiring for a role or have a project in mind? Book a quick call, or send the details and I'll come back to you with next steps. Either way, you'll hear from me within 24 hours.</p>
+<Base title={page.seo.title} description={page.seo.description} subpage={true}>
+  <section class="start-wrap section section-tight-bottom">
+    <div class="eyebrow">{page.eyebrow}</div>
+    <h1 class="start-h1">{headlineLines.map((l, i) => (<>{l}{i < headlineLines.length - 1 && <br />}</>))}</h1>
+    <p class="start-lede">{page.lede}</p>
 
     <div class="start-tabs" role="tablist" aria-label="Contact method">
-      <button class="start-tab" data-tab="call" id="tab-call" role="tab" aria-selected="false" aria-controls="panel-call" tabindex="-1">Book a call</button>
-      <button class="start-tab active" data-tab="form" id="tab-form" role="tab" aria-selected="true" aria-controls="panel-form" tabindex="0">Send a message</button>
+      <button class="start-tab" data-tab="call" id="tab-call" role="tab" aria-selected="false" aria-controls="panel-call" tabindex="-1">{page.callTabLabel}</button>
+      <button class="start-tab active" data-tab="form" id="tab-form" role="tab" aria-selected="true" aria-controls="panel-form" tabindex="0">{page.formTabLabel}</button>
     </div>
   </section>
 
-  <section class="start-wrap" style="padding:0 clamp(20px,5vw,40px) 120px;">
+  <section class="start-wrap section section-flush-top">
     <!-- Book a call -->
     <div class="start-panel" data-panel="call" id="panel-call" role="tabpanel" aria-labelledby="tab-call" tabindex="0">
       <div class="call-card">
         <div class="call-grid">
           <div class="call-left">
-            <h2>25-minute intro call</h2>
-            <p>No pitch, no pressure. We'll talk through the role or project, the stack and timeline, and whether we're a good match.</p>
+            <h2>{page.call.title}</h2>
+            <p>{page.call.body}</p>
             <div class="call-points">
-              <div class="call-point"><span class="d"></span>25 minutes · video call</div>
-              <div class="call-point"><span class="d"></span>Dhaka time (GMT+6), flexible across zones</div>
-              <div class="call-point"><span class="d"></span>Reply within 24 hours</div>
+              {page.call.points.map((pt) => (
+                <div class="call-point"><span class="d"></span>{pt}</div>
+              ))}
             </div>
           </div>
           <div class="call-right">
-            <Placeholder label="Scheduler embed — Cal.com / Calendly" />
+            {page.call.schedulerUrl ? (
+              <div class="sched">
+                <iframe
+                  src={`${page.call.schedulerUrl}?hide_gdpr_banner=1&background_color=ffffff&text_color=0a0a0a&primary_color=2563eb`}
+                  title={page.call.title}
+                  loading="lazy"
+                ></iframe>
+                <a class="sched-link" href={page.call.schedulerUrl} target="_blank" rel="noopener">
+                  {page.call.schedulerFallbackLabel}
+                </a>
+              </div>
+            ) : (
+              <Placeholder label={page.call.embedLabel} />
+            )}
           </div>
         </div>
       </div>
@@ -53,57 +58,57 @@ const timelines = ['ASAP', 'Within 1 month', '1–3 months', '3+ months / flexib
         <form id="contact-form">
           <div class="field-grid">
             <label class="flabel">
-              <span class="lt">Your name *</span>
-              <input class="field" required type="text" placeholder="Jane Doe" />
+              <span class="lt">{page.form.nameLabel}</span>
+              <input class="field" required type="text" placeholder={page.form.namePlaceholder} />
             </label>
             <label class="flabel">
-              <span class="lt">Work email *</span>
-              <input class="field" required type="email" placeholder="jane@company.com" />
+              <span class="lt">{page.form.emailLabel}</span>
+              <input class="field" required type="email" placeholder={page.form.emailPlaceholder} />
             </label>
           </div>
 
-          <div style="margin-top:30px;">
-            <span class="lt" style="display:block;font-size:14px;font-weight:500;margin-bottom:12px;">What's this about? *</span>
+          <div class="stack-md">
+            <span class="lt lt-block">{page.form.needsLabel}</span>
             <div class="check-list">
-              {needs.map((n) => (
+              {page.form.needs.map((n) => (
                 <label class="check-lbl"><input type="checkbox" name="need" />{n}</label>
               ))}
             </div>
           </div>
 
-          <div class="field-grid" style="margin-top:30px;">
+          <div class="field-grid stack-md">
             <label class="flabel">
-              <span class="lt">Budget <span class="muted">(freelance)</span></span>
+              <span class="lt">{page.form.budgetLabel} <span class="muted">(freelance)</span></span>
               <select class="field">
-                <option value="" disabled selected>Select a range</option>
-                {budgets.map((b) => <option>{b}</option>)}
+                <option value="" disabled selected>{page.form.budgetPlaceholder}</option>
+                {page.form.budgets.map((b) => <option>{b}</option>)}
               </select>
             </label>
             <label class="flabel">
-              <span class="lt">Timeline</span>
+              <span class="lt">{page.form.timelineLabel}</span>
               <select class="field">
-                <option value="" disabled selected>Select a timeline</option>
-                {timelines.map((t) => <option>{t}</option>)}
+                <option value="" disabled selected>{page.form.timelinePlaceholder}</option>
+                {page.form.timelines.map((t) => <option>{t}</option>)}
               </select>
             </label>
           </div>
 
-          <label class="flabel" style="margin-top:30px;">
-            <span class="lt">Anything else? (optional)</span>
-            <textarea class="field" rows="4" placeholder="A few lines about the product, the team, or what's keeping you up at night."></textarea>
+          <label class="flabel stack-md">
+            <span class="lt">{page.form.messageLabel}</span>
+            <textarea class="field" rows="4" placeholder={page.form.messagePlaceholder}></textarea>
           </label>
 
           <div class="form-foot">
-            <button type="submit" class="btn btn-dark" style="padding:14px 28px;">Send message <span>↗</span></button>
-            <span class="form-note">I'll get back to you within 24 hours.</span>
+            <button type="submit" class="btn btn-dark btn-cta">{page.form.submitLabel} <span>↗</span></button>
+            <span class="form-note">{page.form.note}</span>
           </div>
         </form>
 
         <div id="form-success" class="form-success" style="display:none;">
           <div class="tick">✓</div>
-          <h2>Got it — thank you.</h2>
-          <p>Your details are in. I'll review and reply within 24 hours with next steps. Talk soon.</p>
-          <a href="/" class="btn btn-light" style="margin-top:30px;padding:12px 24px;">Back to home</a>
+          <h2>{page.success.title}</h2>
+          <p>{page.success.body}</p>
+          <a href="/" class="btn btn-light stack-md">{page.success.backLabel}</a>
         </div>
       </div>
     </div>

@@ -6,130 +6,52 @@ import ServiceVisual from '../components/ServiceVisual.astro';
 import CroDashboard from '../components/CroDashboard.astro';
 import Testimonials from '../components/Testimonials.astro';
 import Faq from '../components/Faq.astro';
-import { getProjects, getShopifyServices } from '../lib/content';
+import { getProjects, getShopifyServices, getShopifyPage } from '../lib/content';
 
 const projects = await getProjects();
 const services = await getShopifyServices();
+const page = await getShopifyPage();
 const shopifyProjects = projects.filter((p) => p.tags.includes('shopify'));
 const featured = shopifyProjects[0];
 
-const heroStats = [
-  { v: '−58%', l: 'Faster load times' },
-  { v: '+24%', l: 'Mobile conversion' },
-  { v: '12', l: 'Shopify builds shipped' },
-];
-
-const brands = ['Vellum', 'Harborline', 'Northwind', 'Brightlane', 'Kettle & Co.', 'Field Notes', 'Lumen', 'Atlas Supply'];
-
-const croFeatures = [
-  'Conversion audit & funnel analysis',
-  'A/B & multivariate testing',
-  'Product page (PDP) optimization',
-  'Cart & checkout optimization',
-  'Mobile conversion optimization',
-  'Trust, urgency & social proof',
-  'Heatmaps & session recordings',
-  'Landing page optimization',
-];
-
-const approach = [
-  { n: '01', t: 'Audit & strategy', b: 'A Lighthouse audit and a funnel review, then a plan tied to revenue — not vanity metrics.' },
-  { n: '02', t: 'Design & build', b: 'Theme or headless, built mobile-first with clean, documented, reviewable code.' },
-  { n: '03', t: 'Speed & QA', b: 'Real-device testing, a performance budget, and a checkout that survives the edge cases.' },
-  { n: '04', t: 'Launch & optimize', b: 'A zero-downtime cutover with analytics in place — then we test our way to a better conversion rate.' },
-];
-
-// Build + CRO track record in one dark band.
-// Ordered so the headline money stat lands last — it becomes the big,
-// full-width "hero" cell when the grid collapses to 2×2 + 1 on mobile.
-const numbers = [
-  { v: 12, l: 'Shopify stores built & optimized' },
-  { v: 47, l: 'A/B tests shipped' },
-  { v: 58, prefix: '−', suffix: '%', l: 'Page load time' },
-  { v: 138, prefix: '+', suffix: '%', l: 'Best single-test lift' },
-  { v: 1.2, prefix: '$', decimals: 1, suffix: 'M+', l: 'Extra revenue generated' },
-];
-
-// Funnel leak (each stage count animates; drop-offs annotated)
-const funnel = [
-  { name: 'Sessions', count: 12480, w: '100%' },
-  { name: 'Product views', count: 7140, w: '72%', drop: '−43%', why: 'slow load · weak hero' },
-  { name: 'Add to cart', count: 3120, w: '48%', drop: '−56%', why: 'unclear PDP · no urgency' },
-  { name: 'Checkout', count: 1560, w: '33%', drop: '−50%', why: 'forced account · surprise fees' },
-  { name: 'Purchase', count: 998, w: '22%', drop: '−36%', why: 'long form · few pay options' },
-];
-
-// Fixes (impact bars grow on scroll)
-const fixes = [
-  { ic: 'fa-box-open', t: 'Product pages', b: 'Imagery, copy, reviews and a sticky add-to-cart.', w: '92%' },
-  { ic: 'fa-cart-shopping', t: 'Cart & checkout', b: 'Fewer steps, express pay, recovered carts.', w: '88%' },
-  { ic: 'fa-mobile-screen-button', t: 'Mobile UX', b: 'Speed and tap-friendly flows where most traffic is.', w: '80%' },
-  { ic: 'fa-gauge-high', t: 'Store speed', b: 'Core Web Vitals that pay back in orders.', w: '71%' },
-  { ic: 'fa-shield-halved', t: 'Trust & proof', b: 'Reviews, badges and guarantees at the point of doubt.', w: '64%' },
-];
-
-// CRO loop
-const croProcess = [
-  { n: '01', t: 'Audit & data review', b: 'GA4, Shopify analytics, heatmaps and session recordings pinpoint exactly where visitors hesitate and drop.' },
-  { n: '02', t: 'Hypotheses & prioritisation', b: 'Findings become testable hypotheses, ranked by impact, confidence and effort (ICE) — highest leverage first.' },
-  { n: '03', t: 'Design & build the variant', b: 'Built directly in your theme — pixel-clean, fast, and flicker-free.' },
-  { n: '04', t: 'A/B test to significance', b: 'Traffic is split and the test runs to 95%+ confidence. No guessing, no peeking.' },
-  { n: '05', t: 'Ship the winner', b: 'Winners roll out, the learning is documented, and the lift is banked.' },
-];
-
-// Experiments leaderboard (lift numbers animate)
-const experiments = [
-  { t: 'Sticky add-to-cart', area: 'PDP · mobile', metric: 'Add-to-cart rate', lift: 34 },
-  { t: 'One-page checkout', area: 'Checkout', metric: 'Checkout completion', lift: 19 },
-  { t: 'Trust badges at checkout', area: 'Checkout', metric: 'Completion rate', lift: 12 },
-  { t: 'Free-shipping threshold bar', area: 'Cart', metric: 'Average order value', lift: 9 },
-];
-
-const testimonials = [
-  { quote: 'Riajul shipped our Shopify rebuild ahead of schedule and our store has never been faster. Clean code, clear updates, zero drama.', name: 'Sarah Whitfield', role: 'Founder, Vellum', initials: 'SW', color: '#0F766E' },
-  { quote: 'He took our slow, app-stuffed theme and got it under a second on mobile. Conversion went up the first week.', name: 'Marcus Lee', role: 'Founder, Harborline', initials: 'ML', color: '#5e8e3e' },
-];
-
-// Build questions and conversion questions, in one list — they are one service now.
-const faqs = [
-  { q: 'Headless or a regular theme — which do I need?', a: "Most stores don't need headless. If a fast, well-built theme gets you there, I'll say so. Headless earns its keep once you've outgrown Liquid or want a fully custom front end — I'll be honest about which side you're on." },
-  { q: 'Can you work with my existing theme?', a: "Yes. A lot of the work is improving what's already there — speed, bug fixes, new sections, conversion tests — without a full rebuild." },
-  { q: 'How long does a Shopify build take?', a: "A focused theme build is usually 3–6 weeks; a headless storefront, 6–10. An AI-accelerated workflow does a lot of the theme scaffolding, so more of that time goes into the conversion details. You get a real timeline after a short scoping call, not a guess." },
-  { q: 'Do you handle migrations?', a: "WooCommerce, Magento, BigCommerce or a legacy Shopify theme — I migrate products, content and URLs with redirects so you don't lose rankings." },
-  { q: 'How much can CRO realistically gain me?', a: "It depends on your starting point — a rough, app-heavy store has more headroom than a polished one. Single tests often land 5–30% on the metric they target, and because CRO compounds, those wins stack. I'll give you an honest read after the audit, not a fantasy number." },
-  { q: 'Do I need a lot of traffic for A/B testing?', a: "Some, yes — statistical significance needs volume. Under ~10k monthly visitors we lean on best-practice fixes, heatmaps and session recordings first, and save formal A/B tests for the pages that get enough traffic." },
-  { q: 'How long does a CRO test take?', a: 'Usually 2–4 weeks per test to reach 95%+ confidence, depending on traffic and effect size. Rushing it is how you ship false winners — so I let tests run their course.' },
-  { q: 'Will testing slow my store down?', a: "No. Variants are built into the theme and performance-budgeted — no third-party flicker, no layout shift. Speed and conversion pull the same direction here." },
-  { q: 'What happens after launch?', a: "I don't vanish at handoff. You get docs, a clean repo, and support options — including a steady cadence of conversion tests if you want to keep compounding the gains." },
-];
+const heroLines = page.hero.headlineLines;
+const brandsTitle = page.brandsHeading.title.split('\n');
+const servicesTitle = page.servicesHeading.title.split('\n');
+const approachTitle = page.approachHeading.title.split('\n');
+const numbersTitle = page.numbersHeading.title.split('\n');
+const croTitle = page.cro.heading.title.split('\n');
+const leakTitle = page.leakHeading.title.split('\n');
+const croProcessTitle = page.croProcessHeading.title.split('\n');
+const calcTitle = page.calcHeading.title.split('\n');
+const experimentsTitle = page.experimentsHeading.title.split('\n');
+const featuredTitle = page.featuredHeading.title.split('\n');
 ---
-<Base
-  title="Shopify & CRO — Store Development and Conversion Optimization — Riajul Islam"
-  description="Headless Hydrogen builds, custom Liquid themes, speed work and conversion rate optimization — Shopify stores that load fast and actually sell."
-  subpage={true}
->
+<Base title={page.seo.title} description={page.seo.description} subpage={true}>
   <!-- Hero -->
   <section class="hero">
     <div class="hero-grid"></div>
     <div class="hero-inner shell" data-hero-intro>
       <div class="hero-meta" data-hero-item>
         <span>—</span>
-        <span>Shopify &amp; CRO</span>
-        <span class="chip-open chip-shop"><span class="dot"></span>Open for builds</span>
+        <span>{page.hero.eyebrow}</span>
+        <span class="chip-open chip-shop"><span class="dot"></span>{page.hero.chip}</span>
       </div>
-      <h1 data-hero-item>Shopify stores,<br>built to <span class="accent accent-shop">convert.</span></h1>
+      <h1 data-hero-item>
+        {heroLines.map((l, i) => (<>{l}{i < heroLines.length - 1 && <br />}</>))}
+        {page.hero.accentWord && <> <span class="accent accent-shop">{page.hero.accentWord}</span></>}
+      </h1>
       <div class="hero-lower">
         <div class="hero-copy">
-          <p class="hero-lede" data-hero-item>Two halves of one job: build a store that loads in under a second, then test it into converting. Headless Hydrogen, custom Liquid themes, speed work and the CRO program that turns your existing traffic into orders. No bloated apps, no theme spaghetti.</p>
+          <p class="hero-lede" data-hero-item>{page.hero.lede}</p>
           <div class="hero-actions" data-hero-item>
-            <a href="/start?tab=form" class="btn btn-dark">Start a Shopify project <span>↗</span></a>
-            <a href="#cro" class="btn btn-light">Jump to CRO</a>
+            <a href={page.hero.primaryCta.href} class="btn btn-dark">{page.hero.primaryCta.label} <span>↗</span></a>
+            <a href={page.hero.secondaryCta.href} class="btn btn-light">{page.hero.secondaryCta.label}</a>
           </div>
-          <div class="hero-stats" data-hero-item style="margin-top:40px;">
-            {heroStats.map((s) => (
+          <div class="hero-stats" data-hero-item>
+            {page.hero.stats.map((s) => (
               <div>
-                <div class="num">{s.v}</div>
-                <div class="lbl">{s.l}</div>
+                <div class="num">{s.value}</div>
+                <div class="lbl">{s.label}</div>
               </div>
             ))}
           </div>
@@ -166,24 +88,28 @@ const faqs = [
 
   <!-- Brands -->
   <section class="section section-bordered">
-    <div style="max-width:var(--maxw);margin:0 auto;">
-      <div class="eyebrow" data-reveal>— Brands I've worked with</div>
-      <h2 class="section-h2" data-reveal style="max-width:760px;">Stores that needed to be fast — and stay that way.</h2>
+    <div class="wrap">
+      <div class="eyebrow" data-reveal>{page.brandsHeading.eyebrow}</div>
+      <h2 class="section-h2 measure-wide" data-reveal>>
+        {brandsTitle.map((l, i) => (<>{l}{i < brandsTitle.length - 1 && <br />}</>))}
+      </h2>
       <div class="brand-wall" data-reveal>
-        {brands.map((b) => <span>{b}</span>)}
+        {page.brands.map((b) => <span>{b}</span>)}
       </div>
     </div>
   </section>
 
   <!-- Services showcase (alternating per-service feature rows) -->
-  <section id="sh-services" class="section section-bordered" style="scroll-margin-top:24px;">
-    <div style="max-width:var(--maxw);margin:0 auto;">
+  <section id="sh-services" class="section section-bordered anchor">
+    <div class="wrap">
       <div class="work-head" data-reveal>
         <div>
-          <div class="eyebrow">— What I do on Shopify</div>
-          <h2 class="section-h2" style="max-width:560px;">Five ways I help your store.</h2>
+          <div class="eyebrow">{page.servicesHeading.eyebrow}</div>
+          <h2 class="section-h2 measure">>
+            {servicesTitle.map((l, i) => (<>{l}{i < servicesTitle.length - 1 && <br />}</>))}
+          </h2>
         </div>
-        <a href="/start?tab=form" class="btn btn-light btn-sm">Start a project ↗</a>
+        <a href={page.servicesCta.href} class="btn btn-light btn-sm">{page.servicesCta.label}</a>
       </div>
 
       <div class="svc-showcase">
@@ -195,15 +121,15 @@ const faqs = [
             </div>
             <div class="svcf-copy">
               <div class="svcf-top">
-                <span class="svcf-tag"><i class="fa-brands fa-shopify" aria-hidden="true"></i> Shopify service</span>
-                <span class="svcf-no">{s.number} / 05</span>
+                <span class="svcf-tag"><i class="fa-brands fa-shopify" aria-hidden="true"></i> {page.serviceTagLabel}</span>
+                <span class="svcf-no">{s.number} / 0{services.length}</span>
               </div>
               <h3>{s.title}</h3>
               <p>{s.description}</p>
               <ul class="svcf-feats">
                 {s.features.map((f) => <li><i class="fa-solid fa-check" aria-hidden="true"></i>{f}</li>)}
               </ul>
-              <a class="svcf-cta" href="/start?tab=form">Start a project <span aria-hidden="true">↗</span></a>
+              <a class="svcf-cta" href={page.serviceCta.href}>{page.serviceCta.label} <span aria-hidden="true">↗</span></a>
             </div>
           </div>
         ))}
@@ -213,17 +139,19 @@ const faqs = [
 
   <!-- Approach -->
   <section class="section section-bordered">
-    <div style="max-width:var(--maxw);margin:0 auto;">
-      <div class="eyebrow" data-reveal>— My approach</div>
-      <h2 class="section-h2" data-reveal>How a build actually goes.</h2>
+    <div class="wrap">
+      <div class="eyebrow" data-reveal>{page.approachHeading.eyebrow}</div>
+      <h2 class="section-h2" data-reveal>
+        {approachTitle.map((l, i) => (<>{l}{i < approachTitle.length - 1 && <br />}</>))}
+      </h2>
       <div class="appr-grid">
-        {approach.map((a) => (
+        {page.approach.map((a) => (
           <div class="appr-card" data-reveal>
             <div class="appr-top">
-              <h3>{a.t}</h3>
-              <span class="appr-num">{a.n}/04</span>
+              <h3>{a.title}</h3>
+              <span class="appr-num">{a.number}/0{page.approach.length}</span>
             </div>
-            <div class="appr-desc"><p>{a.b}</p></div>
+            <div class="appr-desc"><p>{a.body}</p></div>
           </div>
         ))}
       </div>
@@ -232,58 +160,62 @@ const faqs = [
 
   <!-- Track record (dark) -->
   <section class="section process">
-    <div style="max-width:var(--maxw);margin:0 auto;">
-      <div class="eyebrow" data-reveal>— By the numbers</div>
-      <h2 class="section-h2" data-reveal style="color:#fff;">Built, then measured.</h2>
+    <div class="wrap">
+      <div class="eyebrow" data-reveal>{page.numbersHeading.eyebrow}</div>
+      <h2 class="section-h2" data-reveal>
+        {numbersTitle.map((l, i) => (<>{l}{i < numbersTitle.length - 1 && <br />}</>))}
+      </h2>
       <div class="cs-out-grid bento-5" data-reveal>
-        {numbers.map((n) => (
+        {page.numbers.map((n) => (
           <div>
-            <div class="stat" data-count={String(n.v)} data-prefix={n.prefix || ''} data-suffix={n.suffix || ''} data-decimals={String(n.decimals || 0)}>{(n.prefix || '') + '0' + (n.suffix || '')}</div>
-            <div class="lbl">{n.l}</div>
+            <div class="stat" data-count={String(n.value)} data-prefix={n.prefix || ''} data-suffix={n.suffix || ''} data-decimals={String(n.decimals || 0)}>{(n.prefix || '') + '0' + (n.suffix || '')}</div>
+            <div class="lbl">{n.label}</div>
           </div>
         ))}
       </div>
-      <p class="cs-out-note" data-reveal>Figures across recent Shopify engagements. Your numbers depend on your starting point — the audit tells us where the headroom is.</p>
+      <p class="cs-out-note" data-reveal>{page.numbersNote}</p>
     </div>
   </section>
 
   <!-- CRO — the second half of the service -->
-  <section id="cro" class="section section-bordered cro-sec" style="scroll-margin-top:24px;">
+  <section id="cro" class="section section-bordered cro-sec anchor">
     <div class="cro">
       <div class="cro-copy" data-reveal>
-        <div class="eyebrow">— Conversion rate optimization</div>
-        <h2 class="section-h2">More revenue from the<br>traffic you already have.</h2>
-        <p class="cro-lede">A fast store is step one — CRO is how it actually <em>sells</em>. I run data-driven tests on your product pages, cart and checkout to turn more of your existing visitors into buyers. Same traffic, more orders, no extra ad spend.</p>
+        <div class="eyebrow">{page.cro.heading.eyebrow}</div>
+        <h2 class="section-h2">{croTitle.map((l, i) => (<>{l}{i < croTitle.length - 1 && <br />}</>))}</h2>
+        <p class="cro-lede">{page.cro.lede}</p>
         <div class="cro-pills">
-          {croFeatures.map((f) => (
+          {page.cro.features.map((f) => (
             <span class="cro-pill"><i class="fa-solid fa-check" aria-hidden="true"></i>{f}</span>
           ))}
         </div>
         <div class="cro-actions">
-          <a href="/start?tab=form" class="btn btn-dark">Get a CRO audit <span>↗</span></a>
-          <a href="#cro-calc" class="btn btn-light">Do the math</a>
+          <a href={page.cro.primaryCta.href} class="btn btn-dark">{page.cro.primaryCta.label} <span>↗</span></a>
+          <a href={page.cro.secondaryCta.href} class="btn btn-light">{page.cro.secondaryCta.label}</a>
         </div>
       </div>
 
       <div class="cro-viz" data-reveal data-bars aria-hidden="true">
-        <CroDashboard />
+        <CroDashboard data={page.croDashboard} />
       </div>
     </div>
   </section>
 
   <!-- Funnel leak + fixes -->
   <section class="section section-bordered">
-    <div style="max-width:var(--maxw);margin:0 auto;">
-      <div class="eyebrow" data-reveal>— Where the money leaks</div>
-      <h2 class="section-h2" data-reveal style="max-width:680px;">For every 100 visitors,<br>92 leave without buying.</h2>
+    <div class="wrap">
+      <div class="eyebrow" data-reveal>{page.leakHeading.eyebrow}</div>
+      <h2 class="section-h2 measure-wide" data-reveal>>
+        {leakTitle.map((l, i) => (<>{l}{i < leakTitle.length - 1 && <br />}</>))}
+      </h2>
       <div class="lf">
         <div class="leak" data-reveal>
-          {funnel.map((f, i) => (
+          {page.funnel.map((f, i) => (
             <>
               {i > 0 && (
                 <div class="leak-gap"><span class="leak-drop">{f.drop}</span><span class="leak-why">{f.why}</span></div>
               )}
-              <div class="leak-stage" style={`--w:${f.w}`}>
+              <div class="leak-stage" style={`--w:${f.width}`}>
                 <span class="leak-name">{f.name}</span>
                 <span class="leak-val" data-count={String(f.count)} data-sep="true">{f.count.toLocaleString('en-US')}</span>
               </div>
@@ -291,11 +223,11 @@ const faqs = [
           ))}
         </div>
         <div class="fixes" data-reveal data-bars>
-          {fixes.map((f) => (
+          {page.fixes.map((f) => (
             <div class="fix">
-              <span class="fix-ic"><i class={`fa-solid ${f.ic}`} aria-hidden="true"></i></span>
-              <div class="fix-body"><h3>{f.t}</h3><p>{f.b}</p></div>
-              <div class="fix-impact"><span>Impact</span><div class="fix-bar"><i class="bargrow" style={`width:${f.w}`}></i></div></div>
+              <span class="fix-ic"><i class={`fa-solid ${f.icon}`} aria-hidden="true"></i></span>
+              <div class="fix-body"><h3>{f.title}</h3><p>{f.body}</p></div>
+              <div class="fix-impact"><span>Impact</span><div class="fix-bar"><i class="bargrow" style={`width:${f.barWidth}`}></i></div></div>
             </div>
           ))}
         </div>
@@ -304,81 +236,85 @@ const faqs = [
   </section>
 
   <!-- CRO loop (dark) -->
-  <section id="cro-process" class="section process" style="scroll-margin-top:24px;">
-    <div style="max-width:var(--maxw);margin:0 auto;">
-      <div class="eyebrow" data-reveal>— The CRO process</div>
-      <h2 class="section-h2" data-reveal style="color:#fff;">A loop, not a one-off.</h2>
+  <section id="cro-process" class="section process anchor">
+    <div class="wrap">
+      <div class="eyebrow" data-reveal>{page.croProcessHeading.eyebrow}</div>
+      <h2 class="section-h2" data-reveal>
+        {croProcessTitle.map((l, i) => (<>{l}{i < croProcessTitle.length - 1 && <br />}</>))}
+      </h2>
       <div class="cyc" data-reveal>
-        {croProcess.map((s) => (
+        {page.croProcess.map((s) => (
           <div class="cyc-step">
-            <div class="cyc-node">{s.n}</div>
-            <div class="cyc-body"><h3>{s.t}</h3><p>{s.b}</p></div>
+            <div class="cyc-node">{s.number}</div>
+            <div class="cyc-body"><h3>{s.title}</h3><p>{s.body}</p></div>
           </div>
         ))}
-        <div class="cyc-loop"><i class="fa-solid fa-arrow-rotate-left" aria-hidden="true"></i> Then back to 01 — at a higher baseline</div>
+        <div class="cyc-loop"><i class="fa-solid fa-arrow-rotate-left" aria-hidden="true"></i> {page.croProcessLoopNote}</div>
       </div>
     </div>
   </section>
 
   <!-- Revenue calculator -->
-  <section class="section section-bordered" style="scroll-margin-top:24px;">
-    <div style="max-width:var(--maxw);margin:0 auto;">
+  <section class="section section-bordered anchor">
+    <div class="wrap">
       <div class="work-head" data-reveal>
         <div>
-          <div class="eyebrow">— Do the math</div>
-          <h2 class="section-h2">What a better rate is worth.</h2>
+          <div class="eyebrow">{page.calcHeading.eyebrow}</div>
+          <h2 class="section-h2">{calcTitle.map((l, i) => (<>{l}{i < calcTitle.length - 1 && <br />}</>))}</h2>
         </div>
-        <a href="/start?tab=form" class="btn btn-light btn-sm">Get your number ↗</a>
+        <a href={page.calcCta.href} class="btn btn-light btn-sm">{page.calcCta.label}</a>
       </div>
       <div class="calc" id="cro-calc" data-reveal>
         <div class="calc-controls">
           <label class="calc-field">
-            <span class="calc-l">Monthly visitors <b id="cv-vis">20,000</b></span>
-            <input class="calc-range" type="range" id="ci-vis" min="2000" max="200000" step="1000" value="20000" aria-label="Monthly visitors" />
+            <span class="calc-l">{page.calcLabels.visitors} <b id="cv-vis">20,000</b></span>
+            <input class="calc-range" type="range" id="ci-vis" min="2000" max="200000" step="1000" value="20000" aria-label={page.calcLabels.visitors} />
           </label>
           <label class="calc-field">
-            <span class="calc-l">Average order value <b id="cv-aov">$65</b></span>
-            <input class="calc-range" type="range" id="ci-aov" min="15" max="400" step="5" value="65" aria-label="Average order value" />
+            <span class="calc-l">{page.calcLabels.aov} <b id="cv-aov">$65</b></span>
+            <input class="calc-range" type="range" id="ci-aov" min="15" max="400" step="5" value="65" aria-label={page.calcLabels.aov} />
           </label>
           <label class="calc-field">
-            <span class="calc-l">Current conversion rate <b id="cv-cur">2.0%</b></span>
-            <input class="calc-range" type="range" id="ci-cur" min="0.5" max="8" step="0.1" value="2.0" aria-label="Current conversion rate" />
+            <span class="calc-l">{page.calcLabels.current} <b id="cv-cur">2.0%</b></span>
+            <input class="calc-range" type="range" id="ci-cur" min="0.5" max="8" step="0.1" value="2.0" aria-label={page.calcLabels.current} />
           </label>
           <label class="calc-field">
-            <span class="calc-l">Target conversion rate <b id="cv-tgt">3.0%</b></span>
-            <input class="calc-range" type="range" id="ci-tgt" min="0.5" max="10" step="0.1" value="3.0" aria-label="Target conversion rate" />
+            <span class="calc-l">{page.calcLabels.target} <b id="cv-tgt">3.0%</b></span>
+            <input class="calc-range" type="range" id="ci-tgt" min="0.5" max="10" step="0.1" value="3.0" aria-label={page.calcLabels.target} />
           </label>
         </div>
         <div class="calc-out">
-          <span class="calc-out-k">Extra revenue / year</span>
+          <span class="calc-out-k">{page.calcLabels.outKicker}</span>
           <div class="calc-big" id="co-year">$0</div>
           <div class="calc-sub" id="co-sub">from a +1.0 pt conversion change</div>
           <div class="calc-rows">
-            <div><span>Revenue now</span><b id="co-now">$0/mo</b></div>
-            <div><span>After</span><b id="co-after">$0/mo</b></div>
-            <div class="up"><span>Monthly uplift</span><b id="co-mo">+$0</b></div>
-            <div class="up"><span>Extra orders / yr</span><b id="co-orders">0</b></div>
+            <div><span>{page.calcLabels.revenueNow}</span><b id="co-now">$0/mo</b></div>
+            <div><span>{page.calcLabels.revenueAfter}</span><b id="co-after">$0/mo</b></div>
+            <div class="up"><span>{page.calcLabels.monthlyUplift}</span><b id="co-mo">+$0</b></div>
+            <div class="up"><span>{page.calcLabels.extraOrders}</span><b id="co-orders">0</b></div>
           </div>
         </div>
       </div>
-      <p class="calc-note">Illustrative — drag the sliders to model your own store. Real projections come from your analytics.</p>
+      <p class="calc-note">{page.calcNote}</p>
     </div>
   </section>
 
   <!-- Experiments leaderboard -->
   <section class="section section-bordered">
-    <div style="max-width:var(--maxw);margin:0 auto;">
-      <div class="eyebrow" data-reveal>— Tests that moved the needle</div>
-      <h2 class="section-h2" data-reveal>Real experiments, ranked by lift.</h2>
+    <div class="wrap">
+      <div class="eyebrow" data-reveal>{page.experimentsHeading.eyebrow}</div>
+      <h2 class="section-h2" data-reveal>
+        {experimentsTitle.map((l, i) => (<>{l}{i < experimentsTitle.length - 1 && <br />}</>))}
+      </h2>
       <div class="lead" data-reveal>
         <div class="lead-row lead-head">
-          <span>#</span><span>Test</span><span class="lead-metric">Metric</span><span style="text-align:right;">Lift</span>
+          <span>#</span><span>{page.experimentsColumns.test}</span><span class="lead-metric">{page.experimentsColumns.metric}</span><span style="text-align:right;">{page.experimentsColumns.lift}</span>
         </div>
         <div class="lead-body">
-          {experiments.map((e, i) => (
+          {page.experiments.map((e, i) => (
             <div class="lead-row">
               <span class="lead-rank">{String(i + 1).padStart(2, '0')}</span>
-              <span class="lead-test">{e.t}<span>{e.area}</span></span>
+              <span class="lead-test">{e.title}<span>{e.area}</span></span>
               <span class="lead-metric">{e.metric}</span>
               <span class="lead-lift" data-count={String(e.lift)} data-prefix="+" data-suffix="%">+{e.lift}%</span>
             </div>
@@ -390,17 +326,19 @@ const faqs = [
 
   <!-- Featured work -->
   {featured && (
-    <section id="sh-work" class="section section-bordered" style="scroll-margin-top:24px;">
-      <div style="max-width:var(--maxw);margin:0 auto;">
+    <section id="sh-work" class="section section-bordered anchor">
+      <div class="wrap">
         <div class="work-head" data-reveal>
           <div>
-            <div class="eyebrow">— Featured Shopify work</div>
-            <h2 class="section-h2">A headless rebuild, in detail.</h2>
+            <div class="eyebrow">{page.featuredHeading.eyebrow}</div>
+            <h2 class="section-h2">
+              {featuredTitle.map((l, i) => (<>{l}{i < featuredTitle.length - 1 && <br />}</>))}
+            </h2>
           </div>
-          <a href="/work" class="btn btn-light btn-sm">All projects ↗</a>
+          <a href={page.featuredCta.href} class="btn btn-light btn-sm">{page.featuredCta.label}</a>
         </div>
-        <a href={`/work/${featured.slug}`} class="post-feature" data-reveal style="margin-top:44px;">
-          <div class="cover"><Placeholder label={`${featured.title} — ${featured.type}`} image={featured.image} /></div>
+        <a href={`/work/${featured.slug}`} class="post-feature stack-lg" data-reveal>
+          <div class="cover"><Placeholder label={`${featured.title} — ${featured.type}`} image={featured.image} src={`/work/${featured.slug}.jpg`} /></div>
           <div class="pf-body">
             <div class="pf-meta">
               {featured.pills.map((p) => <span class="pf-badge">{p}</span>)}
@@ -419,12 +357,25 @@ const faqs = [
   )}
 
   <!-- Testimonials -->
-  <Testimonials eyebrow="— What clients say" title="Shipped, fast, and still standing." items={testimonials} />
+  <Testimonials
+    eyebrow={page.testimonialsHeading.eyebrow}
+    title={page.testimonialsHeading.title}
+    items={page.testimonials}
+  />
 
   <!-- FAQ -->
-  <Faq eyebrow="— Shopify & CRO FAQ" title={"The questions\nI usually get."} items={faqs} />
+  <Faq
+    eyebrow={page.faqHeading.eyebrow}
+    title={page.faqHeading.title}
+    items={page.faqs.map((f) => ({ q: f.question, a: f.answer }))}
+  />
 
-  <ClosingCta title={"Ready to make Shopify\nactually sell?"} bordered={true} secondaryLabel="See all services" secondaryHref="/services" />
+  <ClosingCta
+    title={page.closing.title}
+    bordered={true}
+    primary={page.closing.primary}
+    secondary={page.closing.secondary}
+  />
 </Base>
 
 <script>

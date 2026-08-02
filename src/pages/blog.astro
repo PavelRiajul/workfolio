@@ -1,79 +1,69 @@
 ---
 import Base from '../layouts/Base.astro';
 import Placeholder from '../components/Placeholder.astro';
-import { getPosts } from '../lib/content';
+import { getPosts, getBlogPage } from '../lib/content';
 
 const posts = await getPosts();
+const page = await getBlogPage();
+const heroLines = page.hero.headlineLines;
+const closingLines = page.closing.title.split('\n');
 const featured = posts.find((p) => p.featured);
 const rest = posts.filter((p) => !p.featured);
 
-const categories = [
-  { label: 'All', value: 'all' },
-  { label: 'AI', value: 'ai' },
-  { label: 'E-commerce', value: 'ecommerce' },
-  { label: 'Mobile', value: 'mobile' },
-  { label: 'Full-Stack', value: 'fullstack' },
-  { label: 'Frontend', value: 'frontend' },
-  { label: 'Backend', value: 'backend' },
-  { label: 'Performance', value: 'performance' },
-  { label: 'Career', value: 'career' },
-];
 ---
-<Base title="Blog — Riajul Islam" description="Notes on building things — AI-accelerated development, Next.js, Shopify, the MERN stack and React Native." subpage={true}>
-  <section class="section" style="padding-bottom:clamp(28px,5vw,40px);">
+<Base title={page.seo.title} description={page.seo.description} subpage={true}>
+  <section class="section section-tight-bottom">
     <div class="page-hero">
-      <div class="eyebrow">— Writing</div>
-      <h1>Notes on<br>building things.</h1>
-      <p>Short, practical write-ups on building with AI, Next.js, Shopify, the MERN stack and React Native — plus the occasional lesson from shipping on a deadline.</p>
+      <div class="eyebrow">{page.hero.eyebrow}</div>
+      <h1>{heroLines.map((l, i) => (<>{l}{i < heroLines.length - 1 && <br />}</>))}</h1>
+      <p>{page.hero.lede}</p>
     </div>
   </section>
 
-  <section style="max-width:var(--maxw);margin:0 auto;padding:0 clamp(20px,5vw,40px) clamp(28px,4vw,40px);">
-    <div class="filters">
-      {categories.map((c, i) => (
-        <button class={`chip ${i === 0 ? 'active' : ''}`} data-blog-filter={c.value} aria-pressed={i === 0 ? 'true' : 'false'}>{c.label}</button>
-      ))}
-    </div>
-  </section>
+  <section class="section">
+    <div class="wrap">
+      <div class="filters">
+        {page.categories.map((c, i) => (
+          <button class={`chip ${i === 0 ? 'active' : ''}`} data-blog-filter={c.href} aria-pressed={i === 0 ? 'true' : 'false'}>{c.label}</button>
+        ))}
+      </div>
 
-  {featured && (
-    <section style="max-width:var(--maxw);margin:0 auto;padding:0 clamp(20px,5vw,40px) clamp(28px,4vw,40px);">
-      <a class="post-card post-feature" data-category={featured.category} href="#">
-        <div class="cover"><div class="post-img-zoom"><Placeholder label={featured.coverLabel} image={featured.image} /></div></div>
-        <div class="pf-body">
-          <div class="pf-meta">
-            <span class="pf-badge">Featured</span>
-            <span class="pf-sub">{featured.categoryLabel} · {featured.readTime}</span>
+      {featured && (
+        <a class="post-card post-feature stack-lg" data-category={featured.category} href="#">
+          <div class="cover"><div class="post-img-zoom"><Placeholder label={featured.coverLabel} image={featured.image} /></div></div>
+          <div class="pf-body">
+            <div class="pf-meta">
+              <span class="pf-badge">{page.featuredBadge}</span>
+              <span class="pf-sub">{featured.categoryLabel} · {featured.readTime}</span>
+            </div>
+            <h2 class="post-title">{featured.title}</h2>
+            <p>{featured.excerpt}</p>
+            <div class="post-date">{featured.date}</div>
           </div>
-          <h2 class="post-title">{featured.title}</h2>
-          <p>{featured.excerpt}</p>
-          <div class="post-date" style="margin-top:22px;">{featured.date}</div>
-        </div>
-      </a>
-    </section>
-  )}
-
-  <section style="max-width:var(--maxw);margin:0 auto;padding:0 clamp(20px,5vw,40px) clamp(72px,11vw,120px);">
-    <div class="post-grid">
-      {rest.map((p) => (
-        <a class="post-card" data-category={p.category} href="#">
-          <div class="cover"><div class="post-img-zoom"><Placeholder label={p.coverLabel} image={p.image} /></div></div>
-          <div class="pc-meta"><span class="pc-tag">{p.categoryLabel}</span>{p.readTime}</div>
-          <h3 class="post-title">{p.title}</h3>
-          <p>{p.excerpt}</p>
-          <div class="post-date" style="margin-top:16px;">{p.date}</div>
         </a>
-      ))}
+      )}
+
+      <div class="post-grid stack-lg">
+        {rest.map((p) => (
+          <a class="post-card" data-category={p.category} href="#">
+            <div class="cover"><div class="post-img-zoom"><Placeholder label={p.coverLabel} image={p.image} /></div></div>
+            <div class="pc-meta"><span class="pc-tag">{p.categoryLabel}</span>{p.readTime}</div>
+            <h3 class="post-title">{p.title}</h3>
+            <p>{p.excerpt}</p>
+            <div class="post-date">{p.date}</div>
+          </a>
+        ))}
+      </div>
+      <div id="blog-empty" class="blog-empty">{page.emptyMessage}</div>
     </div>
-    <div id="blog-empty" class="blog-empty">No posts in this category yet — check back soon.</div>
   </section>
 
   <section class="closing">
     <div class="closing-card">
-      <h2>Got a project worth<br>writing about?</h2>
+      <h2>{closingLines.map((l, i) => (<>{l}{i < closingLines.length - 1 && <br />}</>))}</h2>
       <div class="closing-actions">
-        <a href="/start?tab=form" class="btn btn-dark btn-cta">Get in touch <span>↗</span></a>
-        <a href="/work" class="btn btn-light btn-cta">See my work</a>
+        <a href={page.closing.primary.href} class="btn btn-dark btn-cta">{page.closing.primary.label} <span>↗</span></a>
+        <a href={page.closing.secondary.href} class="btn btn-light btn-cta">{page.closing.secondary.label}</a>
       </div>
     </div>
   </section>

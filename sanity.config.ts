@@ -4,12 +4,31 @@ import { visionTool } from '@sanity/vision';
 import { schemaTypes } from './schemaTypes';
 
 // Singletons we don't want editors creating/deleting copies of.
-const SINGLETONS = ['siteSettings', 'homePage', 'aboutPage', 'resume'];
+const SINGLETONS = [
+  'siteSettings',
+  'homePage',
+  'servicesPage',
+  'stackPage',
+  'shopifyPage',
+  'workPage',
+  'blogPage',
+  'aboutPage',
+  'startPage',
+  'resume',
+  'caseStudyPage',
+];
 const SINGLETON_TITLES: Record<string, string> = {
   siteSettings: 'Site Settings',
   homePage: 'Home Page',
+  servicesPage: 'Services Page',
+  stackPage: 'Stack Page',
+  shopifyPage: 'Shopify Page',
+  workPage: 'Work Page',
+  blogPage: 'Blog Page',
   aboutPage: 'About Page',
+  startPage: 'Contact Page',
   resume: 'Résumé',
+  caseStudyPage: 'Case Study Template',
 };
 
 export default defineConfig({

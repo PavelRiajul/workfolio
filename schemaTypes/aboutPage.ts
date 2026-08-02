@@ -16,10 +16,32 @@ export default defineType({
     }),
     defineField({
       name: 'gallery',
-      title: 'Gallery captions',
+      title: 'Photo gallery',
+      description: 'The horizontal photo strip. Upload a photo or leave it empty to show a placeholder.',
       type: 'array',
-      of: [{ type: 'string' }],
-      description: 'Caption shown under each placeholder/photo.',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          name: 'galleryPhoto',
+          fields: [
+            { name: 'image', title: 'Photo', type: 'image', options: { hotspot: true } },
+            { name: 'caption', title: 'Caption', type: 'string' },
+            {
+              name: 'alt',
+              title: 'Alt text',
+              description: 'Describes the photo for screen readers. Leave blank to reuse the caption.',
+              type: 'string',
+            },
+            {
+              name: 'src',
+              title: 'File path (optional)',
+              description: 'Use instead of an upload to point at a file in /public, e.g. /about/me.jpg',
+              type: 'string',
+            },
+          ],
+          preview: { select: { title: 'caption', media: 'image' } },
+        }),
+      ],
     }),
     defineField({ name: 'outsideTitle', title: 'Outside-the-code title', type: 'string' }),
     defineField({ name: 'outsideBody', title: 'Outside-the-code body', type: 'text', rows: 4 }),

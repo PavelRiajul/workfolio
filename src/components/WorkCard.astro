@@ -13,7 +13,7 @@ const attrs = interactive
 ---
 <Tag class="work-card" data-tags={p.tags.join(',')} data-reveal {...attrs}>
   <div class="work-thumb">
-    <Placeholder label={label} image={p.image} />
+    <Placeholder label={label} image={p.image} src={`/work/${p.slug}.jpg`} alt={`${p.title} — ${p.type}`} />
     {interactive && (
       <div class="work-overlay"><span>View case study ↗</span></div>
     )}

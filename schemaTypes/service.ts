@@ -74,6 +74,7 @@ export default defineType({
           { title: 'MVP — sprint timeline', value: 'mvp' },
           { title: 'Commerce — storefront + uplift', value: 'commerce' },
           { title: 'API — endpoints + stack chain', value: 'api' },
+          { title: 'Booking — chat to confirmed slot', value: 'booking' },
         ],
       },
     }),

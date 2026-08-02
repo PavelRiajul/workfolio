@@ -3,43 +3,38 @@ import Base from '../layouts/Base.astro';
 import WorkCard from '../components/WorkCard.astro';
 import ClosingCta from '../components/ClosingCta.astro';
 import ProjectModal from '../components/ProjectModal.astro';
-import { getProjects } from '../lib/content';
+import { getProjects, getWorkPage } from '../lib/content';
 
 const projects = await getProjects();
-const filters = [
-  { label: 'All', value: 'all' },
-  { label: 'AI', value: 'ai' },
-  { label: 'Shopify', value: 'shopify' },
-  { label: 'Next.js', value: 'nextjs' },
-  { label: 'React Native', value: 'reactnative' },
-  { label: 'MERN', value: 'mern' },
-];
+const page = await getWorkPage();
+const heroLines = page.hero.headlineLines;
 ---
-<Base title="Work — Riajul Islam" description="Selected products I've shipped — AI products and MVPs, headless Shopify, full-stack web apps and cross-platform mobile." subpage={true}>
-  <section class="section" style="padding-top:clamp(72px,11vw,120px);padding-bottom:40px;">
+<Base title={page.seo.title} description={page.seo.description} subpage={true}>
+  <section class="section section-tight-bottom">
     <div class="page-hero" data-reveal>
-      <div class="eyebrow">— Selected Work</div>
-      <h1>Everything I've<br>built, in one place.</h1>
-      <p>A selection of products I've shipped — from AI MVPs and headless Shopify storefronts to full-stack web apps and cross-platform mobile. Each one built to make it ship.</p>
+      <div class="eyebrow">{page.hero.eyebrow}</div>
+      <h1>{heroLines.map((l, i) => (<>{l}{i < heroLines.length - 1 && <br />}</>))}</h1>
+      <p>{page.hero.lede}</p>
     </div>
   </section>
 
-  <section class="section" style="padding-top:clamp(40px,7vw,64px);">
-    <div style="max-width:var(--maxw);margin:0 auto;">
-      <div class="filters" data-reveal style="margin-bottom:40px;">
-        {filters.map((f, i) => (
-          <button class={`chip ${i === 0 ? 'active' : ''}`} data-filter={f.value} aria-pressed={i === 0 ? 'true' : 'false'}>{f.label}</button>
+  <section class="section section-tight-top">
+    <div class="wrap">
+      <div class="filters" data-reveal>
+        {page.filters.map((f, i) => (
+          <button class={`chip ${i === 0 ? 'active' : ''}`} data-filter={f.href} aria-pressed={i === 0 ? 'true' : 'false'}>{f.label}</button>
         ))}
       </div>
+      <h2 class="sr-only">All projects</h2>
       <div class="work-grid">
         {projects.map((p) => <WorkCard project={p} />)}
       </div>
     </div>
   </section>
 
-  <ClosingCta title={"Like what you see?\nLet's build the next one."} />
+  <ClosingCta title={page.closing.title} primary={page.closing.primary} secondary={page.closing.secondary} />
 
-  <ProjectModal projects={projects} />
+  <ProjectModal projects={projects} ctaLabel={page.modalCtaLabel} />
 </Base>
 
 <script>

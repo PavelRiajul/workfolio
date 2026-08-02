@@ -3,15 +3,7 @@ import type { SiteSettings } from '../lib/types';
 interface Props { site: SiteSettings; }
 const { site } = Astro.props;
 const mailto = `mailto:${site.email}`;
-const links = [
-  { label: 'Home', href: '/' },
-  { label: 'Work', href: '/work' },
-  { label: 'Services', href: '/services' },
-  { label: 'Shopify', href: '/shopify' },
-  { label: 'Blog', href: '/blog' },
-  { label: 'About', href: '/about' },
-  { label: 'Résumé', href: '/resume' },
-];
+const links = site.footerLinks;
 ---
 <footer class="footer">
   <div class="footer-inner">
@@ -30,12 +22,12 @@ const links = [
 
     <div class="ft-bar">
       <div class="ft-meta">
-        <span>© 2026 {site.name}</span>
+        <span>© {site.copyrightYear} {site.name}</span>
         <span class="sep">·</span>
         <span>{site.location.split(',')[0]} · <span id="ft-clock" data-tz={site.timeZone}></span> · {site.gmtLabel}</span>
       </div>
       {site.openToWork && (
-        <div class="ft-status"><span class="dot"></span>Open to work</div>
+        <div class="ft-status"><span class="dot"></span>{site.openToWorkLabel}</div>
       )}
     </div>
   </div>
@@ -54,7 +46,7 @@ const links = [
   .ft-wordmark span { display: inline-block; font-family: var(--font-display); font-weight: 700; font-size: clamp(56px,16.5vw,224px); letter-spacing: -0.045em; text-transform: uppercase; white-space: nowrap; background: linear-gradient(180deg, rgba(10,10,10,0.13) 0%, rgba(10,10,10,0.06) 55%, rgba(10,10,10,0) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
   .ft-bar { width: 100%; border-top: 1px solid var(--line); margin-top: clamp(20px,3vw,32px); padding: 22px 0 30px; display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; }
   .ft-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13px; color: var(--color-grey-3); }
-  .ft-meta .sep { color: #d8d8d8; }
+  .ft-meta .sep { color: var(--color-grey-3); }
   .ft-status { display: inline-flex; align-items: center; gap: 8px; background: rgba(31,175,84,0.1); border: 1px solid rgba(31,175,84,0.2); padding: 7px 14px; border-radius: 9999px; font-size: 13px; font-weight: 500; color: #178045; }
   .ft-status .dot { width: 8px; height: 8px; border-radius: 9999px; background: #1faf54; display: inline-block; box-shadow: 0 0 0 3px rgba(31,175,84,0.18); }
 </style>

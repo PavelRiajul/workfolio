@@ -22,6 +22,13 @@ import {
   posts,
   about,
   resume,
+  servicesPage,
+  stackPage,
+  shopifyPage,
+  workPage,
+  blogPage,
+  startPage,
+  caseStudy,
 } from '../src/data/content.ts';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -52,7 +59,13 @@ function clean<T extends object>(obj: T): T {
 const docs: Doc[] = [];
 
 // ---- Singletons (fixed ids — the Studio structure pins these) -------------
-docs.push({ _id: 'siteSettings', _type: 'siteSettings', ...site });
+docs.push({
+  _id: 'siteSettings',
+  _type: 'siteSettings',
+  ...site,
+  nav: keyed(site.nav, 'navItem'),
+  footerLinks: keyed(site.footerLinks, 'cta'),
+});
 
 docs.push({
   _id: 'homePage',
@@ -61,6 +74,7 @@ docs.push({
   stats: keyed(home.stats, 'stat'),
   principles: keyed(home.principles, 'principle'),
   services: keyed(home.services, 'homeService'),
+  aiBand: { ...home.aiBand, stats: keyed(home.aiBand.stats, 'countStat') },
   aiWorkflow: keyed(home.aiWorkflow, 'aiWorkflowStep'),
   process: keyed(home.process, 'processStep'),
   testimonials: keyed(home.testimonials, 'testimonial'),
@@ -72,6 +86,7 @@ docs.push({
   _type: 'aboutPage',
   ...about,
   traits: keyed(about.traits, 'trait'),
+  gallery: keyed(about.gallery, 'galleryPhoto'),
 });
 
 docs.push({
@@ -84,6 +99,64 @@ docs.push({
   projects: keyed(resume.projects, 'resumeProject'),
   education: keyed(resume.education, 'eduItem'),
 });
+
+docs.push({
+  _id: 'servicesPage',
+  _type: 'servicesPage',
+  ...servicesPage,
+  hero: { ...servicesPage.hero, stats: keyed(servicesPage.hero.stats, 'textStat') },
+  velocity: { ...servicesPage.velocity, rows: keyed(servicesPage.velocity.rows, 'velocityRow') },
+  engagements: keyed(servicesPage.engagements, 'engagement'),
+  faqs: keyed(servicesPage.faqs, 'faqItem'),
+});
+
+docs.push({
+  _id: 'stackPage',
+  _type: 'stackPage',
+  ...stackPage,
+  templates: keyed(stackPage.templates, 'buildTemplate'),
+  toolGroups: keyed(stackPage.toolGroups, 'toolGroup').map((g: any) => ({
+    ...g,
+    tools: keyed(g.tools, 'tool'),
+  })),
+});
+
+docs.push({
+  _id: 'shopifyPage',
+  _type: 'shopifyPage',
+  ...shopifyPage,
+  hero: { ...shopifyPage.hero, stats: keyed(shopifyPage.hero.stats, 'textStat') },
+  approach: keyed(shopifyPage.approach, 'numberedCard'),
+  numbers: keyed(shopifyPage.numbers, 'countStat'),
+  croDashboard: {
+    ...shopifyPage.croDashboard,
+    abVariants: keyed(shopifyPage.croDashboard.abVariants, 'abVariant'),
+    funnel: keyed(shopifyPage.croDashboard.funnel, 'funnelBar'),
+  },
+  funnel: keyed(shopifyPage.funnel, 'funnelStage'),
+  fixes: keyed(shopifyPage.fixes, 'croFix'),
+  croProcess: keyed(shopifyPage.croProcess, 'numberedCard'),
+  experiments: keyed(shopifyPage.experiments, 'experiment'),
+  testimonials: keyed(shopifyPage.testimonials, 'testimonialItem'),
+  faqs: keyed(shopifyPage.faqs, 'faqItem'),
+});
+
+docs.push({
+  _id: 'workPage',
+  _type: 'workPage',
+  ...workPage,
+  filters: keyed(workPage.filters, 'cta'),
+});
+
+docs.push({
+  _id: 'blogPage',
+  _type: 'blogPage',
+  ...blogPage,
+  categories: keyed(blogPage.categories, 'cta'),
+});
+
+docs.push({ _id: 'startPage', _type: 'startPage', ...startPage });
+docs.push({ _id: 'caseStudyPage', _type: 'caseStudyPage', ...caseStudy });
 
 // ---- Collections ----------------------------------------------------------
 for (const s of services) {

@@ -1,20 +1,32 @@
 ---
-interface Props { items: string[]; }
-const { items } = Astro.props;
+// The strip is the stack — so it doubles as the way into /stack.
+import type { Cta } from '../lib/types';
+interface Props { items: string[]; cta?: Cta }
+const { items, cta } = Astro.props;
+const Tag = cta ? 'a' : 'div';
+const attrs = cta ? { href: cta.href, 'aria-label': cta.label } : {};
 ---
 <section class="marquee">
-  <div class="marquee-track">
+  <Tag class:list={['marquee-track', cta && 'is-link']} {...attrs}>
     <div class="marquee-row">
       {items.map((t) => (<><span>{t}</span><span class="star">✳</span></>))}
     </div>
     <div class="marquee-row" aria-hidden="true">
       {items.map((t) => (<><span>{t}</span><span class="star">✳</span></>))}
     </div>
-  </div>
+  </Tag>
+  {cta && <span class="marquee-cue" aria-hidden="true">{cta.label} <i>↗</i></span>}
 </section>
 
 <style is:global>
-  .marquee { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 26px 0; overflow: hidden; }
+  .marquee { position: relative; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding-block: var(--space-md); overflow: hidden; }
+  .marquee-track.is-link { text-decoration: none; color: inherit; cursor: pointer; }
+  /* A standing cue, so the strip reads as clickable without a hover. */
+  .marquee-cue { position: absolute; right: 0; top: 0; bottom: 0; z-index: 1; display: flex; align-items: center; gap: 8px; padding: 0 clamp(16px,4vw,28px) 0 clamp(40px,8vw,90px); font-family: var(--font-body); font-size: 13px; font-weight: 500; color: var(--color-grey-1); pointer-events: none; background: linear-gradient(90deg, rgba(255,255,255,0) 0%, #fff 42%); }
+  .marquee-cue i { font-style: normal; color: var(--color-blue); transition: transform .2s ease; }
+  .marquee:hover .marquee-cue i { transform: translate(2px,-2px); }
+  .marquee-track.is-link:focus-visible { outline: 2px solid var(--color-blue); outline-offset: -4px; }
+  @media (max-width: 640px) { .marquee-cue { display: none; } }
   .marquee-track { display: flex; width: max-content; animation: nojaMarquee 32s linear infinite; }
   .marquee-row { display: flex; align-items: center; gap: 34px; padding-right: 34px; font-family: var(--font-display); font-weight: 500; font-size: 26px; letter-spacing: -0.02em; color: var(--color-ink); white-space: nowrap; }
   .marquee-row .star { color: var(--color-blue); }

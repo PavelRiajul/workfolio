@@ -61,6 +61,24 @@ const { service: s } = Astro.props;
   </div>
 )}
 
+{s.visual === 'booking' && (
+  <div class="sv">
+    <div class="sv-panel ov-book">
+      <div class="ov-head"><b>WhatsApp</b><span class="ov-live"><i></i>Assistant</span></div>
+      <div class="ov-chat">
+        <span class="ov-msg in">Do you have anything Thursday morning?</span>
+        <span class="ov-msg out">Dr. Rahman has 9:30 and 11:00 free. Which suits?</span>
+        <span class="ov-msg in">9:30 please</span>
+      </div>
+      <div class="ov-booked">
+        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+        <span><b>Booked · Thu 9:30</b>Confirmation sent · clinic alerted</span>
+      </div>
+    </div>
+    <div class="sv-cap">Real availability, checked before it answers</div>
+  </div>
+)}
+
 {s.visual === 'api' && (
   <div class="sv">
     <div class="sv-panel ov-api">
