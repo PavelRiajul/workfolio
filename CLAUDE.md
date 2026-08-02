@@ -121,6 +121,9 @@ Tokens in `@theme` (also exposed as CSS vars):
 - Heroes get extra top padding on mobile to clear the fixed wordmark, which otherwise lands on the eyebrow.
 - **Headings centre on mobile; body copy stays left-aligned.** Centring a nine-line paragraph gives every line a different start and wrecks readability.
 - The calculator's fill is a `--fill` custom property, not an inline `background`, so the track can be restyled for touch.
+- **Density over stacking.** Card grids go 2-up on phones rather than one long column: 4 → 2×2, 5 → 2×2 + one full-width (`:last-child:nth-child(odd) { grid-column: 1/-1 }`), 3 → 2 + one full-width. Applies to `.appr-grid`, `.trait-grid`, `.tpl-grid`, `.eng-grid`, `.tool-grid`, `.every-list`, `.fixes`, `.svcf-feats`, `.work-grid`, `.post-grid`, `.tst-grid`. Type and padding shrink to match — **cards must stay short**; long lists get clamped (`.tpl-stack` shows 5 chips + a "+N").
+- **The home scroll-stack flattens on mobile** — `position: relative`, no `min-height`. Five sticky 426px cards is a desktop delight and a phone chore.
+- Text floor on mobile is **11px for micro-labels** (chips, column headers) and **12px for anything you read**. Tab-bar labels are the documented 10px exception.
 - **Mobile page length is a design constraint.** `/shopify` and `/services` were 26 and 18 screens tall. The `.svcf-media` mockups are hidden ≤640px (decorative, and the home stack already drops its equivalent), and each service's feature list ships inside `<details class="feats" open>` — `initFeatureLists` closes them ≤640px only, so desktop and no-JS are unchanged and the content stays in the DOM for search. Now 22 and 13 screens.
 
 **Spacing & layout system (use it — do not invent values):**

@@ -97,6 +97,7 @@ const everyTitle = page.everyBuildHeading.title.split('\n');
             <div class="tpl-best"><span>Best for</span>{t.bestFor}</div>
             <ul class="tpl-stack">
               {t.stack.map((tool) => <li>{tool}</li>)}
+              {t.stack.length > 5 && <li class="more">+{t.stack.length - 5}</li>}
             </ul>
             <p class="tpl-note">{t.note}</p>
           </article>

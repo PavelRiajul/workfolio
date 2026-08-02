@@ -51,6 +51,8 @@
        lg 900  tablets (3D hero scenes hide, two-column sections stack) */
 }
 * { box-sizing: border-box; }
+/* Taps should feel immediate: no 300ms double-tap wait, no grey flash. */
+a, button, summary, .chip, .tab, input[type='range'] { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 html { scroll-behavior: smooth; }
 body {
   margin: 0;
@@ -1216,6 +1218,8 @@ textarea.field { resize: vertical; }
 .tpl-best span { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-grey-2); }
 .tpl-stack { list-style: none; padding: 0; margin: var(--space-sm) 0 0; display: flex; flex-wrap: wrap; gap: 7px; }
 .tpl-stack li { font-size: 12.5px; font-weight: 500; line-height: 1; padding: 7px 12px; border-radius: 9999px; background: color-mix(in srgb, var(--tpl-acc, var(--color-blue)) 8%, #fff); color: var(--tpl-acc, var(--color-blue)); border: 1px solid color-mix(in srgb, var(--tpl-acc, var(--color-blue)) 24%, #fff); }
+/* The "+N" chip only exists for the mobile clamp below. */
+.tpl-stack .more { display: none; }
 .tpl-note { font-size: 13.5px; line-height: 1.5; color: var(--color-grey-2); margin: var(--space-sm) 0 0; padding-top: var(--space-sm); border-top: 1px solid var(--line-soft); }
 
 /* Toolbox — grouped name/role pairs */
@@ -1331,6 +1335,63 @@ textarea.field { resize: vertical; }
   .appr-card .appr-desc, .appr-card .appr-desc p, .trait-card p { margin-top: 10px; font-size: 13px; line-height: 1.45; }
   .appr-card.dark { grid-column: 1 / -1; }
   .appr-card.dark p { margin-top: 12px; font-size: 13.5px; }
+
+  /* The scroll-stack is a desktop delight — five sticky 426px cards on a
+     phone is just five tall cards. Let them flow as an ordinary list. */
+  .sstack { margin-top: 26px; }
+  .sstack-card { position: relative; top: auto; min-height: 0; padding: 20px 17px; border-radius: 18px; }
+  .sstack-card + .sstack-card { margin-top: 12px; }
+  .sstack-card h3 { font-size: 23px; margin-top: 14px; }
+  .sstack-lede { font-size: 14.5px; line-height: 1.45; margin-top: 10px; }
+  .sstack-tags { margin-top: 14px; gap: 6px; }
+  .sstack-tag { font-size: 11.5px; padding: 6px 10px; }
+  .sstack-go { width: 34px; height: 34px; top: 18px; right: 17px; font-size: 13px; }
+  .sstack-kicker { font-size: 11px; }
+
+  /* Newer card grids follow the same rule: 4 → 2×2, 5 → 2×2 + one full-width,
+     3 → 2 + one full-width. Type shrinks so two fit without cramping. */
+  .tpl-grid { grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 26px; }
+  .tpl { padding: 16px 14px; border-radius: 14px; }
+  .tpl-top { gap: 9px; }
+  .tpl h3 { font-size: 16px; }
+  .tpl-num { font-size: 11.5px; }
+  .tpl-lede { font-size: 13px; line-height: 1.4; margin-top: 8px; }
+  .tpl-best { margin-top: 10px; font-size: 12px; gap: 4px; }
+  .tpl-best span { font-size: 11px; }
+  .tpl-stack { margin-top: 10px; gap: 5px; }
+  .tpl-stack li { font-size: 11px; padding: 5px 9px; }
+  /* Eight chips wrap to seven rows at this width — show five and a count. */
+  .tpl-stack li:nth-child(n+6):not(.more) { display: none; }
+  .tpl-stack .more { display: inline-block; background: transparent; color: var(--color-grey-2); border-style: dashed; }
+  .tpl-note { margin-top: 10px; padding-top: 10px; font-size: 12px; line-height: 1.4; }
+
+  .eng-grid { grid-template-columns: 1fr 1fr; }
+  .eng-grid > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .eng-meta { margin-top: 10px; }
+
+  .tool-grid { grid-template-columns: 1fr 1fr; gap: 20px 12px; margin-top: 26px; }
+  .tool-group h3 { font-size: 14px; }
+  .tool-row { padding: 7px 0; }
+  .tool-row dt { font-size: 13.5px; }
+
+  .every-list { grid-template-columns: 1fr 1fr; gap: 10px 14px; margin-top: 26px; }
+  .every-list li { font-size: 13.5px; line-height: 1.35; gap: 8px; }
+  .every-list i { margin-top: 4px; }
+
+  /* CRO fixes: five cards → 2×2 + one full-width, impact bar under the copy */
+  .fixes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .fixes > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .fix { grid-template-columns: auto 1fr; gap: 10px; padding: 14px; border-radius: 14px; }
+  .fix-ic { width: 34px; height: 34px; font-size: 14px; border-radius: 10px; }
+  .fix-body h3 { font-size: 15px; }
+  .fix-body p { font-size: 12.5px; line-height: 1.35; }
+  .lead-row.lead-head { font-size: 11px; }
+  .fix-impact { grid-column: 1 / -1; width: 100%; }
+  .fix-impact span { font-size: 11px; }
+
+  /* Two feature columns instead of one long list */
+  .svcf-feats { grid-template-columns: 1fr 1fr; gap: 9px 12px; }
+  .svcf-feats li { font-size: 13px; line-height: 1.35; gap: 7px; }
 
   /* Content card grids → 2-up galleries (Work, Blog, case study, testimonials).
      An odd item-count leaves the last card full-width ("2×2 + big"). */
