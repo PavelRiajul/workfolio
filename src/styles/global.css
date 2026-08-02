@@ -123,13 +123,17 @@ html.lenis, html.lenis body { height: auto; }
 
 /* ===== Brand signature (handwritten corner wordmark) =================== */
 /* white + difference → reads dark on light sections, light on dark ones */
-.brand-sig { position: fixed; top: 16px; left: clamp(16px,4vw,28px); z-index: 1001; font-family: var(--font-hand); font-weight: 700; font-size: 30px; line-height: 1; color: #fff; mix-blend-mode: difference; text-decoration: none; letter-spacing: 0.01em; transition: transform .25s ease; }
+.brand-sig { position: fixed; top: 16px; left: clamp(16px,4vw,28px); z-index: 1001; font-family: var(--font-hand); font-weight: 700; font-size: 30px; line-height: 1; color: #fff; mix-blend-mode: difference; text-decoration: none; letter-spacing: 0.01em; transition: transform .3s cubic-bezier(.22,.61,.36,1), opacity .24s ease; }
 .brand-sig:hover { transform: rotate(-3deg); }
+/* Same tuck as the tab bar — the corner chrome is fixed, so it otherwise
+   sits on top of headings and body copy the whole way down the page. */
+.brand-sig.tucked { transform: translateY(-150%); opacity: 0; pointer-events: none; }
 @media (max-width: 640px) { .brand-sig { font-size: 26px; top: 14px; } }
 
 /* ===== Back to home (sub-pages) ======================================== */
-.back-home { position: fixed; top: 17px; right: clamp(16px,4vw,28px); z-index: 1001; display: inline-flex; align-items: center; gap: 7px; font-size: 13.5px; font-weight: 500; color: var(--color-grey-1); text-decoration: none; background: rgba(255,255,255,0.72); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--line); padding: 8px 16px; border-radius: 9999px; transition: color .2s ease, border-color .2s ease, background .2s ease; }
+.back-home { position: fixed; top: 17px; right: clamp(16px,4vw,28px); z-index: 1001; display: inline-flex; align-items: center; gap: 7px; font-size: 13.5px; font-weight: 500; color: var(--color-grey-1); text-decoration: none; background: rgba(255,255,255,0.72); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--line); padding: 8px 16px; border-radius: 9999px; transition: color .2s ease, border-color .2s ease, background .2s ease, transform .3s cubic-bezier(.22,.61,.36,1), opacity .24s ease; }
 .back-home span { transition: transform .2s ease; }
+.back-home.tucked { transform: translateY(-160%); opacity: 0; pointer-events: none; }
 .back-home:hover { color: var(--color-ink); border-color: rgba(10,10,10,0.28); }
 .back-home:hover span { transform: translateX(-3px); }
 @media (max-width: 640px) { .back-home { top: 15px; padding: 7px 13px; font-size: 13px; } }
@@ -163,7 +167,7 @@ html.lenis, html.lenis body { height: auto; }
   /* Docked bar slides straight down — no centring transform to preserve. */
   .tabbar.tucked { transform: translateY(100%); }
 }
-@media (prefers-reduced-motion: reduce) { .tabbar { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .tabbar, .brand-sig, .back-home { transition: none; } }
 
 /* ===== Reveal (GSAP-driven; safe fallback to visible) =================== */
 [data-reveal] { opacity: 0; transform: translateY(26px); will-change: opacity, transform; }

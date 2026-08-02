@@ -193,6 +193,10 @@ function initRotatingWord() {
 function initTabBar() {
   const bar = document.getElementById('nav');
   if (!bar) return;
+  // The wordmark and back-link are fixed to the top corners, so they collide
+  // with headings exactly like the bar collides with body copy. Same rule.
+  const chrome = [bar, ...document.querySelectorAll<HTMLElement>('.brand-sig, .back-home')];
+  const tuck = (on: boolean) => chrome.forEach((el) => el.classList.toggle('tucked', on));
 
   const JITTER = 6;    // ignore sub-pixel wobble and momentum noise
   const TOP_ZONE = 140; // always visible near the top of the page
@@ -207,13 +211,13 @@ function initTabBar() {
     // Zone checks come first: near the ends the deltas go sub-jitter as the
     // scroll settles, and bailing early there would strand the bar hidden.
     if (y < TOP_ZONE || atEnd) {
-      bar.classList.remove('tucked');
+      tuck(false);
       last = y;
       return;
     }
     const dy = y - last;
     if (Math.abs(dy) < JITTER) return;
-    bar.classList.toggle('tucked', dy > 0);
+    tuck(dy > 0);
     last = y;
   };
 
