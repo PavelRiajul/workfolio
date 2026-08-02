@@ -1349,15 +1349,22 @@ textarea.field { resize: vertical; }
      0.8 screens — below the fold — so phones get the short one and the hero
      tightens up around it. */
   .hero-lede-full { display: none; }
-  .hero-lede-short { display: block; font-size: 16.5px; line-height: 1.5; margin-top: 16px; }
-  .hero h1 { margin-top: 16px; }
-  .hero-actions { margin-top: 22px; gap: 10px; }
+  .hero-lede-short { display: block; font-size: 16.5px; line-height: 1.5; margin-top: 22px; }
+  .hero h1 { margin-top: 22px; }
+  .hero-actions { margin-top: 30px; gap: 12px; }
+  /* Eight blocks stacked in one screen reads as clutter. Let the pitch —
+     eyebrow, headline, lede, CTA — breathe, and push the rotating
+     "currently building with" line below the stats where it's a footnote
+     rather than another thing competing for the first screen. */
+  .hero-copy { display: flex; flex-direction: column; }
+  .hero-building { order: 10; margin-top: 20px; }
+  .hero-meta { gap: 8px 10px; }
   /* Redundant on a phone: the chip above the headline already says
      "Available for projects". Dropping it pulls the stats up clear of the
      floating WhatsApp button. */
   .hero-avail { display: none; }
   .hero-building { margin-top: 14px; font-size: 14px; }
-  .hero-stats { margin-top: 22px; gap: 18px; justify-content: space-between; }
+  .hero-stats { margin-top: 34px; gap: 18px; justify-content: space-between; }
   .hero-stats .num { font-size: 27px; }
   .hero-stats .lbl { font-size: 12.5px; margin-top: 4px; }
   .hero-stats > div { flex: 1 1 0; min-width: 0; }
