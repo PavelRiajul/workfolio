@@ -114,6 +114,7 @@ docs.push({
   _id: 'stackPage',
   _type: 'stackPage',
   ...stackPage,
+  hero: { ...stackPage.hero, stats: keyed(stackPage.hero.stats, 'textStat') },
   templates: keyed(stackPage.templates, 'buildTemplate'),
   toolGroups: keyed(stackPage.toolGroups, 'toolGroup').map((g: any) => ({
     ...g,

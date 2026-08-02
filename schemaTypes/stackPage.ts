@@ -30,6 +30,7 @@ export default defineType({
         { name: 'lede', title: 'Lede', type: 'text', rows: 4 },
         { name: 'primaryCta', title: 'Primary button', type: 'cta' },
         { name: 'secondaryCta', title: 'Secondary button', type: 'cta' },
+        { name: 'stats', title: 'Stats', type: 'array', of: [{ type: 'textStat' }] },
       ],
     }),
 

@@ -1034,6 +1034,52 @@ textarea.field { resize: vertical; }
 .ov-chain i { font-style: normal; color: var(--color-grey-3); }
 
 /* ===== Stack page ======================================================= */
+/* Hero 3D scene — same stage/tilt machinery as the home and Shopify heroes
+   (#hv-stage, .hv-card, .hv-inner, hvFloat). Cards: the template, the data
+   behind it, and the deploy that ends it. */
+.st-layers { width: 216px; transform: translate(-50%,-50%) translate3d(70px,-52px,-14px); }
+.st-db     { width: 162px; transform: translate(-50%,-50%) translate3d(-102px,-112px,52px); }
+.st-deploy { width: 190px; transform: translate(-50%,-50%) translate3d(-88px,96px,86px); }
+.st-badge  { width: 58px;  transform: translate(-50%,-50%) translate3d(118px,112px,68px); }
+.st-layers .hv-inner { animation: hvFloat 6.2s ease-in-out infinite; }
+.st-db .hv-inner     { animation: hvFloat 5.7s ease-in-out infinite .7s; }
+.st-deploy .hv-inner { animation: hvFloat 6.6s ease-in-out infinite 1.1s; }
+.st-badge .hv-inner  { animation: hvFloat 5.3s ease-in-out infinite .4s; }
+
+/* Template card (dark, like the home code card) */
+.st-layers .hv-inner { background: rgba(15,15,17,0.94); border-color: rgba(255,255,255,0.08); box-shadow: 0 30px 60px -22px rgba(10,10,10,0.6); }
+.st-head { display: flex; align-items: center; gap: 9px; padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 11.5px; font-weight: 600; color: #fff; }
+.st-head i { color: #8fb3ff; font-size: 13px; }
+.st-rows { padding: 10px 14px 13px; display: flex; flex-direction: column; gap: 9px; }
+.st-row { display: flex; align-items: center; gap: 9px; font-size: 11px; color: #d7d7de; }
+.st-row em { margin-left: auto; font-style: normal; font-family: var(--font-mono); font-size: 9.5px; color: #6f6f7d; }
+.st-row i { width: 7px; height: 7px; border-radius: 2px; flex: none; }
+.st-row i.fw { background: #8fb3ff; } .st-row i.db { background: #5ad19a; }
+.st-row i.pay { background: #b79bff; } .st-row i.obs { background: #f0b355; }
+
+/* Database card */
+.st-db .hv-inner { padding: 13px 14px; }
+.st-db-top { display: flex; align-items: baseline; justify-content: space-between; }
+.st-tbl { font-family: var(--font-mono); font-size: 11px; color: var(--color-ink); }
+.st-rowcount { font-size: 10px; color: var(--color-grey-3); }
+.st-grid { display: grid; grid-template-columns: 22px 1fr; gap: 8px 9px; margin-top: 11px; }
+.st-grid span { height: 7px; border-radius: 3px; background: rgba(10,10,10,0.09); }
+.st-grid .w60 { width: 60%; } .st-grid .w40 { width: 40%; } .st-grid .w70 { width: 70%; }
+
+/* Deploy card */
+.st-deploy .hv-inner { padding: 13px 14px; }
+.st-dep-head { display: flex; align-items: center; gap: 7px; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-grey-2); }
+.st-dot { width: 7px; height: 7px; border-radius: 50%; background: #1f8f4e; box-shadow: 0 0 0 3px rgba(31,143,78,0.16); }
+.st-dep-main { display: flex; align-items: center; gap: 8px; margin-top: 9px; font-family: var(--font-display); font-weight: 600; font-size: 17px; letter-spacing: -0.02em; color: var(--color-ink); }
+.st-dep-main i { color: #1f8f4e; font-size: 15px; }
+.st-dep-meta { display: flex; align-items: baseline; justify-content: space-between; margin-top: 10px; padding-top: 9px; border-top: 1px solid rgba(10,10,10,0.08); font-family: var(--font-mono); font-size: 10px; color: var(--color-grey-3); }
+.st-dep-meta b { font-family: var(--font-display); font-size: 12px; color: var(--color-ink); }
+
+/* Badge */
+.st-badge .hv-inner { width: 58px; height: 58px; border-radius: 17px; display: grid; place-items: center; background: var(--color-blue); border-color: rgba(255,255,255,0.25); box-shadow: 0 20px 40px -16px rgba(37,99,235,0.7); }
+.st-badge .hv-inner i { color: #fff; font-size: 24px; }
+
+
 /* Build templates — one card per project shape. Tone tints the number and
    the stack chips only; the card stays on the light surface so four of them
    in a row don't turn into a colour chart. */

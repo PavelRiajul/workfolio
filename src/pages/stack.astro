@@ -10,18 +10,69 @@ const toolsTitle = page.toolsHeading.title.split('\n');
 const everyTitle = page.everyBuildHeading.title.split('\n');
 ---
 <Base title={page.seo.title} description={page.seo.description} subpage={true}>
-  <!-- Hero -->
-  <section class="section section-tight">
-    <div class="page-hero" data-reveal>
-      <div class="eyebrow">{page.hero.eyebrow}</div>
-      <h1>
+  <!-- Hero — same 3D stage as the home hero, so initHeroTilt picks it up.
+       The cards are decorative: a template, its database, and a deploy. -->
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-inner shell" data-hero-intro>
+      <div class="hero-meta" data-hero-item>
+        <span>—</span>
+        <span>{page.hero.eyebrow}</span>
+      </div>
+      <h1 data-hero-item>
         {heroLines.map((l, i) => (<>{l}{i < heroLines.length - 1 && <br />}</>))}
         {page.hero.accentWord && <> <span class="accent">{page.hero.accentWord}</span></>}
       </h1>
-      <p>{page.hero.lede}</p>
-      <div class="hero-actions">
-        <a href={page.hero.primaryCta.href} class="btn btn-dark">{page.hero.primaryCta.label} <span>↗</span></a>
-        <a href={page.hero.secondaryCta.href} class="btn btn-light">{page.hero.secondaryCta.label}</a>
+      <div class="hero-lower">
+        <div class="hero-copy">
+          <p class="hero-lede" data-hero-item>{page.hero.lede}</p>
+          <div class="hero-actions" data-hero-item>
+            <a href={page.hero.primaryCta.href} class="btn btn-dark">{page.hero.primaryCta.label} <span>↗</span></a>
+            <a href={page.hero.secondaryCta.href} class="btn btn-light">{page.hero.secondaryCta.label}</a>
+          </div>
+          <div class="hero-stats" data-hero-item>
+            {page.hero.stats.map((s) => (
+              <div>
+                <div class="num">{s.value}</div>
+                <div class="lbl">{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div class="hero-visual" data-hero-item aria-hidden="true">
+          <div class="hv-stage" id="hv-stage">
+            <!-- the template -->
+            <div class="hv-card st-layers"><div class="hv-inner">
+              <div class="st-head"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span>Template 02</span></div>
+              <div class="st-rows">
+                <div class="st-row"><i class="fw"></i>Next.js<em>app</em></div>
+                <div class="st-row"><i class="db"></i>Supabase<em>data</em></div>
+                <div class="st-row"><i class="pay"></i>Stripe<em>billing</em></div>
+                <div class="st-row"><i class="obs"></i>Sentry<em>errors</em></div>
+              </div>
+            </div></div>
+
+            <!-- its database -->
+            <div class="hv-card st-db"><div class="hv-inner">
+              <div class="st-db-top"><span class="st-tbl">users</span><span class="st-rowcount">1,204</span></div>
+              <div class="st-grid">
+                <span></span><span class="w60"></span>
+                <span></span><span class="w40"></span>
+                <span></span><span class="w70"></span>
+              </div>
+            </div></div>
+
+            <!-- shipped -->
+            <div class="hv-card st-deploy"><div class="hv-inner">
+              <div class="st-dep-head"><span class="st-dot"></span>Production</div>
+              <div class="st-dep-main"><i class="fa-solid fa-circle-check" aria-hidden="true"></i>Deployed</div>
+              <div class="st-dep-meta"><span>main · 3f9c1a</span><b>14s</b></div>
+            </div></div>
+
+            <div class="hv-card st-badge"><div class="hv-inner"><i class="fa-solid fa-bolt" aria-hidden="true"></i></div></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>

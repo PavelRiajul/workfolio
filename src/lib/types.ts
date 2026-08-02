@@ -313,7 +313,15 @@ export interface ShopifyPageContent {
 /** The /stack page — what gets built, and with what. */
 export interface StackPageContent {
   seo: SeoMeta;
-  hero: { eyebrow: string; headlineLines: string[]; accentWord: string; lede: string; primaryCta: Cta; secondaryCta: Cta };
+  hero: {
+    eyebrow: string;
+    headlineLines: string[];
+    accentWord: string;
+    lede: string;
+    primaryCta: Cta;
+    secondaryCta: Cta;
+    stats: TextStat[];
+  };
   templatesHeading: Heading;
   templates: {
     number: string;

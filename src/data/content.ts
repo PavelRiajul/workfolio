@@ -1124,6 +1124,11 @@ export const stackPage: StackPageContent = {
       "I start from a setup I already trust rather than re-litigating the stack every project. Here's what I reach for, what each piece is actually doing, and what goes into a build whether or not anyone asks for it.",
     primaryCta: { label: 'Start a project', href: '/start?tab=form' },
     secondaryCta: { label: 'See the services', href: '/services' },
+    stats: [
+      { value: '4', label: 'Setups I build from' },
+      { value: '27', label: 'Tools in rotation' },
+      { value: '8', label: 'Things set up every time' },
+    ],
   },
   templatesHeading: {
     eyebrow: '— How I start',
