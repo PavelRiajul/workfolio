@@ -137,6 +137,9 @@ html.lenis, html.lenis body { height: auto; }
 /* ===== Tab bar ==========================================================
    Desktop: a centered floating pill. Mobile: a full-width docked bar.      */
 .tabbar { position: fixed; z-index: 1000; left: 50%; transform: translateX(-50%); bottom: 22px; background: rgba(255,255,255,0.85); backdrop-filter: blur(18px) saturate(150%); -webkit-backdrop-filter: blur(18px) saturate(150%); border: 1px solid var(--line); border-radius: 9999px; box-shadow: 0 14px 38px rgba(10,10,10,0.14), 0 2px 8px rgba(10,10,10,0.06); padding: 7px; }
+.tabbar { transition: transform .34s cubic-bezier(.22,.61,.36,1), opacity .26s ease; }
+/* Tucked = scrolling down. Keeps the translateX centring on desktop. */
+.tabbar.tucked { transform: translateX(-50%) translateY(calc(100% + 30px)); opacity: 0; pointer-events: none; }
 .tabbar-inner { display: flex; align-items: stretch; gap: 4px; height: 52px; }
 .tab { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 0 16px; border-radius: 9999px; text-decoration: none; color: var(--color-grey-2); font-size: 11px; font-weight: 500; letter-spacing: 0.01em; position: relative; transition: color .2s ease, background .2s ease; }
 .tab i { font-size: 16px; line-height: 1; transition: transform .22s ease; }
@@ -157,7 +160,10 @@ html.lenis, html.lenis body { height: auto; }
   .tab:hover i { transform: none; }
   .tab.active, .tab.active:hover { color: var(--color-ink); background: none; }
   .tab.active::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 24px; height: 2px; border-radius: 0 0 3px 3px; background: var(--color-ink); }
+  /* Docked bar slides straight down — no centring transform to preserve. */
+  .tabbar.tucked { transform: translateY(100%); }
 }
+@media (prefers-reduced-motion: reduce) { .tabbar { transition: none; } }
 
 /* ===== Reveal (GSAP-driven; safe fallback to visible) =================== */
 [data-reveal] { opacity: 0; transform: translateY(26px); will-change: opacity, transform; }

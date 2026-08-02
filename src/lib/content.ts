@@ -64,7 +64,10 @@ export function getProjects(): Promise<Project[]> {
   return safeFetch<Project[]>(
     `*[_type == "project"] | order(order asc){
       title, "slug": slug.current, order, tags, stack, type, blurb, ${imageProjection},
-      hasCaseStudy, modalSummary, modalOutcomes
+      hasCaseStudy, modalSummary, modalOutcomes,
+      // The Shopify page renders a featured card from this list, so it needs
+      // the summary/pills/outcomes too — not just the grid-card fields.
+      pills, summary, outcomes
     }`,
     {},
     fallback.projects

@@ -186,27 +186,47 @@ function initRotatingWord() {
 }
 
 /* ---- Mobile nav -------------------------------------------------------- */
-function initNav() {
-  const nav = document.getElementById('nav');
-  const burger = document.getElementById('nav-burger');
-  if (!nav || !burger) return;
-  const setOpen = (open: boolean) => {
-    nav.classList.toggle('open', open);
-    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
-    // Lock background scroll while the dropdown is open so the page can't
-    // drift behind the menu.
-    document.body.style.overflow = open ? 'hidden' : '';
-    if (open) lenis?.stop();
-    else lenis?.start();
+/* ---- Tab bar: tuck away while reading, come back on the way up --------
+   The bar is fixed, so without this it sits on top of body copy for the
+   whole page. Hides on scroll-down, returns on scroll-up, and is always
+   present near the top and at the very bottom. */
+function initTabBar() {
+  const bar = document.getElementById('nav');
+  if (!bar) return;
+
+  const JITTER = 6;    // ignore sub-pixel wobble and momentum noise
+  const TOP_ZONE = 140; // always visible near the top of the page
+  const END_ZONE = 260; // ...and once the footer comes into view
+  let last = window.scrollY;
+  let ticking = false;
+
+  const update = () => {
+    ticking = false;
+    const y = Math.max(0, window.scrollY);
+    const atEnd = y + window.innerHeight >= document.documentElement.scrollHeight - END_ZONE;
+    // Zone checks come first: near the ends the deltas go sub-jitter as the
+    // scroll settles, and bailing early there would strand the bar hidden.
+    if (y < TOP_ZONE || atEnd) {
+      bar.classList.remove('tucked');
+      last = y;
+      return;
+    }
+    const dy = y - last;
+    if (Math.abs(dy) < JITTER) return;
+    bar.classList.toggle('tucked', dy > 0);
+    last = y;
   };
-  burger.addEventListener('click', () => setOpen(!nav.classList.contains('open')));
-  nav.querySelectorAll('.nav-mobile a').forEach((a) =>
-    a.addEventListener('click', () => setOpen(false))
+
+  window.addEventListener(
+    'scroll',
+    () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    },
+    { passive: true }
   );
-  // Esc closes the menu.
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && nav.classList.contains('open')) setOpen(false);
-  });
 }
 
 /* ---- Footer clock ------------------------------------------------------ */
@@ -386,7 +406,7 @@ function initWhatsAppFab() {
 ready(() => {
   document.documentElement.classList.remove('no-js');
   initSmoothScroll();
-  initNav();
+  initTabBar();
   initWhatsAppFab();
   initHeroTilt();
   initShopifyStack();
