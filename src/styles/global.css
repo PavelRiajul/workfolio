@@ -1341,6 +1341,16 @@ textarea.field { resize: vertical; }
      426px, which left the stack no room; now ~390px). Costs ~370px of page
      height, which is worth it. Only the padding and type shrink here. */
   .sstack { margin-top: 26px; }
+  /* One pin point for every card. The desktop cascade (86 + i*16) needs more
+     room than a 667px screen has: the last cards' static positions already
+     sit above their own pins, so sticky can't push them down and the final
+     transition reverses. Same top = every transition identical. */
+  .sstack-card { top: 84px; }
+  /* Cards must stay a uniform height or a short one won't fully cover the
+     card beneath it — that sliver is what reads as "stacking the wrong way".
+     Tallest natural card is ~330px; 350 leaves headroom for edited copy
+     without the 380px of dead space the desktop value forced. */
+  .sstack-card { min-height: 350px; }
   .sstack-card { padding: 20px 17px; border-radius: 18px; }
   .sstack-card + .sstack-card { margin-top: 12px; }
   .sstack-card h3 { font-size: 23px; margin-top: 14px; }
