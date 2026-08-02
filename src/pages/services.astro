@@ -112,7 +112,7 @@ const processTitle = page.processHeading.title.split('\n');
             style={`--acc:${accentFor(s.visual)};`}
             data-reveal
           >
-            <div class={`svcf-media tone-${s.tone}`}>
+            <div class={`svcf-media tone-${s.tone}`} aria-hidden="true">
               <span class="svcf-ghost" aria-hidden="true">{s.number}</span>
               <OfferVisual service={s} />
             </div>

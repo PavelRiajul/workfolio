@@ -168,6 +168,13 @@ html.lenis, html.lenis body { height: auto; }
   .tabbar.tucked { transform: translateY(100%); }
 }
 @media (prefers-reduced-motion: reduce) { .tabbar, .brand-sig, .back-home { transition: none; } }
+/* Seven tabs at 375px: labels collide at 11px, so tighten type and padding
+   rather than truncating words. */
+@media (max-width: 400px) {
+  .tab { padding: 0; gap: 3px; }
+  .tab span { font-size: 10px; letter-spacing: -0.01em; }
+  .tab i { font-size: 17px; }
+}
 
 /* ===== Reveal (GSAP-driven; safe fallback to visible) =================== */
 [data-reveal] { opacity: 0; transform: translateY(26px); will-change: opacity, transform; }
@@ -459,7 +466,8 @@ html.lenis, html.lenis body { height: auto; }
 .calc-field { display: block; }
 .calc-l { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 14px; font-weight: 500; color: var(--color-grey-1); margin-bottom: 13px; }
 .calc-l b { font-family: var(--font-display); font-weight: 600; font-size: 19px; letter-spacing: -0.02em; color: var(--color-ink); }
-.calc-range { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 9999px; background: rgba(10,10,10,0.1); outline: none; cursor: pointer; }
+.calc-range { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 9999px; outline: none; cursor: pointer;
+  background: linear-gradient(to right, #5e8e3e var(--fill,0%), rgba(10,10,10,0.1) var(--fill,0%)); }
 .calc-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #5e8e3e; border: 3px solid #fff; box-shadow: 0 2px 9px rgba(10,10,10,0.28); cursor: pointer; }
 .calc-range::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: #5e8e3e; border: 3px solid #fff; box-shadow: 0 2px 9px rgba(10,10,10,0.28); cursor: pointer; }
 .calc-out { background: var(--color-ink); color: #fff; border-radius: 18px; padding: clamp(24px,3vw,34px); display: flex; flex-direction: column; justify-content: center; }
@@ -1007,7 +1015,7 @@ textarea.field { resize: vertical; }
 .resume-contacts { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 18px; padding-bottom: 22px; border-bottom: 2px solid var(--color-ink); font-size: 13.5px; color: var(--color-grey-1); }
 .resume-contacts a { color: var(--color-grey-1); text-decoration: none; transition: color .2s ease; }
 .resume-contacts a:hover { color: var(--color-blue); }
-.resume-contacts .sep { color: #c9c9c9; }
+.resume-contacts .sep { color: var(--color-grey-3); }
 .resume-highlights { display: flex; flex-wrap: wrap; gap: 14px clamp(24px,5vw,52px); margin-top: 22px; }
 .resume-highlights .rh { display: flex; flex-direction: column; }
 .resume-highlights .rh-val { font-family: var(--font-display); font-weight: 600; font-size: 24px; letter-spacing: -0.02em; line-height: 1; color: var(--color-ink); }
@@ -1223,6 +1231,50 @@ textarea.field { resize: vertical; }
 .every-list i { color: #6b9bff; font-size: 12px; margin-top: 5px; flex: none; }
 .every-note { max-width: 60ch; margin: var(--space-lg) 0 0; font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.55); }
 
+/* ===== Touch ergonomics ================================================
+   Measured on an iPhone SE (375×667): controls that were comfortable with a
+   cursor were 20–40px tall under a thumb, and several labels sat below 12px.
+   44px is the Apple/WCAG minimum for a touch target. */
+@media (max-width: 640px) {
+  /* The wordmark is fixed at the top-left; heroes need to start below it. */
+  .hero, .hero-compact { padding-top: calc(var(--space-2xl) + 26px); }
+  /* 100svh doesn't know about the fixed tab bar, so the last CTA ended up
+     underneath it. Let the hero size to its content instead. */
+  .hero { min-height: auto; }
+  .page-hero { padding-top: 26px; }
+
+  /* Controls */
+  .chip { min-height: 44px; display: inline-flex; align-items: center; }
+  .start-tab { min-height: 44px; }
+  .ft-nav { gap: 4px 18px; }
+  .ft-nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px; }
+  .ft-soc { width: 46px; height: 46px; }
+
+  /* Standalone text links — pad the hit box without moving the line box. */
+  .svcf-cta, .croh-link, .cs-back, .work-note a, .split-lede a, .sstack-tag,
+  .tab, .acc summary, .lead-row a, .resume-contacts a, .ft-meta a { padding-block: 12px; }
+  .back-home { min-height: 44px; padding-block: 0; display: inline-flex; align-items: center; }
+  .brand-sig { padding: 9px 4px; margin: -9px -4px; }
+  .skip-link { padding: 14px 20px; }
+  .marquee { padding-block: var(--space-sm); }
+  .marquee-track.is-link { padding-block: 4px; }
+  .acc summary { min-height: 44px; }
+
+  /* Range sliders: thin track, thumb big enough to grab. */
+  .calc-range { height: 44px; background: none; }
+  .calc-range::-webkit-slider-runnable-track { height: 8px; border-radius: 9999px;
+    background: linear-gradient(to right, #5e8e3e var(--fill,0%), rgba(10,10,10,0.12) var(--fill,0%)); }
+  .calc-range::-webkit-slider-thumb { width: 28px; height: 28px; margin-top: -10px; }
+  .calc-range::-webkit-slider-runnable-track { margin-block: 18px; }
+  .calc-range::-moz-range-track { height: 8px; border-radius: 9999px;
+    background: linear-gradient(to right, #5e8e3e var(--fill,0%), rgba(10,10,10,0.12) var(--fill,0%)); }
+  .calc-range::-moz-range-thumb { width: 28px; height: 28px; }
+
+  /* Nothing informative below 12px on a phone. */
+  .svcf-no, .eng-meta { font-size: 12px; }
+  .pf-sub, .post-date, .tool-row dd, .leak-why, .leak-drop, .placeholder span { font-size: 12.5px; }
+}
+
 /* ===== Site-wide mobile polish ========================================
    Centrish layout, compact grids and tighter rhythm so phones scroll less.
    (3D hero scenes are already hidden ≤900 via .hero-visual.) */
@@ -1237,12 +1289,19 @@ textarea.field { resize: vertical; }
   .hero-inner, .page-hero { text-align: center; }
   .hero-meta, .hero-actions, .hero-stats, .hero-avail, .hero-building { justify-content: center; }
   .hero-avail, .hero-building { align-items: center; }
-  .hero h1, .hero-lede, .page-hero h1, .page-hero p { margin-left: auto; margin-right: auto; }
+  /* Let the dot flow with the sentence instead of stranding itself on the
+     left when the text wraps to a second line. */
+  .hero-avail { display: block; text-align: center; }
+  .hero-avail .pulse { display: inline-block; vertical-align: middle; margin-right: 9px; }
+  .hero h1, .page-hero h1 { margin-left: auto; margin-right: auto; }
+  /* Multi-line body copy stays left-aligned — centring a 9-line paragraph
+     gives every line a different starting point and kills readability. */
+  .hero-lede, .page-hero p, .split-lede, .cs-out-note, .ai-caveat { text-align: left; }
   .hero-inner .cro-viz { text-align: left; } /* keep the dashboard internals aligned */
 
   .eyebrow { text-align: center; }
   .section-h2 { text-align: center; margin-left: auto; margin-right: auto; }
-  .split-lede, .cs-out-note { text-align: center; margin-left: auto; margin-right: auto; }
+  .split-lede, .cs-out-note { margin-left: auto; margin-right: auto; }
   .work-head { flex-direction: column; align-items: center; text-align: center; gap: 14px; }
 
   /* Compact short-value strips into 2-up instead of a long column */
@@ -1253,7 +1312,7 @@ textarea.field { resize: vertical; }
   .appr-grid, .trait-grid { grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 28px; }
   .appr-card, .trait-card { padding: 18px 15px; border-radius: 14px; }
   .appr-card h3, .trait-card h3 { font-size: 17px; }
-  .appr-card .appr-num { font-size: 11px; }
+  .appr-card .appr-num { font-size: 12px; }
   .appr-card .appr-desc, .appr-card .appr-desc p, .trait-card p { margin-top: 10px; font-size: 13px; line-height: 1.45; }
   .appr-card.dark { grid-column: 1 / -1; }
   .appr-card.dark p { margin-top: 12px; font-size: 13.5px; }
@@ -1269,13 +1328,13 @@ textarea.field { resize: vertical; }
   .work-card h3 { font-size: 15.5px; margin-top: 11px; }
   .work-card p { font-size: 12.5px; line-height: 1.4; margin-top: 7px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .work-tags { margin-top: 10px; gap: 8px; }
-  .tag-pill { font-size: 10px; padding: 3px 8px; }
-  .tag-note { font-size: 11px; }
+  .tag-pill { font-size: 12px; padding: 4px 10px; }
+  .tag-note { font-size: 12px; }
 
   /* Blog cards: cover + title, trimmed excerpt */
   .post-card .post-title { font-size: 15px; margin-top: 10px; }
   .post-card p { font-size: 12.5px; line-height: 1.4; margin-top: 7px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .post-card .pc-meta { font-size: 11px; gap: 7px; margin-top: 10px; }
+  .post-card .pc-meta { font-size: 12px; gap: 7px; margin-top: 10px; }
 
   /* Testimonials: compact so two fit per row */
   .tst-card { padding: 18px 15px; border-radius: 14px; }
@@ -1284,7 +1343,7 @@ textarea.field { resize: vertical; }
   .tst-author { padding-top: 14px; gap: 9px; }
   .tst-avatar { width: 34px; height: 34px; font-size: 13px; }
   .tst-name { font-size: 13px; }
-  .tst-role { font-size: 11.5px; }
+  .tst-role { font-size: 12.5px; }
   .cs-proc .pb, .cs-proc { padding-left: 12px; padding-right: 12px; }
 
   /* Footer: stack the meta bar, centred */

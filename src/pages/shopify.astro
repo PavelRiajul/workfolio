@@ -115,7 +115,7 @@ const featuredTitle = page.featuredHeading.title.split('\n');
       <div class="svc-showcase">
         {services.map((s, i) => (
           <div class={`svcf ${i % 2 === 1 ? 'rev' : ''}`} data-reveal>
-            <div class={`svcf-media tone-${s.tone}`}>
+            <div class={`svcf-media tone-${s.tone}`} aria-hidden="true">
               <span class="svcf-ghost" aria-hidden="true">{s.number}</span>
               <ServiceVisual service={s} />
             </div>
@@ -387,10 +387,11 @@ const featuredTitle = page.featuredHeading.title.split('\n');
     if (vis && aov && cur && tgt) {
       const set = (id: string, txt: string) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
       const money = (n: number) => '$' + Math.round(n).toLocaleString('en-US');
+      // Expose progress as a custom property so CSS owns how the track looks
+      // (the touch treatment on small screens restyles it entirely).
       const paint = (el: HTMLInputElement) => {
         const min = +el.min; const max = +el.max;
-        const p = ((+el.value - min) / (max - min)) * 100;
-        el.style.background = `linear-gradient(to right, #5e8e3e ${p}%, rgba(10,10,10,0.1) ${p}%)`;
+        el.style.setProperty('--fill', `${((+el.value - min) / (max - min)) * 100}%`);
       };
       const update = () => {
         const v = +vis.value, a = +aov.value, c = +cur.value, t = +tgt.value;

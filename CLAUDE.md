@@ -114,6 +114,14 @@ Tokens in `@theme` (also exposed as CSS vars):
 - **Contrast is a constraint, not a preference.** `--color-grey-3` is `#767676` — the lightest grey that clears WCAG AA (4.54:1) on white. It was `#9a9a9a` (2.81:1) and failed across ~300 elements. On `--color-surface` panels grey-3 only reaches 4.13:1, so muted text *on a grey panel* uses `--color-grey-2`. Don't lighten either one back. The only text still under AA is inside the decorative mockups (`hv-*`, `sv-*`, `ov-*`, `sh-*`), which are `aria-hidden` illustrations.
 - Fonts: `--font-display 'Geist'`, `--font-body 'Inter'`, `--font-mono 'Geist Mono'`, `--font-hand 'Caveat'`.
 - `:root`: `--line` / `--line-soft` (subtle borders), `--maxw 1180px`, `--tabbar-h 64px`.
+**Mobile (audited on iPhone SE, 375×667 portrait):**
+- Touch targets are **≥44px** — chips, tabs, footer links, accordion summaries, standalone text links and the range sliders all have explicit mobile sizing. Don't ship a control smaller than that.
+- **No informative text below 12px.** The one exception is the bottom tab-bar label (10px ≤400px): seven tabs can't hold 12px type at 375px, and 10px matches the iOS tab-bar convention.
+- `.hero` drops `min-height:100svh` on mobile — 100svh doesn't account for the fixed tab bar, so the last CTA ended up underneath it.
+- Heroes get extra top padding on mobile to clear the fixed wordmark, which otherwise lands on the eyebrow.
+- **Headings centre on mobile; body copy stays left-aligned.** Centring a nine-line paragraph gives every line a different start and wrecks readability.
+- The calculator's fill is a `--fill` custom property, not an inline `background`, so the track can be restyled for touch.
+
 **Spacing & layout system (use it — do not invent values):**
 - One fluid scale: `--space-2xs … --space-3xl`, plus `--gutter` (page inset) and `--section-y` / `--section-y-tight` (band rhythm). Every gap, pad and margin picks a step. **Never write a bare `clamp()` for spacing** and never write a token as `--x: var(--x)` — a self-referential custom property is invalid and silently drops the whole declaration (it once flattened every section's padding to zero).
 - Layout primitives: `.section` (full-bleed band = rhythm + gutter), `.shell` (centred column *with* gutter), `.wrap` (centred column *inside* a section). Modifiers instead of inline padding: `.section-tight`, `.section-tight-top/-bottom`, `.section-flush-top/-bottom`, `.section-bleed`.
