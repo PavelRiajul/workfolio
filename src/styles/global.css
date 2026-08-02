@@ -188,7 +188,7 @@ html.lenis, html.lenis body { height: auto; }
   html { scroll-behavior: auto; }
   /* Stop continuous loops that can trigger motion sensitivity. */
   /* animation doesn't inherit, so nested loops need naming explicitly. */
-  .wa-ring, .wa-btn, .marquee-track, .hv-card .hv-inner, .bl-ed-body .caret { animation: none !important; }
+  .wa-ring, .wa-btn, .marquee-track, .hv-card .hv-inner, .bl-ed-body .caret, .hero::after { animation: none !important; }
   .hv-stage { transition: none !important; }
 }
 
@@ -1066,6 +1066,10 @@ textarea.field { resize: vertical; }
 
 /* Velocity comparison (services hero visual) */
 .velo-wrap { height: auto; perspective: none; display: flex; align-items: center; }
+/* ...but it's still a hero visual: hidden with the rest below 900px, or it
+   pushes the mobile hero past the viewport. The "~2×" hero stat carries the
+   same point on small screens. */
+@media (max-width: 900px) { .velo-wrap { display: none; } }
 .velo { width: 100%; background: var(--color-ink); color: #fff; border-radius: 22px; padding: clamp(22px,2.4vw,28px); box-shadow: 0 30px 60px -30px rgba(10,10,10,0.5); }
 .velo-k { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.5); font-weight: 500; }
 .velo-row { margin-top: 22px; }
@@ -1247,9 +1251,32 @@ textarea.field { resize: vertical; }
 @media (max-width: 640px) {
   /* The wordmark is fixed at the top-left; heroes need to start below it. */
   .hero, .hero-compact { padding-top: calc(var(--space-2xl) + 26px); }
-  /* 100svh doesn't know about the fixed tab bar, so the last CTA ended up
-     underneath it. Let the hero size to its content instead. */
-  .hero { min-height: auto; }
+  /* Full-screen hero on every page. Sized to the space *above* the fixed tab
+     bar — plain 100svh doesn't know the bar exists, which is what previously
+     stranded the second CTA underneath it. Content centres in what's left. */
+  .hero, .hero-compact {
+    min-height: calc(100svh - var(--tabbar-h) - env(safe-area-inset-bottom));
+    position: relative;
+  }
+  /* A full-screen hero hides the fact that anything follows it. Cold visitors
+     won't go hunting, so the hero says so. */
+  .hero::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 14px;
+    width: 12px;
+    height: 12px;
+    margin-left: -6px;
+    border-right: 2px solid rgba(10,10,10,0.22);
+    border-bottom: 2px solid rgba(10,10,10,0.22);
+    transform: rotate(45deg);
+    animation: heroCue 1.9s ease-in-out infinite;
+  }
+  @keyframes heroCue {
+    0%, 100% { transform: rotate(45deg) translate(0, 0); opacity: .55; }
+    50% { transform: rotate(45deg) translate(3px, 3px); opacity: 1; }
+  }
   .page-hero { padding-top: 26px; }
 
   /* Controls */

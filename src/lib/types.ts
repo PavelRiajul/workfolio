@@ -323,6 +323,8 @@ export interface StackPageContent {
     headlineLines: string[];
     accentWord: string;
     lede: string;
+    /** Punchier lede for phones; falls back to `lede`. */
+    ledeShort?: string;
     primaryCta: Cta;
     secondaryCta: Cta;
     stats: TextStat[];
@@ -347,7 +349,7 @@ export interface StackPageContent {
 
 export interface WorkPageContent {
   seo: SeoMeta;
-  hero: { eyebrow: string; headlineLines: string[]; lede: string };
+  hero: { eyebrow: string; headlineLines: string[]; lede: string; ledeShort?: string };
   filters: Cta[];
   /** Label on the "view full case study" link inside the project modal. */
   modalCtaLabel: string;
@@ -356,7 +358,7 @@ export interface WorkPageContent {
 
 export interface BlogPageContent {
   seo: SeoMeta;
-  hero: { eyebrow: string; headlineLines: string[]; lede: string };
+  hero: { eyebrow: string; headlineLines: string[]; lede: string; ledeShort?: string };
   categories: Cta[];
   featuredBadge: string;
   emptyMessage: string;
@@ -368,6 +370,8 @@ export interface StartPageContent {
   eyebrow: string;
   headlineLines: string[];
   lede: string;
+  /** Punchier lede for phones; falls back to `lede`. */
+  ledeShort?: string;
   callTabLabel: string;
   formTabLabel: string;
   call: {

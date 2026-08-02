@@ -28,6 +28,7 @@ export default defineType({
         },
         { name: 'accentWord', title: 'Accent word', type: 'string' },
         { name: 'lede', title: 'Lede', type: 'text', rows: 4 },
+        { name: 'ledeShort', title: 'Short lede (phones)', description: 'Shown instead of the lede below 640px. Leave empty to reuse the lede.', type: 'text', rows: 2 },
         { name: 'primaryCta', title: 'Primary button', type: 'cta' },
         { name: 'secondaryCta', title: 'Secondary button', type: 'cta' },
         { name: 'stats', title: 'Stats', type: 'array', of: [{ type: 'textStat' }] },

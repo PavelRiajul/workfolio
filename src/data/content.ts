@@ -997,6 +997,7 @@ export const workPage: WorkPageContent = {
     headlineLines: ["Everything I've", 'built, in one place.'],
     lede:
       "A selection of products I've shipped — from AI MVPs and headless Shopify storefronts to full-stack web apps and cross-platform mobile. Each one built to make it ship.",
+    ledeShort: "AI MVPs, Shopify storefronts, web apps and mobile — each one shipped.",
   },
   filters: [
     { label: 'All', href: 'all' },
@@ -1025,6 +1026,7 @@ export const blogPage: BlogPageContent = {
     headlineLines: ['Notes on', 'building things.'],
     lede:
       'Short, practical write-ups on building with AI, Next.js, Shopify, the MERN stack and React Native — plus the occasional lesson from shipping on a deadline.',
+    ledeShort: 'Short, practical write-ups on building with AI — and shipping on a deadline.',
   },
   categories: [
     { label: 'All', href: 'all' },
@@ -1055,6 +1057,7 @@ export const startPage: StartPageContent = {
   headlineLines: ["Let's work", 'together.'],
   lede:
     "Hiring for a role or have a project in mind? Book a quick call, or send the details and I'll come back to you with next steps. Either way, you'll hear from me within 24 hours.",
+  ledeShort: "Book a call or send the details — you'll hear from me within 24 hours.",
   callTabLabel: 'Book a call',
   formTabLabel: 'Send a message',
   call: {
@@ -1126,6 +1129,7 @@ export const stackPage: StackPageContent = {
     accentWord: 'them.',
     lede:
       "I start from a setup I already trust rather than re-litigating the stack every project. Here's what I reach for, what each piece is actually doing, and what goes into a build whether or not anyone asks for it.",
+    ledeShort: 'I start from a setup I already trust, not a fresh argument about tools.',
     primaryCta: { label: 'Start a project', href: '/start?tab=form' },
     secondaryCta: { label: 'See the services', href: '/services' },
     stats: [

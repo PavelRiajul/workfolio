@@ -21,7 +21,8 @@ const heroEyebrow = page.eyebrow.replace(/^[—–-]\s*/, '');
       <h1 data-hero-item>{headlineLines.map((l, i) => (<>{l}{i < headlineLines.length - 1 && <br />}</>))}</h1>
       <div class="hero-lower">
         <div class="hero-copy">
-          <p class="hero-lede" data-hero-item>{page.lede}</p>
+          <p class="hero-lede hero-lede-full" data-hero-item>{page.lede}</p>
+          {page.ledeShort && <p class="hero-lede hero-lede-short" data-hero-item>{page.ledeShort}</p>}
         </div>
         <div class="hero-visual" data-hero-item aria-hidden="true">
           <div class="hv-stage" id="hv-stage">

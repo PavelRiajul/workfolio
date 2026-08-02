@@ -25,7 +25,8 @@ const everyTitle = page.everyBuildHeading.title.split('\n');
       </h1>
       <div class="hero-lower">
         <div class="hero-copy">
-          <p class="hero-lede" data-hero-item>{page.hero.lede}</p>
+          <p class="hero-lede hero-lede-full" data-hero-item>{page.hero.lede}</p>
+          {page.hero.ledeShort && <p class="hero-lede hero-lede-short" data-hero-item>{page.hero.ledeShort}</p>}
           <div class="hero-actions" data-hero-item>
             <a href={page.hero.primaryCta.href} class="btn btn-dark">{page.hero.primaryCta.label} <span>↗</span></a>
             <a href={page.hero.secondaryCta.href} class="btn btn-light">{page.hero.secondaryCta.label}</a>

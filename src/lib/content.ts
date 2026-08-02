@@ -172,7 +172,7 @@ export function getBlogPage(): Promise<BlogPageContent> {
 export function getStartPage(): Promise<StartPageContent> {
   return safeFetch<StartPageContent>(
     `*[_type == "startPage"][0]{
-      seo, eyebrow, headlineLines, lede, callTabLabel, formTabLabel, call, form, success
+      seo, eyebrow, headlineLines, lede, ledeShort, callTabLabel, formTabLabel, call, form, success
     }`,
     {},
     fallback.startPage

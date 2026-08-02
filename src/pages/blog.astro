@@ -25,7 +25,8 @@ const rest = posts.filter((p) => !p.featured);
       <h1 data-hero-item>{heroLines.map((l, i) => (<>{l}{i < heroLines.length - 1 && <br />}</>))}</h1>
       <div class="hero-lower">
         <div class="hero-copy">
-          <p class="hero-lede" data-hero-item>{page.hero.lede}</p>
+          <p class="hero-lede hero-lede-full" data-hero-item>{page.hero.lede}</p>
+          {page.hero.ledeShort && <p class="hero-lede hero-lede-short" data-hero-item>{page.hero.ledeShort}</p>}
         </div>
         <div class="hero-visual" data-hero-item aria-hidden="true">
           <div class="hv-stage" id="hv-stage">

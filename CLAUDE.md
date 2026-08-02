@@ -124,6 +124,8 @@ on desktop), and anything redundant on mobile is dropped rather than shrunk
 stays hidden until the reader is past the hero: at the top it covered a hero
 stat, and the hero's own CTA is right there.
 
+**Mobile heroes fill the viewport** — `min-height: calc(100svh - var(--tabbar-h) - env(safe-area-inset-bottom))`. Sized to the space *above* the fixed tab bar, because plain `100svh` doesn't know the bar exists and strands the last CTA underneath it. A `::after` chevron marks that content follows (killed under `prefers-reduced-motion`), since a full-screen hero otherwise hides the fact. Hero visuals (`.hero-visual`, including `.velo-wrap`) stay hidden ≤900px or the hero overflows the viewport.
+
 **Mobile (audited on iPhone SE, 375×667 portrait):**
 - Touch targets are **≥44px** — chips, tabs, footer links, accordion summaries, standalone text links and the range sliders all have explicit mobile sizing. Don't ship a control smaller than that.
 - **No informative text below 12px.** The one exception is the bottom tab-bar label (10px ≤400px): seven tabs can't hold 12px type at 375px, and 10px matches the iOS tab-bar convention.
