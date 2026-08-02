@@ -1336,6 +1336,21 @@ textarea.field { resize: vertical; }
   .appr-card.dark { grid-column: 1 / -1; }
   .appr-card.dark p { margin-top: 12px; font-size: 13.5px; }
 
+  /* The method band ran 866px — a full screen before the stats start —
+     because it inherited desktop type and padding. Its heading isn't a
+     .section-h2, so the centred eyebrow above left-aligned copy also read
+     as misaligned. */
+  .croh { padding: 26px 20px 28px; border-radius: 20px; }
+  .croh .eyebrow { text-align: left; }
+  .croh-grid { gap: 26px; }
+  .croh-h { font-size: 26px; line-height: 1.1; margin-top: 12px; }
+  .croh-p { font-size: 15px; line-height: 1.5; margin-top: 14px; }
+  .croh-link { margin-top: 18px; font-size: 14.5px; }
+  .croh-stats { gap: 16px; }
+  .croh-num { font-size: 28px; }
+  .croh-bar { margin: 9px 0 6px; height: 5px; }
+  .croh-lbl { font-size: 13px; }
+
   /* The scroll-stack stays sticky on phones — it's the site's signature
      interaction and it reads clearly once the cards are compact (they were
      426px, which left the stack no room; now ~390px). Costs ~370px of page
