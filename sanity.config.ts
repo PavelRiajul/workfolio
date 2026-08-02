@@ -3,6 +3,15 @@ import { structureTool } from 'sanity/structure';
 import { visionTool } from '@sanity/vision';
 import { schemaTypes } from './schemaTypes';
 
+// This config is loaded in two very different places: by Vite when the Studio
+// is embedded in the Astro app (env on `import.meta.env`), and by the Sanity
+// CLI in plain Node (env on `process.env`). Read whichever exists, or the
+// CLI commands fail with "Cannot read properties of undefined".
+const env: Record<string, string | undefined> =
+  (typeof import.meta !== 'undefined' && (import.meta as { env?: Record<string, string | undefined> }).env) ||
+  (typeof process !== 'undefined' ? process.env : {}) ||
+  {};
+
 // Singletons we don't want editors creating/deleting copies of.
 const SINGLETONS = [
   'siteSettings',
@@ -35,8 +44,8 @@ export default defineConfig({
   name: 'default',
   title: 'Riajul Islam — Portfolio',
 
-  projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID || 'placeholder',
-  dataset: import.meta.env.PUBLIC_SANITY_DATASET || 'production',
+  projectId: env.PUBLIC_SANITY_PROJECT_ID || 'placeholder',
+  dataset: env.PUBLIC_SANITY_DATASET || 'production',
 
   basePath: '/admin',
 
