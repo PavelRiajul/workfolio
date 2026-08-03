@@ -9,14 +9,15 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "og": "node --experimental-strip-types scripts/og-images.mts",
     "seed:build": "node --experimental-strip-types scripts/seed-sanity.mts",
     "seed:import": "npm run seed:build && sanity dataset import sanity/seed.ndjson production --replace",
     "schema:deploy": "sanity schema deploy"
   },
   "dependencies": {
     "@astrojs/react": "^4.2.3",
-    "@sanity/astro": "^3.4.1",
     "@astrojs/sitemap": "^3.7.3",
+    "@sanity/astro": "^3.4.1",
     "@sanity/client": "^7.14.1",
     "@sanity/image-url": "^1.1.0",
     "@sanity/vision": "^3.68.3",
