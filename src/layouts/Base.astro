@@ -116,11 +116,22 @@ const graph = {
 
     <script type="application/ld+json" set:html={JSON.stringify(graph)} is:inline />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Type is self-hosted (src/styles/fonts.css). Preload only the two faces
+         above the fold — the h1 and body copy — so they don't wait for the
+         stylesheet to parse. Preloading more would compete with the LCP. -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/geist-700-latin.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/inter-400-latin.woff2"
+      crossorigin
     />
     <link
       rel="stylesheet"

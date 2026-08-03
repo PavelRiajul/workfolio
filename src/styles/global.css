@@ -1,5 +1,11 @@
 @import 'tailwindcss';
 
+/* Self-hosted type. Was two render-blocking hops to fonts.googleapis.com +
+   fonts.gstatic.com before first paint; now same-origin. Regenerate the sheet
+   and the woff2 files only if the type stack changes. Files carry
+   unicode-range, so latin-ext is only fetched when a page actually needs it. */
+@import './fonts.css';
+
 /* ===== Design tokens (also exposed as Tailwind theme colors/fonts) ======== */
 @theme {
   --color-ink: #0a0a0a;
