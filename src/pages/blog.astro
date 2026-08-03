@@ -13,7 +13,7 @@ const featured = posts.find((p) => p.featured);
 const rest = posts.filter((p) => !p.featured);
 
 ---
-<Base title={page.seo.title} description={page.seo.description} subpage={true}>
+<Base title={page.seo.title} description={page.seo.description} subpage={true} pageType="Blog">
   <!-- Hero — 3D stage: a post being written, one already out, and its tags. -->
   <section class="hero hero-compact">
     <div class="hero-grid"></div>

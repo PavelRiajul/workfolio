@@ -7,6 +7,7 @@ import CroDashboard from '../components/CroDashboard.astro';
 import Testimonials from '../components/Testimonials.astro';
 import Faq from '../components/Faq.astro';
 import { getProjects, getShopifyServices, getShopifyPage } from '../lib/content';
+import { faqSchema, shopifyServicesSchema } from '../lib/schema';
 
 const projects = await getProjects();
 const services = await getShopifyServices();
@@ -25,8 +26,18 @@ const croProcessTitle = page.croProcessHeading.title.split('\n');
 const calcTitle = page.calcHeading.title.split('\n');
 const experimentsTitle = page.experimentsHeading.title.split('\n');
 const featuredTitle = page.featuredHeading.title.split('\n');
+
+const origin = (Astro.site ?? new URL(Astro.url.origin)).href;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
+const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin, canonical)];
 ---
-<Base title={page.seo.title} description={page.seo.description} subpage={true}>
+<Base
+  title={page.seo.title}
+  description={page.seo.description}
+  subpage={true}
+  pageType="CollectionPage"
+  schema={schema}
+>
   <!-- Hero -->
   <section class="hero">
     <div class="hero-grid"></div>

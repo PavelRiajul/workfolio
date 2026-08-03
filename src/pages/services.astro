@@ -3,8 +3,10 @@ import Base from '../layouts/Base.astro';
 import ClosingCta from '../components/ClosingCta.astro';
 import OfferVisual from '../components/OfferVisual.astro';
 import Faq from '../components/Faq.astro';
-import { getHome, getServices, getServicesPage } from '../lib/content';
+import { getSite, getHome, getServices, getServicesPage } from '../lib/content';
+import { faqSchema, servicesSchema } from '../lib/schema';
 
+const site = await getSite();
 const home = await getHome();
 const services = await getServices();
 const page = await getServicesPage();
@@ -18,8 +20,17 @@ const methodTitle = page.methodHeading.title.split('\n');
 const listTitle = page.listHeading.title.split('\n');
 const engagementsTitle = page.engagementsHeading.title.split('\n');
 const processTitle = page.processHeading.title.split('\n');
+
+const origin = (Astro.site ?? new URL(Astro.url.origin)).href;
+const schema = [faqSchema(page.faqs), ...servicesSchema(services, site, origin)];
 ---
-<Base title={page.seo.title} description={page.seo.description} subpage={true}>
+<Base
+  title={page.seo.title}
+  description={page.seo.description}
+  subpage={true}
+  pageType="CollectionPage"
+  schema={schema}
+>
   <!-- Hero -->
   <section class="hero">
     <div class="hero-grid"></div>

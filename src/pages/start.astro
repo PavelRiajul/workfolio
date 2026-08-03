@@ -8,7 +8,7 @@ const headlineLines = page.headlineLines;
 // .hero-meta renders its own em-dash — don't double it up.
 const heroEyebrow = page.eyebrow.replace(/^[—–-]\s*/, '');
 ---
-<Base title={page.seo.title} description={page.seo.description} subpage={true}>
+<Base title={page.seo.title} description={page.seo.description} subpage={true} pageType="ContactPage">
   <!-- Hero — 3D stage: an incoming message, the slot it turns into, and
        the promise attached to both. -->
   <section class="hero hero-compact section-tight-bottom">

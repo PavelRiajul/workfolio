@@ -9,6 +9,7 @@ import ServiceStack from '../components/ServiceStack.astro';
 import Testimonials from '../components/Testimonials.astro';
 import Faq from '../components/Faq.astro';
 import { getSite, getHome, getProjects, getServices } from '../lib/content';
+import { faqSchema, servicesSchema } from '../lib/schema';
 
 const site = await getSite();
 const home = await getHome();
@@ -16,8 +17,18 @@ const projects = await getProjects();
 const services = await getServices();
 const bandTitle = home.aiBand.title.split('\n');
 const processTitle = home.processHeading.title.split('\n');
+
+const origin = (Astro.site ?? new URL(Astro.url.origin)).href;
+const schema = [faqSchema(home.faqs), ...servicesSchema(services, site, origin)];
 ---
-<Base title={home.seo.title} description={home.seo.description} onHome={true} bodyClass="home">
+<Base
+  title={home.seo.title}
+  description={home.seo.description}
+  onHome={true}
+  bodyClass="home"
+  pageType="ProfilePage"
+  schema={schema}
+>
   <!-- Hero -->
   <section class="hero">
     <div class="hero-grid"></div>

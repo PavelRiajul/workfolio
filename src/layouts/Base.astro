@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import WhatsApp from '../components/WhatsApp.astro';
 import BackToTop from '../components/BackToTop.astro';
 import { getSite } from '../lib/content';
+import { personSchema, websiteSchema, webPageSchema, autoBreadcrumbs } from '../lib/schema';
 
 interface Props {
   title?: string;
@@ -14,6 +15,17 @@ interface Props {
   bodyClass?: string;
   printChrome?: boolean;
   backToTop?: boolean;
+  /** Extra JSON-LD nodes (FAQPage, BreadcrumbList, Service, …) merged into the
+   *  sitewide @graph. Build them with the helpers in lib/schema.ts. */
+  schema?: unknown[];
+  /** Overrides the last breadcrumb label — use the real page title for
+   *  detail routes whose slug isn't in the nav (case studies, posts). */
+  breadcrumbLeaf?: string;
+  /** Schema.org type for this page's WebPage node — e.g. "AboutPage",
+   *  "ContactPage", "CollectionPage", "ProfilePage". */
+  pageType?: string;
+  /** Keeps a page out of the index without removing it from the site. */
+  noindex?: boolean;
 }
 
 const {
@@ -24,6 +36,10 @@ const {
   bodyClass = '',
   printChrome = false,
   backToTop = true,
+  schema = [],
+  breadcrumbLeaf,
+  pageType = 'WebPage',
+  noindex = false,
 } = Astro.props;
 
 const site = await getSite();
@@ -31,7 +47,21 @@ const chromeClass = printChrome ? 'no-print' : '';
 // Pages set their own SEO; Site Settings supplies the fallback.
 const pageTitle = title || site.seo.title;
 const pageDescription = description || site.seo.description;
+const origin = (Astro.site ?? new URL(Astro.url.origin)).href;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
+
+// One connected @graph per page rather than several loose <script> blocks —
+// the nodes cross-reference by @id, so Google reads them as one entity.
+const graph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    personSchema(site, origin),
+    websiteSchema(site, origin),
+    webPageSchema(origin, canonical, pageTitle, pageDescription, pageType),
+    autoBreadcrumbs(site, origin, Astro.url.pathname, breadcrumbLeaf),
+    ...schema.filter(Boolean),
+  ].filter(Boolean),
+};
 ---
 
 <!doctype html>
@@ -43,6 +73,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} />
     <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
 
     <!-- Sharing cards. og:image is deliberately absent until there's a real
          1200×630 asset — a missing image beats a stretched favicon. -->
@@ -54,6 +85,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={pageDescription} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(graph)} is:inline />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

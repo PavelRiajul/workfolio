@@ -11,7 +11,7 @@ const heroLines = page.hero.headlineLines;
 // .hero-meta renders its own em-dash — don't double it up.
 const heroEyebrow = page.hero.eyebrow.replace(/^[—–-]\s*/, '');
 ---
-<Base title={page.seo.title} description={page.seo.description} subpage={true}>
+<Base title={page.seo.title} description={page.seo.description} subpage={true} pageType="CollectionPage">
   <!-- Hero — the 3D stage from the home hero; cards stand in for a case
        study, the numbers it moved, and the shortlist it sits in. -->
   <section class="hero hero-compact">

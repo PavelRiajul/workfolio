@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Placeholder from '../../components/Placeholder.astro';
 import { getProjects, getProject, getCaseStudy } from '../../lib/content';
+import { caseStudySchema } from '../../lib/schema';
 import type { Project } from '../../lib/types';
 
 export async function getStaticPaths() {
@@ -26,8 +27,17 @@ const cs = await getCaseStudy();
 const heroLabel = `${p.title} — hero mockup`;
 const hasInsights = p.insights && p.insights.length > 0;
 const hasMobile = p.mobileScreens && p.mobileScreens.length > 0;
+
+const origin = (Astro.site ?? new URL(Astro.url.origin)).href;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
 ---
-<Base title={`${p.title} — Case Study`} description={p.summary} subpage={true}>
+<Base
+  title={`${p.title} — Case Study`}
+  description={p.summary}
+  subpage={true}
+  breadcrumbLeaf={p.title}
+  schema={[caseStudySchema(p, origin, canonical)]}
+>
   <article class="cs-article section section-flush-bottom">
     <a href="/#work" class="cs-back">← Back to work</a>
 
