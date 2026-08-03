@@ -1,4 +1,5 @@
 ---
+import Icon from '../components/Icon.astro';
 import Base from '../layouts/Base.astro';
 import ClosingCta from '../components/ClosingCta.astro';
 import OfferVisual from '../components/OfferVisual.astro';
@@ -70,7 +71,7 @@ const schema = [faqSchema(page.faqs), ...servicesSchema(services, site, origin)]
                 <div class="velo-bar"><i class="bargrow" style={`width:${v.barWidth}`}></i></div>
               </div>
             ))}
-            <div class="velo-foot"><i class="fa-solid fa-bolt" aria-hidden="true"></i>{page.velocity.foot}</div>
+            <div class="velo-foot"><Icon name="fa-solid fa-bolt" />{page.velocity.foot}</div>
           </div>
         </div>
       </div>
@@ -130,16 +131,16 @@ const schema = [faqSchema(page.faqs), ...servicesSchema(services, site, origin)]
             </div>
             <div class="svcf-copy">
               <div class="svcf-top">
-                <span class="svcf-tag"><i class={s.icon} aria-hidden="true"></i> {s.kicker}</span>
+                <span class="svcf-tag"><Icon name={s.icon} /> {s.kicker}</span>
                 <span class="svcf-no">{s.number} / 0{services.length}</span>
-                <span class="svcf-time"><i class="fa-regular fa-clock" aria-hidden="true"></i>{s.timeline}</span>
+                <span class="svcf-time"><Icon name="fa-regular fa-clock" />{s.timeline}</span>
               </div>
               <h3>{s.title}</h3>
               <p>{s.description}</p>
               <details class="feats" open>
                 <summary><span>{s.features.length} capabilities</span><i aria-hidden="true">+</i></summary>
                 <ul class="svcf-feats">
-                  {s.features.map((f) => <li><i class="fa-solid fa-check" aria-hidden="true"></i>{f}</li>)}
+                  {s.features.map((f) => <li><Icon name="fa-solid fa-check" />{f}</li>)}
                 </ul>
               </details>
               <div class="svcf-ctas">

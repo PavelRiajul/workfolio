@@ -1,4 +1,5 @@
 ---
+import Icon from './Icon.astro';
 // The CRO "dashboard" visual: a conversion-uplift card, a live A/B test with
 // a winner, and a checkout funnel. Every number comes from the Shopify page
 // document. Wrap it in an element carrying `data-bars` (so the bars grow on
@@ -15,7 +16,7 @@ const { data } = Astro.props;
     <span class="cro-k">{data.rateLabel}</span>
     <div class="cro-rate"><s>{data.rateBefore}</s><span class="cro-arrow">→</span><b>{data.rateAfter}</b></div>
   </div>
-  <span class="cro-badge"><i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i> {data.rateBadge}</span>
+  <span class="cro-badge"><Icon name="fa-solid fa-arrow-trend-up" /> {data.rateBadge}</span>
 </div>
 
 <div class="cro-card cro-ab">

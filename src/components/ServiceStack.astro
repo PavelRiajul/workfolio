@@ -1,4 +1,5 @@
 ---
+import Icon from './Icon.astro';
 // A scroll-stacking glimpse of the top-level services. Cards pin and stack as
 // you scroll (pure CSS sticky; GSAP adds a subtle settle-back scale).
 // Each card pairs its copy with a mockup of what the service actually
@@ -37,7 +38,7 @@ const PEEK = 4;
 
         <div class="sstack-main">
           <span class="sstack-kicker">
-            <i class={s.icon} aria-hidden="true"></i>
+            <Icon name={s.icon} />
             {s.kicker} · {s.number}
           </span>
           <h3>{s.title}</h3>

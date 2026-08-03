@@ -1,4 +1,5 @@
 ---
+import Icon from '../components/Icon.astro';
 import Base from '../layouts/Base.astro';
 import Marquee from '../components/Marquee.astro';
 import WorkCard from '../components/WorkCard.astro';
@@ -96,7 +97,7 @@ const schema = [faqSchema(home.faqs), ...servicesSchema(services, site, origin)]
               </div>
             </div></div>
             <div class="hv-card hv-shop"><div class="hv-inner">
-              <div class="hv-shop-head"><i class="fa-brands fa-shopify" aria-hidden="true"></i><span class="hv-shop-store"></span></div>
+              <div class="hv-shop-head"><Icon name="fa-brands fa-shopify" /><span class="hv-shop-store"></span></div>
               <div class="hv-shop-img"></div>
               <div class="hv-shop-row"><span class="hv-shop-name"></span><span class="hv-shop-price">$48</span></div>
               <span class="hv-shop-btn">Add to cart</span>

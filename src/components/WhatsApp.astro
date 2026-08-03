@@ -1,4 +1,5 @@
 ---
+import Icon from './Icon.astro';
 import type { SiteSettings } from '../lib/types';
 interface Props { site: SiteSettings; }
 const { site } = Astro.props;
@@ -14,7 +15,7 @@ const href = `https://wa.me/${phone}?text=${encodeURIComponent(site.whatsappMess
       <textPath href="#waTextCircle" startOffset="0" textLength="283" lengthAdjust="spacing">LET'S TALK ON WHATSAPP • OPEN TO WORK •</textPath>
     </text>
   </svg>
-  <span class="wa-btn"><i class="fa-brands fa-whatsapp"></i></span>
+  <span class="wa-btn"><Icon name="fa-brands fa-whatsapp" /></span>
 </a>
 
 <style is:global>

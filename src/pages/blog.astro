@@ -1,4 +1,5 @@
 ---
+import Icon from '../components/Icon.astro';
 import Base from '../layouts/Base.astro';
 import Placeholder from '../components/Placeholder.astro';
 import { getPosts, getBlogPage } from '../lib/content';
@@ -49,7 +50,7 @@ const rest = posts.filter((p) => !p.featured);
               <span>AI</span><span>Shopify</span><span>Next.js</span><span>Career</span>
             </div></div>
 
-            <div class="hv-card bl-badge"><div class="hv-inner"><i class="fa-solid fa-feather" aria-hidden="true"></i></div></div>
+            <div class="hv-card bl-badge"><div class="hv-inner"><Icon name="fa-solid fa-feather" /></div></div>
           </div>
         </div>
       </div>

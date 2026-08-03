@@ -1,4 +1,5 @@
 ---
+import Icon from '../components/Icon.astro';
 import Base from '../layouts/Base.astro';
 import Placeholder from '../components/Placeholder.astro';
 import ClosingCta from '../components/ClosingCta.astro';
@@ -71,7 +72,7 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
         <div class="hero-visual" data-hero-item aria-hidden="true">
           <div class="hv-stage" id="hv-stage">
             <div class="hv-card sh-store"><div class="hv-inner">
-              <div class="sh-store-top"><i class="fa-brands fa-shopify" aria-hidden="true"></i><span class="sh-dot-bar"></span><i class="fa-solid fa-bag-shopping" aria-hidden="true"></i></div>
+              <div class="sh-store-top"><Icon name="fa-brands fa-shopify" /><span class="sh-dot-bar"></span><Icon name="fa-solid fa-bag-shopping" /></div>
               <div class="sh-banner"><span>SUMMER<br>DROP</span></div>
               <div class="sh-grid">
                 <div class="sh-tile"><div class="sh-tile-img"></div><span class="sh-tile-price">$24</span></div>
@@ -85,13 +86,13 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
               <div class="sh-spark"><i style="height:32%"></i><i style="height:54%"></i><i style="height:46%"></i><i style="height:72%"></i><i style="height:90%"></i></div>
             </div></div>
             <div class="hv-card sh-cart"><div class="hv-inner">
-              <div class="sh-cart-head"><i class="fa-solid fa-bag-shopping" aria-hidden="true"></i> Cart · 2</div>
+              <div class="sh-cart-head"><Icon name="fa-solid fa-bag-shopping" /> Cart · 2</div>
               <div class="sh-cart-row"><span class="sh-line"></span><span>$24</span></div>
               <div class="sh-cart-row"><span class="sh-line"></span><span>$39</span></div>
               <div class="sh-cart-total"><span>Total</span><b>$63</b></div>
               <span class="sh-checkout">Checkout</span>
             </div></div>
-            <div class="hv-card sh-badge"><div class="hv-inner"><i class="fa-brands fa-shopify" aria-hidden="true"></i></div></div>
+            <div class="hv-card sh-badge"><div class="hv-inner"><Icon name="fa-brands fa-shopify" /></div></div>
           </div>
         </div>
       </div>
@@ -133,7 +134,7 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
             </div>
             <div class="svcf-copy">
               <div class="svcf-top">
-                <span class="svcf-tag"><i class="fa-brands fa-shopify" aria-hidden="true"></i> {page.serviceTagLabel}</span>
+                <span class="svcf-tag"><Icon name="fa-brands fa-shopify" /> {page.serviceTagLabel}</span>
                 <span class="svcf-no">{s.number} / 0{services.length}</span>
               </div>
               <h3>{s.title}</h3>
@@ -141,7 +142,7 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
               <details class="feats" open>
                 <summary><span>{s.features.length} capabilities</span><i aria-hidden="true">+</i></summary>
                 <ul class="svcf-feats">
-                  {s.features.map((f) => <li><i class="fa-solid fa-check" aria-hidden="true"></i>{f}</li>)}
+                  {s.features.map((f) => <li><Icon name="fa-solid fa-check" />{f}</li>)}
                 </ul>
               </details>
               <a class="svcf-cta" href={page.serviceCta.href}>{page.serviceCta.label} <span aria-hidden="true">↗</span></a>
@@ -201,7 +202,7 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
         <p class="cro-lede">{page.cro.lede}</p>
         <div class="cro-pills">
           {page.cro.features.map((f) => (
-            <span class="cro-pill"><i class="fa-solid fa-check" aria-hidden="true"></i>{f}</span>
+            <span class="cro-pill"><Icon name="fa-solid fa-check" />{f}</span>
           ))}
         </div>
         <div class="cro-actions">
@@ -240,7 +241,7 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
         <div class="fixes" data-reveal data-bars>
           {page.fixes.map((f) => (
             <div class="fix">
-              <span class="fix-ic"><i class={`fa-solid ${f.icon}`} aria-hidden="true"></i></span>
+              <span class="fix-ic"><Icon name={`fa-solid ${f.icon}`} /></span>
               <div class="fix-body"><h3>{f.title}</h3><p>{f.body}</p></div>
               <div class="fix-impact"><span>Impact</span><div class="fix-bar"><i class="bargrow" style={`width:${f.barWidth}`}></i></div></div>
             </div>
@@ -264,7 +265,7 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
             <div class="cyc-body"><h3>{s.title}</h3><p>{s.body}</p></div>
           </div>
         ))}
-        <div class="cyc-loop"><i class="fa-solid fa-arrow-rotate-left" aria-hidden="true"></i> {page.croProcessLoopNote}</div>
+        <div class="cyc-loop"><Icon name="fa-solid fa-arrow-rotate-left" /> {page.croProcessLoopNote}</div>
       </div>
     </div>
   </section>

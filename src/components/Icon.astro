@@ -1,0 +1,58 @@
+---
+// Inline SVG replacement for `<i class="fa-solid fa-house">`.
+//
+// Takes the same Font Awesome class string the CMS already stores, so nav and
+// service icons stay authorable in the Studio exactly as before — the only
+// change is that the glyph now ships in the HTML instead of arriving via a
+// third-party stylesheet and a webfont.
+//
+// Icons are decorative here (every one sits beside a text label), so they're
+// aria-hidden by default. Pass `label` for a standalone icon that carries
+// meaning on its own — it then renders as an img with an accessible name.
+import { ICONS, iconKey } from '../lib/icons';
+
+interface Props {
+  /** Font Awesome class pair, e.g. "fa-solid fa-house". */
+  name?: string;
+  /** Extra classes on the <svg>. */
+  class?: string;
+  /** Accessible name. Omit for decorative icons next to a visible label. */
+  label?: string;
+  /** Passthrough for the few call sites that size an icon inline. */
+  style?: string;
+}
+
+const { name, class: cls = '', label, style } = Astro.props;
+const key = iconKey(name);
+const icon = key ? ICONS[key] : undefined;
+// An unknown icon renders nothing rather than a broken glyph — a missing icon
+// beside a label is invisible; a tofu box is not.
+---
+{
+  icon && (
+    <svg
+      class={`icon ${cls}`.trim()}
+      style={style}
+      viewBox={icon[0]}
+      fill="currentColor"
+      aria-hidden={label ? undefined : 'true'}
+      role={label ? 'img' : undefined}
+      focusable="false"
+    >
+      {label && <title>{label}</title>}
+      <path d={icon[1]} />
+    </svg>
+  )
+}
+
+<style is:global>
+  /* Matches how the Font Awesome <i> behaved: sized by the parent's font-size,
+     aligned on the text baseline. */
+  .icon {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    vertical-align: -0.125em;
+    flex: none;
+  }
+</style>

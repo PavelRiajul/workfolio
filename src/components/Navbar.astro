@@ -1,4 +1,5 @@
 ---
+import Icon from './Icon.astro';
 import type { SiteSettings } from '../lib/types';
 interface Props { site: SiteSettings; onHome?: boolean; subpage?: boolean; }
 const { site } = Astro.props;
@@ -19,7 +20,7 @@ const tabs = site.nav.map((t) => {
         class={`tab ${t.active ? 'active' : ''}`}
         aria-current={t.active ? 'page' : undefined}
       >
-        <i class={t.icon} aria-hidden="true"></i>
+        <Icon name={t.icon} />
         <span>{t.label}</span>
       </a>
     ))}

@@ -1,4 +1,5 @@
 ---
+import Icon from './Icon.astro';
 // A mockup of what each top-level service actually delivers. Shared by the
 // home ServiceStack and the /services showcase. Sits on the same `.sv`
 // wrapper as ServiceVisual so both share sizing, panels and shadows.
@@ -17,10 +18,10 @@ const { service: s } = Astro.props;
         <span class="ov-typed">Add Stripe checkout with a 14-day trial</span>
       </div>
       <div class="ov-gen">
-        <div class="ov-genrow"><i class="fa-solid fa-check" aria-hidden="true"></i>checkout/route.ts <em>generated</em></div>
-        <div class="ov-genrow"><i class="fa-solid fa-check" aria-hidden="true"></i>billing.schema.ts <em>generated</em></div>
-        <div class="ov-genrow"><i class="fa-solid fa-check" aria-hidden="true"></i>checkout.test.ts <em>8 passing</em></div>
-        <div class="ov-genrow warn"><i class="fa-solid fa-pen" aria-hidden="true"></i>webhook retry logic <em>rewritten by me</em></div>
+        <div class="ov-genrow"><Icon name="fa-solid fa-check" />checkout/route.ts <em>generated</em></div>
+        <div class="ov-genrow"><Icon name="fa-solid fa-check" />billing.schema.ts <em>generated</em></div>
+        <div class="ov-genrow"><Icon name="fa-solid fa-check" />checkout.test.ts <em>8 passing</em></div>
+        <div class="ov-genrow warn"><Icon name="fa-solid fa-pen" />webhook retry logic <em>rewritten by me</em></div>
       </div>
       <div class="ov-foot"><span class="ov-dot"></span>Reviewed line by line before merge</div>
     </div>
@@ -71,7 +72,7 @@ const { service: s } = Astro.props;
         <span class="ov-msg in">9:30 please</span>
       </div>
       <div class="ov-booked">
-        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+        <Icon name="fa-solid fa-circle-check" />
         <span><b>Booked · Thu 9:30</b>Confirmation sent · clinic alerted</span>
       </div>
     </div>

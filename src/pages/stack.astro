@@ -1,4 +1,5 @@
 ---
+import Icon from '../components/Icon.astro';
 import Base from '../layouts/Base.astro';
 import ClosingCta from '../components/ClosingCta.astro';
 import { getStackPage } from '../lib/content';
@@ -45,7 +46,7 @@ const everyTitle = page.everyBuildHeading.title.split('\n');
           <div class="hv-stage" id="hv-stage">
             <!-- the template -->
             <div class="hv-card st-layers"><div class="hv-inner">
-              <div class="st-head"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><span>Template 02</span></div>
+              <div class="st-head"><Icon name="fa-solid fa-layer-group" /><span>Template 02</span></div>
               <div class="st-rows">
                 <div class="st-row"><i class="fw"></i>Next.js<em>app</em></div>
                 <div class="st-row"><i class="db"></i>Supabase<em>data</em></div>
@@ -67,11 +68,11 @@ const everyTitle = page.everyBuildHeading.title.split('\n');
             <!-- shipped -->
             <div class="hv-card st-deploy"><div class="hv-inner">
               <div class="st-dep-head"><span class="st-dot"></span>Production</div>
-              <div class="st-dep-main"><i class="fa-solid fa-circle-check" aria-hidden="true"></i>Deployed</div>
+              <div class="st-dep-main"><Icon name="fa-solid fa-circle-check" />Deployed</div>
               <div class="st-dep-meta"><span>main · 3f9c1a</span><b>14s</b></div>
             </div></div>
 
-            <div class="hv-card st-badge"><div class="hv-inner"><i class="fa-solid fa-bolt" aria-hidden="true"></i></div></div>
+            <div class="hv-card st-badge"><div class="hv-inner"><Icon name="fa-solid fa-bolt" /></div></div>
           </div>
         </div>
       </div>
@@ -143,7 +144,7 @@ const everyTitle = page.everyBuildHeading.title.split('\n');
       </h2>
       <ul class="every-list" data-reveal>
         {page.everyBuild.map((item) => (
-          <li><i class="fa-solid fa-check" aria-hidden="true"></i>{item}</li>
+          <li><Icon name="fa-solid fa-check" />{item}</li>
         ))}
       </ul>
       <p class="every-note" data-reveal>{page.everyBuildNote}</p>
