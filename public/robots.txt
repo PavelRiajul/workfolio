@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# The embedded Sanity Studio is a private app, not content.
+Disallow: /admin
+Disallow: /admin/
+
+Sitemap: https://riajulislam.dev/sitemap-index.xml

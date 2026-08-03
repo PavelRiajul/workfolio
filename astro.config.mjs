@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@astrojs/react';
 import sanity from '@sanity/astro';
+import sitemap from '@astrojs/sitemap';
 import { loadEnv } from 'vite';
 
 const {
@@ -33,5 +34,10 @@ export default defineConfig({
       studioBasePath: '/admin',
     }),
     react(),
+    // The Studio is a private app, not a page — keep it out of the sitemap.
+    // `/resume` is deliberately included: it's a real landing page for name searches.
+    sitemap({
+      filter: (page) => !page.includes('/admin'),
+    }),
   ],
 });
