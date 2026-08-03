@@ -13,7 +13,12 @@ autonomous SVG mascot). Static Astro site with an optional embedded Sanity CMS.
 - **GSAP + ScrollTrigger** for scroll reveals, count-ups, pinning. **Lenis** for smooth scroll.
 - **Sanity v3** — Studio embedded at `/admin`. Content is fetched via GROQ with a **seeded offline fallback**, so the whole site renders with zero credentials.
 - **jsPDF** — generates the downloadable résumé PDF (text-layer) from data.
+- **`@astrojs/sitemap`** — emits `sitemap-index.xml`; `/admin` is filtered out.
 - No animation libraries beyond GSAP. The mascot/3D effects are pure CSS + Web Animations API.
+- **No third-party CSS at runtime.** Fonts are self-hosted (`src/styles/fonts.css` +
+  `public/fonts/`) and icons are inline SVG (`src/lib/icons.ts`). Both used to be
+  render-blocking hops to `fonts.googleapis.com` and `cdnjs.cloudflare.com`. Don't add a CDN
+  `<link>` back.
 
 ## Commands
 ```bash
@@ -22,6 +27,7 @@ npm run build    # astro build → dist/
 npm run preview  # serve the built site
 ```
 ```bash
+npm run og            # regenerate the per-page social cards → public/og/ (needs local Chrome)
 npm run seed:build    # src/data/content.ts → sanity/seed.ndjson
 npm run seed:import   # ...then import it into the production dataset (needs `sanity login`)
 npm run schema:deploy # push the schema to the Content Lake (needs `sanity login`)
@@ -69,6 +75,13 @@ and (if it's a new type) add a loader + GROQ projection in `src/lib/content.ts`.
 `getSite, getHome, getServicesPage, getShopifyPage, getWorkPage, getBlogPage, getStartPage,
 getCaseStudy, getAbout, getResume, getServices, getShopifyServices, getProjects, getProject, getPosts`.
 
+**A blog post is published by having a `body`.** `blog/[slug].astro` only generates pages for
+posts whose `body` is non-empty, so an unwritten post gets no URL, no sitemap entry and an
+unlinked card. This is deliberate: an indexable page carrying nothing but an excerpt is thin
+content, which costs the domain more than the extra URL gains. `publishedAt` (ISO-8601) is
+separate from `date` (the display label like "July 2026") because `datePublished` in the
+Article JSON-LD has to parse, and a month-and-year string doesn't.
+
 Two service datasets, deliberately separate:
 - `services` (`Service[]`) — the four top-level offers: **AI Web Development, MVP Engineering, Shopify & CRO, Full-Stack & APIs**. Drives the home stack and `/services`.
 - `shopifyServices` (`ShopifyService[]`) — the five Shopify sub-services shown only on `/shopify`.
@@ -84,7 +97,8 @@ Two service datasets, deliberately separate:
 | `/shopify` | `shopify.astro` | **Shopify + CRO merged.** Hero (Shopify 3D scene), brands, 5 Shopify services (`ServiceVisual`), approach, dark by-the-numbers, then the CRO half at `#cro`: `CroDashboard`, funnel leak + fixes, CRO loop (`#cro-process`), ROI calculator (`#cro-calc`, inline script), experiments leaderboard, featured work, testimonials, merged FAQ |
 | `/cro` | — | Retired; redirects to `/shopify#cro` via `redirects` in `astro.config.mjs` |
 | `/about` | `about.astro` | Bio, photo gallery, traits |
-| `/blog` | `blog.astro` | Featured post + category-filtered grid |
+| `/blog` | `blog.astro` | Featured post + category-filtered grid. A card only links once its post has a `body` |
+| `/blog/[slug]` | `blog/[slug].astro` | The article — Portable Text body, related posts, Article JSON-LD |
 | `/resume` | `resume.astro` | ATS résumé; copy-email, print, real downloadable PDF (jsPDF, lazy-loaded `resume-pdf.ts`) |
 | `/start` | `start.astro` | Contact — "book a call" (inline Calendly iframe, URL from `startPage.call.schedulerUrl`) / "send a message" tabs |
 | `/admin` | (Sanity) | Embedded Studio |
@@ -94,6 +108,16 @@ Two service datasets, deliberately separate:
 - `Footer.astro`, `WhatsApp.astro` (floating FAB, bottom-right), `BackToTop.astro` (`#b2t`, bottom-left).
 - `Mascot.astro` — autonomous animated SVG blob pet (see below). Home only.
 - `WorkCard.astro`, `ProjectModal.astro`, `Marquee.astro`, `ClosingCta.astro`.
+- `Icon.astro` — inline SVG icon. Takes the **same Font Awesome class string** the CMS stores
+  (`fa-solid fa-house`), so nav/service icons stay authorable. Geometry lives in
+  `src/lib/icons.ts` (25 glyphs, Font Awesome Free 6.5.1). **A new icon must be added to that
+  map** — an unknown key renders nothing rather than a tofu box. Decorative by default; pass
+  `label` for a standalone icon that carries meaning.
+- `PortableText.astro` + `PortableSpan.astro` — the blog body renderer. Handles paragraphs,
+  h2–h4, bullet/number lists, blockquote, code blocks, and `strong`/`em`/`code`/link marks.
+  Coalesces consecutive list items into one `<ul>`/`<ol>` — Portable Text stores each bullet as
+  its own sibling block, so rendering naively gives one list per item. The Studio's block
+  schema is restricted to exactly what this renders.
 - `Placeholder.astro` — image with a hatched fallback. Source order: Sanity upload → `src` file in `/public` → placeholder. A `src` whose file doesn't exist yet falls back to the placeholder (checked with `fs` at build time), so captions can be wired before photos land.
 - **Project covers:** drop `public/work/<slug>.jpg` (e.g. `halo.jpg`, `vellum.jpg`) and it fills the work card, the case-study hero and the Shopify featured card. A Sanity upload on the project wins over the file.
 - **About photos:** drop files into `public/about/` matching the paths in `about.gallery` (`me.jpg`, `setup.jpg`, `project.jpg`, `coffee.jpg`, `gaming.jpg`, `books.jpg`, `outdoors.jpg`) — they appear with no code change. Or upload per-photo in the Studio (About Page → Photo gallery), which wins over the file. Frames are 4:5, so crop portrait.
@@ -101,6 +125,35 @@ Two service datasets, deliberately separate:
 - `OfferVisual.astro` — mockup per top-level service, keyed by `service.visual` (`ai` prompt→reviewed-code, `mvp` sprint timeline, `commerce` storefront+uplift, `api` endpoints). Shared by `ServiceStack` and `/services`. Uses the `.sv`/`.sv-panel` shell plus `.ov-*` internals.
 - `ServiceVisual.astro` — tone-matched mockup of each **Shopify** sub-service (`tone`: indigo/terracotta/amber/sage/ink). Used by `/shopify` only.
 - `CroDashboard.astro` — CRO visual (uplift card + live A/B test + checkout funnel). Wrap in an element with `data-bars` so bars grow on scroll. Used by `/shopify`.
+
+## SEO
+Four separate things drive the four lines of a Google result. Don't collapse them:
+
+| SERP line | Driven by |
+| --- | --- |
+| Site name (**Riajul Islam**) | `WebSite` JSON-LD — `websiteSchema()`. Google reads it from the homepage only. |
+| URL breadcrumb (`riajulislam.dev › work › halo`) | `BreadcrumbList` — `autoBreadcrumbs()` |
+| Title link | `<title>` |
+| Snippet | `<meta name="description">` |
+
+- **`src/lib/schema.ts`** builds every JSON-LD node from the loaders (no hardcoded copy, same
+  rule as pages). `Base.astro` assembles `Person` + `WebSite` + a `WebPage` node + breadcrumbs
+  into **one `@graph`** per page; pages add more via the `schema` prop
+  (`faqSchema`, `servicesSchema`, `caseStudySchema`, `articleSchema`).
+  Nodes cross-reference by `@id` (`#person`, `#website`) — keep it one graph, not several
+  `<script>` blocks.
+- `Base.astro` props: `schema`, `pageType` (schema.org `WebPage` subtype), `ogType`,
+  `ogImage`, `breadcrumbLeaf`, `noindex`. **`pageType` and `ogType` are deliberately separate** —
+  a post is `WebPage` + `og:type=article`, because the `BlogPosting` is its own node and two
+  `BlogPosting` nodes would claim the same article twice.
+- `sameAs` drops bare-domain placeholders (`https://x.com`) and derives real profile URLs from
+  the `*Handle` fields. **The handles in `siteSettings.socials` must be real** — a `sameAs`
+  pointing at a nonexistent profile is worse than none.
+- **Social cards are per route**, generated by `npm run og` from the same content the page
+  renders, committed to `public/og/`. The route→filename rule (`/work/halo` → `work-halo.png`)
+  lives in *both* `scripts/og-images.mts` and `Base.astro` — change one, change the other.
+  A route with no card falls back to `og/default.png` (build-time `fs` check).
+- `public/robots.txt` disallows `/admin` and points at the sitemap.
 
 ## Layout — `src/layouts/Base.astro`
 Wraps every page. Renders: handwritten brand signature (`.brand-sig`, Caveat font, fixed top-left, links home), a "← Home" pill (`.back-home`, fixed top-right, only when `subpage`), `Navbar`, `<slot/>`, `Footer`, `WhatsApp`, `BackToTop` (unless `backToTop={false}`), and imports `src/scripts/main.ts`.
