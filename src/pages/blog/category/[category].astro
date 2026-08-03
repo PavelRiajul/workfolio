@@ -1,0 +1,121 @@
+---
+// Topic hub. The /blog chips filter client-side, which is good UX but leaves
+// nothing for a crawler to index and nothing for a cluster of posts to point
+// at — these pages are the indexable half of that.
+//
+// Only categories that actually have published posts get a hub: an empty
+// category page is thin content, and thin pages cost more than the extra URL
+// is worth.
+import Base from '../../../layouts/Base.astro';
+import Placeholder from '../../../components/Placeholder.astro';
+import { getPosts, getBlogPage, getSite } from '../../../lib/content';
+import { isPublished } from '../../../lib/portable';
+import type { Post, BlogPageContent } from '../../../lib/types';
+
+export async function getStaticPaths() {
+  const [posts, page] = await Promise.all([getPosts(), getBlogPage()]);
+  const published = posts.filter(isPublished);
+
+  // "all" is /blog itself, not a category.
+  const categories = [...new Set(published.map((p) => p.category))].filter((c) => c && c !== 'all');
+
+  return categories.map((category) => {
+    const inCategory = published
+      .filter((p) => p.category === category)
+      .sort((a, b) => (a.publishedAt < b.publishedAt ? 1 : -1));
+    return {
+      params: { category },
+      props: { category, posts: inCategory, label: inCategory[0].categoryLabel, page },
+    };
+  });
+}
+
+interface Props { category: string; posts: Post[]; label: string; page: BlogPageContent }
+const { category, posts, label, page } = Astro.props;
+const site = await getSite();
+
+// Authored hub copy if it exists, otherwise fall back to the chip label so a
+// newly-used category still ships a sensible page rather than a blank one.
+const intro = page.categoryIntros?.find((c) => c.category === category);
+const title = intro?.title ?? label;
+const lede = intro?.lede ?? `Posts on ${label.toLowerCase()}.`;
+const count = posts.length;
+
+const origin = (Astro.site ?? new URL(Astro.url.origin)).href;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
+
+// An ItemList tells Google what this page collects, which is the whole point
+// of the hub — otherwise it reads as a thin duplicate of /blog.
+const itemList = {
+  '@type': 'ItemList',
+  itemListElement: posts.map((p, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    url: new URL(`/blog/${p.slug}/`, Astro.site ?? Astro.url).href,
+    name: p.title,
+  })),
+};
+---
+<Base
+  title={`${title} — ${site.name}`}
+  description={lede}
+  subpage={true}
+  pageType="CollectionPage"
+  breadcrumbLeaf={title}
+  schema={[itemList]}
+>
+  <section class="section section-tight-bottom">
+    <div class="wrap">
+      <a href="/blog" class="cs-back">← All writing</a>
+      <div class="stack-md cat-head" data-reveal>
+        <div class="eyebrow">{label} · {count} {count === 1 ? 'post' : 'posts'}</div>
+        <h1 class="cat-title">{title}</h1>
+        <p class="cat-lede">{lede}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-flush-top">
+    <div class="wrap">
+      <div class="post-grid post-grid-hub">
+        {posts.map((p) => (
+          <a class="post-card" href={`/blog/${p.slug}`}>
+            <div class="cover"><div class="post-img-zoom"><Placeholder label={p.coverLabel} image={p.image} src={`/blog/${p.slug}.jpg`} /></div></div>
+            <div class="pc-meta"><span class="pc-tag">{p.categoryLabel}</span>{p.readTime}</div>
+            <h2 class="post-title">{p.title}</h2>
+            <p>{p.excerpt}</p>
+            <div class="post-date">{p.date}</div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="closing">
+    <div class="closing-card">
+      <h2>{page.closing.title.split('\n').map((l, i, a) => (<>{l}{i < a.length - 1 && <br />}</>))}</h2>
+      <div class="closing-actions">
+        <a href={page.closing.primary.href} class="btn btn-dark btn-cta">{page.closing.primary.label} <span>↗</span></a>
+        <a href={page.closing.secondary.href} class="btn btn-light btn-cta">{page.closing.secondary.label}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .cat-head { margin-top: var(--space-md); }
+  .cat-title {
+    font-family: var(--font-display); font-weight: 700; letter-spacing: -0.03em;
+    font-size: clamp(2rem, 1.4rem + 3vw, 3.2rem); line-height: 1.05; color: var(--color-ink);
+  }
+  /* Body measure, not the global .measure — that one is 20ch, sized for the
+     big display headlines, and gives a paragraph four words a line. */
+  .cat-lede {
+    max-width: 62ch; color: var(--color-grey-1);
+    font-size: clamp(1rem, .95rem + .3vw, 1.12rem); line-height: 1.7;
+  }
+
+  /* auto-fill rather than the global auto-fit: a hub can legitimately hold a
+     single post, and auto-fit would stretch that one card the full width. */
+  .post-grid-hub { grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
+</style>

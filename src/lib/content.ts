@@ -167,7 +167,10 @@ export function getWorkPage(): Promise<WorkPageContent> {
 
 export function getBlogPage(): Promise<BlogPageContent> {
   return safeFetch<BlogPageContent>(
-    `*[_type == "blogPage"][0]{ seo, hero, categories, featuredBadge, emptyMessage, closing }`,
+    `*[_type == "blogPage"][0]{
+      seo, hero, categories, featuredBadge, emptyMessage, closing,
+      categoryIntros, browseLabel
+    }`,
     {},
     fallback.blogPage
   );

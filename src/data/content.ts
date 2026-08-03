@@ -1142,6 +1142,20 @@ export const blogPage: BlogPageContent = {
   ],
   featuredBadge: 'Featured',
   emptyMessage: 'No posts in this category yet — check back soon.',
+  browseLabel: 'Browse by topic',
+  // Hub copy for /blog/category/<slug>. Deliberately plain and factual — these
+  // are placeholders to rewrite in your own voice as each topic fills out. A
+  // category with no entry here still gets a hub, titled from its chip label.
+  categoryIntros: [
+    { category: 'ai', title: 'AI-accelerated development', lede: 'How I actually build with AI — what gets generated, what gets thrown away, and the review discipline in between.' },
+    { category: 'ecommerce', title: 'E-commerce & Shopify', lede: 'Headless builds, Liquid themes, storefront performance and the decisions behind going headless at all.' },
+    { category: 'mobile', title: 'Mobile', lede: 'Cross-platform apps with React Native — offline-first patterns, sync and shipping to both stores.' },
+    { category: 'fullstack', title: 'Full-stack', lede: 'End-to-end builds: data modelling, APIs and keeping types honest from the database to the UI.' },
+    { category: 'frontend', title: 'Frontend', lede: 'Interfaces, design systems and the front-end craft that survives past the first sprint.' },
+    { category: 'backend', title: 'Backend', lede: 'APIs, auth, jobs and the server-side decisions that are expensive to reverse.' },
+    { category: 'performance', title: 'Performance', lede: 'Core Web Vitals, load time and the handful of changes that move them most.' },
+    { category: 'career', title: 'Career & freelancing', lede: 'Scoping, pricing conversations and lessons from shipping client work on a deadline.' },
+  ],
   closing: {
     title: 'Got a project worth\nwriting about?',
     primary: { label: 'Get in touch', href: '/start?tab=form' },

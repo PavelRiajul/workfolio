@@ -17,6 +17,11 @@ const rest = posts.filter((p) => !p.featured);
 // slugs [slug].astro generates a page for, so linking earlier would 404.
 const hrefFor = (p: (typeof posts)[number]) => (p.body?.length ? `/blog/${p.slug}` : undefined);
 
+// Categories that actually have a hub page — mirrors the getStaticPaths rule in
+// blog/category/[category].astro, so a chip never links to a route that
+// wasn't generated.
+const hubHrefs = new Set(posts.filter((p) => p.body?.length).map((p) => p.category));
+
 ---
 <Base title={page.seo.title} description={page.seo.description} subpage={true} pageType="Blog">
   <!-- Hero — 3D stage: a post being written, one already out, and its tags. -->
@@ -63,9 +68,18 @@ const hrefFor = (p: (typeof posts)[number]) => (p.body?.length ? `/blog/${p.slug
 
   <section class="section">
     <div class="wrap">
+      {/* Real links, not buttons: a crawler follows them to the topic hubs and
+          they work with JS off. The script below intercepts the click and
+          filters in place, so the fast interaction is unchanged. Categories
+          with no published post have no hub, so those stay filter-only. */}
       <div class="filters">
         {page.categories.map((c, i) => (
-          <button class={`chip ${i === 0 ? 'active' : ''}`} data-blog-filter={c.href} aria-pressed={i === 0 ? 'true' : 'false'}>{c.label}</button>
+          <a
+            class={`chip ${i === 0 ? 'active' : ''}`}
+            href={c.href === 'all' ? '/blog' : hubHrefs.has(c.href) ? `/blog/category/${c.href}` : undefined}
+            data-blog-filter={c.href}
+            aria-pressed={i === 0 ? 'true' : 'false'}
+          >{c.label}</a>
         ))}
       </div>
 
@@ -131,7 +145,13 @@ const hrefFor = (p: (typeof posts)[number]) => (p.body?.length ? `/blog/${p.slug
   const empty = document.getElementById('blog-empty');
   if (chips.length) {
     chips.forEach((chip) => {
-      chip.addEventListener('click', () => {
+      chip.addEventListener('click', (ev) => {
+        // The chips are real links to the topic hubs so crawlers can follow
+        // them and the page works without JS. With JS we filter in place
+        // instead — but let modified clicks (new tab, etc.) behave normally.
+        const e = ev as MouseEvent;
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+        e.preventDefault();
         const f = chip.dataset.blogFilter;
         chips.forEach((c) => {
           const on = c === chip;

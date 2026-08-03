@@ -111,6 +111,8 @@ const graph = {
     <meta name="twitter:description" content={pageDescription} />
     <meta name="twitter:image" content={ogUrl} />
 
+    <link rel="alternate" type="application/rss+xml" title={`${site.name} — Blog`} href="/rss.xml" />
+
     <script type="application/ld+json" set:html={JSON.stringify(graph)} is:inline />
 
     <!-- Type is self-hosted (src/styles/fonts.css). Preload only the two faces

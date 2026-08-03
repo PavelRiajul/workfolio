@@ -59,6 +59,31 @@ export const blogPage = defineType({
     }),
     defineField({ name: 'featuredBadge', title: 'Featured badge label', type: 'string' }),
     defineField({ name: 'emptyMessage', title: 'Empty-category message', type: 'string' }),
+    defineField({ name: 'browseLabel', title: 'Browse-by-topic label', type: 'string' }),
+    defineField({
+      name: 'categoryIntros',
+      title: 'Category hub copy',
+      description:
+        'Heading and lede for each /blog/category/<slug> page. A category with no entry falls back to its chip label, so this is optional — but real copy is what makes the hub worth indexing.',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          name: 'categoryIntro',
+          fields: [
+            {
+              name: 'category',
+              type: 'string',
+              title: 'Category value',
+              description: 'Must match the chip link value ("ai", "ecommerce"…).',
+            },
+            { name: 'title', type: 'string', title: 'Heading' },
+            { name: 'lede', type: 'text', rows: 3, title: 'Lede' },
+          ],
+          preview: { select: { title: 'title', subtitle: 'category' } },
+        },
+      ],
+    }),
     defineField({ name: 'closing', title: 'Closing CTA', type: 'closingCta' }),
   ],
   preview: { prepare: () => ({ title: 'Blog Page' }) },

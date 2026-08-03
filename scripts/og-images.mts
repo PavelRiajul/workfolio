@@ -67,6 +67,14 @@ const cards: Card[] = [
     title: p.title,
     sub: p.excerpt,
   })),
+  // One per topic hub, so /blog/category/<slug> doesn't fall back to the
+  // generic blog card. Driven by the same categoryIntros the hubs render.
+  ...(blogPage.categoryIntros ?? []).map((c) => ({
+    file: fileFor(`/blog/category/${c.category}`),
+    eyebrow: 'Writing',
+    title: c.title,
+    sub: c.lede,
+  })),
   // Fallback for any route without its own card.
   { file: 'default', eyebrow: site.role, title: site.name, sub: site.seo.description },
 ];

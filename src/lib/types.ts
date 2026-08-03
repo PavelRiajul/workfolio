@@ -363,6 +363,14 @@ export interface BlogPageContent {
   featuredBadge: string;
   emptyMessage: string;
   closing: ClosingCtaContent;
+  /**
+   * Copy for the /blog/category/<slug> hub pages. Optional — a category with
+   * no entry falls back to its chip label, so a new category never 404s or
+   * ships an empty page. Only categories with published posts get a hub.
+   */
+  categoryIntros?: { category: string; title: string; lede: string }[];
+  /** Label above the hub list, e.g. "Browse by topic". */
+  browseLabel?: string;
 }
 
 export interface StartPageContent {
