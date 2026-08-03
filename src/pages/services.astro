@@ -82,7 +82,7 @@ const schema = [faqSchema(page.faqs), ...servicesSchema(services, site, origin)]
   <section class="section section-bordered">
     <div class="wrap">
       <div class="eyebrow" data-reveal>{page.methodHeading.eyebrow}</div>
-      <h2 class="section-h2 measure-wide" data-reveal>>
+      <h2 class="section-h2 measure-wide" data-reveal>
         {methodTitle.map((l, i) => (<>{l}{i < methodTitle.length - 1 && <br />}</>))}
       </h2>
       <div class="appr-grid">
@@ -106,7 +106,7 @@ const schema = [faqSchema(page.faqs), ...servicesSchema(services, site, origin)]
       <div class="work-head" data-reveal>
         <div>
           <div class="eyebrow">{page.listHeading.eyebrow}</div>
-          <h2 class="section-h2 measure">>
+          <h2 class="section-h2 measure">
             {listTitle.map((l, i) => (<>{l}{i < listTitle.length - 1 && <br />}</>))}
           </h2>
         </div>
