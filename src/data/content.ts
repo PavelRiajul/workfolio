@@ -709,6 +709,19 @@ const aiWorkflowPostBody: PortableBlock[] = [
       },
     ],
   },
+  // A code block and an image, so the renderer's non-text paths are exercised
+  // by the seed rather than only in production. Replace with real ones.
+  {
+    _type: 'code',
+    language: 'ts',
+    code: "// The model proposes; your code decides.\nconst booking = BookingSchema.parse(toolCall.args);\nawait db.booking.create({ data: booking });",
+  },
+  {
+    _type: 'image',
+    src: '/blog/building-with-ai-workflow-diagram.png',
+    alt: 'Prompt to generated code to human review to merge',
+    caption: 'Generation is one step in the loop, not the loop.',
+  },
   { _type: 'block', style: 'h2', children: [{ _type: 'span', text: 'What AI does not change' }] },
   {
     _type: 'block',

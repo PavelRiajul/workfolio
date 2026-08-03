@@ -1,17 +1,26 @@
 ---
 // Minimal Portable Text renderer — the handful of block types a technical
 // article actually uses. Deliberately not a dependency: the whole surface is
-// paragraphs, two heading levels, lists, quotes, inline marks and code, and a
-// library would cost more than it saves here.
+// paragraphs, headings, lists, quotes, images, code and four inline marks, and
+// a library would cost more than it saves here.
 //
 // Consecutive list items are coalesced into one <ul>/<ol>. That's the part
 // hand-rolled renderers usually get wrong — Portable Text stores every bullet
 // as its own sibling block, so rendering naively yields one list per item.
+import { Code } from 'astro:components';
+import { publicFileExists } from '../lib/public-file';
 import type { PortableBlock } from '../lib/types';
+import { headings } from '../lib/portable';
 import Span from './PortableSpan.astro';
 
 interface Props { blocks?: PortableBlock[] }
 const { blocks = [] } = Astro.props;
+
+// Heading ids come from the shared helper so they match the TOC exactly,
+// including the suffix it adds when two headings share a title. Consumed in
+// document order as the headings render.
+const headingIds = headings(blocks).map((h) => h.id);
+let headingCursor = 0;
 
 type Group =
   | { kind: 'block'; block: PortableBlock }
@@ -31,12 +40,32 @@ for (const b of blocks) {
 
 /** A block the editor left blank — renders as nothing, not an empty <p>. */
 const isEmpty = (b: PortableBlock) => !b.children?.some((s) => s.text.trim());
+
+/** Sanity upload wins; otherwise a file in /public, checked at build time so a
+ *  path typo shows up as a missing figure rather than a broken image icon. */
+function imageSrc(b: PortableBlock): string | undefined {
+  if (b.asset?.url) return b.asset.url;
+  if (b.src) return publicFileExists(b.src) ? b.src : undefined;
+  return undefined;
+}
+
+// Shiki needs a language it knows; unlabelled blocks render as plain text.
+const KNOWN = new Set([
+  'astro', 'bash', 'css', 'diff', 'go', 'graphql', 'html', 'ini', 'java', 'js',
+  'javascript', 'json', 'jsonc', 'jsx', 'liquid', 'md', 'markdown', 'php',
+  'python', 'rust', 'scss', 'sh', 'shell', 'sql', 'svelte', 'toml', 'ts',
+  'tsx', 'typescript', 'vue', 'xml', 'yaml', 'yml',
+]);
+const langOf = (b: PortableBlock) => {
+  const l = (b.language || '').toLowerCase().trim();
+  return KNOWN.has(l) ? l : 'plaintext';
+};
 ---
 
 {
-  groups.map((g) =>
-    g.kind === 'list' ? (
-      g.ordered ? (
+  groups.map((g) => {
+    if (g.kind === 'list') {
+      return g.ordered ? (
         <ol class="pt-list">
           {g.items.map((b) => (
             <li>{b.children?.map((s) => <Span span={s} defs={b.markDefs} />)}</li>
@@ -48,21 +77,49 @@ const isEmpty = (b: PortableBlock) => !b.children?.some((s) => s.text.trim());
             <li>{b.children?.map((s) => <Span span={s} defs={b.markDefs} />)}</li>
           ))}
         </ul>
-      )
-    ) : g.block._type === 'code' ? (
-      g.block.code && <pre class="pt-code"><code>{g.block.code}</code></pre>
-    ) : isEmpty(g.block) ? null : g.block.style === 'h2' ? (
-      <h2 class="pt-h2">{g.block.children?.map((s) => <Span span={s} defs={g.block.markDefs} />)}</h2>
-    ) : g.block.style === 'h3' ? (
-      <h3 class="pt-h3">{g.block.children?.map((s) => <Span span={s} defs={g.block.markDefs} />)}</h3>
-    ) : g.block.style === 'h4' ? (
-      <h4 class="pt-h4">{g.block.children?.map((s) => <Span span={s} defs={g.block.markDefs} />)}</h4>
-    ) : g.block.style === 'blockquote' ? (
-      <blockquote class="pt-quote">{g.block.children?.map((s) => <Span span={s} defs={g.block.markDefs} />)}</blockquote>
-    ) : (
-      <p class="pt-p">{g.block.children?.map((s) => <Span span={s} defs={g.block.markDefs} />)}</p>
-    )
-  )
+      );
+    }
+
+    const b = g.block;
+
+    if (b._type === 'image') {
+      const src = imageSrc(b);
+      if (!src) return null;
+      return (
+        <figure class={`pt-figure${b.wide ? ' pt-figure-wide' : ''}`}>
+          <img src={src} alt={b.alt ?? ''} loading="lazy" decoding="async" />
+          {b.caption && <figcaption>{b.caption}</figcaption>}
+        </figure>
+      );
+    }
+
+    if (b._type === 'code') {
+      return b.code ? (
+        <div class="pt-code">
+          <Code code={b.code} lang={langOf(b) as any} theme="github-light" />
+        </div>
+      ) : null;
+    }
+
+    if (isEmpty(b)) return null;
+
+    const kids = b.children?.map((s) => <Span span={s} defs={b.markDefs} />);
+
+    // Headings get a stable id so the TOC and any shared link can target them.
+    if (b.style === 'h2' || b.style === 'h3') {
+      const id = headingIds[headingCursor++];
+      const Tag = b.style;
+      return (
+        <Tag id={id} class={`pt-${b.style} pt-anchored`}>
+          {kids}
+          <a class="pt-anchor" href={`#${id}`} aria-label="Link to this section">#</a>
+        </Tag>
+      );
+    }
+    if (b.style === 'h4') return <h4 class="pt-h4">{kids}</h4>;
+    if (b.style === 'blockquote') return <blockquote class="pt-quote">{kids}</blockquote>;
+    return <p class="pt-p">{kids}</p>;
+  })
 }
 
 <style is:global>
@@ -91,14 +148,43 @@ const isEmpty = (b: PortableBlock) => !b.children?.some((s) => s.text.trim());
     border-left: 3px solid var(--color-blue);
     font-size: 1.05em; color: var(--color-ink);
   }
-  .post-body .pt-code {
-    margin: 0 0 var(--space-md); padding: var(--space-sm) var(--space-md);
-    background: var(--color-surface); border: 1px solid var(--line);
-    border-radius: 12px; overflow-x: auto;
-    font-family: var(--font-mono); font-size: 0.85em; line-height: 1.65;
-  }
   .post-body a { color: var(--color-blue); text-decoration: underline; text-underline-offset: 3px; }
-  .post-body :not(.pt-code) > code {
+
+  /* Heading anchors — hidden until the heading is hovered or the link is
+     focused, so they never clutter the reading view but stay keyboard-usable. */
+  .post-body .pt-anchored { position: relative; scroll-margin-top: 90px; }
+  .post-body .pt-anchor {
+    margin-left: .4em; color: var(--color-grey-3); text-decoration: none;
+    opacity: 0; transition: opacity .18s ease; font-weight: 400;
+  }
+  .post-body .pt-anchored:hover .pt-anchor,
+  .post-body .pt-anchor:focus-visible { opacity: 1; }
+
+  /* Figures. `wide` breaks out past the 68ch measure for diagrams. */
+  .post-body .pt-figure { margin: var(--space-lg) 0; }
+  .post-body .pt-figure img {
+    display: block; width: 100%; height: auto;
+    border: 1px solid var(--line); border-radius: 14px; background: var(--color-surface);
+  }
+  .post-body .pt-figure figcaption {
+    margin-top: var(--space-2xs); font-size: .85rem; color: var(--color-grey-2); line-height: 1.5;
+  }
+  @media (min-width: 900px) {
+    .post-body .pt-figure-wide { width: min(112%, calc(100vw - 2 * var(--gutter))); }
+  }
+
+  /* Shiki emits its own <pre class="astro-code">; this is the frame around it. */
+  .post-body .pt-code { margin: 0 0 var(--space-md); }
+  .post-body .pt-code pre {
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--line); border-radius: 12px;
+    overflow-x: auto; font-size: .85em; line-height: 1.65;
+  }
+  .post-body .pt-code code { font-family: var(--font-mono); }
+  /* Inline code — not the highlighted blocks. */
+  .post-body :not(.pt-code) > p > code,
+  .post-body .pt-list code,
+  .post-body .pt-quote code {
     font-family: var(--font-mono); font-size: 0.88em;
     background: var(--color-surface); border: 1px solid var(--line);
     padding: 0.1em 0.35em; border-radius: 5px;

@@ -91,7 +91,11 @@ export function getPosts(): Promise<Post[]> {
   return safeFetch<Post[]>(
     `*[_type == "post"] | order(order asc){
       title, "slug": slug.current, order, category, categoryLabel,
-      readTime, date, publishedAt, excerpt, coverLabel, featured, body, seo, ${imageProjection}
+      readTime, date, publishedAt, excerpt, coverLabel, featured, seo,
+      // Image blocks inside the body arrive as bare asset _refs unless they're
+      // dereferenced here — the renderer needs a real URL.
+      body[]{ ..., _type == "image" => { ..., asset->{ _id, url } } },
+      ${imageProjection}
     }`,
     {},
     fallback.posts

@@ -3,8 +3,10 @@ import Base from '../../layouts/Base.astro';
 import Placeholder from '../../components/Placeholder.astro';
 import PortableText from '../../components/PortableText.astro';
 import Icon from '../../components/Icon.astro';
+import Toc from '../../components/Toc.astro';
 import { getPosts, getBlogPage } from '../../lib/content';
 import { articleSchema } from '../../lib/schema';
+import { isPublished, tableOfContents } from '../../lib/portable';
 import type { Post } from '../../lib/types';
 
 // Only posts with a body get a page. An indexable URL carrying nothing but an
@@ -12,18 +14,19 @@ import type { Post } from '../../lib/types';
 // Google a reason to trust the domain less. Write the body, get the page.
 export async function getStaticPaths() {
   const posts = await getPosts();
-  const published = posts.filter((p) => p.body && p.body.length > 0);
+  const published = posts.filter(isPublished);
 
   return published.map((post) => {
     // "Read next" — the following post in publish order, wrapping around.
     const i = published.indexOf(post);
     const next = published[(i + 1) % published.length];
-    const related = posts
-      .filter((p) => p.slug !== post.slug && p.category === post.category)
-      .slice(0, 2);
     return {
       params: { slug: post.slug },
-      props: { post, next: next.slug === post.slug ? null : next, related },
+      props: {
+        post,
+        next: next.slug === post.slug ? null : next,
+        related: posts.filter((p) => p.slug !== post.slug && p.category === post.category && isPublished(p)).slice(0, 2),
+      },
     };
   });
 }
@@ -35,6 +38,7 @@ const page = await getBlogPage();
 const origin = (Astro.site ?? new URL(Astro.url.origin)).href;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
 const ogUrl = new URL(`/og/blog-${post.slug}.png`, Astro.site ?? Astro.url).href;
+const toc = tableOfContents(post.body);
 ---
 <Base
   title={post.seo?.title ?? `${post.title} — ${page.seo.title.split('—')[1]?.trim() ?? 'Blog'}`}
@@ -66,16 +70,20 @@ const ogUrl = new URL(`/og/blog-${post.slug}.png`, Astro.site ?? Astro.url).href
       <Placeholder label={post.coverLabel} image={post.image} src={`/blog/${post.slug}.jpg`} alt={post.title} />
     </div>
 
+    {toc.length > 0 && <div data-reveal><Toc entries={toc} /></div>}
+
     <div class="post-body stack-md" data-reveal>
       <PortableText blocks={post.body} />
     </div>
 
     {related.length > 0 && (
       <aside class="post-related" data-reveal>
-        <h2 class="eyebrow">More in {post.categoryLabel}</h2>
+        <h2 class="eyebrow">
+          More in {post.categoryLabel}
+        </h2>
         <div class="post-related-grid">
           {related.map((r) => (
-            <a class="post-related-card" href={r.body?.length ? `/blog/${r.slug}` : '/blog'}>
+            <a class="post-related-card" href={`/blog/${r.slug}`}>
               <span class="pc-tag">{r.categoryLabel}</span>
               <h3>{r.title}</h3>
               <p>{r.excerpt}</p>
@@ -107,7 +115,6 @@ const ogUrl = new URL(`/og/blog-${post.slug}.png`, Astro.site ?? Astro.url).href
 <style>
   .post-meta-head { display: flex; align-items: center; gap: var(--space-2xs); flex-wrap: wrap; }
   .post-sep { color: var(--color-grey-3); }
-
   .post-related { margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--line); }
   .post-related-grid {
     display: grid; gap: var(--space-sm); margin-top: var(--space-sm);

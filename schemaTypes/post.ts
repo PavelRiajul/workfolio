@@ -89,9 +89,36 @@ export default defineType({
           title: 'Code block',
           fields: [
             { name: 'code', type: 'text', title: 'Code', rows: 8 },
-            { name: 'language', type: 'string', title: 'Language' },
+            {
+              name: 'language',
+              type: 'string',
+              title: 'Language',
+              description: 'ts, tsx, js, json, bash, sql, astro… drives highlighting.',
+            },
           ],
           preview: { select: { subtitle: 'language' } },
+        },
+        {
+          type: 'image',
+          title: 'Image',
+          options: { hotspot: true },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Alt text',
+              description:
+                'What the image shows, for screen readers and search. Leave empty only if it is purely decorative.',
+            },
+            { name: 'caption', type: 'string', title: 'Caption' },
+            {
+              name: 'wide',
+              type: 'boolean',
+              title: 'Full width',
+              description: 'Break out past the text measure — for diagrams and wide screenshots.',
+              initialValue: false,
+            },
+          ],
         },
       ],
     }),

@@ -1,0 +1,62 @@
+---
+// Contents list for a post. Ids come from lib/portable so they always match
+// the ids PortableText stamps on the headings.
+//
+// Sticky beside the article on wide screens, a collapsed <details> on
+// narrower ones — a phone shouldn't spend half a screen on navigation before
+// the first paragraph.
+import type { TocEntry } from '../lib/portable';
+
+interface Props { entries: TocEntry[]; label?: string }
+const { entries, label = 'On this page' } = Astro.props;
+---
+{entries.length > 0 && (
+  <nav class="toc" aria-label={label}>
+    <details class="toc-shell" open>
+      <summary><span>{label}</span><span class="toc-caret" aria-hidden="true">+</span></summary>
+      <ol>
+        {entries.map((e) => (
+          <li class={e.level === 3 ? 'toc-sub' : ''}>
+            <a href={`#${e.id}`}>{e.text}</a>
+          </li>
+        ))}
+      </ol>
+    </details>
+  </nav>
+)}
+
+<style>
+  .toc { margin: 0 0 var(--space-lg); }
+  .toc-shell {
+    border: 1px solid var(--line); border-radius: 14px;
+    padding: var(--space-sm) var(--space-md); background: var(--color-surface);
+  }
+  summary {
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; list-style: none; min-height: 44px;
+    font-family: var(--font-display); font-size: .8rem; font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--color-grey-2);
+  }
+  summary::-webkit-details-marker { display: none; }
+  .toc-caret { font-size: 1.1rem; color: var(--color-grey-3); transition: transform .2s ease; }
+  details[open] .toc-caret { transform: rotate(45deg); }
+
+  ol { list-style: none; margin: var(--space-2xs) 0 0; padding: 0; counter-reset: toc; }
+  /* Only top-level entries are numbered. Incrementing on sub-entries too would
+     make the h2 numbers skip (1, then 6) and read as broken. */
+  li:not(.toc-sub) { counter-increment: toc; }
+  li a {
+    display: block; padding: 7px 0; font-size: .92rem; line-height: 1.45;
+    color: var(--color-grey-1); text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+  li a:hover { color: var(--color-ink); }
+  li a::before { content: counter(toc) '. '; color: var(--color-grey-3); }
+  .toc-sub { padding-left: var(--space-sm); }
+  .toc-sub a { font-size: .87rem; color: var(--color-grey-2); }
+  .toc-sub a::before { content: '— '; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .toc-caret { transition: none; }
+  }
+</style>

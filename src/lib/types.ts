@@ -484,7 +484,7 @@ export interface PortableMarkDef {
  * uses the exact same structure. Rendered by components/PortableText.astro.
  */
 export interface PortableBlock {
-  _type: 'block' | 'code';
+  _type: 'block' | 'code' | 'image';
   _key?: string;
   /** block: paragraph or heading level. */
   style?: 'normal' | 'h2' | 'h3' | 'h4' | 'blockquote';
@@ -495,6 +495,13 @@ export interface PortableBlock {
   /** code blocks only. */
   code?: string;
   language?: string;
+  /** image blocks only. A Sanity upload wins; `src` points at /public. */
+  asset?: { _id?: string; url?: string };
+  src?: string;
+  alt?: string;
+  caption?: string;
+  /** Renders full-bleed of the measure — for diagrams and wide screenshots. */
+  wide?: boolean;
 }
 
 export interface Post {
