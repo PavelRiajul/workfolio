@@ -9,6 +9,7 @@ import type {
   HomeContent,
   Project,
   Post,
+  PortableBlock,
   AboutContent,
   ResumeContent,
   Service,
@@ -634,17 +635,104 @@ export const projects: Project[] = [
   },
 ];
 
+/**
+ * A worked example of the post body format, and the only post that currently
+ * has a public page — a post without a `body` gets no route, no sitemap entry
+ * and no card link (see src/pages/blog/[slug].astro).
+ *
+ * The prose below is assembled from copy already published elsewhere on this
+ * site (the AI-method band, the four workflow steps and the caveat), so it
+ * states nothing new. Treat it as a starting draft to expand, and copy the
+ * block shape for the other nine posts.
+ */
+const aiWorkflowPostBody: PortableBlock[] = [
+  {
+    _type: 'block',
+    style: 'normal',
+    children: [
+      {
+        _type: 'span',
+        text: 'The mechanical 60% of a build — scaffolding, CRUD, types, test fixtures — gets generated in minutes. The saved weeks go into architecture, performance and the details that decide whether people actually use the thing.',
+      },
+    ],
+  },
+  { _type: 'block', style: 'h2', children: [{ _type: 'span', text: 'How the workflow actually runs' }] },
+  {
+    _type: 'block',
+    style: 'h3',
+    children: [{ _type: 'span', text: 'Scope with AI, decide with judgment' }],
+  },
+  {
+    _type: 'block',
+    style: 'normal',
+    children: [
+      {
+        _type: 'span',
+        text: 'I pressure-test the spec against edge cases before a line is written, so week one builds the right thing instead of discovering it in week three.',
+      },
+    ],
+  },
+  { _type: 'block', style: 'h3', children: [{ _type: 'span', text: 'Generate the boring 60%' }] },
+  {
+    _type: 'block',
+    style: 'normal',
+    children: [
+      {
+        _type: 'span',
+        text: 'Scaffolding, CRUD, types, test fixtures, migrations — the parts that are mechanical get generated in minutes, not days.',
+      },
+    ],
+  },
+  {
+    _type: 'block',
+    style: 'h3',
+    children: [{ _type: 'span', text: 'Spend the saved time on the hard 40%' }],
+  },
+  {
+    _type: 'block',
+    style: 'normal',
+    children: [
+      {
+        _type: 'span',
+        text: 'Architecture, data modelling, performance and the interaction details are where I actually spend the budget you saved.',
+      },
+    ],
+  },
+  { _type: 'block', style: 'h3', children: [{ _type: 'span', text: 'Review everything, ship small' }] },
+  {
+    _type: 'block',
+    style: 'normal',
+    children: [
+      {
+        _type: 'span',
+        text: 'AI-assisted review plus my own read on every PR, with tests and a preview deploy on each push. Nothing lands unread.',
+      },
+    ],
+  },
+  { _type: 'block', style: 'h2', children: [{ _type: 'span', text: 'What AI does not change' }] },
+  {
+    _type: 'block',
+    style: 'blockquote',
+    children: [
+      {
+        _type: 'span',
+        text: "Someone still has to own the architecture, catch the subtle bug, and say no to the feature that will sink the timeline. That part is still me — the tooling just means you pay for judgment instead of typing.",
+      },
+    ],
+  },
+];
+
 export const posts: Post[] = [
-  { title: 'How I actually build with AI — and where I still do the work', slug: 'building-with-ai-workflow', order: 1, category: 'ai', categoryLabel: 'AI', readTime: '8 min read', date: 'July 2026', excerpt: "The honest version of an AI-accelerated workflow: what gets generated, what gets thrown away, and the review discipline that keeps 'fast' from meaning 'fragile'.", coverLabel: 'AI workflow — cover', featured: true, image: null },
-  { title: 'Shipping an MVP in 19 days without shipping garbage', slug: 'mvp-in-19-days', order: 2, category: 'ai', categoryLabel: 'AI', readTime: '6 min', date: 'July 2026', excerpt: 'Scope triage, generated scaffolding, and the four things I refuse to cut no matter how tight the deadline gets.', coverLabel: 'MVP in 19 days — cover', featured: false, image: null },
-  { title: 'RAG that actually answers: chunking, reranking and citations', slug: 'rag-that-answers', order: 3, category: 'ai', categoryLabel: 'AI', readTime: '9 min', date: 'June 2026', excerpt: 'Most bad AI answers are bad retrieval, not bad models. The pipeline changes that moved accuracy the most.', coverLabel: 'RAG pipeline — cover', featured: false, image: null },
-  { title: 'Going headless: when Shopify Hydrogen is actually worth it', slug: 'shopify-hydrogen-worth-it', order: 4, category: 'ecommerce', categoryLabel: 'E-commerce', readTime: '7 min read', date: 'June 2026', excerpt: "Headless is powerful, but it isn't free. Here's the honest decision framework I use to tell clients when to leave Liquid behind — and when to stay put.", coverLabel: 'Hydrogen vs Liquid — cover', featured: false, image: null },
-  { title: 'Shipping a React Native app that works offline-first', slug: 'react-native-offline-first', order: 5, category: 'mobile', categoryLabel: 'Mobile', readTime: '6 min', date: 'May 2026', excerpt: 'A local store, a sync queue, and the patterns that keep logging instant when the signal drops.', coverLabel: 'Offline-first RN — cover', featured: false, image: null },
-  { title: 'Type-safe from MongoDB to the UI in a MERN app', slug: 'type-safe-mern', order: 6, category: 'fullstack', categoryLabel: 'Full-Stack', readTime: '8 min', date: 'April 2026', excerpt: 'Sharing TypeScript types across the stack so the compiler catches mismatches before users do.', coverLabel: 'Type-safe MERN — cover', featured: false, image: null },
-  { title: 'Core Web Vitals: a practical checklist for Next.js', slug: 'core-web-vitals-nextjs', order: 7, category: 'performance', categoryLabel: 'Performance', readTime: '5 min', date: 'March 2026', excerpt: 'The handful of changes that move LCP, CLS and INP the most — without a full rewrite.', coverLabel: 'Core Web Vitals — cover', featured: false, image: null },
-  { title: 'What two years of freelancing taught me about scoping', slug: 'freelance-scoping', order: 8, category: 'career', categoryLabel: 'Career', readTime: '4 min', date: 'February 2026', excerpt: "Most project pain starts at the proposal. Here's how I scope to avoid it.", coverLabel: 'Freelance scoping — cover', featured: false, image: null },
-  { title: "Building a design system you'll actually reuse", slug: 'reusable-design-system', order: 9, category: 'frontend', categoryLabel: 'Frontend', readTime: '6 min', date: 'January 2026', excerpt: 'Tokens, components and docs that survive past the first sprint and three engineers.', coverLabel: 'Design system — cover', featured: false, image: null },
-  { title: 'Role-based auth in a Next.js + Express app, end to end', slug: 'role-based-auth-nextjs-express', order: 10, category: 'backend', categoryLabel: 'Backend', readTime: '7 min', date: 'December 2025', excerpt: 'Sessions, middleware and protecting routes on both the server and the client.', coverLabel: 'Auth in Next.js — cover', featured: false, image: null },
+  { title: 'How I actually build with AI — and where I still do the work', slug: 'building-with-ai-workflow', order: 1, category: 'ai', categoryLabel: 'AI', readTime: '8 min read', date: 'July 2026', publishedAt: '2026-07-01', excerpt: "The honest version of an AI-accelerated workflow: what gets generated, what gets thrown away, and the review discipline that keeps 'fast' from meaning 'fragile'.", coverLabel: 'AI workflow — cover', featured: true, image: null, body: aiWorkflowPostBody },
+  { title: 'Shipping an MVP in 19 days without shipping garbage', slug: 'mvp-in-19-days', order: 2, category: 'ai', categoryLabel: 'AI', readTime: '6 min', date: 'July 2026', publishedAt: '2026-07-01', excerpt: 'Scope triage, generated scaffolding, and the four things I refuse to cut no matter how tight the deadline gets.', coverLabel: 'MVP in 19 days — cover', featured: false, image: null },
+  { title: 'RAG that actually answers: chunking, reranking and citations', slug: 'rag-that-answers', order: 3, category: 'ai', categoryLabel: 'AI', readTime: '9 min', date: 'June 2026', publishedAt: '2026-06-01', excerpt: 'Most bad AI answers are bad retrieval, not bad models. The pipeline changes that moved accuracy the most.', coverLabel: 'RAG pipeline — cover', featured: false, image: null },
+  { title: 'Going headless: when Shopify Hydrogen is actually worth it', slug: 'shopify-hydrogen-worth-it', order: 4, category: 'ecommerce', categoryLabel: 'E-commerce', readTime: '7 min read', date: 'June 2026', publishedAt: '2026-06-01', excerpt: "Headless is powerful, but it isn't free. Here's the honest decision framework I use to tell clients when to leave Liquid behind — and when to stay put.", coverLabel: 'Hydrogen vs Liquid — cover', featured: false, image: null },
+  { title: 'Shipping a React Native app that works offline-first', slug: 'react-native-offline-first', order: 5, category: 'mobile', categoryLabel: 'Mobile', readTime: '6 min', date: 'May 2026', publishedAt: '2026-05-01', excerpt: 'A local store, a sync queue, and the patterns that keep logging instant when the signal drops.', coverLabel: 'Offline-first RN — cover', featured: false, image: null },
+  { title: 'Type-safe from MongoDB to the UI in a MERN app', slug: 'type-safe-mern', order: 6, category: 'fullstack', categoryLabel: 'Full-Stack', readTime: '8 min', date: 'April 2026', publishedAt: '2026-04-01', excerpt: 'Sharing TypeScript types across the stack so the compiler catches mismatches before users do.', coverLabel: 'Type-safe MERN — cover', featured: false, image: null },
+  { title: 'Core Web Vitals: a practical checklist for Next.js', slug: 'core-web-vitals-nextjs', order: 7, category: 'performance', categoryLabel: 'Performance', readTime: '5 min', date: 'March 2026', publishedAt: '2026-03-01', excerpt: 'The handful of changes that move LCP, CLS and INP the most — without a full rewrite.', coverLabel: 'Core Web Vitals — cover', featured: false, image: null },
+  { title: 'What two years of freelancing taught me about scoping', slug: 'freelance-scoping', order: 8, category: 'career', categoryLabel: 'Career', readTime: '4 min', date: 'February 2026', publishedAt: '2026-02-01', excerpt: "Most project pain starts at the proposal. Here's how I scope to avoid it.", coverLabel: 'Freelance scoping — cover', featured: false, image: null },
+  { title: "Building a design system you'll actually reuse", slug: 'reusable-design-system', order: 9, category: 'frontend', categoryLabel: 'Frontend', readTime: '6 min', date: 'January 2026', publishedAt: '2026-01-01', excerpt: 'Tokens, components and docs that survive past the first sprint and three engineers.', coverLabel: 'Design system — cover', featured: false, image: null },
+  { title: 'Role-based auth in a Next.js + Express app, end to end', slug: 'role-based-auth-nextjs-express', order: 10, category: 'backend', categoryLabel: 'Backend', readTime: '7 min', date: 'December 2025', publishedAt: '2025-12-01', excerpt: 'Sessions, middleware and protecting routes on both the server and the client.', coverLabel: 'Auth in Next.js — cover', featured: false, image: null },
 ];
 
 export const about: AboutContent = {

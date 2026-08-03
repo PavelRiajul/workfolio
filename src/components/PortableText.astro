@@ -1,0 +1,106 @@
+---
+// Minimal Portable Text renderer — the handful of block types a technical
+// article actually uses. Deliberately not a dependency: the whole surface is
+// paragraphs, two heading levels, lists, quotes, inline marks and code, and a
+// library would cost more than it saves here.
+//
+// Consecutive list items are coalesced into one <ul>/<ol>. That's the part
+// hand-rolled renderers usually get wrong — Portable Text stores every bullet
+// as its own sibling block, so rendering naively yields one list per item.
+import type { PortableBlock } from '../lib/types';
+import Span from './PortableSpan.astro';
+
+interface Props { blocks?: PortableBlock[] }
+const { blocks = [] } = Astro.props;
+
+type Group =
+  | { kind: 'block'; block: PortableBlock }
+  | { kind: 'list'; ordered: boolean; items: PortableBlock[] };
+
+const groups: Group[] = [];
+for (const b of blocks) {
+  if (b.listItem) {
+    const ordered = b.listItem === 'number';
+    const last = groups[groups.length - 1];
+    if (last && last.kind === 'list' && last.ordered === ordered) last.items.push(b);
+    else groups.push({ kind: 'list', ordered, items: [b] });
+  } else {
+    groups.push({ kind: 'block', block: b });
+  }
+}
+
+/** A block the editor left blank — renders as nothing, not an empty <p>. */
+const isEmpty = (b: PortableBlock) => !b.children?.some((s) => s.text.trim());
+---
+
+{
+  groups.map((g) =>
+    g.kind === 'list' ? (
+      g.ordered ? (
+        <ol class="pt-list">
+          {g.items.map((b) => (
+            <li>{b.children?.map((s) => <Span span={s} defs={b.markDefs} />)}</li>
+          ))}
+        </ol>
+      ) : (
+        <ul class="pt-list">
+          {g.items.map((b) => (
+            <li>{b.children?.map((s) => <Span span={s} defs={b.markDefs} />)}</li>
+          ))}
+        </ul>
+      )
+    ) : g.block._type === 'code' ? (
+      g.block.code && <pre class="pt-code"><code>{g.block.code}</code></pre>
+    ) : isEmpty(g.block) ? null : g.block.style === 'h2' ? (
+      <h2 class="pt-h2">{g.block.children?.map((s) => <Span span={s} defs={g.block.markDefs} />)}</h2>
+    ) : g.block.style === 'h3' ? (
+      <h3 class="pt-h3">{g.block.children?.map((s) => <Span span={s} defs={g.block.markDefs} />)}</h3>
+    ) : g.block.style === 'h4' ? (
+      <h4 class="pt-h4">{g.block.children?.map((s) => <Span span={s} defs={g.block.markDefs} />)}</h4>
+    ) : g.block.style === 'blockquote' ? (
+      <blockquote class="pt-quote">{g.block.children?.map((s) => <Span span={s} defs={g.block.markDefs} />)}</blockquote>
+    ) : (
+      <p class="pt-p">{g.block.children?.map((s) => <Span span={s} defs={g.block.markDefs} />)}</p>
+    )
+  )
+}
+
+<style is:global>
+  /* Article body. Measure is capped for readability; type inherits the site's
+     existing scale rather than introducing a second one. */
+  .post-body { max-width: 68ch; }
+  .post-body .pt-p { margin-bottom: var(--space-md); color: var(--color-grey-1); line-height: 1.75; }
+  .post-body .pt-h2 {
+    font-family: var(--font-display); font-weight: 600; letter-spacing: -0.02em;
+    font-size: clamp(1.35rem, 1.1rem + 1vw, 1.75rem);
+    margin-top: var(--space-xl); margin-bottom: var(--space-sm); color: var(--color-ink);
+  }
+  .post-body .pt-h3 {
+    font-family: var(--font-display); font-weight: 600; letter-spacing: -0.015em;
+    font-size: clamp(1.1rem, 1rem + 0.5vw, 1.3rem);
+    margin-top: var(--space-lg); margin-bottom: var(--space-2xs); color: var(--color-ink);
+  }
+  .post-body .pt-h4 {
+    font-family: var(--font-display); font-weight: 600; font-size: 1rem;
+    margin-top: var(--space-md); margin-bottom: var(--space-2xs); color: var(--color-ink);
+  }
+  .post-body .pt-list { margin: 0 0 var(--space-md); padding-left: 1.35em; color: var(--color-grey-1); }
+  .post-body .pt-list li { margin-bottom: var(--space-2xs); line-height: 1.7; }
+  .post-body .pt-quote {
+    margin: var(--space-lg) 0; padding-left: var(--space-md);
+    border-left: 3px solid var(--color-blue);
+    font-size: 1.05em; color: var(--color-ink);
+  }
+  .post-body .pt-code {
+    margin: 0 0 var(--space-md); padding: var(--space-sm) var(--space-md);
+    background: var(--color-surface); border: 1px solid var(--line);
+    border-radius: 12px; overflow-x: auto;
+    font-family: var(--font-mono); font-size: 0.85em; line-height: 1.65;
+  }
+  .post-body a { color: var(--color-blue); text-decoration: underline; text-underline-offset: 3px; }
+  .post-body :not(.pt-code) > code {
+    font-family: var(--font-mono); font-size: 0.88em;
+    background: var(--color-surface); border: 1px solid var(--line);
+    padding: 0.1em 0.35em; border-radius: 5px;
+  }
+</style>

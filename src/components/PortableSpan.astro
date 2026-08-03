@@ -1,0 +1,38 @@
+---
+// One inline span of Portable Text: its decorators (strong/em/code) plus the
+// link annotation it may belong to. Split out because Astro has no way to
+// declare a local sub-component inside PortableText.astro.
+import type { PortableSpan, PortableMarkDef } from '../lib/types';
+
+interface Props { span: PortableSpan; defs?: PortableMarkDef[] }
+const { span, defs } = Astro.props;
+
+const marks = span.marks ?? [];
+// A mark is either a decorator (a known name) or a key into markDefs.
+const href = marks.map((m) => defs?.find((d) => d._key === m)?.href).find(Boolean);
+const strong = marks.includes('strong');
+const em = marks.includes('em');
+const code = marks.includes('code');
+
+// External links get rel="noopener" — internal ones don't need it.
+const external = href ? /^https?:\/\//.test(href) : false;
+---
+{href ? (
+  <a href={href} rel={external ? 'noopener' : undefined} target={external ? '_blank' : undefined}>
+    {code ? <code>{span.text}</code>
+      : strong && em ? <strong><em>{span.text}</em></strong>
+      : strong ? <strong>{span.text}</strong>
+      : em ? <em>{span.text}</em>
+      : span.text}
+  </a>
+) : code ? (
+  <code>{span.text}</code>
+) : strong && em ? (
+  <strong><em>{span.text}</em></strong>
+) : strong ? (
+  <strong>{span.text}</strong>
+) : em ? (
+  <em>{span.text}</em>
+) : (
+  span.text
+)}

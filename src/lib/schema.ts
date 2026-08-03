@@ -6,7 +6,7 @@
 // Nodes reference each other by `@id` (`#person`, `#website`) so Google reads
 // them as one connected entity instead of several disconnected islands.
 // ---------------------------------------------------------------------------
-import type { SiteSettings, Faq, Service, ShopifyService, Project } from './types';
+import type { SiteSettings, Faq, Service, ShopifyService, Project, Post } from './types';
 
 /** Absolute URL for a site-relative path. Schema.org requires absolute URLs. */
 export function abs(origin: string, path = '/'): string {
@@ -219,5 +219,24 @@ export function caseStudySchema(p: Project, origin: string, canonical: string) {
     ...(p.year ? { dateCreated: p.year } : {}),
     ...(p.tags?.length ? { keywords: p.tags.join(', ') } : {}),
     isPartOf: { '@id': siteId(origin) },
+  };
+}
+
+/** Blog posts. `datePublished` must be ISO-8601 for the Article rich result. */
+export function articleSchema(post: Post, origin: string, canonical: string, image?: string) {
+  return {
+    '@type': 'BlogPosting',
+    '@id': `${canonical}#article`,
+    headline: post.title,
+    description: post.excerpt,
+    url: canonical,
+    datePublished: post.publishedAt,
+    dateModified: post.publishedAt,
+    author: { '@id': personId(origin) },
+    publisher: { '@id': personId(origin) },
+    mainEntityOfPage: { '@id': canonical },
+    articleSection: post.categoryLabel,
+    isPartOf: { '@id': siteId(origin) },
+    ...(image ? { image: [image] } : {}),
   };
 }

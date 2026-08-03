@@ -462,6 +462,41 @@ export interface Project {
   outcomesNote: string;
 }
 
+/** A span of text inside a Portable Text block. */
+export interface PortableSpan {
+  _type?: 'span';
+  _key?: string;
+  text: string;
+  /** Mark names — "strong", "em", "code", or a key into the block's markDefs. */
+  marks?: string[];
+}
+
+/** A link annotation referenced by a span's `marks`. */
+export interface PortableMarkDef {
+  _key: string;
+  _type: 'link';
+  href: string;
+}
+
+/**
+ * One block of post body. Portable Text, the shape Sanity's block editor
+ * emits — so the Studio gets a proper writing experience and the offline seed
+ * uses the exact same structure. Rendered by components/PortableText.astro.
+ */
+export interface PortableBlock {
+  _type: 'block' | 'code';
+  _key?: string;
+  /** block: paragraph or heading level. */
+  style?: 'normal' | 'h2' | 'h3' | 'h4' | 'blockquote';
+  listItem?: 'bullet' | 'number';
+  level?: number;
+  children?: PortableSpan[];
+  markDefs?: PortableMarkDef[];
+  /** code blocks only. */
+  code?: string;
+  language?: string;
+}
+
 export interface Post {
   title: string;
   slug: string;
@@ -469,11 +504,23 @@ export interface Post {
   category: string;
   categoryLabel: string;
   readTime: string;
+  /** Human-readable date shown on the card, e.g. "July 2026". */
   date: string;
+  /** ISO-8601 publish date. Drives `datePublished` in the Article JSON-LD and
+   *  the sort order — the display `date` has no day and can't be parsed. */
+  publishedAt: string;
   excerpt: string;
   coverLabel: string;
   featured: boolean;
   image?: SanityImage | null;
+  /**
+   * The article itself. A post only gets a `/blog/<slug>` page, a sitemap
+   * entry and a card link once this has content — an indexable page with
+   * nothing but an excerpt on it is a thin-content liability, not an asset.
+   */
+  body?: PortableBlock[];
+  /** Optional per-post SEO override; falls back to title + excerpt. */
+  seo?: SeoMeta;
 }
 
 /** One photo in the About strip. Falls back to a hatched placeholder until

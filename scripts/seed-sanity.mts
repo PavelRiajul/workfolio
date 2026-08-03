@@ -49,6 +49,28 @@ function slug(current: string) {
   return { _type: 'slug', current };
 }
 
+/**
+ * Portable Text needs a _key on the blocks *and* on every child span — the
+ * generic `keyed` above only reaches the top level, and a span without a _key
+ * makes the Studio's block editor throw as soon as you open the post.
+ */
+function portable(blocks: unknown[] | undefined) {
+  if (!blocks?.length) return undefined;
+  return blocks.map((block, i) => {
+    const b = block as Record<string, unknown>;
+    const children = b.children as Record<string, unknown>[] | undefined;
+    return {
+      _key: `blk-${i}`,
+      ...b,
+      ...(children
+        ? {
+            children: children.map((c, j) => ({ _type: 'span', _key: `blk-${i}-${j}`, ...c })),
+          }
+        : {}),
+    };
+  });
+}
+
 /** Drop nulls/undefined so empty seed values don't land in the dataset. */
 function clean<T extends object>(obj: T): T {
   return Object.fromEntries(
@@ -186,7 +208,16 @@ for (const p of projects) {
 }
 
 for (const p of posts) {
-  docs.push(clean({ _id: `post-${p.slug}`, _type: 'post', ...p, slug: slug(p.slug), image: undefined }));
+  docs.push(
+    clean({
+      _id: `post-${p.slug}`,
+      _type: 'post',
+      ...p,
+      slug: slug(p.slug),
+      body: portable(p.body),
+      image: undefined,
+    })
+  );
 }
 
 mkdirSync(dirname(OUT), { recursive: true });

@@ -91,7 +91,7 @@ export function getPosts(): Promise<Post[]> {
   return safeFetch<Post[]>(
     `*[_type == "post"] | order(order asc){
       title, "slug": slug.current, order, category, categoryLabel,
-      readTime, date, excerpt, coverLabel, featured, ${imageProjection}
+      readTime, date, publishedAt, excerpt, coverLabel, featured, body, seo, ${imageProjection}
     }`,
     {},
     fallback.posts

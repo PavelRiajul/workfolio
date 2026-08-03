@@ -13,6 +13,10 @@ const closingLines = page.closing.title.split('\n');
 const featured = posts.find((p) => p.featured);
 const rest = posts.filter((p) => !p.featured);
 
+// A card links to its post only once that post has a body — those are the only
+// slugs [slug].astro generates a page for, so linking earlier would 404.
+const hrefFor = (p: (typeof posts)[number]) => (p.body?.length ? `/blog/${p.slug}` : undefined);
+
 ---
 <Base title={page.seo.title} description={page.seo.description} subpage={true} pageType="Blog">
   <!-- Hero — 3D stage: a post being written, one already out, and its tags. -->
@@ -66,7 +70,11 @@ const rest = posts.filter((p) => !p.featured);
       </div>
 
       {featured && (
-        <a class="post-card post-feature stack-lg" data-category={featured.category} href="#">
+        <a
+          class={`post-card post-feature stack-lg ${hrefFor(featured) ? '' : 'post-unwritten'}`}
+          data-category={featured.category}
+          href={hrefFor(featured)}
+        >
           <div class="cover"><div class="post-img-zoom"><Placeholder label={featured.coverLabel} image={featured.image} /></div></div>
           <div class="pf-body">
             <div class="pf-meta">
@@ -82,7 +90,11 @@ const rest = posts.filter((p) => !p.featured);
 
       <div class="post-grid stack-lg">
         {rest.map((p) => (
-          <a class="post-card" data-category={p.category} href="#">
+          <a
+            class={`post-card ${hrefFor(p) ? '' : 'post-unwritten'}`}
+            data-category={p.category}
+            href={hrefFor(p)}
+          >
             <div class="cover"><div class="post-img-zoom"><Placeholder label={p.coverLabel} image={p.image} /></div></div>
             <div class="pc-meta"><span class="pc-tag">{p.categoryLabel}</span>{p.readTime}</div>
             <h3 class="post-title">{p.title}</h3>
@@ -105,6 +117,12 @@ const rest = posts.filter((p) => !p.featured);
     </div>
   </section>
 </Base>
+
+<style>
+  /* A card whose post isn't written yet: same card, no hover affordance and no
+     pointer, because there's nothing to click through to. */
+  .post-unwritten { cursor: default; }
+</style>
 
 <script>
   // Blog category filter — Blog page only.

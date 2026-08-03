@@ -1,0 +1,133 @@
+---
+import Base from '../../layouts/Base.astro';
+import Placeholder from '../../components/Placeholder.astro';
+import PortableText from '../../components/PortableText.astro';
+import Icon from '../../components/Icon.astro';
+import { getPosts, getBlogPage } from '../../lib/content';
+import { articleSchema } from '../../lib/schema';
+import type { Post } from '../../lib/types';
+
+// Only posts with a body get a page. An indexable URL carrying nothing but an
+// excerpt is thin content — it competes with the pages that do rank and gives
+// Google a reason to trust the domain less. Write the body, get the page.
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  const published = posts.filter((p) => p.body && p.body.length > 0);
+
+  return published.map((post) => {
+    // "Read next" — the following post in publish order, wrapping around.
+    const i = published.indexOf(post);
+    const next = published[(i + 1) % published.length];
+    const related = posts
+      .filter((p) => p.slug !== post.slug && p.category === post.category)
+      .slice(0, 2);
+    return {
+      params: { slug: post.slug },
+      props: { post, next: next.slug === post.slug ? null : next, related },
+    };
+  });
+}
+
+interface Props { post: Post; next: Post | null; related: Post[] }
+const { post, next, related } = Astro.props;
+const page = await getBlogPage();
+
+const origin = (Astro.site ?? new URL(Astro.url.origin)).href;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
+const ogUrl = new URL(`/og/blog-${post.slug}.png`, Astro.site ?? Astro.url).href;
+---
+<Base
+  title={post.seo?.title ?? `${post.title} — ${page.seo.title.split('—')[1]?.trim() ?? 'Blog'}`}
+  description={post.seo?.description ?? post.excerpt}
+  subpage={true}
+  {/* The page node stays a WebPage; the BlogPosting is a separate node that
+      references it via mainEntityOfPage. Two BlogPosting nodes would just be
+      the same article claimed twice. */}
+  pageType="WebPage"
+  ogType="article"
+  breadcrumbLeaf={post.title}
+  schema={[articleSchema(post, origin, canonical, ogUrl)]}
+>
+  <article class="cs-article section section-flush-bottom">
+    <a href="/blog" class="cs-back">← Back to blog</a>
+
+    <header class="stack-md" data-reveal>
+      <div class="pc-meta post-meta-head">
+        <span class="pc-tag">{post.categoryLabel}</span>
+        <Icon name="fa-regular fa-clock" />{post.readTime}
+        <span class="post-sep" aria-hidden="true">·</span>
+        <time datetime={post.publishedAt}>{post.date}</time>
+      </div>
+      <h1 class="cs-title">{post.title}</h1>
+      <p class="cs-summary">{post.excerpt}</p>
+    </header>
+
+    <div class="cs-hero" data-reveal>
+      <Placeholder label={post.coverLabel} image={post.image} src={`/blog/${post.slug}.jpg`} alt={post.title} />
+    </div>
+
+    <div class="post-body stack-md" data-reveal>
+      <PortableText blocks={post.body} />
+    </div>
+
+    {related.length > 0 && (
+      <aside class="post-related" data-reveal>
+        <h2 class="eyebrow">More in {post.categoryLabel}</h2>
+        <div class="post-related-grid">
+          {related.map((r) => (
+            <a class="post-related-card" href={r.body?.length ? `/blog/${r.slug}` : '/blog'}>
+              <span class="pc-tag">{r.categoryLabel}</span>
+              <h3>{r.title}</h3>
+              <p>{r.excerpt}</p>
+            </a>
+          ))}
+        </div>
+      </aside>
+    )}
+
+    {next && (
+      <a class="cs-next" href={`/blog/${next.slug}`} data-reveal>
+        <span class="eyebrow">Read next</span>
+        <span class="cs-next-title">{next.title} <span aria-hidden="true">→</span></span>
+      </a>
+    )}
+  </article>
+
+  <section class="closing">
+    <div class="closing-card">
+      <h2>{page.closing.title.split('\n').map((l, i, a) => (<>{l}{i < a.length - 1 && <br />}</>))}</h2>
+      <div class="closing-actions">
+        <a href={page.closing.primary.href} class="btn btn-dark btn-cta">{page.closing.primary.label} <span>↗</span></a>
+        <a href={page.closing.secondary.href} class="btn btn-light btn-cta">{page.closing.secondary.label}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .post-meta-head { display: flex; align-items: center; gap: var(--space-2xs); flex-wrap: wrap; }
+  .post-sep { color: var(--color-grey-3); }
+
+  .post-related { margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--line); }
+  .post-related-grid {
+    display: grid; gap: var(--space-sm); margin-top: var(--space-sm);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .post-related-card {
+    display: block; padding: var(--space-md); border: 1px solid var(--line);
+    border-radius: 16px; text-decoration: none; color: inherit;
+    transition: border-color .24s ease, transform .24s cubic-bezier(.22,.61,.36,1);
+  }
+  .post-related-card:hover { border-color: rgba(10,10,10,.22); transform: translateY(-2px); }
+  .post-related-card h3 { font-family: var(--font-display); font-size: 1.02rem; font-weight: 600; margin: var(--space-2xs) 0; }
+  .post-related-card p {
+    color: var(--color-grey-2); font-size: .9rem; line-height: 1.6;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+
+  /* Density over stacking, per the mobile rules — but two cards this text-heavy
+     genuinely don't fit side by side on a phone. */
+  @media (max-width: 640px) {
+    .post-related-grid { grid-template-columns: 1fr; }
+  }
+</style>
