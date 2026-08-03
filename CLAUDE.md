@@ -75,6 +75,25 @@ and (if it's a new type) add a loader + GROQ projection in `src/lib/content.ts`.
 `getSite, getHome, getServicesPage, getShopifyPage, getWorkPage, getBlogPage, getStartPage,
 getCaseStudy, getAbout, getResume, getServices, getShopifyServices, getProjects, getProject, getPosts`.
 
+**Blog specifics.** `src/lib/portable.ts` is the shared brain: `headings()` decides heading
+ids and is used by *both* the renderer and the TOC (two implementations would drift and leave
+the contents list pointing at nothing), `relatedPosts()` prefers same-`series` over
+same-category and only ever returns published posts, `isPublished()` is the one definition of
+"has a page". The `/blog` chips are real `<a>` links to the hubs — a crawler follows them, JS
+intercepts the click and filters in place. A chip only gets an href if that category actually
+has a hub. Body images: Sanity upload wins, else a `src` under `/public`; a missing file
+renders no figure rather than a broken image. Code blocks are highlighted at build time by
+Astro's bundled Shiki (`astro:components` `Code`) — no new dependency, and an unknown
+`language` degrades to plain text.
+
+**`publicFileExists()` (`src/lib/public-file.ts`) must be used for every build-time /public
+check.** The obvious `new URL('../../public' + p, import.meta.url)` is wrong: components get
+bundled, so `import.meta.url` points at `dist/pages/*.mjs` and the check resolves to
+`dist/public/…`, which never exists. It silently "worked" for components that happened to land
+in `dist/chunks/` (right depth by luck) and failed for anything inlined into a page module —
+and it always works in dev, which is what makes it easy to miss. `process.cwd()` is correct in
+both.
+
 **A blog post is published by having a `body`.** `blog/[slug].astro` only generates pages for
 posts whose `body` is non-empty, so an unwritten post gets no URL, no sitemap entry and an
 unlinked card. This is deliberate: an indexable page carrying nothing but an excerpt is thin
@@ -98,7 +117,9 @@ Two service datasets, deliberately separate:
 | `/cro` | — | Retired; redirects to `/shopify#cro` via `redirects` in `astro.config.mjs` |
 | `/about` | `about.astro` | Bio, photo gallery, traits |
 | `/blog` | `blog.astro` | Featured post + category-filtered grid. A card only links once its post has a `body` |
-| `/blog/[slug]` | `blog/[slug].astro` | The article — Portable Text body, related posts, Article JSON-LD |
+| `/blog/[slug]` | `blog/[slug].astro` | The article — Portable Text body, TOC, author card, series/related, Article JSON-LD |
+| `/blog/category/[category]` | `blog/category/[category].astro` | Topic hub — one per category that has published posts, with `ItemList` JSON-LD |
+| `/rss.xml` | `rss.xml.ts` | Feed of published posts |
 | `/resume` | `resume.astro` | ATS résumé; copy-email, print, real downloadable PDF (jsPDF, lazy-loaded `resume-pdf.ts`) |
 | `/start` | `start.astro` | Contact — "book a call" (inline Calendly iframe, URL from `startPage.call.schedulerUrl`) / "send a message" tabs |
 | `/admin` | (Sanity) | Embedded Studio |
