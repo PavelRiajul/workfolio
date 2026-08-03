@@ -4,8 +4,7 @@ import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import WhatsApp from '../components/WhatsApp.astro';
 import BackToTop from '../components/BackToTop.astro';
-import { existsSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
+import { publicFileExists } from '../lib/public-file';
 import { getSite } from '../lib/content';
 import { personSchema, websiteSchema, webPageSchema, autoBreadcrumbs } from '../lib/schema';
 
@@ -66,10 +65,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
 const ogSlug = Astro.url.pathname === '/'
   ? 'home'
   : Astro.url.pathname.replace(/^\/|\/$/g, '').replace(/\//g, '-');
-const ogExists = (p: string) =>
-  existsSync(fileURLToPath(new URL(`../../public${p}`, import.meta.url)));
 const ogCandidate = ogImage ?? `/og/${ogSlug}.png`;
-const ogPath = ogExists(ogCandidate) ? ogCandidate : '/og/default.png';
+const ogPath = publicFileExists(ogCandidate) ? ogCandidate : '/og/default.png';
 const ogUrl = new URL(ogPath, Astro.site ?? Astro.url).href;
 
 // One connected @graph per page rather than several loose <script> blocks —

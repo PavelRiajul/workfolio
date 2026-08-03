@@ -5,17 +5,11 @@
 // A `src` pointing at a file that hasn't landed yet falls back to the
 // placeholder instead of a broken image, so captions can be wired up before
 // the photos exist. Checked at build time (the site is statically rendered).
-import { existsSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
+import { publicFileExists } from '../lib/public-file';
 import type { SanityImage } from '../lib/types';
 
 interface Props { label: string; image?: SanityImage | null; src?: string; alt?: string; class?: string; }
 const { label, image, src, alt, class: cls = '' } = Astro.props;
-
-function publicFileExists(path: string) {
-  if (!path.startsWith('/')) return true; // remote or relative — trust it
-  return existsSync(fileURLToPath(new URL(`../../public${path}`, import.meta.url)));
-}
 
 const localSrc = src && publicFileExists(src) ? src : undefined;
 const url = image?.asset?.url || localSrc;
