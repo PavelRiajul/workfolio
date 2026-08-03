@@ -231,7 +231,9 @@ export function articleSchema(post: Post, origin: string, canonical: string, ima
     description: post.excerpt,
     url: canonical,
     datePublished: post.publishedAt,
-    dateModified: post.publishedAt,
+    // Falls back to the publish date when the post has never been revised —
+    // dateModified only carries a freshness signal if it reflects real work.
+    dateModified: post.updatedAt ?? post.publishedAt,
     author: { '@id': personId(origin) },
     publisher: { '@id': personId(origin) },
     mainEntityOfPage: { '@id': canonical },

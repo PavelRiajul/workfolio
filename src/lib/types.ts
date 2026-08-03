@@ -536,6 +536,18 @@ export interface Post {
   body?: PortableBlock[];
   /** Optional per-post SEO override; falls back to title + excerpt. */
   seo?: SeoMeta;
+  /**
+   * ISO-8601 date of the last substantive edit. Drives `dateModified`, which
+   * only carries a freshness signal if it reflects a real revision — so this
+   * is deliberately separate from `publishedAt` rather than mirroring it.
+   */
+  updatedAt?: string;
+  /**
+   * Groups posts into a cluster. Depth on one topic is what makes a set of
+   * posts read as a body of work rather than scattered one-offs, so posts in
+   * a series link to each other ahead of merely sharing a category.
+   */
+  series?: string;
 }
 
 /** One photo in the About strip. Falls back to a hatched placeholder until

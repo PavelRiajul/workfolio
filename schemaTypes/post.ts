@@ -41,6 +41,20 @@ export default defineType({
         'The real date. Drives datePublished in the Article structured data — Google needs ISO-8601, which the label above is not.',
       validation: (r) => r.required(),
     }),
+    defineField({
+      name: 'updatedAt',
+      title: 'Last updated',
+      type: 'date',
+      description:
+        'Set only on a real revision. dateModified is a freshness signal, so mirroring the publish date here just tells Google nothing.',
+    }),
+    defineField({
+      name: 'series',
+      title: 'Series',
+      type: 'string',
+      description:
+        'Groups posts into a cluster (e.g. "AI booking"). Posts in a series link to each other ahead of ones that merely share a category.',
+    }),
     defineField({ name: 'excerpt', title: 'Excerpt', type: 'text', rows: 3 }),
     defineField({ name: 'coverLabel', title: 'Cover placeholder label', type: 'string' }),
     defineField({ name: 'featured', title: 'Featured', type: 'boolean', initialValue: false }),

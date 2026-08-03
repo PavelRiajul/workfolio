@@ -61,3 +61,18 @@ export function tableOfContents(blocks: PortableBlock[] = [], min = 3): TocEntry
 
 /** A post is published — and therefore linkable — once it has a body. */
 export const isPublished = (p: Post) => Boolean(p.body?.length);
+
+/**
+ * Posts to suggest at the end of an article. Same series first (a cluster is a
+ * stronger relationship than a shared tag), then same category, then anything
+ * else recent, so the slot is never empty on a small blog. Only ever returns
+ * posts that actually have a page.
+ */
+export function relatedPosts(post: Post, all: Post[], limit = 2): Post[] {
+  const pool = all.filter((p) => p.slug !== post.slug && isPublished(p));
+  const rank = (p: Post) =>
+    post.series && p.series === post.series ? 0 : p.category === post.category ? 1 : 2;
+  return pool
+    .sort((a, b) => rank(a) - rank(b) || (a.publishedAt < b.publishedAt ? 1 : -1))
+    .slice(0, limit);
+}

@@ -4,9 +4,9 @@ import Placeholder from '../../components/Placeholder.astro';
 import PortableText from '../../components/PortableText.astro';
 import Icon from '../../components/Icon.astro';
 import Toc from '../../components/Toc.astro';
-import { getPosts, getBlogPage } from '../../lib/content';
+import { getPosts, getBlogPage, getSite } from '../../lib/content';
 import { articleSchema } from '../../lib/schema';
-import { isPublished, tableOfContents } from '../../lib/portable';
+import { isPublished, relatedPosts, tableOfContents } from '../../lib/portable';
 import type { Post } from '../../lib/types';
 
 // Only posts with a body get a page. An indexable URL carrying nothing but an
@@ -25,15 +25,20 @@ export async function getStaticPaths() {
       props: {
         post,
         next: next.slug === post.slug ? null : next,
-        related: posts.filter((p) => p.slug !== post.slug && p.category === post.category && isPublished(p)).slice(0, 2),
+        related: relatedPosts(post, posts),
+        // Every other post in the same series, so a cluster reads as one body
+        // of work instead of a set of pages that happen to share a tag.
+        seriesPosts: post.series
+          ? published.filter((p) => p.series === post.series && p.slug !== post.slug)
+          : [],
       },
     };
   });
 }
 
-interface Props { post: Post; next: Post | null; related: Post[] }
-const { post, next, related } = Astro.props;
-const page = await getBlogPage();
+interface Props { post: Post; next: Post | null; related: Post[]; seriesPosts: Post[] }
+const { post, next, related, seriesPosts } = Astro.props;
+const [page, site] = await Promise.all([getBlogPage(), getSite()]);
 
 const origin = (Astro.site ?? new URL(Astro.url.origin)).href;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
@@ -49,6 +54,12 @@ const toc = tableOfContents(post.body);
       the same article claimed twice. */}
   pageType="WebPage"
   ogType="article"
+  articleMeta={{
+    publishedTime: post.publishedAt,
+    modifiedTime: post.updatedAt ?? post.publishedAt,
+    author: site.name,
+    section: post.categoryLabel,
+  }}
   breadcrumbLeaf={post.title}
   schema={[articleSchema(post, origin, canonical, ogUrl)]}
 >
@@ -57,13 +68,20 @@ const toc = tableOfContents(post.body);
 
     <header class="stack-md" data-reveal>
       <div class="pc-meta post-meta-head">
-        <span class="pc-tag">{post.categoryLabel}</span>
+        <a class="pc-tag pc-tag-link" href={`/blog/category/${post.category}`}>{post.categoryLabel}</a>
         <Icon name="fa-regular fa-clock" />{post.readTime}
         <span class="post-sep" aria-hidden="true">·</span>
         <time datetime={post.publishedAt}>{post.date}</time>
+        {post.updatedAt && post.updatedAt !== post.publishedAt && (
+          <>
+            <span class="post-sep" aria-hidden="true">·</span>
+            <span class="post-updated">Updated <time datetime={post.updatedAt}>{post.updatedAt}</time></span>
+          </>
+        )}
       </div>
       <h1 class="cs-title">{post.title}</h1>
       <p class="cs-summary">{post.excerpt}</p>
+      <p class="post-byline">By <a href="/about" rel="author">{site.name}</a> — {site.role}</p>
     </header>
 
     <div class="cs-hero" data-reveal>
@@ -76,10 +94,37 @@ const toc = tableOfContents(post.body);
       <PortableText blocks={post.body} />
     </div>
 
+    <aside class="post-author" data-reveal>
+      <div class="post-author-body">
+        <p class="eyebrow">Written by</p>
+        <h2 class="post-author-name">{site.name}</h2>
+        <p>{site.seo.description}</p>
+        <div class="post-author-links">
+          <a href="/about">More about me</a>
+          <a href={site.closingCta.primary.href}>{site.closingCta.primary.label}</a>
+        </div>
+      </div>
+    </aside>
+
+    {seriesPosts.length > 0 && (
+      <aside class="post-related" data-reveal>
+        <h2 class="eyebrow">Part of the {post.series} series</h2>
+        <div class="post-related-grid">
+          {seriesPosts.map((r) => (
+            <a class="post-related-card" href={`/blog/${r.slug}`}>
+              <span class="pc-tag">{r.categoryLabel}</span>
+              <h3>{r.title}</h3>
+              <p>{r.excerpt}</p>
+            </a>
+          ))}
+        </div>
+      </aside>
+    )}
+
     {related.length > 0 && (
       <aside class="post-related" data-reveal>
         <h2 class="eyebrow">
-          More in {post.categoryLabel}
+          More in <a href={`/blog/category/${post.category}`}>{post.categoryLabel}</a>
         </h2>
         <div class="post-related-grid">
           {related.map((r) => (
@@ -115,6 +160,31 @@ const toc = tableOfContents(post.body);
 <style>
   .post-meta-head { display: flex; align-items: center; gap: var(--space-2xs); flex-wrap: wrap; }
   .post-sep { color: var(--color-grey-3); }
+  .post-updated { color: var(--color-grey-3); }
+  .pc-tag-link { text-decoration: none; }
+  .pc-tag-link:hover { border-color: rgba(10,10,10,.22); }
+
+  .post-byline { color: var(--color-grey-2); font-size: .95rem; }
+  .post-byline a { color: var(--color-ink); text-decoration: underline; text-underline-offset: 3px; }
+
+  /* End-of-post author card. Search engines weigh who wrote a piece for
+     anything advice-shaped, and a reader deciding whether to trust the post
+     shouldn't have to leave it to find out. */
+  .post-author {
+    margin-top: var(--space-2xl); padding: var(--space-lg);
+    border: 1px solid var(--line); border-radius: 18px; background: var(--color-surface);
+  }
+  .post-author-name {
+    font-family: var(--font-display); font-size: 1.25rem; font-weight: 600;
+    margin: var(--space-2xs) 0 var(--space-xs); color: var(--color-ink);
+  }
+  .post-author-body p:last-of-type { color: var(--color-grey-1); line-height: 1.7; max-width: 60ch; }
+  .post-author-links { display: flex; flex-wrap: wrap; gap: var(--space-md); margin-top: var(--space-sm); }
+  .post-author-links a {
+    color: var(--color-blue); text-decoration: underline; text-underline-offset: 3px;
+    font-size: .95rem; min-height: 44px; display: inline-flex; align-items: center;
+  }
+
   .post-related { margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--line); }
   .post-related-grid {
     display: grid; gap: var(--space-sm); margin-top: var(--space-sm);
