@@ -202,6 +202,24 @@
       "cat": "fullstack",
       "id": "post-feature-flags-simple",
       "words": 2543
+    },
+    {
+      "slug": "role-based-auth-nextjs-express",
+      "cat": "backend",
+      "id": "post-role-based-auth-nextjs-express",
+      "words": 2817
+    },
+    {
+      "slug": "stripe-webhooks-idempotency",
+      "cat": "backend",
+      "id": "post-stripe-webhooks-idempotency",
+      "words": 2608
+    },
+    {
+      "slug": "supabase-row-level-security",
+      "cat": "backend",
+      "id": "post-supabase-row-level-security",
+      "words": 2548
     }
   ],
   "current_category": "backend",
@@ -209,9 +227,6 @@
     "ai": [],
     "fullstack": [],
     "backend": [
-      "role-based-auth-nextjs-express",
-      "stripe-webhooks-idempotency",
-      "supabase-row-level-security",
       "transactional-email-deliverability",
       "neon-database-branching",
       "zero-downtime-migrations",
