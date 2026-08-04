@@ -220,26 +220,85 @@
       "cat": "backend",
       "id": "post-supabase-row-level-security",
       "words": 2548
+    },
+    {
+      "slug": "transactional-email-deliverability",
+      "cat": "backend",
+      "id": "post-transactional-email-deliverability",
+      "words": 2508
+    },
+    {
+      "slug": "neon-database-branching",
+      "cat": "backend",
+      "id": "post-neon-database-branching",
+      "words": 2526
+    },
+    {
+      "slug": "zero-downtime-migrations",
+      "cat": "backend",
+      "id": "post-zero-downtime-migrations",
+      "words": 2522
+    },
+    {
+      "slug": "r2-vs-s3",
+      "cat": "backend",
+      "id": "post-r2-vs-s3",
+      "words": 2531
+    },
+    {
+      "slug": "rest-api-design",
+      "cat": "backend",
+      "id": "post-rest-api-design",
+      "words": 2534
+    },
+    {
+      "slug": "mongodb-schema-indexes",
+      "cat": "backend",
+      "id": "post-mongodb-schema-indexes",
+      "words": 2538
+    },
+    {
+      "slug": "signed-upload-urls",
+      "cat": "backend",
+      "id": "post-signed-upload-urls",
+      "words": 2521
+    },
+    {
+      "slug": "idempotency-keys",
+      "cat": "backend",
+      "id": "post-idempotency-keys",
+      "words": 2510
+    },
+    {
+      "slug": "background-job-queues",
+      "cat": "backend",
+      "id": "post-background-job-queues",
+      "words": 2522
+    },
+    {
+      "slug": "render-background-jobs",
+      "cat": "backend",
+      "id": "post-render-background-jobs",
+      "words": 2515
+    },
+    {
+      "slug": "edge-rate-limiting",
+      "cat": "backend",
+      "id": "post-edge-rate-limiting",
+      "words": 2508
+    },
+    {
+      "slug": "n8n-workflow-automation",
+      "cat": "backend",
+      "id": "post-n8n-workflow-automation",
+      "words": 2512
     }
   ],
-  "current_category": "backend",
+  "current_category": "frontend",
   "remaining": {
     "ai": [],
     "fullstack": [],
-    "backend": [
-      "transactional-email-deliverability",
-      "neon-database-branching",
-      "zero-downtime-migrations",
-      "r2-vs-s3",
-      "rest-api-design",
-      "mongodb-schema-indexes",
-      "signed-upload-urls",
-      "render-background-jobs",
-      "idempotency-keys",
-      "background-job-queues",
-      "edge-rate-limiting",
-      "n8n-workflow-automation"
-    ],
+    "backend": [],
     "frontend": [
       "astro-vs-nextjs",
       "astro-islands",
