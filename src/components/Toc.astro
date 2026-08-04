@@ -30,7 +30,7 @@ const { entries, label = 'On this page' } = Astro.props;
      indexes a 68ch column should not itself run to 1060px — the mismatch left
      a wide dead margin down the right of the card and two different left-to-
      right rhythms stacked on top of each other. */
-  .toc { margin: 0 0 var(--space-lg); max-width: 68ch; }
+  .toc { margin: 0 auto var(--space-lg); max-width: var(--prose); }
   .toc-shell {
     border: 1px solid var(--line); border-radius: 14px;
     padding: var(--space-sm) var(--space-md); background: var(--color-surface);

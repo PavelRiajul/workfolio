@@ -48,6 +48,18 @@
   --section-y: var(--space-3xl);
   --section-y-tight: var(--space-2xl);
 
+  /* ---- Long-form reading axis --------------------------------------------
+     Two widths, used together by every part of an article. `--prose` is the
+     text column, sized for ~70 characters a line at the article body size —
+     deliberately in rem rather than ch, because Inter's "0" is 0.63em, so a
+     68ch column measures 86 characters and reads as a wall.
+     `--prose-wide` is what tables, code blocks and figures get. Both are
+     centred on the same axis: the failure this replaces was a 686px text
+     column left-aligned inside a 1180px container, with 580px of dead space
+     beside every paragraph and a full-width hero above it. */
+  --prose: 41rem;
+  --prose-wide: 54rem;
+
   /* ---- Breakpoints -------------------------------------------------------
      Four, and only four. Custom properties can't be used inside @media, so
      these are documentation — but every query in this file uses one of them.
@@ -865,6 +877,22 @@ html.lenis, html.lenis body { height: auto; }
 .pc-tag { text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-grey-1); border: 1px solid rgba(10,10,10,0.12); padding: 4px 10px; border-radius: 9999px; }
 .post-card .post-title { font-size: 23px; line-height: 1.15; letter-spacing: -0.02em; margin: 14px 0 0; }
 .post-card p { font-size: 15px; line-height: 1.55; color: var(--color-grey-2); margin: 10px 0 0; }
+/* Cards with no artwork yet. Rather than a hatched rectangle standing in for
+   an image that does not exist, the card becomes a text card: a bordered panel
+   with the meta row on top. Applied automatically by `hasCover` in blog.astro,
+   so the moment a file lands in /public/blog the cover returns and this class
+   stops being emitted. */
+.post-card.no-cover {
+  border: 1px solid var(--line); border-radius: 16px;
+  padding: var(--space-sm) var(--space-md) var(--space-md);
+  transition: border-color .24s ease, transform .24s cubic-bezier(.22,.61,.36,1);
+}
+.post-card.no-cover:hover { border-color: rgba(10,10,10,.22); transform: translateY(-2px); }
+.post-card.no-cover .pc-meta { margin-top: 0; }
+.post-feature.no-cover { padding: clamp(22px,3.5vw,40px); }
+.post-feature.no-cover .pf-body { padding: 0; }
+.post-feature.no-cover p { max-width: 62ch; }
+
 .blog-empty { display: none; text-align: center; padding: 60px 0; color: var(--color-grey-3); font-size: 16px; }
 
 /* ===== Case study ====================================================== */

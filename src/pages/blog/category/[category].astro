@@ -11,8 +11,14 @@ import Placeholder from '../../../components/Placeholder.astro';
 import { getPosts, getBlogPage, getSite } from '../../../lib/content';
 import { isPublished } from '../../../lib/portable';
 import { categoryLabel } from '../../../lib/categories';
+import { publicFileExists } from '../../../lib/public-file';
 import type { Post, BlogPageContent } from '../../../lib/types';
 import Headline from '../../../components/Headline.astro';
+
+// Same rule as /blog and the post page: no hatched stand-in where no artwork
+// exists at all. Drop a file into /public/blog and covers return by themselves.
+const hasCover = (p: Post) =>
+  Boolean(p.image?.asset?.url) || publicFileExists(`/blog/${p.slug}.jpg`);
 
 export async function getStaticPaths() {
   const [posts, page] = await Promise.all([getPosts(), getBlogPage()]);
@@ -84,8 +90,10 @@ const itemList = {
     <div class="wrap">
       <div class="post-grid post-grid-hub">
         {posts.map((p) => (
-          <a class="post-card" href={`/blog/${p.slug}`}>
-            <div class="cover"><div class="post-img-zoom"><Placeholder label={p.coverLabel} image={p.image} src={`/blog/${p.slug}.jpg`} /></div></div>
+          <a class={`post-card ${hasCover(p) ? '' : 'no-cover'}`} href={`/blog/${p.slug}`}>
+            {hasCover(p) && (
+              <div class="cover"><div class="post-img-zoom"><Placeholder label={p.coverLabel} image={p.image} src={`/blog/${p.slug}.jpg`} /></div></div>
+            )}
             <div class="pc-meta"><span class="pc-tag">{categoryLabel(p.category, p.categoryLabel)}</span>{p.readTime}</div>
             <h2 class="post-title">{p.title}</h2>
             <p>{p.excerpt}</p>

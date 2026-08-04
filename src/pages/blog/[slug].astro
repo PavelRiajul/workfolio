@@ -4,10 +4,12 @@ import Placeholder from '../../components/Placeholder.astro';
 import PortableText from '../../components/PortableText.astro';
 import Icon from '../../components/Icon.astro';
 import Toc from '../../components/Toc.astro';
+import ShareLinks from '../../components/ShareLinks.astro';
 import { getPosts, getBlogPage, getSite } from '../../lib/content';
 import { articleSchema, faqSchema } from '../../lib/schema';
 import { isPublished, relatedPosts, tableOfContents } from '../../lib/portable';
 import { categoryLabel } from '../../lib/categories';
+import { publicFileExists } from '../../lib/public-file';
 import type { Post } from '../../lib/types';
 import Headline from '../../components/Headline.astro';
 
@@ -46,6 +48,15 @@ const origin = (Astro.site ?? new URL(Astro.url.origin)).href;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
 const ogUrl = new URL(`/og/blog-${post.slug}.png`, Astro.site ?? Astro.url).href;
 const toc = tableOfContents(post.body);
+
+// Only show a cover when there is a real one. Body images already suppress
+// themselves when the file is missing (Placeholder falls back, PortableText
+// renders no figure) — the cover did not, so every post opened with a 540px
+// hatched grey slab between the title and the first sentence. A placeholder is
+// right where a caption is being wired up ahead of the photo; it is wrong as
+// the first thing a reader meets on an article.
+const coverSrc = `/blog/${post.slug}.jpg`;
+const hasCover = Boolean(post.image?.asset?.url) || publicFileExists(coverSrc);
 ---
 <Base
   title={post.seo?.title ?? `${post.title} — ${page.seo.title.split('—')[1]?.trim() ?? 'Blog'}`}
@@ -65,53 +76,81 @@ const toc = tableOfContents(post.body);
   breadcrumbLeaf={post.title}
   schema={[articleSchema(post, origin, canonical, ogUrl), faqSchema(post.faqs ?? [])]}
 >
-  <article class="cs-article section section-flush-bottom">
+  <article class="cs-article post-article section section-flush-bottom">
     <a href="/blog" class="cs-back">← Back to blog</a>
 
-    <header class="stack-md" data-reveal>
-      <div class="pc-meta post-meta-head">
-        <a class="pc-tag pc-tag-link" href={`/blog/category/${post.category}`}>{categoryLabel(post.category, post.categoryLabel)}</a>
-        <Icon name="fa-regular fa-clock" />{post.readTime}
-        <span class="post-sep" aria-hidden="true">·</span>
-        <time datetime={post.publishedAt}>{post.date}</time>
-        {post.updatedAt && post.updatedAt !== post.publishedAt && (
-          <>
-            <span class="post-sep" aria-hidden="true">·</span>
-            <span class="post-updated">Updated <time datetime={post.updatedAt}>{post.updatedAt}</time></span>
-          </>
-        )}
+    {/* The header is centred and spans the full column; the two-column reading
+        layout starts below it. Same arrangement as the reference design. */}
+    <header class="post-head" data-reveal>
+      <a class="pc-tag pc-tag-link" href={`/blog/category/${post.category}`}>{categoryLabel(post.category, post.categoryLabel)}</a>
+      <h1 class="cs-title post-title">{post.title}</h1>
+      <p class="cs-summary post-summary">{post.excerpt}</p>
+
+      {/* One bordered strip carries author, date and read time, instead of the
+          four separate lines they were scattered across. */}
+      <div class="post-meta-bar">
+        <div class="post-meta-who">
+          <span class="post-avatar" aria-hidden="true">{site.name.slice(0, 1)}</span>
+          <span class="post-meta-stack">
+            <a class="post-meta-name" href="/about" rel="author">{site.name}</a>
+            <span class="post-meta-sub">{site.role}</span>
+          </span>
+        </div>
+        <div class="post-meta-when">
+          <span><Icon name="fa-regular fa-clock" />{post.readTime}</span>
+          <span class="post-sep" aria-hidden="true">·</span>
+          <time datetime={post.publishedAt}>{post.date}</time>
+          {post.updatedAt && post.updatedAt !== post.publishedAt && (
+            <>
+              <span class="post-sep" aria-hidden="true">·</span>
+              <span class="post-updated">Updated <time datetime={post.updatedAt}>{post.updatedAt}</time></span>
+            </>
+          )}
+        </div>
       </div>
-      <h1 class="cs-title">{post.title}</h1>
-      <p class="cs-summary">{post.excerpt}</p>
-      <p class="post-byline">By <a href="/about" rel="author">{site.name}</a> — {site.role}</p>
     </header>
 
-    <div class="cs-hero" data-reveal>
-      <Placeholder label={post.coverLabel} image={post.image} src={`/blog/${post.slug}.jpg`} alt={post.title} />
-    </div>
-
-    {toc.length > 0 && <div data-reveal><Toc entries={toc} /></div>}
-
-    <div class="post-body stack-md" data-reveal>
-      <PortableText blocks={post.body} />
-    </div>
-
-    {post.faqs && post.faqs.length > 0 && (
-      <section class="post-faq" data-reveal>
-        <h2 class="post-faq-title">Frequently asked questions</h2>
-        {/* Rendered as visible HTML, not schema-only — Google stopped counting
-            FAQ markup that has no on-page counterpart. <details> keeps the page
-            short while leaving every answer in the DOM for a crawler. */}
-        {post.faqs.map((f) => (
-          <details class="post-faq-item">
-            <summary>{f.question}</summary>
-            <p>{f.answer}</p>
-          </details>
-        ))}
-      </section>
+    {hasCover && (
+      <div class="cs-hero" data-reveal>
+        <Placeholder label={post.coverLabel} image={post.image} src={coverSrc} alt={post.title} />
+      </div>
     )}
 
-    <aside class="post-author" data-reveal>
+    <div class="post-layout">
+      {/* Left rail. Sticky from 1024px up, where there is genuinely room for it
+          — that width used to be empty space beside the text. Below it, the
+          contents list falls back to the collapsed block above the article and
+          the share card moves to the end. */}
+      <aside class="post-rail">
+        {toc.length > 0 && <Toc entries={toc} />}
+        {/* Wrapped rather than class-on-component: a scoped rule in this page
+            does not reach a child component's own root element. */}
+        <div class="post-rail-share"><ShareLinks url={canonical} title={post.title} /></div>
+      </aside>
+
+      <div class="post-main">
+        <div class="post-body" data-reveal>
+          <PortableText blocks={post.body} />
+        </div>
+
+        {post.faqs && post.faqs.length > 0 && (
+          <section class="post-faq" data-reveal>
+            <h2 class="post-faq-title">Frequently asked questions</h2>
+            {/* Rendered as visible HTML, not schema-only — Google stopped counting
+                FAQ markup that has no on-page counterpart. <details> keeps the page
+                short while leaving every answer in the DOM for a crawler. */}
+            {post.faqs.map((f) => (
+              <details class="post-faq-item">
+                <summary>{f.question}</summary>
+                <p>{f.answer}</p>
+              </details>
+            ))}
+          </section>
+        )}
+
+        <div class="post-end-share"><ShareLinks url={canonical} title={post.title} /></div>
+
+        <aside class="post-author" data-reveal>
       <div class="post-author-body">
         <p class="eyebrow">Written by</p>
         <h2 class="post-author-name">{site.name}</h2>
@@ -121,8 +160,12 @@ const toc = tableOfContents(post.body);
           <a href={site.closingCta.primary.href}>{site.closingCta.primary.label}</a>
         </div>
       </div>
-    </aside>
+        </aside>
+      </div>
+    </div>
 
+    {/* Related work spans the full width below the two-column area, as a 3-up
+        grid — it is browsing, not reading, so it does not want the measure. */}
     {seriesPosts.length > 0 && (
       <aside class="post-related" data-reveal>
         <h2 class="eyebrow">Part of the {post.series} series</h2>
@@ -175,14 +218,98 @@ const toc = tableOfContents(post.body);
 </Base>
 
 <style>
-  .post-meta-head { display: flex; align-items: center; gap: var(--space-2xs); flex-wrap: wrap; }
+  /* ---- Header ------------------------------------------------------------
+     Centred and capped at the wide measure. The title used to run the full
+     1180px container while the body sat in a 686px column beneath it, so the
+     two halves of the page had different left edges. */
+  .post-head {
+    max-width: var(--prose-wide); margin: var(--space-md) auto 0;
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    gap: var(--space-sm);
+  }
+  .post-title { margin: 0; font-size: clamp(2rem, 1.3rem + 2.6vw, 3.25rem); line-height: 1.06; }
+  .post-summary { margin: 0; max-width: 46rem; text-align: center; }
+
+  .post-meta-bar {
+    width: 100%; margin-top: var(--space-2xs);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: var(--space-sm);
+    padding: var(--space-sm) 0;
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    text-align: left;
+  }
+  .post-meta-who { display: flex; align-items: center; gap: var(--space-2xs); }
+  /* Initial in a ring, until there is a real author photo to drop in. */
+  .post-avatar {
+    display: grid; place-items: center; width: 44px; height: 44px; flex: none;
+    border-radius: 999px; border: 1px solid var(--line); background: var(--color-surface);
+    font-family: var(--font-display); font-weight: 600; color: var(--color-ink);
+  }
+  .post-meta-stack { display: flex; flex-direction: column; line-height: 1.3; }
+  .post-meta-name {
+    font-family: var(--font-display); font-weight: 600; color: var(--color-ink);
+    text-decoration: none;
+  }
+  .post-meta-name:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .post-meta-sub { font-size: .85rem; color: var(--color-grey-2); }
+  .post-meta-when {
+    display: flex; align-items: center; gap: var(--space-2xs); flex-wrap: wrap;
+    font-size: .9rem; color: var(--color-grey-2);
+  }
+  .post-meta-when :global(svg) { width: 14px; height: 14px; fill: currentColor; margin-right: 5px; vertical-align: -2px; }
   .post-sep { color: var(--color-grey-3); }
   .post-updated { color: var(--color-grey-3); }
   .pc-tag-link { text-decoration: none; }
   .pc-tag-link:hover { border-color: rgba(10,10,10,.22); }
 
-  .post-byline { color: var(--color-grey-2); font-size: .95rem; }
-  .post-byline a { color: var(--color-ink); text-decoration: underline; text-underline-offset: 3px; }
+  /* ---- Two-column reading layout ----------------------------------------
+     A left rail for navigation and sharing, and the article beside it. The
+     rail occupies width that was previously empty: the prose column is capped
+     for readability, so on a wide screen the alternative to a rail is dead
+     space, not a wider line. */
+  .post-layout { margin-top: var(--space-lg); }
+  .post-main { min-width: 0; }
+  .post-rail { display: contents; }
+  .post-rail-share { display: none; }
+
+  @media (min-width: 1024px) {
+    .post-layout {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: var(--space-xl);
+      align-items: start;
+    }
+    .post-rail {
+      display: flex; flex-direction: column; gap: var(--space-md);
+      position: sticky;
+      /* Clears the fixed wordmark; the rail scrolls internally when a long
+         contents list would otherwise run past the viewport. */
+      top: var(--space-lg);
+      max-height: calc(100vh - var(--space-lg) * 2 - var(--tabbar-h));
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    .post-rail-share { display: block; }
+    /* The end-of-article share is a duplicate once the rail is visible. */
+    .post-end-share { display: none; }
+    /* The rail supplies its own spacing via the flex gap. */
+    .post-rail :global(.toc) { margin: 0; max-width: none; }
+
+    /* Beside the rail, prose aligns to the left of the column rather than
+       centring inside it. The main column is only ~130px wider than the
+       measure, so centring put paragraphs 65px inside the left edge of the
+       code blocks and tables — close enough to look like a mistake rather
+       than a deliberate bleed. Shared left edge, wide blocks run right. */
+    .post-main :global(.post-body) > :global(.pt-p),
+    .post-main :global(.post-body) > :global(.pt-h2),
+    .post-main :global(.post-body) > :global(.pt-h3),
+    .post-main :global(.post-body) > :global(.pt-h4),
+    .post-main :global(.post-body) > :global(.pt-list),
+    .post-main :global(.post-body) > :global(.pt-quote) { margin-left: 0; margin-right: 0; }
+    .post-main :global(.post-faq) { max-width: var(--prose); margin-left: 0; }
+  }
+
+  .post-end-share { margin-top: var(--space-xl); }
 
   /* End-of-post author card. Search engines weigh who wrote a piece for
      anything advice-shaped, and a reader deciding whether to trust the post
@@ -228,9 +355,17 @@ const toc = tableOfContents(post.body);
   }
 
   .post-related { margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--line); }
+  /* Two up on phones (the site-wide density rule), three from 900px — this is
+     browsing rather than reading, so it takes the full width below the
+     two-column area rather than the measure. */
   .post-related-grid {
     display: grid; gap: var(--space-sm); margin-top: var(--space-sm);
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  /* auto-fit rather than a fixed 3, so a series with two posts fills the row
+     instead of leaving a third of the width empty. */
+  @media (min-width: 900px) {
+    .post-related-grid { grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); }
   }
   .post-related-card {
     display: block; padding: var(--space-md); border: 1px solid var(--line);

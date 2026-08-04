@@ -153,18 +153,22 @@ const langOf = (b: PortableBlock) => {
 }
 
 <style is:global>
-  /* Article body. Measure is capped for readability; type inherits the site's
-     existing scale rather than introducing a second one. */
-  .post-body { max-width: 68ch; }
+  /* Article body. Reading type is a size up from UI type — 16px is a control
+     label, and a 2,500-word article set in it is tiring well before the end. */
+  .post-body {
+    max-width: var(--prose-wide);
+    margin-inline: auto;
+    font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  }
   .post-body .pt-p { margin-bottom: var(--space-md); color: var(--color-grey-1); line-height: 1.75; }
   .post-body .pt-h2 {
     font-family: var(--font-display); font-weight: 600; letter-spacing: -0.02em;
-    font-size: clamp(1.35rem, 1.1rem + 1vw, 1.75rem);
+    font-size: clamp(1.5rem, 1.2rem + 1.1vw, 2rem);
     margin-top: var(--space-xl); margin-bottom: var(--space-sm); color: var(--color-ink);
   }
   .post-body .pt-h3 {
     font-family: var(--font-display); font-weight: 600; letter-spacing: -0.015em;
-    font-size: clamp(1.1rem, 1rem + 0.5vw, 1.3rem);
+    font-size: clamp(1.15rem, 1.05rem + 0.5vw, 1.375rem);
     margin-top: var(--space-lg); margin-bottom: var(--space-2xs); color: var(--color-ink);
   }
   .post-body .pt-h4 {
@@ -179,6 +183,21 @@ const langOf = (b: PortableBlock) => {
     font-size: 1.05em; color: var(--color-ink);
   }
   .post-body a { color: var(--color-blue); text-decoration: underline; text-underline-offset: 3px; }
+
+  /* One reading axis. Text sits in the prose column; tables, code and figures
+     are centred on the same axis at the wider width, so nothing is stranded
+     against the left edge of a much wider container. These rules come last so
+     they win the margin shorthand set on .pt-list and .pt-quote above. */
+  .post-body > .pt-p,
+  .post-body > .pt-h2,
+  .post-body > .pt-h3,
+  .post-body > .pt-h4,
+  .post-body > .pt-list,
+  .post-body > .pt-quote {
+    max-width: var(--prose);
+    margin-left: auto;
+    margin-right: auto;
+  }
 
   /* Heading anchors — hidden until the heading is hovered or the link is
      focused, so they never clutter the reading view but stay keyboard-usable. */
@@ -211,13 +230,26 @@ const langOf = (b: PortableBlock) => {
     overflow-x: auto; font-size: .85em; line-height: 1.65;
   }
   .post-body .pt-code code { font-family: var(--font-mono); }
-  /* Inline code — not the highlighted blocks. */
-  .post-body :not(.pt-code) > p > code,
+  /* Inline code — not the highlighted blocks.
+     This used to read `:not(.pt-code) > p > code`, which never matched a single
+     span on the site: .pt-p is a direct child of .post-body, so the descendant
+     combinator had no element to bind to. Every inline identifier rendered as
+     bare monospace at full body size with no background, and long ones broke
+     mid-token across lines looking like a rendering fault. Target the block
+     classes directly instead — .pt-code's own <pre><code> is never one of them. */
+  .post-body .pt-p code,
   .post-body .pt-list code,
-  .post-body .pt-quote code {
-    font-family: var(--font-mono); font-size: 0.88em;
+  .post-body .pt-quote code,
+  .post-body .pt-h2 code,
+  .post-body .pt-h3 code,
+  .post-body .pt-h4 code,
+  .post-body .pt-table code {
+    font-family: var(--font-mono); font-size: 0.86em;
     background: var(--color-surface); border: 1px solid var(--line);
     padding: 0.1em 0.35em; border-radius: 5px;
+    /* Break only when it genuinely cannot fit, so an identifier stays whole
+       wherever there is room for it. */
+    overflow-wrap: break-word;
   }
 
   /* Comparison tables. The wrapper is what scrolls, never the page — a wide

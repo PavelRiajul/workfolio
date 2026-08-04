@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 import Placeholder from '../components/Placeholder.astro';
 import { getPosts, getBlogPage } from '../lib/content';
 import { categoryLabel } from '../lib/categories';
+import { publicFileExists } from '../lib/public-file';
 import Headline from '../components/Headline.astro';
 
 const posts = await getPosts();
@@ -23,6 +24,17 @@ const hrefFor = (p: (typeof posts)[number]) => (p.body?.length ? `/blog/${p.slug
 // blog/category/[category].astro, so a chip never links to a route that
 // wasn't generated.
 const hubHrefs = new Set(posts.filter((p) => p.body?.length).map((p) => p.category));
+
+// Same rule as the post page: a card shows a cover only when there is a real
+// one. With no artwork on the site yet this page rendered 47 identical hatched
+// rectangles, the featured one 1134x709 — a full screen of nothing above the
+// first headline, and the dominant visual element of the page. A placeholder
+// earns its place where one photo is pending among many; it does not where
+// every single image is missing. Drop a file into /public/blog and the cover
+// comes back with no code change.
+const coverFor = (p: (typeof posts)[number]) => `/blog/${p.slug}.jpg`;
+const hasCover = (p: (typeof posts)[number]) =>
+  Boolean(p.image?.asset?.url) || publicFileExists(coverFor(p));
 
 ---
 <Base title={page.seo.title} description={page.seo.description} subpage={true} pageType="Blog">
@@ -87,11 +99,13 @@ const hubHrefs = new Set(posts.filter((p) => p.body?.length).map((p) => p.catego
 
       {featured && (
         <a
-          class={`post-card post-feature stack-lg ${hrefFor(featured) ? '' : 'post-unwritten'}`}
+          class={`post-card post-feature stack-lg ${hrefFor(featured) ? '' : 'post-unwritten'} ${hasCover(featured) ? '' : 'no-cover'}`}
           data-category={featured.category}
           href={hrefFor(featured)}
         >
-          <div class="cover"><div class="post-img-zoom"><Placeholder label={featured.coverLabel} image={featured.image} /></div></div>
+          {hasCover(featured) && (
+            <div class="cover"><div class="post-img-zoom"><Placeholder label={featured.coverLabel} image={featured.image} src={coverFor(featured)} /></div></div>
+          )}
           <div class="pf-body">
             <div class="pf-meta">
               <span class="pf-badge">{page.featuredBadge}</span>
@@ -107,11 +121,13 @@ const hubHrefs = new Set(posts.filter((p) => p.body?.length).map((p) => p.catego
       <div class="post-grid stack-lg">
         {rest.map((p) => (
           <a
-            class={`post-card ${hrefFor(p) ? '' : 'post-unwritten'}`}
+            class={`post-card ${hrefFor(p) ? '' : 'post-unwritten'} ${hasCover(p) ? '' : 'no-cover'}`}
             data-category={p.category}
             href={hrefFor(p)}
           >
-            <div class="cover"><div class="post-img-zoom"><Placeholder label={p.coverLabel} image={p.image} /></div></div>
+            {hasCover(p) && (
+              <div class="cover"><div class="post-img-zoom"><Placeholder label={p.coverLabel} image={p.image} src={coverFor(p)} /></div></div>
+            )}
             <div class="pc-meta"><span class="pc-tag">{categoryLabel(p.category, p.categoryLabel)}</span>{p.readTime}</div>
             <h3 class="post-title">{p.title}</h3>
             <p>{p.excerpt}</p>

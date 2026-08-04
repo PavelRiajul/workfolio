@@ -1,0 +1,93 @@
+---
+// Share row for an article. Plain links to each network's share endpoint — no
+// third-party widget, so nothing is loaded from another origin and nothing
+// tracks the reader before they choose to share.
+//
+// The copy-link button is progressive: it is a real link to the canonical URL,
+// so it works with JavaScript off, and the script upgrades it to a clipboard
+// write with a confirmation.
+import Icon from './Icon.astro';
+
+interface Props { url: string; title: string; label?: string; class?: string }
+const { url, title, label = 'Share this article', class: cls = '' } = Astro.props;
+
+const u = encodeURIComponent(url);
+const t = encodeURIComponent(title);
+
+const targets = [
+  { name: 'X', icon: 'fa-brands fa-x-twitter', href: `https://x.com/intent/tweet?url=${u}&text=${t}` },
+  { name: 'LinkedIn', icon: 'fa-brands fa-linkedin-in', href: `https://www.linkedin.com/sharing/share-offsite/?url=${u}` },
+  { name: 'Facebook', icon: 'fa-brands fa-facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${u}` },
+];
+---
+<div class={`share ${cls}`}>
+  <p class="share-label">{label}</p>
+  <div class="share-row">
+    {targets.map((s) => (
+      <a
+        class="share-btn"
+        href={s.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Share on ${s.name}`}
+      >
+        <Icon name={s.icon} />
+      </a>
+    ))}
+    <a class="share-btn share-copy" href={url} data-copy={url} aria-label="Copy link">
+      <Icon name="fa-solid fa-link" />
+      <span class="share-done" aria-hidden="true">Copied</span>
+    </a>
+  </div>
+</div>
+
+<style>
+  .share-label {
+    font-family: var(--font-display); font-size: .8rem; font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--color-grey-2);
+    margin: 0 0 var(--space-xs);
+  }
+  .share-row { display: flex; flex-wrap: wrap; gap: var(--space-2xs); }
+  /* 44px, like every other control on the site. */
+  .share-btn {
+    position: relative;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; border-radius: 10px;
+    border: 1px solid var(--line); color: var(--color-grey-1);
+    text-decoration: none; background: #fff;
+    transition: border-color .2s ease, color .2s ease, transform .2s cubic-bezier(.22,.61,.36,1);
+  }
+  .share-btn:hover { border-color: rgba(10,10,10,.22); color: var(--color-ink); transform: translateY(-1px); }
+  .share-btn :global(svg) { width: 17px; height: 17px; fill: currentColor; }
+
+  /* Confirmation for the copy button. Hidden until the script sets the flag. */
+  .share-done {
+    position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+    padding: 3px 8px; border-radius: 6px; white-space: nowrap;
+    background: var(--color-ink); color: #fff; font-size: .72rem;
+    opacity: 0; pointer-events: none; transition: opacity .18s ease;
+  }
+  .share-copy[data-copied] .share-done { opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .share-btn, .share-done { transition: none; }
+  }
+</style>
+
+<script>
+  // Upgrade the copy link in place. Without JS it stays a normal link to the
+  // article, which is a reasonable fallback for "give me this URL".
+  document.querySelectorAll<HTMLAnchorElement>('.share-copy').forEach((el) => {
+    el.addEventListener('click', async (e) => {
+      if (!navigator.clipboard) return; // let the link navigate
+      e.preventDefault();
+      try {
+        await navigator.clipboard.writeText(el.dataset.copy ?? el.href);
+        el.dataset.copied = 'true';
+        setTimeout(() => delete el.dataset.copied, 1600);
+      } catch {
+        window.location.href = el.href;
+      }
+    });
+  });
+</script>
