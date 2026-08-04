@@ -1,0 +1,84 @@
+---
+// The service a post is about, offered beside it in the rail.
+//
+// Every word comes from the service loader — title, kicker, tagline, timeline,
+// features — so editing a service in the Studio updates it everywhere it
+// appears and there is no second copy of the offer to drift. The page only
+// decides *which* service, via `serviceForCategory`.
+import Icon from './Icon.astro';
+import type { Service } from '../lib/types';
+
+interface Props { service: Service; label?: string; cta?: string }
+const { service, label = 'Related service', cta = 'See the service' } = Astro.props;
+
+// A service with its own landing page links there; the rest deep-link to their
+// section on /services.
+const href = service.href ?? `/services#${service.slug}`;
+---
+<aside class="svc-card" aria-label={label}>
+  <p class="svc-label">{label}</p>
+
+  <div class="svc-head">
+    <span class="svc-icon" aria-hidden="true"><Icon name={service.icon} /></span>
+    <span>
+      <span class="svc-kicker">{service.kicker}</span>
+      <h2 class="svc-title">{service.title}</h2>
+    </span>
+  </div>
+
+  <p class="svc-tagline">{service.tagline}</p>
+
+  {/* No timeline row. The card sits beneath the contents list in a sticky
+      rail, and at 270px the timeline wrapped onto a line of its own — every
+      row this card takes is a section of the article the reader cannot see.
+      /services carries the timeline, which is where someone comparing
+      engagements is looking anyway. */}
+  <a class="svc-cta" href={href}>{cta} <span aria-hidden="true">→</span></a>
+</aside>
+
+<style>
+  .svc-card {
+    border: 1px solid var(--line); border-radius: 14px;
+    padding: var(--space-sm) var(--space-md) var(--space-md);
+    background: #fff;
+  }
+  .svc-label {
+    font-family: var(--font-display); font-size: .8rem; font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--color-grey-2);
+    margin: 0 0 var(--space-xs);
+  }
+
+  .svc-head { display: flex; align-items: flex-start; gap: var(--space-2xs); }
+  .svc-icon {
+    display: grid; place-items: center; flex: none;
+    width: 34px; height: 34px; border-radius: 9px;
+    background: var(--color-surface); border: 1px solid var(--line);
+    color: var(--color-blue);
+  }
+  .svc-icon :global(svg) { width: 15px; height: 15px; fill: currentColor; }
+  .svc-kicker {
+    display: block; font-size: .72rem; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--color-grey-2);
+  }
+  .svc-title {
+    font-family: var(--font-display); font-weight: 600; letter-spacing: -0.015em;
+    font-size: 1.05rem; line-height: 1.25; margin: 2px 0 0; color: var(--color-ink);
+  }
+
+  .svc-tagline {
+    margin: var(--space-xs) 0 0;
+    font-size: .92rem; line-height: 1.55; color: var(--color-grey-1);
+  }
+  /* 44px like every other control. */
+  .svc-cta {
+    display: inline-flex; align-items: center; gap: 6px; min-height: 44px;
+    color: var(--color-blue); font-weight: 500; font-size: .92rem;
+    text-decoration: underline; text-underline-offset: 3px;
+  }
+  .svc-cta span { transition: transform .22s cubic-bezier(.22,.61,.36,1); }
+  .svc-cta:hover span { transform: translateX(3px); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .svc-cta span { transition: none; }
+  }
+</style>

@@ -5,10 +5,11 @@ import PortableText from '../../components/PortableText.astro';
 import Icon from '../../components/Icon.astro';
 import Toc from '../../components/Toc.astro';
 import ShareLinks from '../../components/ShareLinks.astro';
-import { getPosts, getBlogPage, getSite } from '../../lib/content';
+import ServiceCard from '../../components/ServiceCard.astro';
+import { getPosts, getBlogPage, getSite, getServices } from '../../lib/content';
 import { articleSchema, faqSchema } from '../../lib/schema';
 import { isPublished, relatedPosts, tableOfContents } from '../../lib/portable';
-import { categoryLabel } from '../../lib/categories';
+import { categoryLabel, serviceForCategory } from '../../lib/categories';
 import { publicFileExists } from '../../lib/public-file';
 import type { Post } from '../../lib/types';
 import Headline from '../../components/Headline.astro';
@@ -42,7 +43,13 @@ export async function getStaticPaths() {
 
 interface Props { post: Post; next: Post | null; related: Post[]; seriesPosts: Post[] }
 const { post, next, related, seriesPosts } = Astro.props;
-const [page, site] = await Promise.all([getBlogPage(), getSite()]);
+const [page, site, services] = await Promise.all([getBlogPage(), getSite(), getServices()]);
+
+// The service this post's topic points at, offered in the rail beside it. A
+// reader who has just spent thirteen minutes on rate limiting is the readiest
+// they will ever be to hear that I build APIs — far more use than a generic CTA.
+// An unmapped category, or a service that no longer exists, renders nothing.
+const matchedService = services.find((s) => s.slug === serviceForCategory(post.category));
 
 const origin = (Astro.site ?? new URL(Astro.url.origin)).href;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
@@ -122,12 +129,13 @@ const hasCover = Boolean(post.image?.asset?.url) || publicFileExists(coverSrc);
           — that width used to be empty space beside the text. Below it, the
           contents list falls back to the collapsed block above the article and
           the share card moves to the end. */}
-      <aside class="post-rail">
+      {/* Navigation left, article centre, offer right. Both rails are sticky
+          and each holds one card, so neither competes with the other for the
+          viewport — three cards in one rail clipped the contents list down to
+          six of eleven sections. Share stays at the end of the article, which
+          is when someone decides to share it. */}
+      <aside class="post-nav">
         {toc.length > 0 && <Toc entries={toc} rail />}
-        {/* One instance, moved by grid order rather than rendered twice and
-            hidden. Wrapped rather than class-on-component, because a scoped
-            rule in this page does not reach a child component's root element. */}
-        <div class="post-share"><ShareLinks url={canonical} title={post.title} /></div>
       </aside>
 
       <div class="post-main">
@@ -165,7 +173,15 @@ const hasCover = Boolean(post.image?.asset?.url) || publicFileExists(coverSrc);
             </div>
           </div>
         </aside>
+
+        <div class="post-share"><ShareLinks url={canonical} title={post.title} /></div>
       </div>
+
+      {matchedService && (
+        <aside class="post-aside">
+          <div class="post-offer"><ServiceCard service={matchedService} /></div>
+        </aside>
+      )}
     </div>
 
     {/* Related work spans the full width below the two-column area, as a 3-up
@@ -271,44 +287,46 @@ const hasCover = Boolean(post.image?.asset?.url) || publicFileExists(coverSrc);
      rail occupies width that was previously empty: the prose column is capped
      for readability, so on a wide screen the alternative to a rail is dead
      space, not a wider line. */
-  /* Single column below 1024px. The rail is `display: contents` so its two
-     children become grid items in their own right and `order` can put the
-     contents list above the article and the share row below it — one instance
-     of each, rather than rendering the share block twice and hiding one. */
+  /* One column by default: contents, article, then the offer. The offer
+     answers "what now", and asking that before the reader has read anything
+     is noise — so on a phone it waits until the end. */
   .post-layout {
     display: grid; grid-template-columns: minmax(0, 1fr);
     gap: var(--space-md); margin-top: var(--space-lg);
   }
-  .post-rail { display: contents; }
-  .post-rail :global(.toc) { order: 1; }
-  .post-main { min-width: 0; order: 2; }
-  .post-share { order: 3; margin-top: var(--space-lg); }
+  .post-main { min-width: 0; }
+  .post-aside { margin-top: var(--space-lg); }
+  .post-share { margin-top: var(--space-xl); }
 
   @media (min-width: 1024px) {
+    /* Two columns: contents rail plus the article, with the offer still in
+       flow beneath. A third column here would take the reading measure under
+       60 characters and squeeze every table with it — it arrives at 1280. */
     .post-layout {
-      grid-template-columns: 250px minmax(0, 1fr);
-      gap: var(--space-xl);
+      grid-template-columns: 230px minmax(0, 1fr);
+      grid-template-areas:
+        'nav main'
+        'nav aside';
+      gap: var(--space-md) var(--space-lg);
       align-items: start;
     }
+    .post-nav { grid-area: nav; }
+    .post-main { grid-area: main; }
+    .post-aside { grid-area: aside; margin-top: 0; max-width: var(--prose); }
+
     /* Grid rather than flex, for one specific reason: a `minmax(0, 1fr)` grid
        track resolves to a definite height, so `height: 100%` inside the
        contents card works. As a flex column the card was stretched but its
        height stayed indefinite, percentages did not resolve, and the 1,296px
-       list overflowed straight over the share row below it. */
-    .post-rail {
-      display: grid;
-      grid-template-rows: minmax(0, 1fr) auto;
-      gap: var(--space-md);
-      position: sticky; top: var(--space-lg);
-      /* The rail never scrolls — the contents list does, inside its own card,
-         so the share row stays reachable at the foot of it. */
-      max-height: calc(100svh - var(--space-lg) - var(--space-md));
-      min-height: 0;
+       list overflowed straight over whatever sat below it.
+       Offsets are tight on purpose: every pixel spent here is a section of
+       the contents list that falls below the fold. */
+    .post-nav {
+      display: grid; min-height: 0;
+      position: sticky; top: var(--space-sm);
+      max-height: calc(100svh - var(--space-sm) * 2);
     }
-    /* DOM order (contents, then share) is what renders here — the `order`
-       values above only matter in the single-column layout. */
-    .post-rail :global(.toc) { min-height: 0; height: 100%; }
-    .post-share { margin-top: 0; }
+    .post-nav :global(.toc) { min-height: 0; height: 100%; }
     /* Beside the rail, prose aligns to the left of the column rather than
        centring inside it. The main column is only ~130px wider than the
        measure, so centring put paragraphs 65px inside the left edge of the
@@ -321,6 +339,24 @@ const hasCover = Boolean(post.image?.asset?.url) || publicFileExists(coverSrc);
     .post-main :global(.post-body) > :global(.pt-list),
     .post-main :global(.post-body) > :global(.pt-quote) { margin-left: 0; margin-right: 0; }
     .post-main :global(.post-faq) { max-width: var(--prose); margin-left: 0; }
+  }
+
+  /* Three columns: contents left, article centre, the related service right.
+     The article container widens past --maxw here — at 1180px the three tracks
+     leave the middle one at ~556px, which is 62 characters and cramps every
+     comparison table. 1320px gives the measure its full width back and still
+     leaves both rails their own space. */
+  @media (min-width: 1280px) {
+    .post-article { max-width: 1320px; }
+    .post-layout {
+      grid-template-columns: 230px minmax(0, 1fr) 250px;
+      grid-template-areas: 'nav main aside';
+      gap: var(--space-lg);
+    }
+    .post-aside {
+      max-width: none;
+      position: sticky; top: var(--space-sm);
+    }
   }
 
   /* End-of-post author card. Search engines weigh who wrote a piece for

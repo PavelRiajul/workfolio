@@ -105,6 +105,19 @@ is built from that list, and `categoryLabel(value, authored?)` derives the displ
 `categoryLabel` field is an optional per-post override, not a required field: the topic hub takes
 its heading from the first post in the category, so a single post saved with it blank used to leave
 the hub with no title, and two posts spelling it differently changed the heading by publish order.
+Each category also carries the **service slug** it points at, resolved by `serviceForCategory()` —
+that is what puts the right offer in a post's right rail (`ServiceCard.astro`). It stores a slug,
+never copy: the card's title, kicker and tagline all come from `getServices()`, so editing a
+service in the Studio updates every post pointing at it. An unmapped category renders no card,
+which is better than the wrong offer beside an article.
+
+**The post layout is three columns at ≥1280px** — contents left (`.post-nav`), article centre,
+related service right (`.post-aside`) — two at ≥1024 with the offer in flow below the article, and
+one below that. The article container widens to 1320px at the three-column tier on purpose: at
+`--maxw` the middle track lands at ~556px, which is 62 characters and cramps every comparison
+table. Both rails are `position: sticky` and hold **one card each**; three cards in one rail
+squeezed the contents list to six of eleven sections. Sharing lives at the end of the article,
+which is when somebody decides to share it.
 
 **Social profiles are a repeatable list** (`siteSettings.socialLinks`), resolved in one place by
 `src/lib/socials.ts`. The footer, the résumé contact line, the résumé PDF and `sameAs` in the
@@ -260,7 +273,7 @@ stat, and the hero's own CTA is right there.
 - One fluid scale: `--space-2xs … --space-3xl`, plus `--gutter` (page inset) and `--section-y` / `--section-y-tight` (band rhythm). Every gap, pad and margin picks a step. **Never write a bare `clamp()` for spacing** and never write a token as `--x: var(--x)` — a self-referential custom property is invalid and silently drops the whole declaration (it once flattened every section's padding to zero).
 - Layout primitives: `.section` (full-bleed band = rhythm + gutter), `.shell` (centred column *with* gutter), `.wrap` (centred column *inside* a section). Modifiers instead of inline padding: `.section-tight`, `.section-tight-top/-bottom`, `.section-flush-top/-bottom`, `.section-bleed`.
 - Stacking helpers `.stack-sm/-md/-lg`, measure helpers `.measure` / `.measure-wide` (ch-based), anchor offsets `.anchor` / `.anchor-deep`.
-- **Four breakpoints only — 480 / 640 / 768 / 900.** Nothing else. (Was 10 ad-hoc values.)
+- **Four breakpoints only — 480 / 640 / 768 / 900.** Nothing else, with one documented exception: the blog post layout adds **1024** and **1280**, where its column count changes (one → two → three). Those tiers are about how many rails fit beside a fixed reading measure, which is a different question from the mobile scale, and they are confined to `blog/[slug].astro`. Don't add more.
 - Pages carry no inline `style` for spacing. If you reach for one, add a modifier instead.
 - **Don't put two accordion sections back to back** — Process uses the `.cyc` timeline (`.cyc-blue` off commerce pages) precisely so it doesn't read as a second FAQ.
 

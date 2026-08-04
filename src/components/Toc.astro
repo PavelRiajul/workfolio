@@ -121,6 +121,12 @@ for (const e of entries) {
      spilled over the share row beneath. Giving the shell `overflow-y: auto`
      works because flex has already resolved a real height for it. */
   .toc-rail { max-width: none; margin: 0; min-height: 0; }
+  /* Tighter rows in the rail. The card shares a sticky viewport with the
+     related-service card below it, and at the default rhythm eleven sections
+     did not fit — the list clipped at nine with nothing to say so. Still 44px
+     on coarse pointers via the rule above, which is where it matters. */
+  .toc-rail li a { padding: 2px 0; font-size: .9rem; line-height: 1.35; }
+  .toc-rail .toc-sub a { font-size: .85rem; }
   .toc-rail .toc-shell {
     height: 100%; overflow-y: auto; overscroll-behavior: contain;
     padding-top: 0;
