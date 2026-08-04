@@ -474,6 +474,14 @@ function initTocSpy() {
       else link.removeAttribute('aria-current');
     });
 
+    // Sub-sections are collapsed by default, so open the group the reader is
+    // in — whether the active entry is the section itself or one of its
+    // sub-sections. Without this the h3s would never be reachable by pointer.
+    const openGroup = target?.closest('.toc-group') ?? null;
+    toc.querySelectorAll('.toc-group').forEach((g) => {
+      g.classList.toggle('is-open', g === openGroup);
+    });
+
     // The rail's list scrolls internally, so the active entry can sit outside
     // it. Scroll the list, never the page — scrollIntoView would drag the
     // document along with it and fight the reader.

@@ -9,15 +9,33 @@ import type { TocEntry } from '../lib/portable';
 
 interface Props { entries: TocEntry[]; label?: string; rail?: boolean }
 const { entries, label = 'On this page', rail = false } = Astro.props;
+
+// Nest each h3 under the h2 above it. Flat, a post with 11 sections and 15
+// sub-sections is 26 rows — taller than the rail, so it scrolled internally
+// and showed five of the eleven sections with no visible scrollbar to say so.
+// Grouped, every top-level section is on screen at once and the sub-sections
+// for the one being read open beneath it.
+const groups: { entry: TocEntry; children: TocEntry[] }[] = [];
+for (const e of entries) {
+  if (e.level === 2 || groups.length === 0) groups.push({ entry: e, children: [] });
+  else groups[groups.length - 1].children.push(e);
+}
 ---
 {entries.length > 0 && (
   <nav class={`toc ${rail ? 'toc-rail' : ''}`} aria-label={label}>
     <details class="toc-shell" open>
       <summary><span>{label}</span><span class="toc-caret" aria-hidden="true">+</span></summary>
       <ol>
-        {entries.map((e) => (
-          <li class={e.level === 3 ? 'toc-sub' : ''}>
-            <a href={`#${e.id}`}>{e.text}</a>
+        {groups.map((g) => (
+          <li class="toc-group">
+            <a href={`#${g.entry.id}`}>{g.entry.text}</a>
+            {g.children.length > 0 && (
+              <ol class="toc-children">
+                {g.children.map((c) => (
+                  <li class="toc-sub"><a href={`#${c.id}`}>{c.text}</a></li>
+                ))}
+              </ol>
+            )}
           </li>
         ))}
       </ol>
@@ -48,7 +66,14 @@ const { entries, label = 'On this page', rail = false } = Astro.props;
   ol { list-style: none; margin: var(--space-2xs) 0 0; padding: 0; counter-reset: toc; }
   /* Only top-level entries are numbered. Incrementing on sub-entries too would
      make the h2 numbers skip (1, then 6) and read as broken. */
-  li:not(.toc-sub) { counter-increment: toc; }
+  .toc-group { counter-increment: toc; }
+
+  /* Sub-sections belong to the section being read. Collapsed otherwise, so all
+     eleven top-level sections fit on screen instead of five. Nothing is lost —
+     the headings are in the article, and the parent link still reaches them. */
+  .toc-children { margin: 0; padding: 0; display: none; }
+  .toc-group.is-open > .toc-children,
+  .toc-group:focus-within > .toc-children { display: block; }
   /* Posts run to 14+ H2s and 15+ H3s, so the list is long by design. Keeping
      rows tight is what stops it occupying most of a screen before the first
      paragraph. Touch targets stay at 44px on coarse pointers below. */
