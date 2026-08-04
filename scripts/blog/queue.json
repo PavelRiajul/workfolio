@@ -292,6 +292,30 @@
       "cat": "backend",
       "id": "post-n8n-workflow-automation",
       "words": 2512
+    },
+    {
+      "slug": "astro-vs-nextjs",
+      "cat": "frontend",
+      "id": "post-astro-vs-nextjs",
+      "words": 2505
+    },
+    {
+      "slug": "astro-islands",
+      "cat": "frontend",
+      "id": "post-astro-islands",
+      "words": 2501
+    },
+    {
+      "slug": "gsap-lenis-smooth-scroll",
+      "cat": "frontend",
+      "id": "post-gsap-lenis-smooth-scroll",
+      "words": 2502
+    },
+    {
+      "slug": "prefers-reduced-motion",
+      "cat": "frontend",
+      "id": "post-prefers-reduced-motion",
+      "words": 2501
     }
   ],
   "current_category": "frontend",
@@ -300,10 +324,6 @@
     "fullstack": [],
     "backend": [],
     "frontend": [
-      "astro-vs-nextjs",
-      "astro-islands",
-      "gsap-lenis-smooth-scroll",
-      "prefers-reduced-motion",
       "fluid-spacing-scale",
       "wcag-contrast-audit",
       "self-host-fonts-inline-icons",
