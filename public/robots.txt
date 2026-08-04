@@ -5,4 +5,34 @@ Allow: /
 Disallow: /admin
 Disallow: /admin/
 
+# AI crawlers are welcome, and saying so explicitly matters. The wildcard above
+# already permits them, but several of these agents are blocked by default in
+# hosting presets and boilerplate robots files — an unstated allow is one
+# copy-paste away from becoming a silent block.
+#
+# They share one rule block on purpose. A named user-agent group replaces the
+# `*` group for that agent rather than adding to it, so each of these would
+# otherwise lose the /admin disallow above and start crawling the Studio.
+#
+# Retrieval agents (OAI-SearchBot, ChatGPT-User, PerplexityBot, Claude-User,
+# Claude-SearchBot) fetch a page to answer a live question. The rest also build
+# training corpora. Google-Extended governs Gemini training only and has no
+# effect on ranking in Google Search.
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: PerplexityBot
+User-agent: Claude-User
+User-agent: Claude-SearchBot
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: CCBot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+# A curated map of the site for agents that look for one:
+# https://riajulislam.dev/llms.txt
+
 Sitemap: https://riajulislam.dev/sitemap-index.xml

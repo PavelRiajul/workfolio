@@ -353,6 +353,21 @@ function initFeatureLists() {
   narrow.addEventListener('change', apply);
 }
 
+/* ---- Contents list: collapsed on phones -------------------------------- */
+/* Same reasoning as the feature lists, and the same no-JS behaviour: the
+   markup ships `open` so every entry is in the DOM for a crawler and for
+   anyone without JS. A post with 14 headings and 15 sub-headings makes for a
+   list well over a screen tall, and a reader on a phone should reach the first
+   paragraph without scrolling past all of it. */
+function initToc() {
+  const toc = document.querySelector<HTMLDetailsElement>('details.toc-shell');
+  if (!toc) return;
+  const narrow = window.matchMedia('(max-width: 640px)');
+  const apply = () => { toc.open = !narrow.matches; };
+  apply();
+  narrow.addEventListener('change', apply);
+}
+
 /* ---- Metric bars: grow from zero when their group scrolls in ----------- */
 function initBarGrow() {
   if (prefersReduced) return;
@@ -438,6 +453,7 @@ ready(() => {
   initHeroTilt();
   initShopifyStack();
   initFeatureLists();
+  initToc();
   initBarGrow();
   initTabSpy();
   initReveal();
