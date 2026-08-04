@@ -364,19 +364,38 @@
       "cat": "frontend",
       "id": "post-accessible-forms",
       "words": 2502
+    },
+    {
+      "slug": "dark-mode-tokens",
+      "cat": "frontend",
+      "id": "post-dark-mode-tokens",
+      "words": 2508
+    },
+    {
+      "slug": "toc-shared-heading-ids",
+      "cat": "frontend",
+      "id": "post-toc-shared-heading-ids",
+      "words": 2505
+    },
+    {
+      "slug": "scroll-stacking-cards",
+      "cat": "frontend",
+      "id": "post-scroll-stacking-cards",
+      "words": 2501
+    },
+    {
+      "slug": "inline-icon-system",
+      "cat": "frontend",
+      "id": "post-inline-icon-system",
+      "words": 2500
     }
   ],
-  "current_category": "frontend",
+  "current_category": "performance",
   "remaining": {
     "ai": [],
     "fullstack": [],
     "backend": [],
-    "frontend": [
-      "dark-mode-tokens",
-      "toc-shared-heading-ids",
-      "scroll-stacking-cards",
-      "inline-icon-system"
-    ],
+    "frontend": [],
     "performance": [
       "core-web-vitals-nextjs",
       "near-zero-cls",
