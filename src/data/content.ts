@@ -5,6 +5,7 @@
 // Once you connect Sanity + seed it, live data takes over automatically.
 // ---------------------------------------------------------------------------
 import type {
+  Faq,
   SiteSettings,
   HomeContent,
   Project,
@@ -68,6 +69,12 @@ export const site: SiteSettings = {
   whatsappPhone: '8801XXXXXXXXX',
   whatsappMessage: 'Hi Riajul — I found you through your portfolio.',
   website: 'riajulislam.dev',
+  // Add a platform here (or in the Studio) and it appears in the footer, the
+  // résumé contact line and the Person schema's sameAs — no code change.
+  socialLinks: [
+    { label: 'GitHub', url: 'github.com/riajulislam', icon: 'fa-brands fa-github' },
+    { label: 'LinkedIn', url: 'linkedin.com/in/riajulislam', icon: 'fa-brands fa-linkedin-in' },
+  ],
   socials: {
     github: 'https://github.com',
     githubHandle: 'github.com/riajulislam',
@@ -733,10 +740,48 @@ const aiWorkflowPostBody: PortableBlock[] = [
       },
     ],
   },
+  {
+    _type: 'table',
+    headerRow: true,
+    caption: 'Where the time actually goes on a two-week feature.',
+    rows: [
+      { cells: ['Task', 'Written by AI', 'Owned by me'] },
+      { cells: ['Scaffolding & boilerplate', 'Almost all of it', 'Naming and file layout'] },
+      { cells: ['Data model', 'A first draft', 'Every decision that survives v2'] },
+      { cells: ['Business logic', 'Roughly half', 'Correctness and edge cases'] },
+      { cells: ['Tests', 'The obvious paths', 'The paths that actually break'] },
+      { cells: ['Security & auth', 'Nothing I keep', 'All of it'] },
+    ],
+  },
+];
+
+/** FAQ for the AI-workflow post. Answers stay at 40–60 words: a longer answer
+ *  is not what gets lifted into a People Also Ask result. */
+const aiWorkflowFaqs: Faq[] = [
+  {
+    question: 'Does AI-generated code mean lower quality?',
+    answer:
+      'Not on its own. Generated code is a first draft, and the quality comes from what happens next — review, tests on the paths that matter, and a person who owns the architecture. Skip that step and it does get worse, faster than hand-written code would.',
+  },
+  {
+    question: 'How much faster is an AI-accelerated workflow, honestly?',
+    answer:
+      'Roughly two to three times on the typing-heavy parts: scaffolding, CRUD, boilerplate, first-pass tests. Close to zero on the parts that decide whether a project succeeds — scoping, data modelling, security and knowing which feature to cut.',
+  },
+  {
+    question: 'What do you refuse to let AI write?',
+    answer:
+      'Authentication, permissions, payment handling and anything touching migrations. These fail quietly and expensively, and reviewing generated code in those areas takes longer than writing it myself.',
+  },
+  {
+    question: 'Will I be able to maintain the codebase afterwards?',
+    answer:
+      'Yes — that is the whole point of owning the architecture rather than the typing. You get conventional patterns, typed end to end, with a staging environment, CI and error tracking already wired up. No generated code ships that I could not have written.',
+  },
 ];
 
 export const posts: Post[] = [
-  { title: 'How I actually build with AI — and where I still do the work', slug: 'building-with-ai-workflow', order: 1, category: 'ai', categoryLabel: 'AI', readTime: '8 min read', date: 'July 2026', publishedAt: '2026-07-01', excerpt: "The honest version of an AI-accelerated workflow: what gets generated, what gets thrown away, and the review discipline that keeps 'fast' from meaning 'fragile'.", coverLabel: 'AI workflow — cover', featured: true, image: null, body: aiWorkflowPostBody },
+  { title: 'How I actually build with AI — and where I still do the work', slug: 'building-with-ai-workflow', order: 1, category: 'ai', categoryLabel: 'AI', readTime: '8 min read', date: 'July 2026', publishedAt: '2026-07-01', excerpt: "The honest version of an AI-accelerated workflow: what gets generated, what gets thrown away, and the review discipline that keeps 'fast' from meaning 'fragile'.", coverLabel: 'AI workflow — cover', featured: true, image: null, body: aiWorkflowPostBody, faqs: aiWorkflowFaqs },
   { title: 'Shipping an MVP in 19 days without shipping garbage', slug: 'mvp-in-19-days', order: 2, category: 'ai', categoryLabel: 'AI', readTime: '6 min', date: 'July 2026', publishedAt: '2026-07-01', excerpt: 'Scope triage, generated scaffolding, and the four things I refuse to cut no matter how tight the deadline gets.', coverLabel: 'MVP in 19 days — cover', featured: false, image: null },
   { title: 'RAG that actually answers: chunking, reranking and citations', slug: 'rag-that-answers', order: 3, category: 'ai', categoryLabel: 'AI', readTime: '9 min', date: 'June 2026', publishedAt: '2026-06-01', excerpt: 'Most bad AI answers are bad retrieval, not bad models. The pipeline changes that moved accuracy the most.', coverLabel: 'RAG pipeline — cover', featured: false, image: null },
   { title: 'Going headless: when Shopify Hydrogen is actually worth it', slug: 'shopify-hydrogen-worth-it', order: 4, category: 'ecommerce', categoryLabel: 'E-commerce', readTime: '7 min read', date: 'June 2026', publishedAt: '2026-06-01', excerpt: "Headless is powerful, but it isn't free. Here's the honest decision framework I use to tell clients when to leave Liquid behind — and when to stay put.", coverLabel: 'Hydrogen vs Liquid — cover', featured: false, image: null },

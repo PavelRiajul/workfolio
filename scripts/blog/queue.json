@@ -1,0 +1,220 @@
+{
+  "note": "Publishing queue for the 105-post plan. Order is category by category. Each iteration of the loop writes the next 2-3, gates them on anatomy.mjs, then pushes to Sanity. Loop stops when every category is done.",
+  "categories": [
+    "ai",
+    "fullstack",
+    "backend",
+    "frontend",
+    "performance",
+    "ecommerce",
+    "mobile",
+    "career"
+  ],
+  "done": [
+    {
+      "slug": "rag-that-answers",
+      "cat": "ai",
+      "id": "post-rag-that-answers",
+      "words": 2658
+    },
+    {
+      "slug": "ai-feature-development-cost",
+      "cat": "ai",
+      "id": "post-ai-feature-development-cost",
+      "words": 2537
+    },
+    {
+      "slug": "ai-is-a-module-not-a-stack",
+      "cat": "ai",
+      "id": "post-ai-is-a-module-not-a-stack",
+      "words": 2510
+    },
+    {
+      "slug": "validating-llm-tool-calls-zod",
+      "cat": "ai",
+      "id": "post-validating-llm-tool-calls-zod",
+      "words": 2525
+    },
+    {
+      "slug": "ai-booking-system-guide",
+      "cat": "ai",
+      "id": "post-ai-booking-system-guide",
+      "words": 2529
+    },
+    {
+      "slug": "mvp-in-19-days",
+      "cat": "ai",
+      "id": "post-mvp-in-19-days",
+      "words": 2545
+    },
+    {
+      "slug": "building-with-ai-workflow",
+      "cat": "ai",
+      "id": "post-building-with-ai-workflow",
+      "words": 2504
+    },
+    {
+      "slug": "ai-cost-logging",
+      "cat": "ai",
+      "id": "post-ai-cost-logging",
+      "words": 2518
+    },
+    {
+      "slug": "streaming-ai-ui",
+      "cat": "ai",
+      "id": "post-streaming-ai-ui",
+      "words": 2520
+    },
+    {
+      "slug": "pgvector-semantic-search",
+      "cat": "ai",
+      "id": "post-pgvector-semantic-search",
+      "words": 2536
+    },
+    {
+      "slug": "provider-agnostic-ai-sdk",
+      "cat": "ai",
+      "id": "post-provider-agnostic-ai-sdk",
+      "words": 2526
+    },
+    {
+      "slug": "document-extraction-pipeline",
+      "cat": "ai",
+      "id": "post-document-extraction-pipeline",
+      "words": 2505
+    },
+    {
+      "slug": "rate-limiting-ai-features",
+      "cat": "ai",
+      "id": "post-rate-limiting-ai-features",
+      "words": 2502
+    },
+    {
+      "slug": "ai-evaluation-harness",
+      "cat": "ai",
+      "id": "post-ai-evaluation-harness",
+      "words": 2561
+    },
+    {
+      "slug": "semantic-search-guide",
+      "cat": "ai",
+      "id": "post-semantic-search-guide",
+      "words": 2561
+    },
+    {
+      "slug": "prompt-versioning",
+      "cat": "ai",
+      "id": "post-prompt-versioning",
+      "words": 2539
+    }
+  ],
+  "current_category": "fullstack",
+  "remaining": {
+    "ai": [],
+    "fullstack": [
+      "project-stack-templates",
+      "mvp-development-cost",
+      "supabase-vs-neon-clerk",
+      "type-safe-mern",
+      "database-design-for-v2",
+      "multi-tenant-prisma-postgres",
+      "staging-environment",
+      "ci-pipeline-typecheck-tests",
+      "tested-database-backups",
+      "auth-billing-onboarding-mvp",
+      "project-handover-checklist",
+      "discovery-call-questions",
+      "uptime-vs-error-tracking",
+      "testing-critical-paths",
+      "form-spam-protection",
+      "feature-flags-simple"
+    ],
+    "backend": [
+      "role-based-auth-nextjs-express",
+      "stripe-webhooks-idempotency",
+      "supabase-row-level-security",
+      "transactional-email-deliverability",
+      "neon-database-branching",
+      "zero-downtime-migrations",
+      "r2-vs-s3",
+      "rest-api-design",
+      "mongodb-schema-indexes",
+      "signed-upload-urls",
+      "render-background-jobs",
+      "idempotency-keys",
+      "background-job-queues",
+      "edge-rate-limiting",
+      "n8n-workflow-automation"
+    ],
+    "frontend": [
+      "astro-vs-nextjs",
+      "astro-islands",
+      "gsap-lenis-smooth-scroll",
+      "prefers-reduced-motion",
+      "fluid-spacing-scale",
+      "wcag-contrast-audit",
+      "self-host-fonts-inline-icons",
+      "reusable-design-system",
+      "mobile-hero-viewport",
+      "portable-text-renderer",
+      "mobile-card-density",
+      "accessible-forms",
+      "dark-mode-tokens",
+      "toc-shared-heading-ids",
+      "scroll-stacking-cards",
+      "inline-icon-system"
+    ],
+    "performance": [
+      "core-web-vitals-nextjs",
+      "near-zero-cls",
+      "cloudflare-pages-vs-vercel",
+      "bundle-splitting",
+      "image-optimization-strategy",
+      "field-vs-lab-data",
+      "third-party-script-cost",
+      "lazy-load-heavy-libraries",
+      "prefetch-on-hover",
+      "headless-chrome-screenshots"
+    ],
+    "ecommerce": [
+      "shopify-hydrogen-worth-it",
+      "ecommerce-conversion-leaks",
+      "shopify-performance-optimization",
+      "custom-vs-premium-shopify-theme",
+      "cro-process-loop",
+      "posthog-ab-testing-shopify",
+      "product-page-elements",
+      "shopify-product-schema",
+      "figma-to-shopify",
+      "shopify-checkout-customization",
+      "cro-experiment-results",
+      "shopify-metafields-performance",
+      "shopify-subscriptions"
+    ],
+    "mobile": [
+      "react-native-offline-first",
+      "app-vs-pwa",
+      "expo-in-production",
+      "react-native-gesture-performance",
+      "push-notifications-reliability",
+      "shared-api-web-mobile",
+      "mobile-app-retention",
+      "app-store-rejections",
+      "mobile-token-storage",
+      "react-native-deep-linking"
+    ],
+    "career": [
+      "project-scoping",
+      "development-process",
+      "pricing-ai-accelerated-work",
+      "ai-accelerated-positioning",
+      "choosing-a-stack-once",
+      "client-objections",
+      "handover-documentation",
+      "freelancing-remote-timezones",
+      "estimation-lessons",
+      "declining-projects"
+    ]
+  },
+  "note_stopped": "Loop stopped by user after the AI category completed. 89 posts remain across 7 categories; restart with /loop to continue."
+}

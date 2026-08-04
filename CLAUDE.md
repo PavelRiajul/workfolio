@@ -56,6 +56,15 @@ src/lib/content.ts    ← one loader per content type (GROQ query + fallback). P
 `src/lib/types.ts` (interface), `src/lib/content.ts` (loader + GROQ), and `schemaTypes/` (Studio).
 Miss the last one and editors can't author what the site queries.
 
+**`withFallback` pairs list items by identity (`slug`/`name`/`id`), not by position.** Object
+results have always merged field-by-field; arrays used to be returned wholesale, so a live
+document missing a field lost it entirely rather than falling back. That is what suppressed the
+blog: ten `post` documents existed in Sanity with no `body`, the non-empty array meant the seed
+never applied, and `blog/[slug].astro` generated nothing — no URLs, an empty `rss.xml`, and
+`articleSchema()` emitting on zero pages, all while the build reported success. Pairing is by
+identity rather than index on purpose: merging positionally would graft one post's body onto
+another the moment an editor reorders or inserts a document.
+
 **Pages hold no copy.** Every heading, label, list, stat, chip and CTA comes from a loader —
 `.astro` files contain layout only. A hardcoded string in a page is a bug. Each landing page has
 its own singleton (`servicesPage`, `shopifyPage`, `workPage`, `blogPage`, `startPage`,
@@ -67,6 +76,11 @@ objects in `schemaTypes/objects.ts`.
 Conventions worth knowing: a `\n` inside a `Heading.title` (or any headline field) renders as a
 line break; `headlineLines[]` does the same for heroes; filter/category chips reuse `Cta` where
 `label` is the visible text and `href` holds the filter value ("all", "ai", "shopify").
+**Render those line breaks with `<Headline text={...} />`** (`src/components/Headline.astro`),
+which takes either the `\n` string or the pre-split array. It emits a space before each `<br>`:
+adjacent text nodes are concatenated when anything extracts the text layer and `<br>` is not a
+word boundary, so 38 hand-rolled `.map(... <br/> ...)` call sites were shipping "Builtfor speed."
+to crawlers, screen readers and AI retrievers while looking correct on screen.
 **Not editable by design:** the decorative mockup internals (`OfferVisual`, `ServiceVisual`, the
 3D hero cards) — they're illustrations tied to specific layouts, not copy.
 
@@ -85,6 +99,34 @@ has a hub. Body images: Sanity upload wins, else a `src` under `/public`; a miss
 renders no figure rather than a broken image. Code blocks are highlighted at build time by
 Astro's bundled Shiki (`astro:components` `Code`) — no new dependency, and an unknown
 `language` degrades to plain text.
+
+**Categories live once, in `src/lib/categories.ts`** — the Studio dropdown in `schemaTypes/post.ts`
+is built from that list, and `categoryLabel(value, authored?)` derives the display name. A post's
+`categoryLabel` field is an optional per-post override, not a required field: the topic hub takes
+its heading from the first post in the category, so a single post saved with it blank used to leave
+the hub with no title, and two posts spelling it differently changed the heading by publish order.
+
+**Social profiles are a repeatable list** (`siteSettings.socialLinks`), resolved in one place by
+`src/lib/socials.ts`. The footer, the résumé contact line, the résumé PDF and `sameAs` in the
+Person schema all read `resolveSocials()`/`socialUrls()`, so markup and structured data can't claim
+different profiles — the footer used to link the bare `https://github.com` while `sameAs` asserted
+`github.com/riajulislam`, and a contradiction between the two is worse for entity resolution than
+either link alone. A value with no path is treated as unset and renders nothing; an icon with no
+glyph in `icons.ts` degrades to `fa-solid fa-link` rather than an empty 44px circle. The old fixed
+`socials.{github,linkedin,x}` object is read only when the list is empty.
+
+**Add icons with `npm run icons -- brands:instagram solid:link`** (`scripts/fetch-icons.mts`),
+which pulls real geometry from Font Awesome Free 6.5.1 and merges it into `src/lib/icons.ts`.
+`icons.ts` always documented this script; it didn't exist, so glyphs were pasted by hand.
+
+**`/llms.txt`** (`src/pages/llms.txt.ts`) is generated from the same loaders as the pages, so it
+can't drift from the site it describes, and it lists only posts that have a page.
+
+**Sitemap `lastmod` covers the blog routes only** — `blogLastmod()` in `astro.config.mjs` derives
+dates from `updatedAt || publishedAt`. Static pages deliberately get none: stamping all fourteen
+with the build time marks everything as modified on every deploy, and Google discards a sitemap
+whose dates are obviously synthetic. The config runs before the Astro runtime exists, so it can't
+use `src/lib/content.ts` and queries Sanity directly — it applies the same rule the loaders do.
 
 **`publicFileExists()` (`src/lib/public-file.ts`) must be used for every build-time /public
 check.** The obvious `new URL('../../public' + p, import.meta.url)` is wrong: components get
