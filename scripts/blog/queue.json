@@ -106,29 +106,108 @@
       "cat": "ai",
       "id": "post-prompt-versioning",
       "words": 2539
+    },
+    {
+      "slug": "project-stack-templates",
+      "cat": "fullstack",
+      "id": "post-project-stack-templates",
+      "words": 2581
+    },
+    {
+      "slug": "mvp-development-cost",
+      "cat": "fullstack",
+      "id": "post-mvp-development-cost",
+      "words": 2526
+    },
+    {
+      "slug": "supabase-vs-neon-clerk",
+      "cat": "fullstack",
+      "id": "post-supabase-vs-neon-clerk",
+      "words": 2501
+    },
+    {
+      "slug": "type-safe-mern",
+      "cat": "fullstack",
+      "id": "post-type-safe-mern",
+      "words": 2523
+    },
+    {
+      "slug": "database-design-for-v2",
+      "cat": "fullstack",
+      "id": "post-database-design-for-v2",
+      "words": 2537
+    },
+    {
+      "slug": "multi-tenant-prisma-postgres",
+      "cat": "fullstack",
+      "id": "post-multi-tenant-prisma-postgres",
+      "words": 2532
+    },
+    {
+      "slug": "staging-environment",
+      "cat": "fullstack",
+      "id": "post-staging-environment",
+      "words": 2501
+    },
+    {
+      "slug": "ci-pipeline-typecheck-tests",
+      "cat": "fullstack",
+      "id": "post-ci-pipeline-typecheck-tests",
+      "words": 2508
+    },
+    {
+      "slug": "tested-database-backups",
+      "cat": "fullstack",
+      "id": "post-tested-database-backups",
+      "words": 2511
+    },
+    {
+      "slug": "auth-billing-onboarding-mvp",
+      "cat": "fullstack",
+      "id": "post-auth-billing-onboarding-mvp",
+      "words": 2503
+    },
+    {
+      "slug": "project-handover-checklist",
+      "cat": "fullstack",
+      "id": "post-project-handover-checklist",
+      "words": 2512
+    },
+    {
+      "slug": "discovery-call-questions",
+      "cat": "fullstack",
+      "id": "post-discovery-call-questions",
+      "words": 2518
+    },
+    {
+      "slug": "uptime-vs-error-tracking",
+      "cat": "fullstack",
+      "id": "post-uptime-vs-error-tracking",
+      "words": 2516
+    },
+    {
+      "slug": "testing-critical-paths",
+      "cat": "fullstack",
+      "id": "post-testing-critical-paths",
+      "words": 2503
+    },
+    {
+      "slug": "form-spam-protection",
+      "cat": "fullstack",
+      "id": "post-form-spam-protection",
+      "words": 2515
+    },
+    {
+      "slug": "feature-flags-simple",
+      "cat": "fullstack",
+      "id": "post-feature-flags-simple",
+      "words": 2543
     }
   ],
-  "current_category": "fullstack",
+  "current_category": "backend",
   "remaining": {
     "ai": [],
-    "fullstack": [
-      "project-stack-templates",
-      "mvp-development-cost",
-      "supabase-vs-neon-clerk",
-      "type-safe-mern",
-      "database-design-for-v2",
-      "multi-tenant-prisma-postgres",
-      "staging-environment",
-      "ci-pipeline-typecheck-tests",
-      "tested-database-backups",
-      "auth-billing-onboarding-mvp",
-      "project-handover-checklist",
-      "discovery-call-questions",
-      "uptime-vs-error-tracking",
-      "testing-critical-paths",
-      "form-spam-protection",
-      "feature-flags-simple"
-    ],
+    "fullstack": [],
     "backend": [
       "role-based-auth-nextjs-express",
       "stripe-webhooks-idempotency",
