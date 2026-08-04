@@ -88,15 +88,10 @@ for (const e of entries) {
   .toc-sub a { font-size: .87rem; color: var(--color-grey-2); }
   .toc-sub a::before { content: '— '; }
 
-  /* The section being read. Marked with a rule down the left edge rather than
-     a background, so it reads at a glance without turning the list into a
-     block of colour — and the ink weight change carries it for anyone who
-     cannot separate the blue from the grey. */
-  li a.is-current {
-    color: var(--color-ink); font-weight: 600;
-    box-shadow: inset 2px 0 0 var(--color-blue);
-    padding-left: var(--space-2xs);
-  }
+  /* The section being read. Weight and ink only — no rule down the left edge.
+     The bar sat in the row's left padding, so marking an entry also nudged its
+     text sideways, and every scroll past a heading made the list twitch. */
+  li a.is-current { color: var(--color-ink); font-weight: 600; }
   li a.is-current::before { color: var(--color-blue); }
   @media (prefers-reduced-motion: no-preference) {
     li a { transition: color .18s ease; }
