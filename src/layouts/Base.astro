@@ -16,6 +16,13 @@ interface Props {
   bodyClass?: string;
   printChrome?: boolean;
   backToTop?: boolean;
+  /** Set false on a page that renders its own contextual back link. Detail
+   *  routes carry a "← Back to blog" / "← Back to work" at the top of the
+   *  content, and the fixed "← Home" pill landed in the same band — two back
+   *  buttons a few hundred pixels apart, when the wordmark top-left and the
+   *  Home tab already go home twice more. The contextual one wins: on an
+   *  article, up one level is the useful move, not up to the root. */
+  backHome?: boolean;
   /** Extra JSON-LD nodes (FAQPage, BreadcrumbList, Service, …) merged into the
    *  sitewide @graph. Build them with the helpers in lib/schema.ts. */
   schema?: unknown[];
@@ -48,6 +55,7 @@ const {
   bodyClass = '',
   printChrome = false,
   backToTop = true,
+  backHome = true,
   schema = [],
   breadcrumbLeaf,
   pageType = 'WebPage',
@@ -153,7 +161,7 @@ const graph = {
     <a href="#main" class="skip-link">{site.skipLinkLabel}</a>
     <div class={chromeClass}>
       <a href="/" class="brand-sig" aria-label={`${site.name} — home`}>{site.name}</a>
-      {subpage && (
+      {subpage && backHome && (
         <a href="/" class="back-home" aria-label="Back to home">
           <span aria-hidden="true">←</span> {site.backHomeLabel}
         </a>

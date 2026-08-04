@@ -62,6 +62,7 @@ const hasCover = Boolean(post.image?.asset?.url) || publicFileExists(coverSrc);
   title={post.seo?.title ?? `${post.title} — ${page.seo.title.split('—')[1]?.trim() ?? 'Blog'}`}
   description={post.seo?.description ?? post.excerpt}
   subpage={true}
+  backHome={false}
   {/* The page node stays a WebPage; the BlogPosting is a separate node that
       references it via mainEntityOfPage. Two BlogPosting nodes would just be
       the same article claimed twice. */}
@@ -150,18 +151,19 @@ const hasCover = Boolean(post.image?.asset?.url) || publicFileExists(coverSrc);
         )}
 
         <aside class="post-author" data-reveal>
-      <div class="post-author-body">
-        <p class="eyebrow">Written by</p>
-        <h2 class="post-author-name">{site.name}</h2>
-        <p>{site.seo.description}</p>
-        {/* Credibility, not conversion. This used to repeat the closing card's
-            "Get in touch" — two links to /start about 1,800px apart, the second
-            one larger and the actual CTA. The author card's job is telling a
-            reader who wrote this without making them leave the page. */}
-        <div class="post-author-links">
-          <a href="/about">More about me</a>
-        </div>
-      </div>
+          <div class="post-author-body">
+            <p class="eyebrow">Written by</p>
+            <h2 class="post-author-name">{site.name}</h2>
+            <p>{site.seo.description}</p>
+            {/* Credibility, not conversion. This used to repeat the closing
+                card's "Get in touch" — two links to /start about 1,800px
+                apart, the second one larger and the actual CTA. The author
+                card's job is telling a reader who wrote this without making
+                them leave the page. */}
+            <div class="post-author-links">
+              <a href="/about">More about me</a>
+            </div>
+          </div>
         </aside>
       </div>
     </div>

@@ -36,6 +36,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
   title={`${p.title} — Case Study`}
   description={p.summary}
   subpage={true}
+  backHome={false}
   breadcrumbLeaf={p.title}
   schema={[caseStudySchema(p, origin, canonical)]}
 >

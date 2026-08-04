@@ -219,9 +219,10 @@ Four separate things drive the four lines of a Google result. Don't collapse the
 - `public/robots.txt` disallows `/admin` and points at the sitemap.
 
 ## Layout — `src/layouts/Base.astro`
-Wraps every page. Renders: handwritten brand signature (`.brand-sig`, Caveat font, fixed top-left, links home), a "← Home" pill (`.back-home`, fixed top-right, only when `subpage`), `Navbar`, `<slot/>`, `Footer`, `WhatsApp`, `BackToTop` (unless `backToTop={false}`), and imports `src/scripts/main.ts`.
-Props: `title, description, onHome, subpage, bodyClass, printChrome, backToTop`.
+Wraps every page. Renders: handwritten brand signature (`.brand-sig`, Caveat font, fixed top-left, links home), a "← Home" pill (`.back-home`, fixed top-right, when `subpage` **and** `backHome`), `Navbar`, `<slot/>`, `Footer`, `WhatsApp`, `BackToTop` (unless `backToTop={false}`), and imports `src/scripts/main.ts`.
+Props: `title, description, onHome, subpage, bodyClass, printChrome, backToTop, backHome`.
 - `onHome` is set on `/`; `subpage` on every other page (shows the back-home pill, hides chrome on print when `printChrome`).
+- **`backHome={false}` on any page that renders its own `.cs-back` link** — the three detail routes (`blog/[slug]`, `work/[slug]`, `blog/category/[category]`). Their "← Back to blog" / "← Back to work" landed in the same band as the fixed "← Home" pill, giving two back buttons a few hundred pixels apart while the wordmark and the Home tab already went home twice more. The contextual link wins: from an article, up one level is the useful move, not up to the root.
 - Home passes `bodyClass="home"` (used to stack `.b2t` above the mascot).
 
 ## Design system (`src/styles/global.css`)
