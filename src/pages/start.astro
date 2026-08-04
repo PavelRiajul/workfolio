@@ -3,6 +3,7 @@ import Icon from '../components/Icon.astro';
 import Base from '../layouts/Base.astro';
 import Placeholder from '../components/Placeholder.astro';
 import { getStartPage } from '../lib/content';
+import Headline from '../components/Headline.astro';
 
 const page = await getStartPage();
 const headlineLines = page.headlineLines;
@@ -19,7 +20,7 @@ const heroEyebrow = page.eyebrow.replace(/^[—–-]\s*/, '');
         <span>—</span>
         <span>{heroEyebrow}</span>
       </div>
-      <h1 data-hero-item>{headlineLines.map((l, i) => (<>{l}{i < headlineLines.length - 1 && <br />}</>))}</h1>
+      <h1 data-hero-item><Headline text={headlineLines} /></h1>
       <div class="hero-lower">
         <div class="hero-copy">
           <p class="hero-lede hero-lede-full" data-hero-item>{page.lede}</p>

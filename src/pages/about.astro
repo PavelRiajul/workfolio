@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Placeholder from '../components/Placeholder.astro';
 import ClosingCta from '../components/ClosingCta.astro';
 import { getAbout, getHome } from '../lib/content';
+import Headline from '../components/Headline.astro';
 
 const about = await getAbout();
 const home = await getHome();
@@ -16,7 +17,7 @@ const buildTitle = about.buildHeading.title.split('\n');
       <div class="eyebrow" data-reveal>{about.eyebrow}</div>
       <div class="about-intro-grid">
         <div data-reveal>
-          <h1>{headingLines.map((l, i) => (<>{l}{i < headingLines.length - 1 && <br />}</>))}</h1>
+          <h1><Headline text={headingLines} /></h1>
         </div>
         <div data-reveal>
           <p class="about-lead">{about.leadParagraph}</p>
@@ -58,7 +59,7 @@ const buildTitle = about.buildHeading.title.split('\n');
     <div class="wrap">
       <div data-reveal>
         <div class="eyebrow">{about.traitsHeading.eyebrow}</div>
-        <h2 class="about-h2">{traitsTitle.map((l, i) => (<>{l}{i < traitsTitle.length - 1 && <br />}</>))}</h2>
+        <h2 class="about-h2"><Headline text={traitsTitle} /></h2>
       </div>
       <div class="trait-grid">
         {about.traits.map((t) => (
@@ -97,7 +98,7 @@ const buildTitle = about.buildHeading.title.split('\n');
     <div class="split">
       <div data-reveal>
         <div class="eyebrow">{about.buildHeading.eyebrow}</div>
-        <h2 class="about-h2">{buildTitle.map((l, i) => (<>{l}{i < buildTitle.length - 1 && <br />}</>))}</h2>
+        <h2 class="about-h2"><Headline text={buildTitle} /></h2>
         <p class="split-lede">{about.buildHeading.lede} <a href={about.buildLink.href}>{about.buildLink.label}</a> <a href={about.stackLink.href}>{about.stackLink.label}</a></p>
       </div>
       <div data-reveal>

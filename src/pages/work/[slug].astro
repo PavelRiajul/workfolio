@@ -4,6 +4,7 @@ import Placeholder from '../../components/Placeholder.astro';
 import { getProjects, getProject, getCaseStudy } from '../../lib/content';
 import { caseStudySchema } from '../../lib/schema';
 import type { Project } from '../../lib/types';
+import Headline from '../../components/Headline.astro';
 
 export async function getStaticPaths() {
   const projects = await getProjects();
@@ -62,7 +63,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
     <div class="cs-split wrap" data-reveal>
       <div>
         <div class="eyebrow">{cs.challengeHeading.eyebrow}</div>
-        <h2 class="cs-h2">{cs.challengeHeading.title.split('\n').map((l, i, a) => (<>{l}{i < a.length - 1 && <br />}</>))}</h2>
+        <h2 class="cs-h2"><Headline text={cs.challengeHeading.title} /></h2>
       </div>
       <div>{p.challenge.map((para) => <p class="cs-body">{para}</p>)}</div>
     </div>
@@ -72,7 +73,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
     <div class="cs-split wrap" data-reveal>
       <div>
         <div class="eyebrow">{cs.approachHeading.eyebrow}</div>
-        <h2 class="cs-h2">{cs.approachHeading.title.split('\n').map((l, i, a) => (<>{l}{i < a.length - 1 && <br />}</>))}</h2>
+        <h2 class="cs-h2"><Headline text={cs.approachHeading.title} /></h2>
       </div>
       <div>{p.approach.map((para) => <p class="cs-body">{para}</p>)}</div>
     </div>

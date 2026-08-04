@@ -101,6 +101,36 @@ const langOf = (b: PortableBlock) => {
       ) : null;
     }
 
+    // Comparison tables. A real <table> is the format featured snippets and AI
+    // answers lift most reliably, and it's the one block a prose-only renderer
+    // can't fake — a bulleted "X vs Y" list carries none of the row/column
+    // relationships. Wrapped in its own scroll container so a wide table
+    // scrolls itself instead of the page.
+    if (b._type === 'table') {
+      const rows = (b.rows ?? []).map((r) => r.cells ?? []).filter((c) => c.length);
+      if (!rows.length) return null;
+      const [head, ...body] = b.headerRow === false ? [null, ...rows] : rows;
+      return (
+        <figure class="pt-table-wrap">
+          <div class="pt-table-scroll">
+            <table class="pt-table">
+              {head && (
+                <thead>
+                  <tr>{head.map((c) => <th scope="col">{c}</th>)}</tr>
+                </thead>
+              )}
+              <tbody>
+                {body.map((r) => (
+                  <tr>{r.map((c, i) => (i === 0 ? <th scope="row">{c}</th> : <td>{c}</td>))}</tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {b.caption && <figcaption>{b.caption}</figcaption>}
+        </figure>
+      );
+    }
+
     if (isEmpty(b)) return null;
 
     const kids = b.children?.map((s) => <Span span={s} defs={b.markDefs} />);
@@ -188,5 +218,44 @@ const langOf = (b: PortableBlock) => {
     font-family: var(--font-mono); font-size: 0.88em;
     background: var(--color-surface); border: 1px solid var(--line);
     padding: 0.1em 0.35em; border-radius: 5px;
+  }
+
+  /* Comparison tables. The wrapper is what scrolls, never the page — a wide
+     table inside the measure would otherwise scroll the whole document
+     sideways on a phone. */
+  .post-body .pt-table-wrap { margin: 0 0 var(--space-lg); }
+  .post-body .pt-table-scroll {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--line); border-radius: 12px;
+  }
+  .post-body .pt-table {
+    width: 100%; border-collapse: collapse;
+    font-size: .92em; line-height: 1.55;
+  }
+  .post-body .pt-table th,
+  .post-body .pt-table td {
+    padding: var(--space-2xs) var(--space-sm);
+    text-align: left; vertical-align: top;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .post-body .pt-table thead th {
+    background: var(--color-surface);
+    font-family: var(--font-display); font-weight: 600;
+    color: var(--color-ink); white-space: nowrap;
+    border-bottom: 1px solid var(--line);
+  }
+  /* Row headers carry the label for the row — kept heavier than the cells. */
+  .post-body .pt-table tbody th { font-weight: 600; color: var(--color-ink); }
+  .post-body .pt-table tbody td { color: var(--color-grey-1); }
+  .post-body .pt-table tbody tr:last-child th,
+  .post-body .pt-table tbody tr:last-child td { border-bottom: 0; }
+  .post-body .pt-table-wrap figcaption {
+    margin-top: var(--space-2xs);
+    font-size: .85em; color: var(--color-grey-2);
+  }
+  @media (max-width: 640px) {
+    .post-body .pt-table { font-size: .85em; }
+    .post-body .pt-table th,
+    .post-body .pt-table td { padding: var(--space-2xs) var(--space-xs); }
   }
 </style>

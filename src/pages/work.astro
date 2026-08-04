@@ -5,6 +5,7 @@ import WorkCard from '../components/WorkCard.astro';
 import ClosingCta from '../components/ClosingCta.astro';
 import ProjectModal from '../components/ProjectModal.astro';
 import { getProjects, getWorkPage } from '../lib/content';
+import Headline from '../components/Headline.astro';
 
 const projects = await getProjects();
 const page = await getWorkPage();
@@ -22,7 +23,7 @@ const heroEyebrow = page.hero.eyebrow.replace(/^[—–-]\s*/, '');
         <span>—</span>
         <span>{heroEyebrow}</span>
       </div>
-      <h1 data-hero-item>{heroLines.map((l, i) => (<>{l}{i < heroLines.length - 1 && <br />}</>))}</h1>
+      <h1 data-hero-item><Headline text={heroLines} /></h1>
       <div class="hero-lower">
         <div class="hero-copy">
           <p class="hero-lede hero-lede-full" data-hero-item>{page.hero.lede}</p>

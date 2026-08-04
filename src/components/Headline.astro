@@ -1,0 +1,35 @@
+---
+/**
+ * A CMS headline rendered with its authored line breaks.
+ *
+ * Accepts either a `\n`-delimited string (`Heading.title`) or an already-split
+ * array (`headlineLines[]`) — both conventions exist in the content model and
+ * both land here so there's one implementation to keep correct.
+ *
+ * The space before each `<br>` is the entire point. Adjacent text nodes are
+ * concatenated when a crawler, a screen reader or an AI retriever extracts the
+ * text layer, and `<br>` is not a word boundary — so "Built\nfor speed."
+ * reached them as "Builtfor speed." across 23 headings. The break still renders
+ * identically; a trailing space collapses at the end of a line.
+ */
+interface Props {
+  text: string | string[];
+}
+
+const { text } = Astro.props;
+const lines = Array.isArray(text) ? text : text.split('\n');
+---
+
+{
+  lines.map((line, i) => (
+    <>
+      {line}
+      {i < lines.length - 1 && (
+        <>
+          {' '}
+          <br />
+        </>
+      )}
+    </>
+  ))
+}

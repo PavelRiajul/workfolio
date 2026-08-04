@@ -3,6 +3,7 @@ import Icon from '../components/Icon.astro';
 import Base from '../layouts/Base.astro';
 import ClosingCta from '../components/ClosingCta.astro';
 import { getStackPage } from '../lib/content';
+import Headline from '../components/Headline.astro';
 
 const page = await getStackPage();
 const heroLines = page.hero.headlineLines;
@@ -21,7 +22,7 @@ const everyTitle = page.everyBuildHeading.title.split('\n');
         <span>{page.hero.eyebrow}</span>
       </div>
       <h1 data-hero-item>
-        {heroLines.map((l, i) => (<>{l}{i < heroLines.length - 1 && <br />}</>))}
+        <Headline text={heroLines} />
         {page.hero.accentWord && <> <span class="accent">{page.hero.accentWord}</span></>}
       </h1>
       <div class="hero-lower">
@@ -84,7 +85,7 @@ const everyTitle = page.everyBuildHeading.title.split('\n');
     <div class="wrap">
       <div class="eyebrow" data-reveal>{page.templatesHeading.eyebrow}</div>
       <h2 class="section-h2 measure-wide" data-reveal>
-        {templatesTitle.map((l, i) => (<>{l}{i < templatesTitle.length - 1 && <br />}</>))}
+        <Headline text={templatesTitle} />
       </h2>
       <p class="split-lede" data-reveal>{page.templatesHeading.lede}</p>
 
@@ -113,7 +114,7 @@ const everyTitle = page.everyBuildHeading.title.split('\n');
     <div class="wrap">
       <div class="eyebrow" data-reveal>{page.toolsHeading.eyebrow}</div>
       <h2 class="section-h2 measure-wide" data-reveal>
-        {toolsTitle.map((l, i) => (<>{l}{i < toolsTitle.length - 1 && <br />}</>))}
+        <Headline text={toolsTitle} />
       </h2>
       <p class="split-lede" data-reveal>{page.toolsHeading.lede}</p>
 
@@ -140,7 +141,7 @@ const everyTitle = page.everyBuildHeading.title.split('\n');
     <div class="wrap">
       <div class="eyebrow" data-reveal>{page.everyBuildHeading.eyebrow}</div>
       <h2 class="section-h2" data-reveal>
-        {everyTitle.map((l, i) => (<>{l}{i < everyTitle.length - 1 && <br />}</>))}
+        <Headline text={everyTitle} />
       </h2>
       <ul class="every-list" data-reveal>
         {page.everyBuild.map((item) => (

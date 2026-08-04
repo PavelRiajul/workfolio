@@ -3,6 +3,7 @@
 // Site Settings; pages pass their own when they want different wording.
 import type { Cta } from '../lib/types';
 import { getSite } from '../lib/content';
+import Headline from './Headline.astro';
 
 interface Props {
   title: string;
@@ -18,7 +19,7 @@ const lines = title.split('\n');
 ---
 <section class={`closing ${bordered ? 'bordered' : ''}`}>
   <div class="closing-card" data-reveal>
-    <h2>{lines.map((l, i) => (<>{l}{i < lines.length - 1 && <br />}</>))}</h2>
+    <h2><Headline text={lines} /></h2>
     <div class="closing-actions">
       <a href={primaryCta.href} class="btn btn-dark btn-cta">{primaryCta.label} <span>↗</span></a>
       <a href={secondaryCta.href} class="btn btn-light btn-cta">{secondaryCta.label}</a>

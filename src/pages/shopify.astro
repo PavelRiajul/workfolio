@@ -9,6 +9,7 @@ import Testimonials from '../components/Testimonials.astro';
 import Faq from '../components/Faq.astro';
 import { getProjects, getShopifyServices, getShopifyPage } from '../lib/content';
 import { faqSchema, shopifyServicesSchema } from '../lib/schema';
+import Headline from '../components/Headline.astro';
 
 const projects = await getProjects();
 const services = await getShopifyServices();
@@ -49,7 +50,7 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
         <span class="chip-open chip-shop"><span class="dot"></span>{page.hero.chip}</span>
       </div>
       <h1 data-hero-item>
-        {heroLines.map((l, i) => (<>{l}{i < heroLines.length - 1 && <br />}</>))}
+        <Headline text={heroLines} />
         {page.hero.accentWord && <> <span class="accent accent-shop">{page.hero.accentWord}</span></>}
       </h1>
       <div class="hero-lower">
@@ -104,7 +105,7 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
     <div class="wrap">
       <div class="eyebrow" data-reveal>{page.brandsHeading.eyebrow}</div>
       <h2 class="section-h2 measure-wide" data-reveal>
-        {brandsTitle.map((l, i) => (<>{l}{i < brandsTitle.length - 1 && <br />}</>))}
+        <Headline text={brandsTitle} />
       </h2>
       <div class="brand-wall" data-reveal>
         {page.brands.map((b) => <span>{b}</span>)}
@@ -119,7 +120,7 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
         <div>
           <div class="eyebrow">{page.servicesHeading.eyebrow}</div>
           <h2 class="section-h2 measure">
-            {servicesTitle.map((l, i) => (<>{l}{i < servicesTitle.length - 1 && <br />}</>))}
+            <Headline text={servicesTitle} />
           </h2>
         </div>
         <a href={page.servicesCta.href} class="btn btn-light btn-sm">{page.servicesCta.label}</a>
@@ -158,7 +159,7 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
     <div class="wrap">
       <div class="eyebrow" data-reveal>{page.approachHeading.eyebrow}</div>
       <h2 class="section-h2" data-reveal>
-        {approachTitle.map((l, i) => (<>{l}{i < approachTitle.length - 1 && <br />}</>))}
+        <Headline text={approachTitle} />
       </h2>
       <div class="appr-grid">
         {page.approach.map((a) => (
@@ -179,7 +180,7 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
     <div class="wrap">
       <div class="eyebrow" data-reveal>{page.numbersHeading.eyebrow}</div>
       <h2 class="section-h2" data-reveal>
-        {numbersTitle.map((l, i) => (<>{l}{i < numbersTitle.length - 1 && <br />}</>))}
+        <Headline text={numbersTitle} />
       </h2>
       <div class="cs-out-grid bento-5" data-reveal>
         {page.numbers.map((n) => (
@@ -198,7 +199,7 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
     <div class="cro">
       <div class="cro-copy" data-reveal>
         <div class="eyebrow">{page.cro.heading.eyebrow}</div>
-        <h2 class="section-h2">{croTitle.map((l, i) => (<>{l}{i < croTitle.length - 1 && <br />}</>))}</h2>
+        <h2 class="section-h2"><Headline text={croTitle} /></h2>
         <p class="cro-lede">{page.cro.lede}</p>
         <div class="cro-pills">
           {page.cro.features.map((f) => (
@@ -222,7 +223,7 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
     <div class="wrap">
       <div class="eyebrow" data-reveal>{page.leakHeading.eyebrow}</div>
       <h2 class="section-h2 measure-wide" data-reveal>
-        {leakTitle.map((l, i) => (<>{l}{i < leakTitle.length - 1 && <br />}</>))}
+        <Headline text={leakTitle} />
       </h2>
       <div class="lf">
         <div class="leak" data-reveal>
@@ -256,7 +257,7 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
     <div class="wrap">
       <div class="eyebrow" data-reveal>{page.croProcessHeading.eyebrow}</div>
       <h2 class="section-h2" data-reveal>
-        {croProcessTitle.map((l, i) => (<>{l}{i < croProcessTitle.length - 1 && <br />}</>))}
+        <Headline text={croProcessTitle} />
       </h2>
       <div class="cyc" data-reveal>
         {page.croProcess.map((s) => (
@@ -276,7 +277,7 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
       <div class="work-head" data-reveal>
         <div>
           <div class="eyebrow">{page.calcHeading.eyebrow}</div>
-          <h2 class="section-h2">{calcTitle.map((l, i) => (<>{l}{i < calcTitle.length - 1 && <br />}</>))}</h2>
+          <h2 class="section-h2"><Headline text={calcTitle} /></h2>
         </div>
         <a href={page.calcCta.href} class="btn btn-light btn-sm">{page.calcCta.label}</a>
       </div>
@@ -320,7 +321,7 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
     <div class="wrap">
       <div class="eyebrow" data-reveal>{page.experimentsHeading.eyebrow}</div>
       <h2 class="section-h2" data-reveal>
-        {experimentsTitle.map((l, i) => (<>{l}{i < experimentsTitle.length - 1 && <br />}</>))}
+        <Headline text={experimentsTitle} />
       </h2>
       <div class="lead" data-reveal>
         <div class="lead-row lead-head">
@@ -348,7 +349,7 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
           <div>
             <div class="eyebrow">{page.featuredHeading.eyebrow}</div>
             <h2 class="section-h2">
-              {featuredTitle.map((l, i) => (<>{l}{i < featuredTitle.length - 1 && <br />}</>))}
+              <Headline text={featuredTitle} />
             </h2>
           </div>
           <a href={page.featuredCta.href} class="btn btn-light btn-sm">{page.featuredCta.label}</a>

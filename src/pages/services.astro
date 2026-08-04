@@ -6,6 +6,7 @@ import OfferVisual from '../components/OfferVisual.astro';
 import Faq from '../components/Faq.astro';
 import { getSite, getHome, getServices, getServicesPage } from '../lib/content';
 import { faqSchema, servicesSchema } from '../lib/schema';
+import Headline from '../components/Headline.astro';
 
 const site = await getSite();
 const home = await getHome();
@@ -42,7 +43,7 @@ const schema = [faqSchema(page.faqs), ...servicesSchema(services, site, origin)]
         <span class="chip-open"><span class="dot"></span>{page.hero.chip}</span>
       </div>
       <h1 data-hero-item>
-        {heroLines.map((l, i) => (<>{l}{i < heroLines.length - 1 && <br />}</>))}
+        <Headline text={heroLines} />
         {page.hero.accentWord && <> <span class="accent">{page.hero.accentWord}</span></>}
       </h1>
       <div class="hero-lower">
@@ -83,7 +84,7 @@ const schema = [faqSchema(page.faqs), ...servicesSchema(services, site, origin)]
     <div class="wrap">
       <div class="eyebrow" data-reveal>{page.methodHeading.eyebrow}</div>
       <h2 class="section-h2 measure-wide" data-reveal>
-        {methodTitle.map((l, i) => (<>{l}{i < methodTitle.length - 1 && <br />}</>))}
+        <Headline text={methodTitle} />
       </h2>
       <div class="appr-grid">
         {home.aiWorkflow.map((a) => (
@@ -107,7 +108,7 @@ const schema = [faqSchema(page.faqs), ...servicesSchema(services, site, origin)]
         <div>
           <div class="eyebrow">{page.listHeading.eyebrow}</div>
           <h2 class="section-h2 measure">
-            {listTitle.map((l, i) => (<>{l}{i < listTitle.length - 1 && <br />}</>))}
+            <Headline text={listTitle} />
           </h2>
         </div>
         <a href={page.listCta.href} class="btn btn-light btn-sm">{page.listCta.label}</a>
@@ -161,7 +162,7 @@ const schema = [faqSchema(page.faqs), ...servicesSchema(services, site, origin)]
     <div class="wrap">
       <div class="eyebrow" data-reveal>{page.engagementsHeading.eyebrow}</div>
       <h2 class="section-h2" data-reveal>
-        {engagementsTitle.map((l, i) => (<>{l}{i < engagementsTitle.length - 1 && <br />}</>))}
+        <Headline text={engagementsTitle} />
       </h2>
       <div class="appr-grid eng-grid">
         {page.engagements.map((e) => (
@@ -185,7 +186,7 @@ const schema = [faqSchema(page.faqs), ...servicesSchema(services, site, origin)]
     <div class="wrap">
       <div data-reveal>
         <div class="eyebrow">{page.processHeading.eyebrow}</div>
-        <h2 class="section-h2">{processTitle.map((l, i) => (<>{l}{i < processTitle.length - 1 && <br />}</>))}</h2>
+        <h2 class="section-h2"><Headline text={processTitle} /></h2>
         <p class="split-lede">{page.processHeading.lede}</p>
       </div>
       <div class="cyc cyc-blue" data-reveal>

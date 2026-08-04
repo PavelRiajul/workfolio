@@ -9,8 +9,8 @@ export interface ResumePdfData {
   location: string;
   email: string;
   phone: string;
-  github: string;
-  linkedin: string;
+  /** Resolved profile URLs, scheme stripped — however many are authored. */
+  socials: string[];
   website: string;
   summary: string;
   skills: { label: string; values: string }[];
@@ -60,7 +60,7 @@ export function generateResumePdf(d: ResumePdfData) {
   doc.text(d.role, M, y);
   y += 16;
 
-  const contacts = [d.location, d.email, d.phone, d.github, d.linkedin, d.website].filter(Boolean);
+  const contacts = [d.location, d.email, d.phone, ...(d.socials ?? []), d.website].filter(Boolean);
   doc.setFontSize(9);
   setColor(GREY);
   const contactLine = contacts.join('   •   ');

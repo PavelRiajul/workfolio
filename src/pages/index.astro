@@ -11,6 +11,7 @@ import Testimonials from '../components/Testimonials.astro';
 import Faq from '../components/Faq.astro';
 import { getSite, getHome, getProjects, getServices } from '../lib/content';
 import { faqSchema, servicesSchema } from '../lib/schema';
+import Headline from '../components/Headline.astro';
 
 const site = await getSite();
 const home = await getHome();
@@ -40,7 +41,7 @@ const schema = [faqSchema(home.faqs), ...servicesSchema(services, site, origin)]
         <span class="chip-open"><span class="dot"></span>{home.availabilityChip}</span>
       </div>
       <h1 data-hero-item>
-        {home.headlineLines.map((l, i) => (<>{l}{i < home.headlineLines.length - 1 && <br />}</>))}
+        <Headline text={home.headlineLines} />
         {home.accentWord && <> <span class="accent">{home.accentWord}</span></>}
       </h1>
       <div class="hero-lower">
@@ -137,7 +138,7 @@ const schema = [faqSchema(home.faqs), ...servicesSchema(services, site, origin)]
           <div class="croh-copy">
             <div class="eyebrow">{home.aiBand.eyebrow}</div>
             <h2 class="croh-h">
-              {bandTitle.map((l, i) => (<>{l}{i < bandTitle.length - 1 && <br />}</>))}
+              <Headline text={bandTitle} />
               {home.aiBand.accentWord && <> <span class="accent">{home.aiBand.accentWord}</span></>}
             </h2>
             <p class="croh-p">{home.aiBand.body}</p>
@@ -170,7 +171,7 @@ const schema = [faqSchema(home.faqs), ...servicesSchema(services, site, origin)]
     <div class="wrap">
       <div data-reveal>
         <div class="eyebrow">{home.processHeading.eyebrow}</div>
-        <h2 class="section-h2">{processTitle.map((l, i) => (<>{l}{i < processTitle.length - 1 && <br />}</>))}</h2>
+        <h2 class="section-h2"><Headline text={processTitle} /></h2>
         <p class="split-lede">{home.processHeading.lede}</p>
       </div>
       <div class="cyc cyc-blue" data-reveal>

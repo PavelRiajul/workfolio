@@ -6,6 +6,7 @@ import Icon from './Icon.astro';
 // delivers. Full detail lives on /services.
 import type { Cta, Heading, Service } from '../lib/types';
 import OfferVisual from './OfferVisual.astro';
+import Headline from './Headline.astro';
 
 interface Props {
   services: Service[];
@@ -21,7 +22,7 @@ const PEEK = 4;
   <div class="sstack-head" data-reveal>
     <div>
       <div class="eyebrow">{heading.eyebrow}</div>
-      <h2>{headingLines.map((l, i) => (<>{l}{i < headingLines.length - 1 && <br />}</>))}</h2>
+      <h2><Headline text={headingLines} /></h2>
     </div>
     <a href={cta.href} class="btn btn-light btn-sm">{cta.label}</a>
   </div>
