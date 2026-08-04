@@ -7,11 +7,11 @@
 // the first paragraph.
 import type { TocEntry } from '../lib/portable';
 
-interface Props { entries: TocEntry[]; label?: string }
-const { entries, label = 'On this page' } = Astro.props;
+interface Props { entries: TocEntry[]; label?: string; rail?: boolean }
+const { entries, label = 'On this page', rail = false } = Astro.props;
 ---
 {entries.length > 0 && (
-  <nav class="toc" aria-label={label}>
+  <nav class={`toc ${rail ? 'toc-rail' : ''}`} aria-label={label}>
     <details class="toc-shell" open>
       <summary><span>{label}</span><span class="toc-caret" aria-hidden="true">+</span></summary>
       <ol>
@@ -63,10 +63,50 @@ const { entries, label = 'On this page' } = Astro.props;
   .toc-sub a { font-size: .87rem; color: var(--color-grey-2); }
   .toc-sub a::before { content: '— '; }
 
+  /* The section being read. Marked with a rule down the left edge rather than
+     a background, so it reads at a glance without turning the list into a
+     block of colour — and the ink weight change carries it for anyone who
+     cannot separate the blue from the grey. */
+  li a.is-current {
+    color: var(--color-ink); font-weight: 600;
+    box-shadow: inset 2px 0 0 var(--color-blue);
+    padding-left: var(--space-2xs);
+  }
+  li a.is-current::before { color: var(--color-blue); }
+  @media (prefers-reduced-motion: no-preference) {
+    li a { transition: color .18s ease; }
+  }
+
   /* Anything without a precise pointer keeps the site-wide 44px minimum. */
   @media (pointer: coarse) {
     li a { padding: 10px 0; min-height: 44px; }
   }
+
+  /* Rail variant. Posts run to 26 entries, which is taller than a viewport, so
+     the *list* scrolls inside the card rather than the card being clipped by
+     the rail. Scrolling the rail instead put everything below the contents —
+     the share buttons — out of reach, and cut the last entry mid-word with no
+     indication there was more. The heading stays put so the scroll has an
+     anchor. */
+  /* The card itself is the scroll container, with the heading pinned inside it.
+     Two things had to be ruled out first: `max-height: 100%` on the shell does
+     not resolve against an auto-height flex parent, and making <details> a
+     flex container does not make its content a flex item — Chrome lays the
+     content out in its own box, so the list kept its full 1,296px height and
+     spilled over the share row beneath. Giving the shell `overflow-y: auto`
+     works because flex has already resolved a real height for it. */
+  .toc-rail { max-width: none; margin: 0; min-height: 0; }
+  .toc-rail .toc-shell {
+    height: 100%; overflow-y: auto; overscroll-behavior: contain;
+    padding-top: 0;
+  }
+  .toc-rail summary {
+    position: sticky; top: 0; z-index: 1;
+    background: var(--color-surface);
+    padding-top: var(--space-sm);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .toc-rail ol { margin-top: var(--space-xs); }
 
   @media (prefers-reduced-motion: reduce) {
     .toc-caret { transition: none; }

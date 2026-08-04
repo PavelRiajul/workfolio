@@ -431,6 +431,69 @@ function initTabSpy() {
   onScroll();
 }
 
+/* ---- Article contents: mark the section you're reading ----------------- */
+// The contents list is sticky beside the article for the whole read, so without
+// this it shows where you could go and never where you are. On a post with 26
+// entries that is most of its value missing.
+//
+// Deliberately not IntersectionObserver: headings fire on entry and exit, and
+// with several visible at once "which one am I reading" is a question about the
+// scroll position rather than about visibility. Reading positions off a rect on
+// scroll answers it directly, and the loop is a handful of reads.
+function initTocSpy() {
+  const toc = document.querySelector<HTMLElement>('.toc');
+  if (!toc) return;
+
+  const links = Array.from(toc.querySelectorAll<HTMLAnchorElement>('a[href^="#"]'));
+  const pairs = links
+    .map((link) => ({ link, heading: document.getElementById(decodeURIComponent(link.hash.slice(1))) }))
+    .filter((p): p is { link: HTMLAnchorElement; heading: HTMLElement } => Boolean(p.heading));
+  if (!pairs.length) return;
+
+  const list = toc.querySelector<HTMLElement>('ol');
+  let active: HTMLAnchorElement | null = null;
+
+  const onScroll = () => {
+    // The last heading that has passed the reading line is the one you are in.
+    const line = window.innerHeight * 0.25;
+    let current = pairs[0];
+    for (const p of pairs) {
+      if (p.heading.getBoundingClientRect().top <= line) current = p;
+      else break;
+    }
+    // Above the first heading nothing is active — the intro is not a section.
+    const atTop = pairs[0].heading.getBoundingClientRect().top > line;
+    const target = atTop ? null : current.link;
+    if (target === active) return;
+
+    active = target;
+    pairs.forEach(({ link }) => {
+      const on = link === target;
+      link.classList.toggle('is-current', on);
+      if (on) link.setAttribute('aria-current', 'true');
+      else link.removeAttribute('aria-current');
+    });
+
+    // The rail's list scrolls internally, so the active entry can sit outside
+    // it. Scroll the list, never the page — scrollIntoView would drag the
+    // document along with it and fight the reader.
+    if (target && list && list.scrollHeight > list.clientHeight) {
+      const l = list.getBoundingClientRect();
+      const t = target.getBoundingClientRect();
+      if (t.top < l.top || t.bottom > l.bottom) {
+        list.scrollTo({
+          top: list.scrollTop + (t.top - l.top) - list.clientHeight / 2 + t.height / 2,
+          behavior: prefersReduced ? 'auto' : 'smooth',
+        });
+      }
+    }
+  };
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  if (lenis) lenis.on('scroll', onScroll);
+  onScroll();
+}
+
 /* ---- WhatsApp FAB: hide when footer is in view ------------------------- */
 function initWhatsAppFab() {
   const fab = document.querySelector<HTMLElement>('.wa-fab');
@@ -456,6 +519,7 @@ ready(() => {
   initToc();
   initBarGrow();
   initTabSpy();
+  initTocSpy();
   initReveal();
   initHeroIntro();
   initCountUp();

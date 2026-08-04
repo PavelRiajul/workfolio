@@ -122,10 +122,11 @@ const hasCover = Boolean(post.image?.asset?.url) || publicFileExists(coverSrc);
           contents list falls back to the collapsed block above the article and
           the share card moves to the end. */}
       <aside class="post-rail">
-        {toc.length > 0 && <Toc entries={toc} />}
-        {/* Wrapped rather than class-on-component: a scoped rule in this page
-            does not reach a child component's own root element. */}
-        <div class="post-rail-share"><ShareLinks url={canonical} title={post.title} /></div>
+        {toc.length > 0 && <Toc entries={toc} rail />}
+        {/* One instance, moved by grid order rather than rendered twice and
+            hidden. Wrapped rather than class-on-component, because a scoped
+            rule in this page does not reach a child component's root element. */}
+        <div class="post-share"><ShareLinks url={canonical} title={post.title} /></div>
       </aside>
 
       <div class="post-main">
@@ -148,16 +149,17 @@ const hasCover = Boolean(post.image?.asset?.url) || publicFileExists(coverSrc);
           </section>
         )}
 
-        <div class="post-end-share"><ShareLinks url={canonical} title={post.title} /></div>
-
         <aside class="post-author" data-reveal>
       <div class="post-author-body">
         <p class="eyebrow">Written by</p>
         <h2 class="post-author-name">{site.name}</h2>
         <p>{site.seo.description}</p>
+        {/* Credibility, not conversion. This used to repeat the closing card's
+            "Get in touch" — two links to /start about 1,800px apart, the second
+            one larger and the actual CTA. The author card's job is telling a
+            reader who wrote this without making them leave the page. */}
         <div class="post-author-links">
           <a href="/about">More about me</a>
-          <a href={site.closingCta.primary.href}>{site.closingCta.primary.label}</a>
         </div>
       </div>
         </aside>
@@ -267,34 +269,44 @@ const hasCover = Boolean(post.image?.asset?.url) || publicFileExists(coverSrc);
      rail occupies width that was previously empty: the prose column is capped
      for readability, so on a wide screen the alternative to a rail is dead
      space, not a wider line. */
-  .post-layout { margin-top: var(--space-lg); }
-  .post-main { min-width: 0; }
+  /* Single column below 1024px. The rail is `display: contents` so its two
+     children become grid items in their own right and `order` can put the
+     contents list above the article and the share row below it — one instance
+     of each, rather than rendering the share block twice and hiding one. */
+  .post-layout {
+    display: grid; grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-md); margin-top: var(--space-lg);
+  }
   .post-rail { display: contents; }
-  .post-rail-share { display: none; }
+  .post-rail :global(.toc) { order: 1; }
+  .post-main { min-width: 0; order: 2; }
+  .post-share { order: 3; margin-top: var(--space-lg); }
 
   @media (min-width: 1024px) {
     .post-layout {
-      display: grid;
       grid-template-columns: 250px minmax(0, 1fr);
       gap: var(--space-xl);
       align-items: start;
     }
+    /* Grid rather than flex, for one specific reason: a `minmax(0, 1fr)` grid
+       track resolves to a definite height, so `height: 100%` inside the
+       contents card works. As a flex column the card was stretched but its
+       height stayed indefinite, percentages did not resolve, and the 1,296px
+       list overflowed straight over the share row below it. */
     .post-rail {
-      display: flex; flex-direction: column; gap: var(--space-md);
-      position: sticky;
-      /* Clears the fixed wordmark; the rail scrolls internally when a long
-         contents list would otherwise run past the viewport. */
-      top: var(--space-lg);
-      max-height: calc(100vh - var(--space-lg) * 2 - var(--tabbar-h));
-      overflow-y: auto;
-      overscroll-behavior: contain;
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) auto;
+      gap: var(--space-md);
+      position: sticky; top: var(--space-lg);
+      /* The rail never scrolls — the contents list does, inside its own card,
+         so the share row stays reachable at the foot of it. */
+      max-height: calc(100svh - var(--space-lg) - var(--space-md));
+      min-height: 0;
     }
-    .post-rail-share { display: block; }
-    /* The end-of-article share is a duplicate once the rail is visible. */
-    .post-end-share { display: none; }
-    /* The rail supplies its own spacing via the flex gap. */
-    .post-rail :global(.toc) { margin: 0; max-width: none; }
-
+    /* DOM order (contents, then share) is what renders here — the `order`
+       values above only matter in the single-column layout. */
+    .post-rail :global(.toc) { min-height: 0; height: 100%; }
+    .post-share { margin-top: 0; }
     /* Beside the rail, prose aligns to the left of the column rather than
        centring inside it. The main column is only ~130px wider than the
        measure, so centring put paragraphs 65px inside the left edge of the
@@ -308,8 +320,6 @@ const hasCover = Boolean(post.image?.asset?.url) || publicFileExists(coverSrc);
     .post-main :global(.post-body) > :global(.pt-quote) { margin-left: 0; margin-right: 0; }
     .post-main :global(.post-faq) { max-width: var(--prose); margin-left: 0; }
   }
-
-  .post-end-share { margin-top: var(--space-xl); }
 
   /* End-of-post author card. Search engines weigh who wrote a piece for
      anything advice-shaped, and a reader deciding whether to trust the post
