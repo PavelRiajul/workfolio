@@ -340,6 +340,30 @@
       "cat": "frontend",
       "id": "post-reusable-design-system",
       "words": 2501
+    },
+    {
+      "slug": "mobile-hero-viewport",
+      "cat": "frontend",
+      "id": "post-mobile-hero-viewport",
+      "words": 2502
+    },
+    {
+      "slug": "portable-text-renderer",
+      "cat": "frontend",
+      "id": "post-portable-text-renderer",
+      "words": 2501
+    },
+    {
+      "slug": "mobile-card-density",
+      "cat": "frontend",
+      "id": "post-mobile-card-density",
+      "words": 2504
+    },
+    {
+      "slug": "accessible-forms",
+      "cat": "frontend",
+      "id": "post-accessible-forms",
+      "words": 2502
     }
   ],
   "current_category": "frontend",
@@ -348,10 +372,6 @@
     "fullstack": [],
     "backend": [],
     "frontend": [
-      "mobile-hero-viewport",
-      "portable-text-renderer",
-      "mobile-card-density",
-      "accessible-forms",
       "dark-mode-tokens",
       "toc-shared-heading-ids",
       "scroll-stacking-cards",

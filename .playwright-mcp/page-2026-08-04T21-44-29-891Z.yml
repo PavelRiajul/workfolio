@@ -1,0 +1,665 @@
+- generic [active] [ref=e1]:
+  - link "Skip to content" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "Md. Musfiqur Rahaman - home" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e11]: Musfiqur Rahaman
+      - navigation "Primary" [ref=e12]:
+        - list [ref=e13]:
+          - listitem [ref=e14]:
+            - link "Home" [ref=e15] [cursor=pointer]:
+              - /url: /
+          - listitem [ref=e16]:
+            - link "Work" [ref=e17] [cursor=pointer]:
+              - /url: /projects
+          - listitem [ref=e18]:
+            - link "About" [ref=e19] [cursor=pointer]:
+              - /url: /about
+          - listitem [ref=e20]:
+            - link "Resume" [ref=e21] [cursor=pointer]:
+              - /url: /resume
+          - listitem [ref=e22]:
+            - link "Writing" [ref=e23] [cursor=pointer]:
+              - /url: /blog
+          - listitem [ref=e24]:
+            - link "Contact" [ref=e25] [cursor=pointer]:
+              - /url: /contact
+      - generic [ref=e26]:
+        - button "Switch colour theme" [ref=e27] [cursor=pointer]
+        - link "Hire me" [ref=e35] [cursor=pointer]:
+          - /url: /contact
+  - main [ref=e39]:
+    - region [ref=e40]:
+      - generic [ref=e41]:
+        - generic [ref=e42]:
+          - paragraph [ref=e43]: Open to Software / Backend / DevOps / AI Engineering conversations
+          - paragraph [ref=e45]:
+            - text: Badda, Dhaka, Bangladesh
+            - generic [ref=e49]: /
+            - text: Asia/Dhaka (UTC+6)
+          - heading "Md. Musfiqur Rahaman" [level=1] [ref=e50]
+          - paragraph [ref=e51]:
+            - generic [ref=e52]: I work as a
+            - generic [ref=e53]: Full Stack Software Engineer
+          - paragraph [ref=e55]: "Roles: Full Stack Software Engineer, Backend Engineer, AI Engineer, DevOps Engineer, Software Engineer."
+          - paragraph [ref=e56]: I design the systems underneath the product - multi-tenant SaaS platforms, distributed crawlers, streaming pipelines and the AI layers on top of them - and I stay responsible for them all the way to the container running in production.
+          - generic [ref=e57]:
+            - link "See the work" [ref=e58] [cursor=pointer]:
+              - /url: /projects
+            - link "Resume" [ref=e61] [cursor=pointer]:
+              - /url: /resume
+            - link "Email me" [ref=e65] [cursor=pointer]:
+              - /url: mailto:musfiqdehan@gmail.com
+          - generic [ref=e69]:
+            - generic [ref=e70]:
+              - term [ref=e71]: 3+
+              - definition [ref=e72]: years shipping production systems
+            - generic [ref=e73]:
+              - term [ref=e74]: 10k+
+              - definition [ref=e75]: daily active users supported
+            - generic [ref=e76]:
+              - term [ref=e77]: "4"
+              - definition [ref=e78]: platforms designed end to end
+            - generic [ref=e79]:
+              - term [ref=e80]: "5"
+              - definition [ref=e81]: engineering disciplines covered
+        - generic [ref=e82]:
+          - figure "fig 01 - the engineer" [ref=e83]:
+            - img "Md. Musfiqur Rahaman, Full Stack Software Engineer, working on a laptop" [ref=e85]
+          - list [ref=e87]:
+            - listitem [ref=e88]:
+              - generic [ref=e89]: Full Stack
+              - generic [ref=e91]: Django · DRF · FastAPI
+            - listitem [ref=e92]:
+              - generic [ref=e93]: Backend
+              - generic [ref=e95]: Python · Django · DRF
+            - listitem [ref=e96]:
+              - generic [ref=e97]: AI
+              - generic [ref=e99]: LangChain · LangGraph · CrewAI
+            - listitem [ref=e100]:
+              - generic [ref=e101]: DevOps
+              - generic [ref=e103]: Docker · GitHub Actions · Traefik
+            - listitem [ref=e104]:
+              - generic [ref=e105]: Engineering
+              - generic [ref=e107]: Python · TypeScript · C++
+      - generic [ref=e108]:
+        - list [ref=e110]:
+          - listitem [ref=e111]: Python
+          - listitem [ref=e113]: Django
+          - listitem [ref=e115]: FastAPI
+          - listitem [ref=e117]: PostgreSQL
+          - listitem [ref=e119]: Redis Streams
+          - listitem [ref=e121]: Celery
+          - listitem [ref=e123]: pgvector
+          - listitem [ref=e125]: Docker
+          - listitem [ref=e127]: Traefik
+          - listitem [ref=e129]: AWS
+          - listitem [ref=e131]: Next.js
+          - listitem [ref=e133]: React Native
+          - listitem [ref=e135]: LangGraph
+          - listitem [ref=e137]: Scrapy
+          - listitem [ref=e139]: Playwright
+          - listitem [ref=e141]: Prometheus
+          - listitem [ref=e143]: Grafana
+          - listitem [ref=e145]: Cloudflare
+          - listitem [ref=e147]: PgBouncer
+          - listitem [ref=e149]: WebSocket
+          - listitem [ref=e151]: Python
+          - listitem [ref=e153]: Django
+          - listitem [ref=e155]: FastAPI
+          - listitem [ref=e157]: PostgreSQL
+          - listitem [ref=e159]: Redis Streams
+          - listitem [ref=e161]: Celery
+          - listitem [ref=e163]: pgvector
+          - listitem [ref=e165]: Docker
+          - listitem [ref=e167]: Traefik
+          - listitem [ref=e169]: AWS
+          - listitem [ref=e171]: Next.js
+          - listitem [ref=e173]: React Native
+          - listitem [ref=e175]: LangGraph
+          - listitem [ref=e177]: Scrapy
+          - listitem [ref=e179]: Playwright
+          - listitem [ref=e181]: Prometheus
+          - listitem [ref=e183]: Grafana
+          - listitem [ref=e185]: Cloudflare
+          - listitem [ref=e187]: PgBouncer
+          - listitem [ref=e189]: WebSocket
+        - paragraph [ref=e191]: "Core stack: Python, Django, FastAPI, PostgreSQL, Redis Streams, Celery, pgvector, Docker, Traefik, AWS, Next.js, React Native, LangGraph, Scrapy, Playwright, Prometheus, Grafana, Cloudflare, PgBouncer, WebSocket."
+    - region [ref=e192]:
+      - generic [ref=e193]:
+        - generic [ref=e194]:
+          - generic [ref=e195]: 01 / Capability console
+          - heading "Five roles, one engineer" [level=2] [ref=e196]
+          - paragraph [ref=e197]: Job titles slice the same work differently. Pick the lens you are hiring for - the diagram, the evidence and the stack all re-focus around it.
+        - generic [ref=e198]:
+          - tablist "Engineering roles" [ref=e199]:
+            - tab "Full Stack Full Stack Software Engineer" [selected] [ref=e200] [cursor=pointer]:
+              - generic [ref=e206]:
+                - generic [ref=e207]: Full Stack
+                - generic [ref=e208]: Full Stack Software Engineer
+            - tab "Backend Backend Engineer" [ref=e210] [cursor=pointer]:
+              - generic [ref=e216]:
+                - generic [ref=e217]: Backend
+                - generic [ref=e218]: Backend Engineer
+            - tab "AI AI Engineer" [ref=e219] [cursor=pointer]:
+              - generic [ref=e225]:
+                - generic [ref=e226]: AI
+                - generic [ref=e227]: AI Engineer
+            - tab "DevOps DevOps Engineer" [ref=e228] [cursor=pointer]:
+              - generic [ref=e236]:
+                - generic [ref=e237]: DevOps
+                - generic [ref=e238]: DevOps Engineer
+            - tab "Engineering Software Engineer" [ref=e239] [cursor=pointer]:
+              - generic [ref=e245]:
+                - generic [ref=e246]: Engineering
+                - generic [ref=e247]: Software Engineer
+          - figure "Live system A request through the stack I build, operate and debug" [ref=e249]:
+            - generic [ref=e250]:
+              - generic [ref=e251]: Live system
+              - generic [ref=e252]: A request through the stack I build, operate and debug
+            - img "Architecture diagram of the systems Md. Musfiqur Rahaman builds Clients reach a Cloudflare and Traefik edge, which routes to a Django and FastAPI API. The API uses a Redis cache and PgBouncer pool, and enqueues onto a Redis Streams plane feeding Scrapy and Playwright workers and an LLM and embedding model layer. Results are committed to PostgreSQL with schema-per-tenant isolation and to a pgvector semantic index, with Prometheus and Grafana observing the workers." [ref=e253]:
+              - generic [ref=e284]:
+                - 'button "Clients: Next.js dashboards, React Native app and third-party API consumers hitting one contract." [ref=e285] [cursor=pointer]':
+                  - generic [ref=e289]: Clients
+                  - generic [ref=e290]: Web · Mobile · API
+                - 'button "Edge: TLS, routing, per-tenant custom domains, rate limits and health-gated rolling releases." [ref=e292] [cursor=pointer]':
+                  - generic [ref=e296]: Edge
+                  - generic [ref=e297]: Cloudflare · Traefik
+                - 'button "API: Domain-modelled REST resources, RBAC resolved against plan + role + resource, WebSocket fan-out." [ref=e299] [cursor=pointer]':
+                  - generic [ref=e304]: API
+                  - generic [ref=e305]: Django · FastAPI
+                - 'button "Cache & Locks: Hot state, politeness budgets, distributed locks and pooled connections under load." [ref=e307] [cursor=pointer]':
+                  - generic [ref=e312]: Cache & Locks
+                  - generic [ref=e313]: Redis · PgBouncer
+                - 'button "Stream Plane: Consumer groups, delayed retries, dead-letter queues and stale-message reclaim. At-least-once, handled idempotently." [ref=e315] [cursor=pointer]':
+                  - generic [ref=e319]: Stream Plane
+                  - generic [ref=e320]: Streams · Celery
+                - 'button "Workers: HTTP-first crawling with a browser fallback, robots/SSRF guards and conditional recrawl on ETag/304." [ref=e322] [cursor=pointer]':
+                  - generic [ref=e327]: Workers
+                  - generic [ref=e328]: Scrapy · Playwright
+                - 'button "Model Layer: Schema-validated extraction, provider fallback, cost tracking and versioned embeddings." [ref=e330] [cursor=pointer]':
+                  - generic [ref=e336]: Model Layer
+                  - generic [ref=e337]: LLM · BGE-M3
+                - 'button "PostgreSQL: Isolated tenant schemas, lease-based work queues via FOR UPDATE SKIP LOCKED, transactional truth." [ref=e339] [cursor=pointer]':
+                  - generic [ref=e345]: PostgreSQL
+                  - generic [ref=e346]: schema-per-tenant
+                - 'button "pgvector: Embedding index behind SimHash banding, so semantic comparison only runs on real near-duplicates." [ref=e348] [cursor=pointer]':
+                  - generic [ref=e355]: pgvector
+                  - generic [ref=e356]: semantic search
+                - 'button "Observability: Queue depth, stage latency and error budgets - the signals that predict an incident before users do." [ref=e358] [cursor=pointer]':
+                  - generic [ref=e363]: Observability
+                  - generic [ref=e364]: Prometheus · Grafana
+            - paragraph [ref=e366]:
+              - generic [ref=e367]: Hover a node
+              - generic [ref=e368]: Each block is something I have built, broken and fixed in production.
+        - tabpanel "Full Stack Full Stack Software Engineer" [ref=e370]:
+          - generic [ref=e371]:
+            - heading "One person, the whole vertical slice." [level=3] [ref=e372]
+            - paragraph [ref=e373]: I take a feature from an ambiguous requirement to a deployed, observable slice - schema, API, UI state, background jobs and the release that carries it. Three products in production, two of them multi-tenant SaaS with a web app and a mobile client on the same API.
+            - list [ref=e374]:
+              - listitem [ref=e375]:
+                - generic [ref=e376]: "3"
+                - generic [ref=e377]: production platforms owned end to end
+              - listitem [ref=e378]:
+                - generic [ref=e379]: Web + Mobile
+                - generic [ref=e380]: clients served from one Django API
+              - listitem [ref=e381]:
+                - generic [ref=e382]: 10k+
+                - generic [ref=e383]: daily active users supported
+            - list [ref=e384]:
+              - listitem [ref=e385]: Django
+              - listitem [ref=e386]: DRF
+              - listitem [ref=e387]: FastAPI
+              - listitem [ref=e388]: React
+              - listitem [ref=e389]: Next.js
+              - listitem [ref=e390]: React Native
+              - listitem [ref=e391]: TypeScript
+              - listitem [ref=e392]: PostgreSQL
+              - listitem [ref=e393]: WebSocket
+          - list [ref=e394]:
+            - listitem [ref=e395]:
+              - text: "01"
+              - heading "Product-shaped API design" [level=4] [ref=e396]
+              - paragraph [ref=e397]: RESTful resources modelled on the domain, not the ORM - versioned, paginated, permission-aware, and documented well enough that the frontend team never has to read my code.
+            - listitem [ref=e398]:
+              - text: "02"
+              - heading "React & Next.js front ends on my own contracts" [level=4] [ref=e399]
+              - paragraph [ref=e400]: Dashboards, onboarding flows and admin surfaces in React, Next.js and React Native, wired to WebSocket channels for live state instead of polling.
+            - listitem [ref=e401]:
+              - text: "03"
+              - heading "Requirement → architecture → delivery" [level=4] [ref=e402]
+              - paragraph [ref=e403]: I sit in the requirements conversation, translate it into a data model and a delivery plan, then own it end to end. That loop is why I lead junior engineers today.
+    - region [ref=e404]:
+      - generic [ref=e405]:
+        - generic [ref=e406]:
+          - generic [ref=e407]: 02 / Selected work
+          - heading "Systems, not screenshots" [level=2] [ref=e408]
+          - paragraph [ref=e409]: Platforms where the interesting part was never the UI. Each case study is written the way I would explain it in a design review.
+        - generic [ref=e410]:
+          - article [ref=e411]:
+            - link "NewsCrawl" [ref=e412] [cursor=pointer]:
+              - /url: /projects/newscrawl
+              - generic [ref=e413]: Read the NewsCrawl case study
+            - generic [ref=e414]: frontier
+            - generic [ref=e496]:
+              - generic [ref=e497]:
+                - generic [ref=e498]: Backend
+                - generic [ref=e499]: live
+                - generic [ref=e500]: 2025 - Present
+              - heading "NewsCrawl" [level=3] [ref=e501]
+              - paragraph [ref=e502]: A distributed, multilingual news intelligence system that survives its own workers dying.
+              - list [ref=e503]:
+                - listitem [ref=e504]:
+                  - generic [ref=e505]: 4-stage
+                  - generic [ref=e506]: dedup pipeline
+                - listitem [ref=e507]:
+                  - generic [ref=e508]: "2"
+                  - generic [ref=e509]: languages end to end
+                - listitem [ref=e510]:
+                  - generic [ref=e511]: SKIP LOCKED
+                  - generic [ref=e512]: no external queue
+                - listitem [ref=e513]:
+                  - generic [ref=e514]: ≥1
+                  - generic [ref=e515]: delivery, idempotent
+              - list [ref=e516]:
+                - listitem [ref=e517]: Python
+                - listitem [ref=e518]: FastAPI
+                - listitem [ref=e519]: Scrapy
+                - listitem [ref=e520]: Playwright
+                - listitem [ref=e521]: Redis Streams
+                - listitem [ref=e522]: PostgreSQL
+                - listitem [ref=e523]: pgvector
+                - listitem [ref=e524]: BGE-M3
+                - listitem [ref=e525]: "+4"
+              - generic [ref=e526]:
+                - generic [ref=e527]: Read the case study
+                - generic [ref=e530]:
+                  - link "Source" [ref=e531] [cursor=pointer]:
+                    - /url: https://github.com/MusfiqDehan/NewsCrawl-Intelligence-Platform
+                  - link "Live" [ref=e536] [cursor=pointer]:
+                    - /url: https://newscrawl.musfiqdehan.com
+          - article [ref=e540]:
+            - link "Sortorium" [ref=e541] [cursor=pointer]:
+              - /url: /projects/sortorium
+              - generic [ref=e542]: Read the Sortorium case study
+            - generic [ref=e544]:
+              - img [ref=e546]:
+                - generic [ref=e558]: g0
+                - generic [ref=e569]: g1
+                - generic [ref=e580]: g2
+                - generic [ref=e583]: DLQ
+              - generic [ref=e585]: stream
+            - generic [ref=e586]:
+              - generic [ref=e587]:
+                - generic [ref=e588]: Full Stack
+                - generic [ref=e589]: live
+                - generic [ref=e590]: 2025 - Present
+              - heading "Sortorium" [level=3] [ref=e591]
+              - paragraph [ref=e592]: Multi-tenant POS and ERP SaaS with an offline-first desktop till that keeps selling when the internet does not.
+              - list [ref=e593]:
+                - listitem [ref=e594]:
+                  - generic [ref=e595]: Schema/tenant
+                  - generic [ref=e596]: PostgreSQL isolation
+                - listitem [ref=e597]:
+                  - generic [ref=e598]: Offline-first
+                  - generic [ref=e599]: Tauri desktop till
+                - listitem [ref=e600]:
+                  - generic [ref=e601]: Idempotent
+                  - generic [ref=e602]: checkout replay
+              - list [ref=e603]:
+                - listitem [ref=e604]: Python
+                - listitem [ref=e605]: Django
+                - listitem [ref=e606]: DRF
+                - listitem [ref=e607]: PostgreSQL
+                - listitem [ref=e608]: django-tenants
+                - listitem [ref=e609]: "+8"
+              - generic [ref=e610]:
+                - generic [ref=e611]: Read the case study
+                - generic [ref=e614]:
+                  - link "Live" [ref=e615] [cursor=pointer]:
+                    - /url: https://sortorium.com
+                  - link "Backend" [ref=e619] [cursor=pointer]:
+                    - /url: https://github.com/MusfiqDehan/PoS-ERP-System-Backend
+                  - link "Frontend" [ref=e624] [cursor=pointer]:
+                    - /url: https://github.com/MusfiqDehan/PoS-ERP-System-Frontend
+                  - link "Desktop" [ref=e629] [cursor=pointer]:
+                    - /url: https://github.com/MusfiqDehan/POS-Offline-Desktop-Application
+          - article [ref=e634]:
+            - link "FitsSort" [ref=e635] [cursor=pointer]:
+              - /url: /projects/fitssort
+              - generic [ref=e636]: Read the FitsSort case study
+            - generic [ref=e638]:
+              - img [ref=e640]:
+                - generic [ref=e643]: shared cluster
+              - generic [ref=e669]: tenant
+            - generic [ref=e670]:
+              - generic [ref=e671]:
+                - generic [ref=e672]: Full Stack
+                - generic [ref=e673]: live
+                - generic [ref=e674]: 2024 - Present
+              - heading "FitsSort" [level=3] [ref=e675]
+              - paragraph [ref=e676]: Multi-tenant, multi-branch SaaS for health and fitness businesses - web, mobile and turnstile.
+              - list [ref=e677]:
+                - listitem [ref=e678]:
+                  - generic [ref=e679]: 10k+
+                  - generic [ref=e680]: daily active users
+                - listitem [ref=e681]:
+                  - generic [ref=e682]: 1 schema
+                  - generic [ref=e683]: per tenant
+                - listitem [ref=e684]:
+                  - generic [ref=e685]: "3"
+                  - generic [ref=e686]: clients on one API
+              - list [ref=e687]:
+                - listitem [ref=e688]: Python
+                - listitem [ref=e689]: Django
+                - listitem [ref=e690]: DRF
+                - listitem [ref=e691]: PostgreSQL
+                - listitem [ref=e692]: React
+                - listitem [ref=e693]: "+9"
+              - generic [ref=e694]:
+                - generic [ref=e695]: Read the case study
+                - generic [ref=e698]:
+                  - link "Live" [ref=e699] [cursor=pointer]:
+                    - /url: https://fitssort.com
+                  - link "Tenant demo" [ref=e703] [cursor=pointer]:
+                    - /url: https://super-gym.fitssort.com
+                  - link "Backend" [ref=e707] [cursor=pointer]:
+                    - /url: https://github.com/MusfiqDehan/Fitness-Management-System-Backend
+                  - link "Frontend" [ref=e712] [cursor=pointer]:
+                    - /url: https://github.com/MusfiqDehan/Fitness-Management-System-Frontend
+                  - link "Mobile" [ref=e717] [cursor=pointer]:
+                    - /url: https://github.com/MusfiqDehan/Gym-Membership-Mobile-App
+          - article [ref=e722]:
+            - link "ECamp" [ref=e723] [cursor=pointer]:
+              - /url: /projects/ecamp
+              - generic [ref=e724]: Read the ECamp case study
+            - generic [ref=e726]:
+              - img [ref=e728]:
+                - generic [ref=e731]: batch
+                - generic [ref=e735]: open
+                - generic [ref=e744]: open
+                - generic [ref=e752]: bounce
+                - generic [ref=e760]: sent
+                - generic [ref=e769]: open
+                - generic [ref=e777]: sent
+                - generic [ref=e785]: sent
+                - generic [ref=e794]: sent
+              - generic [ref=e799]: fanout
+            - generic [ref=e800]:
+              - generic [ref=e801]:
+                - generic [ref=e802]: AI
+                - generic [ref=e803]: live
+                - generic [ref=e804]: 2025 - Present
+              - heading "ECamp" [level=3] [ref=e805]
+              - paragraph [ref=e806]: Agentic multi-tenant SaaS for bulk email campaigns and deliverability intelligence.
+              - list [ref=e807]:
+                - listitem [ref=e808]:
+                  - generic [ref=e809]: "2"
+                  - generic [ref=e810]: interchangeable providers
+                - listitem [ref=e811]:
+                  - generic [ref=e812]: 3-layer
+                  - generic [ref=e813]: rate limiting
+                - listitem [ref=e814]:
+                  - generic [ref=e815]: Pause/Resume
+                  - generic [ref=e816]: mid-campaign
+              - list [ref=e817]:
+                - listitem [ref=e818]: Python
+                - listitem [ref=e819]: Django
+                - listitem [ref=e820]: DRF
+                - listitem [ref=e821]: Celery
+                - listitem [ref=e822]: Redis
+                - listitem [ref=e823]: "+9"
+              - generic [ref=e824]:
+                - generic [ref=e825]: Read the case study
+                - generic [ref=e828]:
+                  - link "Source" [ref=e829] [cursor=pointer]:
+                    - /url: https://github.com/MusfiqDehan/Agentic-Email-Campaign-Management-Platform
+                  - link "Live" [ref=e834] [cursor=pointer]:
+                    - /url: https://emailcampaign.musfiqdehan.com/
+          - article [ref=e838]:
+            - link "ZKTeco LAN Agent" [ref=e839] [cursor=pointer]:
+              - /url: /projects/zkteco-lan-agent
+              - generic [ref=e840]: Read the ZKTeco LAN Agent case study
+            - generic [ref=e842]:
+              - img [ref=e844]:
+                - generic [ref=e880]: agent → api
+              - generic [ref=e881]: device
+            - generic [ref=e882]:
+              - generic [ref=e883]:
+                - generic [ref=e884]: DevOps
+                - generic [ref=e885]: maintained
+                - generic [ref=e886]: 2025 - Present
+              - heading "ZKTeco LAN Agent" [level=3] [ref=e887]
+              - paragraph [ref=e888]: A LAN-side bridge that makes non-ADMS biometric terminals look like cloud-capable ones.
+              - list [ref=e889]:
+                - listitem [ref=e890]:
+                  - generic [ref=e891]: Non-ADMS
+                  - generic [ref=e892]: devices made cloud-capable
+                - listitem [ref=e893]:
+                  - generic [ref=e894]: 1 path
+                  - generic [ref=e895]: server-side ingest
+                - listitem [ref=e896]:
+                  - generic [ref=e897]: At-least-once
+                  - generic [ref=e898]: punch delivery
+              - list [ref=e899]:
+                - listitem [ref=e900]: Python
+                - listitem [ref=e901]: Poetry
+                - listitem [ref=e902]: PyPI
+                - listitem [ref=e903]: ZKTeco SDK
+                - listitem [ref=e904]: ADMS HTTP
+                - listitem [ref=e905]: "+4"
+              - generic [ref=e906]:
+                - generic [ref=e907]: Read the case study
+                - generic [ref=e910]:
+                  - link "Source" [ref=e911] [cursor=pointer]:
+                    - /url: https://github.com/MusfiqDehan/ZKTeco-LAN-Agent
+                  - link "PyPI" [ref=e916] [cursor=pointer]:
+                    - /url: https://pypi.org/project/zkteco-lan-agent/
+        - link "All work" [ref=e921] [cursor=pointer]:
+          - /url: /projects
+    - region [ref=e924]:
+      - generic [ref=e925]:
+        - generic [ref=e926]:
+          - generic [ref=e927]: 03 / Track record
+          - heading "Where the experience came from" [level=2] [ref=e928]
+          - paragraph [ref=e929]: Four years climbing the same ladder from a different rung each time - intern, associate, engineer, senior.
+        - generic [ref=e930]:
+          - generic [ref=e931]:
+            - generic [ref=e932]: Currently
+            - heading "Senior Full Stack Software Engineer" [level=3] [ref=e933]
+            - paragraph [ref=e934]:
+              - text: TechForing Ltd.
+              - generic [ref=e935]: Jan 2026 - Present
+            - paragraph [ref=e936]: "Technical leadership on a multi-tenant SaaS platform: breaking a monolith into services, automating tenant provisioning, and bringing AI into the internal development loop."
+            - list [ref=e937]:
+              - listitem [ref=e938]: Provided technical leadership to junior engineers and drove delivery of scalable SaaS platform capabilities.
+              - listitem [ref=e939]: Migrated legacy monoliths into modular microservices, improving reusability, scalability and maintainability.
+              - listitem [ref=e940]: Integrated AI-driven workflows into internal systems, accelerating development and improving team productivity.
+            - link "Full résumé" [ref=e941] [cursor=pointer]:
+              - /url: /resume
+          - list [ref=e944]:
+            - listitem [ref=e945]:
+              - generic [ref=e947]:
+                - heading "Full Stack Software Engineer" [level=4] [ref=e948]
+                - generic [ref=e949]: Jan 2025 - Dec 2025
+              - paragraph [ref=e950]: TechForing Ltd.
+              - paragraph [ref=e951]: Owned the communication and attendance surfaces of the product line, plus the third-party integrations everything else depended on.
+            - listitem [ref=e952]:
+              - generic [ref=e954]:
+                - heading "Software Engineer" [level=4] [ref=e955]
+                - generic [ref=e956]: May 2024 - Dec 2024
+              - paragraph [ref=e957]: Nimusoft Technologies Ltd.
+              - paragraph [ref=e958]: Moved from executing tickets to shaping systems - requirements with leadership, architecture decisions, and end-to-end ownership across several products.
+            - listitem [ref=e959]:
+              - generic [ref=e961]:
+                - heading "Associate Software Engineer" [level=4] [ref=e962]
+                - generic [ref=e963]: Jan 2024 - Apr 2024
+              - paragraph [ref=e964]: Nimusoft Technologies Ltd.
+              - paragraph [ref=e965]: Django application work with a deliberate bias toward shared, reusable building blocks.
+            - listitem [ref=e966]:
+              - generic [ref=e968]:
+                - heading "Software Engineer Intern" [level=4] [ref=e969]
+                - generic [ref=e970]: Jul 2023 - Dec 2023
+              - paragraph [ref=e971]: NSU StartUps Next
+              - paragraph [ref=e972]: Built the incubator's own platform while advising the startups inside it - a fast lesson in shipping against requirements that change weekly.
+    - region [ref=e973]:
+      - generic [ref=e974]:
+        - generic [ref=e975]:
+          - generic [ref=e976]: 04 / Writing
+          - heading "Notes from inside the systems" [level=2] [ref=e977]
+          - paragraph [ref=e978]: Long-form engineering write-ups on the decisions that actually mattered - concurrency, isolation, delivery guarantees and where LLMs belong.
+        - generic [ref=e979]:
+          - article [ref=e980]:
+            - link "Read Never Stop the Old Container First" [ref=e981] [cursor=pointer]:
+              - /url: /blog/zero-downtime-blue-green-traefik
+            - generic [ref=e983]: infra
+            - generic [ref=e1035]:
+              - generic [ref=e1036]:
+                - generic [ref=e1037]: DevOps
+                - time [ref=e1038]: 30 Jul 2026
+                - generic [ref=e1039]: ·
+                - generic [ref=e1040]: 14 min
+              - heading "Never Stop the Old Container First" [level=3] [ref=e1044]
+              - paragraph [ref=e1045]: A plain docker compose up costs you a minute of 502s, because recreate means stop then start. Here is the blue-green pipeline - GitHub Actions, rsync, Compose overlays and Traefik as the load balancer - that ships to a single VPS without a user ever seeing a failed request.
+              - list [ref=e1046]:
+                - listitem [ref=e1047]: Docker
+                - listitem [ref=e1048]: Traefik
+                - listitem [ref=e1049]: GitHub Actions
+                - listitem [ref=e1050]: CI/CD
+              - generic [ref=e1051]: Read
+          - article [ref=e1054]:
+            - 'link "Read Selling With the Wi-Fi Down: An Offline-First POS in Tauri 2.0" [ref=e1055] [cursor=pointer]':
+              - /url: /blog/offline-first-pos-tauri-sync-outbox
+            - generic [ref=e1058]:
+              - img [ref=e1060]:
+                - generic [ref=e1072]: g0
+                - generic [ref=e1083]: g1
+                - generic [ref=e1094]: g2
+                - generic [ref=e1097]: DLQ
+              - generic [ref=e1099]: stream
+            - generic [ref=e1100]:
+              - generic [ref=e1101]:
+                - generic [ref=e1102]: Full stack
+                - time [ref=e1103]: 29 Jul 2026
+                - generic [ref=e1104]: ·
+                - generic [ref=e1105]: 12 min
+              - 'heading "Selling With the Wi-Fi Down: An Offline-First POS in Tauri 2.0" [level=3] [ref=e1109]'
+              - paragraph [ref=e1110]: A till that stops working when the internet does is a till that loses money. Here is the outbox-plus-idempotency contract that lets a Tauri desktop POS sell offline and replay safely into a Django backend - without double-charging anyone.
+              - list [ref=e1111]:
+                - listitem [ref=e1112]: Tauri
+                - listitem [ref=e1113]: React
+                - listitem [ref=e1114]: SQLite
+                - listitem [ref=e1115]: Django
+              - generic [ref=e1116]: Read
+          - article [ref=e1119]:
+            - link "Read Decomposing a Monolith Without a Rewrite" [ref=e1120] [cursor=pointer]:
+              - /url: /blog/decomposing-a-monolith-without-a-rewrite
+            - generic [ref=e1122]: mesh
+            - generic [ref=e1187]:
+              - generic [ref=e1188]:
+                - generic [ref=e1189]: Architecture
+                - time [ref=e1190]: 8 Jul 2026
+                - generic [ref=e1191]: ·
+                - generic [ref=e1192]: 10 min
+              - heading "Decomposing a Monolith Without a Rewrite" [level=3] [ref=e1196]
+              - paragraph [ref=e1197]: Seams before services. How to extract modular services from a legacy monolith incrementally - with the data ownership rule, the strangler pattern, and an honest list of what you give up the moment a function call becomes a network call.
+              - list [ref=e1198]:
+                - listitem [ref=e1199]: Architecture
+                - listitem [ref=e1200]: Microservices
+                - listitem [ref=e1201]: Django
+                - listitem [ref=e1202]: Refactoring
+              - generic [ref=e1203]: Read
+        - generic [ref=e1206]:
+          - link "All 11 articles" [ref=e1207] [cursor=pointer]:
+            - /url: /blog
+          - link "RSS" [ref=e1210] [cursor=pointer]:
+            - /url: /rss.xml
+    - region [ref=e1215]:
+      - generic [ref=e1217]:
+        - generic [ref=e1218]:
+          - text: Open to work
+          - heading "If you are building something that has to stay up, let's talk." [level=2] [ref=e1219]
+          - paragraph [ref=e1220]: Senior backend, platform, or AI engineering - full time or contract. I reply to everything, usually within a day.
+          - generic [ref=e1221]:
+            - link "musfiqdehan@gmail.com" [ref=e1222] [cursor=pointer]:
+              - /url: mailto:musfiqdehan@gmail.com
+            - link "More ways to reach me" [ref=e1226] [cursor=pointer]:
+              - /url: /contact
+        - generic [ref=e1229]:
+          - generic [ref=e1230]:
+            - term [ref=e1231]: Based in
+            - definition [ref=e1232]: Badda, Dhaka, Bangladesh
+          - generic [ref=e1233]:
+            - term [ref=e1234]: Timezone
+            - definition [ref=e1235]: Asia/Dhaka (UTC+6)
+          - generic [ref=e1236]:
+            - term [ref=e1237]: Working with
+            - definition [ref=e1238]: Distributed teams across time zones
+          - generic [ref=e1239]:
+            - term [ref=e1240]: Languages
+            - definition [ref=e1241]: English, Bangla
+  - contentinfo [ref=e1242]:
+    - generic [ref=e1243]:
+      - generic [ref=e1244]:
+        - generic [ref=e1245]:
+          - paragraph [ref=e1246]: Md. Musfiqur Rahaman
+          - paragraph [ref=e1247]: I design and operate the systems behind the product.
+          - list [ref=e1248]:
+            - listitem [ref=e1249]: Full Stack Software Engineer
+            - listitem [ref=e1251]: Backend Engineer
+            - listitem [ref=e1253]: AI Engineer
+            - listitem [ref=e1255]: DevOps Engineer
+            - listitem [ref=e1257]: Software Engineer
+        - navigation "Footer" [ref=e1259]:
+          - heading "Site" [level=2] [ref=e1260]
+          - list [ref=e1261]:
+            - listitem [ref=e1262]:
+              - link "Home" [ref=e1263] [cursor=pointer]:
+                - /url: /
+            - listitem [ref=e1264]:
+              - link "Work" [ref=e1265] [cursor=pointer]:
+                - /url: /projects
+            - listitem [ref=e1266]:
+              - link "About" [ref=e1267] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e1268]:
+              - link "Resume" [ref=e1269] [cursor=pointer]:
+                - /url: /resume
+            - listitem [ref=e1270]:
+              - link "Writing" [ref=e1271] [cursor=pointer]:
+                - /url: /blog
+            - listitem [ref=e1272]:
+              - link "Contact" [ref=e1273] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e1274]:
+              - link "RSS feed" [ref=e1275] [cursor=pointer]:
+                - /url: /rss.xml
+        - generic [ref=e1276]:
+          - heading "Elsewhere" [level=2] [ref=e1277]
+          - list [ref=e1278]:
+            - listitem [ref=e1279]:
+              - link "GitHub" [ref=e1280] [cursor=pointer]:
+                - /url: https://github.com/musfiqdehan
+            - listitem [ref=e1283]:
+              - link "LinkedIn" [ref=e1284] [cursor=pointer]:
+                - /url: https://linkedin.com/in/musfiqdehan
+            - listitem [ref=e1289]:
+              - link "LeetCode" [ref=e1290] [cursor=pointer]:
+                - /url: https://leetcode.com/musfiqdehan
+            - listitem [ref=e1294]:
+              - link "Email" [ref=e1295] [cursor=pointer]:
+                - /url: mailto:musfiqdehan@gmail.com
+        - generic [ref=e1299]:
+          - heading "Coordinates" [level=2] [ref=e1300]
+          - list [ref=e1301]:
+            - listitem [ref=e1302]: Badda, Dhaka, Bangladesh
+            - listitem [ref=e1306]: Asia/Dhaka (UTC+6)
+            - listitem [ref=e1310]:
+              - link "musfiqdehan@gmail.com" [ref=e1314] [cursor=pointer]:
+                - /url: mailto:musfiqdehan@gmail.com
+          - paragraph [ref=e1315]: Available for new work
+      - generic [ref=e1317]:
+        - paragraph [ref=e1318]: © 2026 Md. Musfiqur Rahaman. Built with Astro - no trackers, no cookie banner.
+        - paragraph [ref=e1319]: designed & engineered in Dhaka
