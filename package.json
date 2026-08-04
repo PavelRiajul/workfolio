@@ -16,7 +16,8 @@
     "icons": "node --experimental-strip-types scripts/fetch-icons.mts",
     "blog:check": "node scripts/blog/anatomy-check.mjs",
     "blog:push": "node scripts/blog/push.mjs",
-    "blog:queue": "node -e \"const q=require('./scripts/blog/queue.json');const left=Object.entries(q.remaining).filter(([,v])=>v.length);console.log(q.done.length+' published, '+left.reduce((a,[,v])=>a+v.length,0)+' remaining');console.log('next: '+q.current_category);for(const [c,v] of left)console.log('  '+c.padEnd(12)+v.length+'  '+v.slice(0,3).join(', '))\""
+    "blog:queue": "node -e \"const q=require('./scripts/blog/queue.json');const left=Object.entries(q.remaining).filter(([,v])=>v.length);console.log(q.done.length+' published, '+left.reduce((a,[,v])=>a+v.length,0)+' remaining');console.log('next: '+q.current_category);for(const [c,v] of left)console.log('  '+c.padEnd(12)+v.length+'  '+v.slice(0,3).join(', '))\"",
+    "blog:benchmark": "node scripts/blog/benchmark.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^4.2.3",
