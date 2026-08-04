@@ -10,7 +10,9 @@ import Base from '../../../layouts/Base.astro';
 import Placeholder from '../../../components/Placeholder.astro';
 import { getPosts, getBlogPage, getSite } from '../../../lib/content';
 import { isPublished } from '../../../lib/portable';
+import { categoryLabel } from '../../../lib/categories';
 import type { Post, BlogPageContent } from '../../../lib/types';
+import Headline from '../../../components/Headline.astro';
 
 export async function getStaticPaths() {
   const [posts, page] = await Promise.all([getPosts(), getBlogPage()]);
@@ -25,7 +27,10 @@ export async function getStaticPaths() {
       .sort((a, b) => (a.publishedAt < b.publishedAt ? 1 : -1));
     return {
       params: { category },
-      props: { category, posts: inCategory, label: inCategory[0].categoryLabel, page },
+      // Derived from the shared category list, not from whichever post happens
+      // to sort first — one post saved without a label used to blank the hub's
+      // heading entirely.
+      props: { category, posts: inCategory, label: categoryLabel(category, inCategory[0].categoryLabel), page },
     };
   });
 }
@@ -81,7 +86,7 @@ const itemList = {
         {posts.map((p) => (
           <a class="post-card" href={`/blog/${p.slug}`}>
             <div class="cover"><div class="post-img-zoom"><Placeholder label={p.coverLabel} image={p.image} src={`/blog/${p.slug}.jpg`} /></div></div>
-            <div class="pc-meta"><span class="pc-tag">{p.categoryLabel}</span>{p.readTime}</div>
+            <div class="pc-meta"><span class="pc-tag">{categoryLabel(p.category, p.categoryLabel)}</span>{p.readTime}</div>
             <h2 class="post-title">{p.title}</h2>
             <p>{p.excerpt}</p>
             <div class="post-date">{p.date}</div>
@@ -93,7 +98,7 @@ const itemList = {
 
   <section class="closing">
     <div class="closing-card">
-      <h2>{page.closing.title.split('\n').map((l, i, a) => (<>{l}{i < a.length - 1 && <br />}</>))}</h2>
+      <h2><Headline text={page.closing.title} /></h2>
       <div class="closing-actions">
         <a href={page.closing.primary.href} class="btn btn-dark btn-cta">{page.closing.primary.label} <span>↗</span></a>
         <a href={page.closing.secondary.href} class="btn btn-light btn-cta">{page.closing.secondary.label}</a>

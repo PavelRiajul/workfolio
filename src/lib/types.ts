@@ -121,6 +121,20 @@ export interface Service {
   tone: Tone;
 }
 
+/** One social profile, authored in the Studio. */
+export interface SocialLink {
+  /** Visible name and the link's accessible label, e.g. "GitHub". */
+  label: string;
+  /**
+   * Full URL or a bare handle path (`github.com/riajulislam`, `@name`). A value
+   * with no path — a bare `https://github.com` — is treated as unset, because a
+   * social icon pointing at a platform's homepage claims the wrong entity.
+   */
+  url: string;
+  /** Font Awesome class pair as the Studio stores it, e.g. "fa-brands fa-github". */
+  icon: string;
+}
+
 export interface SiteSettings {
   name: string;
   role: string;
@@ -146,12 +160,24 @@ export interface SiteSettings {
   whatsappPhone: string;
   whatsappMessage: string;
   website: string;
+  /**
+   * Every social profile, authored as a repeatable list so a new platform is a
+   * Studio entry rather than a code change. Drives the footer icons, the résumé
+   * contact line and `sameAs` in the Person schema from one source, which is
+   * what stops the visible links and the structured data from disagreeing.
+   */
+  socialLinks?: SocialLink[];
+  /**
+   * The original fixed three. Superseded by `socialLinks` and read only when
+   * that's empty, so an un-migrated dataset keeps rendering.
+   */
   socials: {
     github: string;
     githubHandle: string;
     linkedin: string;
     linkedinHandle: string;
     x: string;
+    xHandle?: string;
   };
   techStack: string[];
 }
@@ -492,7 +518,7 @@ export interface PortableMarkDef {
  * uses the exact same structure. Rendered by components/PortableText.astro.
  */
 export interface PortableBlock {
-  _type: 'block' | 'code' | 'image';
+  _type: 'block' | 'code' | 'image' | 'table';
   _key?: string;
   /** block: paragraph or heading level. */
   style?: 'normal' | 'h2' | 'h3' | 'h4' | 'blockquote';
@@ -510,6 +536,9 @@ export interface PortableBlock {
   caption?: string;
   /** Renders full-bleed of the measure — for diagrams and wide screenshots. */
   wide?: boolean;
+  /** table blocks only. First row is the header unless `headerRow` is false. */
+  rows?: { _key?: string; cells?: string[] }[];
+  headerRow?: boolean;
 }
 
 export interface Post {
@@ -534,6 +563,13 @@ export interface Post {
    * nothing but an excerpt on it is a thin-content liability, not an asset.
    */
   body?: PortableBlock[];
+  /**
+   * Rendered after the body and emitted as a `FAQPage` node on the post's page.
+   * This is what puts an article in a People Also Ask result, and the answers
+   * have to exist in the visible HTML as well as the schema — Google stopped
+   * counting schema-only FAQ markup in 2023.
+   */
+  faqs?: Faq[];
   /** Optional per-post SEO override; falls back to title + excerpt. */
   seo?: SeoMeta;
   /**

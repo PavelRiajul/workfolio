@@ -16,7 +16,8 @@ export function getSite(): Promise<SiteSettings> {
       name, role, seo, nav, footerLinks, copyrightYear, openToWorkLabel,
       skipLinkLabel, backHomeLabel, closingCta,
       email, phone, location, timeZone, gmtLabel, openToWork,
-      footerWordmark, whatsappPhone, whatsappMessage, website, socials, techStack
+      footerWordmark, whatsappPhone, whatsappMessage, website,
+      socialLinks, socials, techStack
     }`,
     {},
     fallback.site
@@ -95,6 +96,7 @@ export function getPosts(): Promise<Post[]> {
       // Image blocks inside the body arrive as bare asset _refs unless they're
       // dereferenced here — the renderer needs a real URL.
       body[]{ ..., _type == "image" => { ..., asset->{ _id, url } } },
+      faqs,
       ${imageProjection}
     }`,
     {},

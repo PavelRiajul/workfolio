@@ -4,6 +4,7 @@ import rss from '@astrojs/rss';
 import type { APIContext } from 'astro';
 import { getSite, getPosts, getBlogPage } from '../lib/content';
 import { isPublished } from '../lib/portable';
+import { categoryLabel } from '../lib/categories';
 
 export async function GET(context: APIContext) {
   const [site, page, posts] = await Promise.all([getSite(), getBlogPage(), getPosts()]);
@@ -22,7 +23,10 @@ export async function GET(context: APIContext) {
       description: p.excerpt,
       link: `/blog/${p.slug}/`,
       pubDate: new Date(p.publishedAt),
-      categories: [p.categoryLabel],
+      // Derived, not read straight off the document: a post authored in the
+      // Studio without the optional label override would otherwise put `null`
+      // in here, and @astrojs/rss rejects the whole feed rather than that item.
+      categories: [categoryLabel(p.category, p.categoryLabel)],
       author: site.email,
     })),
     customData: '<language>en</language>',

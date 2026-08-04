@@ -7,6 +7,8 @@
 // them as one connected entity instead of several disconnected islands.
 // ---------------------------------------------------------------------------
 import type { SiteSettings, Faq, Service, ShopifyService, Project, Post } from './types';
+import { socialUrls } from './socials';
+import { categoryLabel } from './categories';
 
 /** Absolute URL for a site-relative path. Schema.org requires absolute URLs. */
 export function abs(origin: string, path = '/'): string {
@@ -16,35 +18,11 @@ export function abs(origin: string, path = '/'): string {
 export const personId = (o: string) => `${abs(o)}#person`;
 export const siteId = (o: string) => `${abs(o)}#website`;
 
-/**
- * The seed data ships bare-domain placeholders (`https://github.com`) while the
- * *handle* carries the real profile path. Prefer whichever actually resolves to
- * a profile, and drop the entry entirely if neither does — a `sameAs` pointing
- * at a bare homepage is worse than no `sameAs`, because it claims the wrong
- * entity.
- */
-function profileUrl(url?: string, handle?: string): string | null {
-  if (handle) {
-    const h = handle.replace(/^https?:\/\//, '').replace(/\/$/, '');
-    if (h.includes('/')) return `https://${h}`;
-  }
-  if (url) {
-    try {
-      if (new URL(url).pathname.replace(/\/$/, '').length > 0) return url;
-    } catch {
-      /* malformed URL in the CMS — skip it rather than emit invalid JSON-LD */
-    }
-  }
-  return null;
-}
-
 /** The identity node. Everything else on the site points back at this. */
 export function personSchema(site: SiteSettings, origin: string) {
-  const sameAs = [
-    profileUrl(site.socials.github, site.socials.githubHandle),
-    profileUrl(site.socials.linkedin, site.socials.linkedinHandle),
-    profileUrl(site.socials.x),
-  ].filter(Boolean);
+  // Same resolver the footer and résumé use, so the markup and the structured
+  // data can't claim different profiles for the same person.
+  const sameAs = socialUrls(site);
 
   // "Dhaka, Bangladesh" → locality + country.
   const [locality, country] = site.location.split(',').map((s) => s.trim());
@@ -237,7 +215,7 @@ export function articleSchema(post: Post, origin: string, canonical: string, ima
     author: { '@id': personId(origin) },
     publisher: { '@id': personId(origin) },
     mainEntityOfPage: { '@id': canonical },
-    articleSection: post.categoryLabel,
+    articleSection: categoryLabel(post.category, post.categoryLabel),
     isPartOf: { '@id': siteId(origin) },
     ...(image ? { image: [image] } : {}),
   };

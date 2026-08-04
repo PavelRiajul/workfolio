@@ -3,6 +3,8 @@ import Icon from '../components/Icon.astro';
 import Base from '../layouts/Base.astro';
 import Placeholder from '../components/Placeholder.astro';
 import { getPosts, getBlogPage } from '../lib/content';
+import { categoryLabel } from '../lib/categories';
+import Headline from '../components/Headline.astro';
 
 const posts = await getPosts();
 const page = await getBlogPage();
@@ -32,7 +34,7 @@ const hubHrefs = new Set(posts.filter((p) => p.body?.length).map((p) => p.catego
         <span>—</span>
         <span>{heroEyebrow}</span>
       </div>
-      <h1 data-hero-item>{heroLines.map((l, i) => (<>{l}{i < heroLines.length - 1 && <br />}</>))}</h1>
+      <h1 data-hero-item><Headline text={heroLines} /></h1>
       <div class="hero-lower">
         <div class="hero-copy">
           <p class="hero-lede hero-lede-full" data-hero-item>{page.hero.lede}</p>
@@ -93,7 +95,7 @@ const hubHrefs = new Set(posts.filter((p) => p.body?.length).map((p) => p.catego
           <div class="pf-body">
             <div class="pf-meta">
               <span class="pf-badge">{page.featuredBadge}</span>
-              <span class="pf-sub">{featured.categoryLabel} · {featured.readTime}</span>
+              <span class="pf-sub">{categoryLabel(featured.category, featured.categoryLabel)} · {featured.readTime}</span>
             </div>
             <h2 class="post-title">{featured.title}</h2>
             <p>{featured.excerpt}</p>
@@ -110,7 +112,7 @@ const hubHrefs = new Set(posts.filter((p) => p.body?.length).map((p) => p.catego
             href={hrefFor(p)}
           >
             <div class="cover"><div class="post-img-zoom"><Placeholder label={p.coverLabel} image={p.image} /></div></div>
-            <div class="pc-meta"><span class="pc-tag">{p.categoryLabel}</span>{p.readTime}</div>
+            <div class="pc-meta"><span class="pc-tag">{categoryLabel(p.category, p.categoryLabel)}</span>{p.readTime}</div>
             <h3 class="post-title">{p.title}</h3>
             <p>{p.excerpt}</p>
             <div class="post-date">{p.date}</div>
@@ -123,7 +125,7 @@ const hubHrefs = new Set(posts.filter((p) => p.body?.length).map((p) => p.catego
 
   <section class="closing">
     <div class="closing-card">
-      <h2>{closingLines.map((l, i) => (<>{l}{i < closingLines.length - 1 && <br />}</>))}</h2>
+      <h2><Headline text={closingLines} /></h2>
       <div class="closing-actions">
         <a href={page.closing.primary.href} class="btn btn-dark btn-cta">{page.closing.primary.label} <span>↗</span></a>
         <a href={page.closing.secondary.href} class="btn btn-light btn-cta">{page.closing.secondary.label}</a>

@@ -1,17 +1,23 @@
 ---
 import Icon from './Icon.astro';
 import type { SiteSettings } from '../lib/types';
+import { resolveSocials } from '../lib/socials';
 interface Props { site: SiteSettings; }
 const { site } = Astro.props;
 const mailto = `mailto:${site.email}`;
 const links = site.footerLinks;
+
+// Whatever is authored in Site Settings → Social profiles, in that order.
+// `rel="me"` is a genuine identity signal, not decoration: it's what lets a
+// linked profile confirm back that it belongs to the same person.
+const socials = resolveSocials(site);
 ---
 <footer class="footer">
   <div class="footer-inner">
     <div class="ft-socials">
-      <a class="ft-soc" href={site.socials.github} target="_blank" rel="noopener" aria-label="GitHub"><Icon name="fa-brands fa-github" style="font-size:18px;" /></a>
-      <a class="ft-soc" href={site.socials.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn"><Icon name="fa-brands fa-linkedin-in" style="font-size:17px;" /></a>
-      <a class="ft-soc" href={site.socials.x} target="_blank" rel="noopener" aria-label="X (Twitter)"><Icon name="fa-brands fa-x-twitter" style="font-size:17px;" /></a>
+      {socials.map((s) => (
+        <a class="ft-soc" href={s.href} target="_blank" rel="noopener me" aria-label={s.label}><Icon name={s.icon} style="font-size:17px;" /></a>
+      ))}
       <a class="ft-soc" href={mailto} aria-label="Email"><Icon name="fa-solid fa-envelope" style="font-size:17px;" /></a>
     </div>
 

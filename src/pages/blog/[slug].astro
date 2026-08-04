@@ -5,9 +5,11 @@ import PortableText from '../../components/PortableText.astro';
 import Icon from '../../components/Icon.astro';
 import Toc from '../../components/Toc.astro';
 import { getPosts, getBlogPage, getSite } from '../../lib/content';
-import { articleSchema } from '../../lib/schema';
+import { articleSchema, faqSchema } from '../../lib/schema';
 import { isPublished, relatedPosts, tableOfContents } from '../../lib/portable';
+import { categoryLabel } from '../../lib/categories';
 import type { Post } from '../../lib/types';
+import Headline from '../../components/Headline.astro';
 
 // Only posts with a body get a page. An indexable URL carrying nothing but an
 // excerpt is thin content — it competes with the pages that do rank and gives
@@ -58,17 +60,17 @@ const toc = tableOfContents(post.body);
     publishedTime: post.publishedAt,
     modifiedTime: post.updatedAt ?? post.publishedAt,
     author: site.name,
-    section: post.categoryLabel,
+    section: categoryLabel(post.category, post.categoryLabel),
   }}
   breadcrumbLeaf={post.title}
-  schema={[articleSchema(post, origin, canonical, ogUrl)]}
+  schema={[articleSchema(post, origin, canonical, ogUrl), faqSchema(post.faqs ?? [])]}
 >
   <article class="cs-article section section-flush-bottom">
     <a href="/blog" class="cs-back">← Back to blog</a>
 
     <header class="stack-md" data-reveal>
       <div class="pc-meta post-meta-head">
-        <a class="pc-tag pc-tag-link" href={`/blog/category/${post.category}`}>{post.categoryLabel}</a>
+        <a class="pc-tag pc-tag-link" href={`/blog/category/${post.category}`}>{categoryLabel(post.category, post.categoryLabel)}</a>
         <Icon name="fa-regular fa-clock" />{post.readTime}
         <span class="post-sep" aria-hidden="true">·</span>
         <time datetime={post.publishedAt}>{post.date}</time>
@@ -94,6 +96,21 @@ const toc = tableOfContents(post.body);
       <PortableText blocks={post.body} />
     </div>
 
+    {post.faqs && post.faqs.length > 0 && (
+      <section class="post-faq" data-reveal>
+        <h2 class="post-faq-title">Frequently asked questions</h2>
+        {/* Rendered as visible HTML, not schema-only — Google stopped counting
+            FAQ markup that has no on-page counterpart. <details> keeps the page
+            short while leaving every answer in the DOM for a crawler. */}
+        {post.faqs.map((f) => (
+          <details class="post-faq-item">
+            <summary>{f.question}</summary>
+            <p>{f.answer}</p>
+          </details>
+        ))}
+      </section>
+    )}
+
     <aside class="post-author" data-reveal>
       <div class="post-author-body">
         <p class="eyebrow">Written by</p>
@@ -112,7 +129,7 @@ const toc = tableOfContents(post.body);
         <div class="post-related-grid">
           {seriesPosts.map((r) => (
             <a class="post-related-card" href={`/blog/${r.slug}`}>
-              <span class="pc-tag">{r.categoryLabel}</span>
+              <span class="pc-tag">{categoryLabel(r.category, r.categoryLabel)}</span>
               <h3>{r.title}</h3>
               <p>{r.excerpt}</p>
             </a>
@@ -124,12 +141,12 @@ const toc = tableOfContents(post.body);
     {related.length > 0 && (
       <aside class="post-related" data-reveal>
         <h2 class="eyebrow">
-          More in <a href={`/blog/category/${post.category}`}>{post.categoryLabel}</a>
+          More in <a href={`/blog/category/${post.category}`}>{categoryLabel(post.category, post.categoryLabel)}</a>
         </h2>
         <div class="post-related-grid">
           {related.map((r) => (
             <a class="post-related-card" href={`/blog/${r.slug}`}>
-              <span class="pc-tag">{r.categoryLabel}</span>
+              <span class="pc-tag">{categoryLabel(r.category, r.categoryLabel)}</span>
               <h3>{r.title}</h3>
               <p>{r.excerpt}</p>
             </a>
@@ -148,7 +165,7 @@ const toc = tableOfContents(post.body);
 
   <section class="closing">
     <div class="closing-card">
-      <h2>{page.closing.title.split('\n').map((l, i, a) => (<>{l}{i < a.length - 1 && <br />}</>))}</h2>
+      <h2><Headline text={page.closing.title} /></h2>
       <div class="closing-actions">
         <a href={page.closing.primary.href} class="btn btn-dark btn-cta">{page.closing.primary.label} <span>↗</span></a>
         <a href={page.closing.secondary.href} class="btn btn-light btn-cta">{page.closing.secondary.label}</a>
@@ -170,6 +187,31 @@ const toc = tableOfContents(post.body);
   /* End-of-post author card. Search engines weigh who wrote a piece for
      anything advice-shaped, and a reader deciding whether to trust the post
      shouldn't have to leave it to find out. */
+  /* End-of-article FAQ. Summaries clear the 44px touch target the rest of the
+     site holds to. */
+  .post-faq { margin-top: var(--space-2xl); max-width: 68ch; }
+  .post-faq-title {
+    font-family: var(--font-display); font-weight: 600; letter-spacing: -0.02em;
+    font-size: clamp(1.35rem, 1.1rem + 1vw, 1.75rem);
+    margin-bottom: var(--space-sm); color: var(--color-ink);
+  }
+  .post-faq-item { border-bottom: 1px solid var(--line); }
+  .post-faq-item summary {
+    display: flex; align-items: center; justify-content: space-between; gap: var(--space-sm);
+    min-height: 44px; padding: var(--space-xs) 0; cursor: pointer;
+    font-family: var(--font-display); font-weight: 600; color: var(--color-ink);
+    list-style: none;
+  }
+  .post-faq-item summary::-webkit-details-marker { display: none; }
+  .post-faq-item summary::after {
+    content: '+'; flex: none; font-weight: 400; font-size: 1.25rem;
+    color: var(--color-grey-2); transition: transform .22s cubic-bezier(.22,.61,.36,1);
+  }
+  .post-faq-item[open] summary::after { transform: rotate(45deg); }
+  .post-faq-item p {
+    margin: 0 0 var(--space-sm); color: var(--color-grey-1); line-height: 1.75;
+  }
+
   .post-author {
     margin-top: var(--space-2xl); padding: var(--space-lg);
     border: 1px solid var(--line); border-radius: 18px; background: var(--color-surface);
