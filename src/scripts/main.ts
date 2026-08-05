@@ -12,9 +12,53 @@ const prefersReduced =
 
 let lenis: Lenis | null = null;
 
-function ready(fn: () => void) {
-  if (document.readyState !== 'loading') fn();
-  else document.addEventListener('DOMContentLoaded', fn);
+/* ---- Lifecycle --------------------------------------------------------
+   Navigation is client-side (ClientRouter in Base.astro), so this module is
+   evaluated once for the whole session and every init below runs again on each
+   page. Anything bound to something that outlives the swap — window, document,
+   matchMedia, a timer, GSAP's ticker — therefore has to be unbound, or the
+   second visit to a page runs two scroll handlers, the third runs three, and
+   the clock ticks once per page ever visited. Listeners on elements inside the
+   swapped body are collected with them and need no bookkeeping.
+
+   `cleanups` is the registry; the helpers are the only supported way to bind
+   something long-lived, so registering the teardown is not a step you can
+   forget to do. */
+const cleanups: Array<() => void> = [];
+
+function on<K extends string>(
+  target: EventTarget,
+  type: K,
+  fn: EventListenerOrEventListenerObject,
+  opts?: AddEventListenerOptions
+) {
+  target.addEventListener(type, fn, opts);
+  cleanups.push(() => target.removeEventListener(type, fn, opts));
+}
+
+function every(ms: number, fn: () => void) {
+  const id = window.setInterval(fn, ms);
+  cleanups.push(() => window.clearInterval(id));
+}
+
+function later(ms: number, fn: () => void) {
+  const id = window.setTimeout(fn, ms);
+  cleanups.push(() => window.clearTimeout(id));
+}
+
+function teardown() {
+  cleanups.splice(0).forEach((fn) => {
+    try {
+      fn();
+    } catch {
+      /* one bad teardown must not strand the rest */
+    }
+  });
+  // ScrollTriggers pin to elements that are about to be removed; left alone
+  // they keep measuring detached nodes and fight the new page's triggers.
+  ScrollTrigger.getAll().forEach((t) => t.kill());
+  lenis?.destroy();
+  lenis = null;
 }
 
 /* ---- Smooth scroll (Lenis ⇄ ScrollTrigger) ----------------------------- */
@@ -30,7 +74,9 @@ function initSmoothScroll() {
 
   // Drive Lenis off GSAP's ticker so scroll + animations share one clock.
   lenis.on('scroll', ScrollTrigger.update);
-  gsap.ticker.add((time) => lenis?.raf(time * 1000));
+  const tick = (time: number) => lenis?.raf(time * 1000);
+  gsap.ticker.add(tick);
+  cleanups.push(() => gsap.ticker.remove(tick));
   gsap.ticker.lagSmoothing(0);
 
   // In-page anchors glide instead of jumping.
@@ -97,17 +143,25 @@ function initReveal() {
       }),
   });
 
-  // Failsafe: never leave content hidden if a trigger misfires.
-  window.setTimeout(() => {
+  // Failsafe: never leave content hidden if a trigger misfires. Scoped to what
+  // the trigger line has already passed, because the previous version revealed
+  // every element on the page — which meant the scroll reveal was silently
+  // cancelled 2.6s after load, and on a slow connection never ran at all. An
+  // element still below the line is not stuck, it is waiting for the reader.
+  later(2600, () => {
     hidden.forEach((el) => {
-      if (!el.classList.contains('in')) {
-        gsap.set(el, { opacity: 1, y: 0 });
-        el.classList.add('in');
-      }
+      if (el.classList.contains('in')) return;
+      if (el.getBoundingClientRect().top > window.innerHeight * 0.9) return;
+      gsap.set(el, { opacity: 1, y: 0 });
+      el.classList.add('in');
     });
-  }, 2600);
+  });
 
   ScrollTrigger.refresh();
+  // Triggers are measured before the webfonts swap in, and that reflow moves
+  // every start position down the page. Re-measuring once type has settled is
+  // what stops triggers misfiring in the first place.
+  document.fonts?.ready.then(() => ScrollTrigger.refresh());
 }
 
 /* ---- Count-up stats ----------------------------------------------------
@@ -176,7 +230,7 @@ function initHeroIntro() {
   // If the bundle lands after the intro already finished no animationend is
   // coming. Longest delay plus duration is ~1.1s from first paint, and this
   // timer starts later than that, so it can never cut the intro short.
-  window.setTimeout(freeze, 1400);
+  later(1400, freeze);
 }
 
 /* ---- Rotating hero word ------------------------------------------------ */
@@ -191,7 +245,7 @@ function initRotatingWord() {
   }
   if (words.length < 2) return;
   let i = 0;
-  window.setInterval(() => {
+  every(1700, () => {
     i = (i + 1) % words.length;
     if (prefersReduced) {
       rot.textContent = words[i];
@@ -207,7 +261,7 @@ function initRotatingWord() {
         gsap.fromTo(rot, { y: 6, opacity: 0 }, { y: 0, opacity: 1, duration: 0.18 });
       },
     });
-  }, 1700);
+  });
 }
 
 /* ---- Mobile nav -------------------------------------------------------- */
@@ -255,7 +309,8 @@ function initTabBar() {
     last = y;
   };
 
-  window.addEventListener(
+  on(
+    window,
     'scroll',
     () => {
       if (!ticking) {
@@ -287,9 +342,9 @@ function initClock() {
     }
   };
   el.textContent = fmt();
-  window.setInterval(() => {
+  every(1000, () => {
     el.textContent = fmt();
-  }, 1000);
+  });
 }
 
 /* ---- Back to top ------------------------------------------------------- */
@@ -300,9 +355,9 @@ function initBackToTop() {
     const y = window.pageYOffset || document.documentElement.scrollTop || 0;
     btn.classList.toggle('show', y > 420);
   };
-  window.addEventListener('scroll', onScroll, { passive: true });
-  if (lenis) lenis.on('scroll', onScroll);
-  btn.addEventListener('click', scrollToTop);
+  on(window, 'scroll', onScroll, { passive: true });
+  if (lenis) lenis.on('scroll', onScroll); // goes with lenis.destroy()
+  btn.addEventListener('click', scrollToTop); // btn is swapped with the page
   onScroll();
 }
 
@@ -375,7 +430,7 @@ function initFeatureLists() {
   const narrow = window.matchMedia('(max-width: 640px)');
   const apply = () => lists.forEach((d) => { d.open = !narrow.matches; });
   apply();
-  narrow.addEventListener('change', apply);
+  on(narrow, 'change', apply);
 }
 
 /* ---- Contents list: collapsed on phones -------------------------------- */
@@ -390,7 +445,7 @@ function initToc() {
   const narrow = window.matchMedia('(max-width: 640px)');
   const apply = () => { toc.open = !narrow.matches; };
   apply();
-  narrow.addEventListener('change', apply);
+  on(narrow, 'change', apply);
 }
 
 /* ---- Metric bars: grow from zero when their group scrolls in ----------- */
@@ -451,8 +506,8 @@ function initTabSpy() {
     });
   };
 
-  window.addEventListener('scroll', onScroll, { passive: true });
-  if (lenis) lenis.on('scroll', onScroll);
+  on(window, 'scroll', onScroll, { passive: true });
+  if (lenis) lenis.on('scroll', onScroll); // goes with lenis.destroy()
   onScroll();
 }
 
@@ -522,8 +577,8 @@ function initTocSpy() {
     }
   };
 
-  window.addEventListener('scroll', onScroll, { passive: true });
-  if (lenis) lenis.on('scroll', onScroll);
+  on(window, 'scroll', onScroll, { passive: true });
+  if (lenis) lenis.on('scroll', onScroll); // goes with lenis.destroy()
   onScroll();
 }
 
@@ -539,9 +594,10 @@ function initWhatsAppFab() {
     { rootMargin: '0px 0px -40px 0px' }
   );
   io.observe(footer);
+  cleanups.push(() => io.disconnect());
 }
 
-ready(() => {
+function boot() {
   document.documentElement.classList.remove('no-js');
   initSmoothScroll();
   initTabBar();
@@ -559,4 +615,12 @@ ready(() => {
   initRotatingWord();
   initClock();
   initBackToTop();
-});
+}
+
+/* `astro:page-load` fires after the first load *and* after every client-side
+   navigation, so it replaces DOMContentLoaded entirely — DOMContentLoaded only
+   ever fires once now and would leave every page after the first inert.
+   `astro:before-swap` runs while the old document is still in place, which is
+   the only moment ScrollTrigger can measure what it is killing. */
+document.addEventListener('astro:page-load', boot);
+document.addEventListener('astro:before-swap', teardown);

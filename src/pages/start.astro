@@ -155,53 +155,60 @@ const heroEyebrow = page.eyebrow.replace(/^[—–-]\s*/, '');
 </Base>
 
 <script>
-  // Contact tabs + form success — Start page only.
-  const tabs = [...document.querySelectorAll<HTMLElement>('[role="tab"][data-tab]')];
-  const panels = document.querySelectorAll<HTMLElement>('[data-panel]');
-  if (tabs.length) {
-    // setFocus=true moves keyboard focus to the newly-selected tab (arrow nav);
-    // false leaves focus alone (click / initial URL sync).
-    const setTab = (name: string, setFocus = false) => {
-      tabs.forEach((t) => {
-        const on = t.dataset.tab === name;
-        t.classList.toggle('active', on);
-        t.setAttribute('aria-selected', on ? 'true' : 'false');
-        t.tabIndex = on ? 0 : -1; // roving tabindex: one stop for the whole tablist
-        if (on && setFocus) t.focus();
+  // Navigation is client-side, so this module is evaluated once for the whole
+  // session. `astro:page-load` fires on the first load and after every swap,
+  // which is what re-binds this to the incoming page's elements — without it
+  // the controls are dead on every visit after the first. Every listener here
+  // lands on a swapped element, so they are collected with the old page.
+  document.addEventListener('astro:page-load', () => {
+    // Contact tabs + form success — Start page only.
+    const tabs = [...document.querySelectorAll<HTMLElement>('[role="tab"][data-tab]')];
+    const panels = document.querySelectorAll<HTMLElement>('[data-panel]');
+    if (tabs.length) {
+      // setFocus=true moves keyboard focus to the newly-selected tab (arrow nav);
+      // false leaves focus alone (click / initial URL sync).
+      const setTab = (name: string, setFocus = false) => {
+        tabs.forEach((t) => {
+          const on = t.dataset.tab === name;
+          t.classList.toggle('active', on);
+          t.setAttribute('aria-selected', on ? 'true' : 'false');
+          t.tabIndex = on ? 0 : -1; // roving tabindex: one stop for the whole tablist
+          if (on && setFocus) t.focus();
+        });
+        panels.forEach((p) => p.classList.toggle('active', p.dataset.panel === name));
+        try {
+          const u = new URL(location.href);
+          u.searchParams.set('tab', name);
+          history.replaceState(null, '', u);
+        } catch { /* noop */ }
+      };
+      tabs.forEach((t, i) => {
+        t.addEventListener('click', () => setTab(t.dataset.tab || 'form'));
+        // Arrow keys move between tabs; Home/End jump to the ends (WAI-ARIA tabs).
+        t.addEventListener('keydown', (e) => {
+          const last = tabs.length - 1;
+          let next = -1;
+          if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = i === last ? 0 : i + 1;
+          else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = i === 0 ? last : i - 1;
+          else if (e.key === 'Home') next = 0;
+          else if (e.key === 'End') next = last;
+          if (next < 0) return;
+          e.preventDefault();
+          setTab(tabs[next].dataset.tab || 'form', true);
+        });
       });
-      panels.forEach((p) => p.classList.toggle('active', p.dataset.panel === name));
-      try {
-        const u = new URL(location.href);
-        u.searchParams.set('tab', name);
-        history.replaceState(null, '', u);
-      } catch { /* noop */ }
-    };
-    tabs.forEach((t, i) => {
-      t.addEventListener('click', () => setTab(t.dataset.tab || 'form'));
-      // Arrow keys move between tabs; Home/End jump to the ends (WAI-ARIA tabs).
-      t.addEventListener('keydown', (e) => {
-        const last = tabs.length - 1;
-        let next = -1;
-        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = i === last ? 0 : i + 1;
-        else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = i === 0 ? last : i - 1;
-        else if (e.key === 'Home') next = 0;
-        else if (e.key === 'End') next = last;
-        if (next < 0) return;
+      const initial = new URLSearchParams(location.search).get('tab');
+      if (initial === 'call' || initial === 'form') setTab(initial);
+    }
+    const form = document.getElementById('contact-form') as HTMLFormElement | null;
+    const success = document.getElementById('form-success');
+    if (form && success) {
+      form.addEventListener('submit', (e) => {
         e.preventDefault();
-        setTab(tabs[next].dataset.tab || 'form', true);
+        form.style.display = 'none';
+        success.style.display = 'block';
+        try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch { window.scrollTo(0, 0); }
       });
-    });
-    const initial = new URLSearchParams(location.search).get('tab');
-    if (initial === 'call' || initial === 'form') setTab(initial);
-  }
-  const form = document.getElementById('contact-form') as HTMLFormElement | null;
-  const success = document.getElementById('form-success');
-  if (form && success) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      form.style.display = 'none';
-      success.style.display = 'block';
-      try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch { window.scrollTo(0, 0); }
-    });
-  }
+    }
+  });
 </script>

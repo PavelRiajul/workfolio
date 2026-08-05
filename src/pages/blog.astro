@@ -157,33 +157,40 @@ const hasCover = (p: (typeof posts)[number]) =>
 </style>
 
 <script>
-  // Blog category filter — Blog page only.
-  const chips = document.querySelectorAll<HTMLElement>('[data-blog-filter]');
-  const cards = document.querySelectorAll<HTMLElement>('[data-category]');
-  const empty = document.getElementById('blog-empty');
-  if (chips.length) {
-    chips.forEach((chip) => {
-      chip.addEventListener('click', (ev) => {
-        // The chips are real links to the topic hubs so crawlers can follow
-        // them and the page works without JS. With JS we filter in place
-        // instead — but let modified clicks (new tab, etc.) behave normally.
-        const e = ev as MouseEvent;
-        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
-        e.preventDefault();
-        const f = chip.dataset.blogFilter;
-        chips.forEach((c) => {
-          const on = c === chip;
-          c.classList.toggle('active', on);
-          c.setAttribute('aria-pressed', on ? 'true' : 'false');
+  // Navigation is client-side, so this module is evaluated once for the whole
+  // session. `astro:page-load` fires on the first load and after every swap,
+  // which is what re-binds these to the incoming page's elements — without it
+  // the controls are dead on every visit after the first. Listeners land on
+  // swapped elements, so they are collected with them and need no teardown.
+  document.addEventListener('astro:page-load', () => {
+    // Blog category filter — Blog page only.
+    const chips = document.querySelectorAll<HTMLElement>('[data-blog-filter]');
+    const cards = document.querySelectorAll<HTMLElement>('[data-category]');
+    const empty = document.getElementById('blog-empty');
+    if (chips.length) {
+      chips.forEach((chip) => {
+        chip.addEventListener('click', (ev) => {
+          // The chips are real links to the topic hubs so crawlers can follow
+          // them and the page works without JS. With JS we filter in place
+          // instead — but let modified clicks (new tab, etc.) behave normally.
+          const e = ev as MouseEvent;
+          if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+          e.preventDefault();
+          const f = chip.dataset.blogFilter;
+          chips.forEach((c) => {
+            const on = c === chip;
+            c.classList.toggle('active', on);
+            c.setAttribute('aria-pressed', on ? 'true' : 'false');
+          });
+          let shown = 0;
+          cards.forEach((card) => {
+            const show = f === 'all' || card.dataset.category === f;
+            card.style.display = show ? '' : 'none';
+            if (show) shown++;
+          });
+          if (empty) empty.style.display = shown === 0 ? 'block' : 'none';
         });
-        let shown = 0;
-        cards.forEach((card) => {
-          const show = f === 'all' || card.dataset.category === f;
-          card.style.display = show ? '' : 'none';
-          if (show) shown++;
-        });
-        if (empty) empty.style.display = shown === 0 ? 'block' : 'none';
       });
-    });
-  }
+    }
+  });
 </script>

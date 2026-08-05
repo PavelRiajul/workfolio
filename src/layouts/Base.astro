@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import WhatsApp from '../components/WhatsApp.astro';
@@ -162,6 +163,18 @@ const graph = {
       href="/fonts/inter-latin.woff2"
       crossorigin
     />
+
+    <!-- Client-side navigation. Without it every click tore the document down
+         and rebuilt it, which is why moving between pages felt like a stall
+         rather than a transition. It also keeps the stylesheet and the GSAP
+         bundle parsed across navigations instead of re-paying for both.
+
+         This changes the contract for every script on the site: modules are now
+         evaluated once per session, not once per page, so anything that binds
+         to the DOM does it on `astro:page-load` and anything bound to window,
+         document or a timer is removed on `astro:before-swap`. See the
+         lifecycle block at the top of src/scripts/main.ts. -->
+    <ClientRouter />
   </head>
   <body class={bodyClass}>
     <a href="#main" class="skip-link">{site.skipLinkLabel}</a>

@@ -75,19 +75,26 @@ const targets = [
 </style>
 
 <script>
-  // Upgrade the copy link in place. Without JS it stays a normal link to the
-  // article, which is a reasonable fallback for "give me this URL".
-  document.querySelectorAll<HTMLAnchorElement>('.share-copy').forEach((el) => {
-    el.addEventListener('click', async (e) => {
-      if (!navigator.clipboard) return; // let the link navigate
-      e.preventDefault();
-      try {
-        await navigator.clipboard.writeText(el.dataset.copy ?? el.href);
-        el.dataset.copied = 'true';
-        setTimeout(() => delete el.dataset.copied, 1600);
-      } catch {
-        window.location.href = el.href;
-      }
+  // Navigation is client-side, so this module is evaluated once for the whole
+  // session. `astro:page-load` fires on the first load and after every swap,
+  // which is what re-binds these to the incoming page's elements — without it
+  // the controls are dead on every visit after the first. Listeners land on
+  // swapped elements, so they are collected with them and need no teardown.
+  document.addEventListener('astro:page-load', () => {
+    // Upgrade the copy link in place. Without JS it stays a normal link to the
+    // article, which is a reasonable fallback for "give me this URL".
+    document.querySelectorAll<HTMLAnchorElement>('.share-copy').forEach((el) => {
+      el.addEventListener('click', async (e) => {
+        if (!navigator.clipboard) return; // let the link navigate
+        e.preventDefault();
+        try {
+          await navigator.clipboard.writeText(el.dataset.copy ?? el.href);
+          el.dataset.copied = 'true';
+          setTimeout(() => delete el.dataset.copied, 1600);
+        } catch {
+          window.location.href = el.href;
+        }
+      });
     });
   });
 </script>

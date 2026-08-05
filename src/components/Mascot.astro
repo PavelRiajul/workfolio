@@ -207,6 +207,13 @@ const { state = 'idle' } = Astro.props;
 </style>
 
 <script>
+  // Navigation is client-side, so this module is evaluated once for the whole
+  // session while the mascot itself only exists on the home page. Everything
+  // below therefore has to start on `astro:page-load` and, more importantly,
+  // stop on `astro:before-swap`: `roam()` is an unbounded async loop, and left
+  // running after the swap it would keep driving a detached element while
+  // happily reaching into the *new* page's DOM to pick things to bonk.
+  document.addEventListener('astro:page-load', () => {
   const m = document.getElementById('mascot') as HTMLElement | null;
   const body = m?.querySelector('.m-body') as SVGElement | null;
   if (m && body) {
@@ -397,9 +404,22 @@ const { state = 'idle' } = Astro.props;
     }
 
     // auto-start a moment after load; pause/resume on viewport changes
-    setTimeout(startRoam, 1600);
-    window.addEventListener('resize', () => { if (desktop()) startRoam(); else roaming = false; });
-    reduce.addEventListener?.('change', () => { if (reduce.matches) roaming = false; else startRoam(); });
+    const hello = window.setTimeout(startRoam, 1600);
+    const onResize = () => { if (desktop()) startRoam(); else roaming = false; };
+    const onReduce = () => { if (reduce.matches) roaming = false; else startRoam(); };
+    window.addEventListener('resize', onResize);
+    reduce.addEventListener?.('change', onReduce);
+
+    // Leaving the page ends the roam. `roaming = false` lets the loop fall out
+    // at its next await rather than killing it mid-animation, and the two
+    // listeners have to go with it or a later visit would start a second loop
+    // alongside the first.
+    document.addEventListener('astro:before-swap', () => {
+      roaming = false;
+      window.clearTimeout(hello);
+      window.removeEventListener('resize', onResize);
+      reduce.removeEventListener?.('change', onReduce);
+    }, { once: true });
 
     // click = an excited hop in place (works mid-roam idle and under reduced motion)
     m.addEventListener('click', () => { if (!busy) jump(); });
@@ -408,4 +428,5 @@ const { state = 'idle' } = Astro.props;
     m.addEventListener('focus', () => { near = true; if (!busy && !isJumping()) set('walking'); });
     m.addEventListener('blur', () => { near = false; if (!busy && !isJumping()) set('idle'); });
   }
+  });
 </script>

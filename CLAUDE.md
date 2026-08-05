@@ -300,8 +300,43 @@ Tone keys (`.tone-*`) set `--sbg/--sfg/--smut/--spill*` for stack + showcase car
 `svcf` showcase rows take a per-row `--acc` accent (blue by default; the commerce row passes Shopify green).
 
 ## Client interactions (`src/scripts/main.ts`)
-Single module imported once by `Base.astro`; runs on `DOMContentLoaded`. Every feature is guarded by element presence (safe on every route) and respects `prefers-reduced-motion`. Init functions:
-`initSmoothScroll` (Lenis⇄ScrollTrigger + anchor glide, offset −24), `initTabBar` (tucks the bottom bar on scroll-down, restores it on scroll-up and at both ends of the page — it's `position:fixed`, so without this it covers body copy the whole way down), `initWhatsAppFab` (tucks the FAB when the footer is in view), `initHeroTilt` (mouse-tilt the 3D stack via `--rx`/`--ry`; skipped when `#hv-stage[data-locked]`), `initShopifyStack` (drives `#sstack`), `initBarGrow` (grows any `.bargrow` inside a `[data-bars]` group), `initTabSpy` (scroll-spy for in-page anchor tabs), `initReveal`, `initHeroIntro`, `initCountUp`, `initRotatingWord`, `initProjectFilter`, `initModal`, `initBlogFilter`, `initStart`, `initResume`, `initClock`, `initBackToTop`.
+**Navigation is client-side** — `<ClientRouter />` in `Base.astro`. That changes the contract
+for every script on the site: a module is evaluated **once per session, not once per page**, so
+a `<script>` that binds listeners at top level is dead on every visit after the first. All of
+them — `main.ts`, `Mascot`, `ProjectModal`, `ShareLinks`, and the `blog`/`work`/`resume`/
+`start`/`shopify` page scripts — bind inside `astro:page-load`, which fires on the first load
+*and* after every swap.
+
+Anything attached to something that **outlives the swap** must be released on
+`astro:before-swap`, or the second visit to a page runs two scroll handlers and the third runs
+three. `main.ts` has a `cleanups` registry for this and the `on()` / `every()` / `later()`
+helpers are the only supported way to bind window, document, matchMedia or a timer — the
+teardown is registered for you, so it isn't a step you can forget. `teardown()` also kills every
+ScrollTrigger and destroys Lenis. Listeners on elements *inside* the swapped body need no
+bookkeeping; they're collected with the old page. Two exceptions live outside `main.ts`:
+`ProjectModal`'s focus trap (on `document`, so it can catch Tab from anywhere) and the mascot's
+roam loop, which must be stopped or it keeps driving a detached element while reaching into the
+*new* page's DOM to pick things to bonk.
+
+Single module imported once by `Base.astro`. Every feature is guarded by element presence (safe
+on every route) and respects `prefers-reduced-motion`. Init functions:
+`initSmoothScroll` (Lenis⇄ScrollTrigger + anchor glide, offset −24), `initTabBar` (tucks the bottom bar on scroll-down, restores it on scroll-up and at both ends of the page — it's `position:fixed`, so without this it covers body copy the whole way down), `initWhatsAppFab` (tucks the FAB when the footer is in view), `initHeroTilt` (mouse-tilt the 3D stack via `--rx`/`--ry`; skipped when `#hv-stage[data-locked]`), `initShopifyStack` (drives `#sstack`), `initBarGrow` (grows any `.bargrow` inside a `[data-bars]` group), `initTabSpy` (scroll-spy for in-page anchor tabs), `initTocSpy`, `initFeatureLists`, `initToc`, `initReveal`, `initHeroIntro`, `initCountUp`, `initRotatingWord`, `initClock`, `initBackToTop`.
+
+**The hero intro is CSS, not GSAP** (`@keyframes heroIn` in `global.css`). It used to ship at
+`opacity: 0` and wait for this 55KB bundle, which held the LCP element invisible for ~830ms and
+was most of why navigation felt stalled — the page was there, the words weren't. `initHeroIntro`
+now only freezes the end state once it has played, because a CSS animation restarts when an
+element's `display` changes and three hero items are media-query-gated (`.hero-visual` under
+900px, the two ledes), so a rotation replayed the intro mid-read. `[data-reveal]` keeps its
+opacity gate — those are below the fold by definition — plus a CSS failsafe so a dead bundle
+can't blank the page, which `initReveal` cancels inline on everything it drives.
+
+**`initReveal`'s failsafe is scoped to the trigger line, deliberately.** It used to reveal every
+element on the page 2.6s after load, which silently cancelled the scroll reveal everywhere — on
+a slow connection the effect never ran at all. An element still below the line isn't stuck, it's
+waiting for the reader. Triggers are also re-measured on `document.fonts.ready`, since the
+webfont swap reflows every start position and that is what makes triggers misfire in the first
+place.
 
 ## The 3D hero card stack
 Every landing page has one: `.hero > .hero-visual > .hv-stage#hv-stage > .hv-card`.
