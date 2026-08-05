@@ -12,8 +12,8 @@ export default {
   category: 'fullstack',
   order: 32,
   readTime: '12 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-16',
+  date: 'December 2025',
+  publishedAt: '2025-12-30',
   series: 'Templates',
   excerpt:
     'One vendor for database, auth and storage, or best-of-breed pieces. The single question about your organisation model that settles it.',

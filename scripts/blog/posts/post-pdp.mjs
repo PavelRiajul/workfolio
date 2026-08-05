@@ -12,8 +12,8 @@ export default {
   category: 'ecommerce',
   order: 93,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-17',
+  date: 'June 2026',
+  publishedAt: '2026-06-01',
   series: 'CRO',
   excerpt:
     'The page that decides the sale, element by element — in the order a buyer needs them, and with the things that only add weight left out.',

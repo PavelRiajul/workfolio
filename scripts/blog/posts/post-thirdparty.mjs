@@ -12,8 +12,8 @@ export default {
   category: 'performance',
   order: 83,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-07',
+  date: 'May 2026',
+  publishedAt: '2026-05-07',
   series: 'Foundations',
   excerpt:
     'A tag manager, a chat widget and two analytics scripts can outweigh your entire application. How to measure the damage and what to do about each one.',

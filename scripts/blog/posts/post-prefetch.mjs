@@ -12,8 +12,8 @@ export default {
   category: 'performance',
   order: 85,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-09',
+  date: 'May 2026',
+  publishedAt: '2026-05-12',
   series: 'Foundations',
   excerpt:
     'A pointer arrives at a link about 200ms before the click. That gap is enough to load the next page — if you spend it carefully and not on everything.',

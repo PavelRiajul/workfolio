@@ -12,8 +12,8 @@ export default {
   category: 'backend',
   order: 48,
   readTime: '13 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-02',
+  date: 'February 2026',
+  publishedAt: '2026-02-08',
   series: 'B2B',
   excerpt:
     'The policies that actually hold, the service role key that quietly bypasses all of them, and why an unindexed policy turns a fast query into a slow one.',

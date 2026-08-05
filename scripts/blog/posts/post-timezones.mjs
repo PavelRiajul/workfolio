@@ -12,8 +12,8 @@ export default {
   category: 'career',
   order: 117,
   readTime: '13 min read',
-  date: 'November 2026',
-  publishedAt: '2026-11-10',
+  date: 'July 2026',
+  publishedAt: '2026-07-31',
   series: 'Freelance practice',
   excerpt:
     'A large time difference is an advantage if the work is structured for it and a slow disaster if it is not. What actually has to change.',

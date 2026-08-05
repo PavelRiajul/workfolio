@@ -12,8 +12,8 @@ export default {
   category: 'frontend',
   order: 69,
   readTime: '12 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-23',
+  date: 'April 2026',
+  publishedAt: '2026-04-02',
   series: 'Foundations',
   excerpt:
     'svh, dvh and lvh explained by what breaks, plus the fixed bottom bar that no viewport unit knows about and the shorter lede a phone actually needs.',

@@ -12,8 +12,8 @@ export default {
   category: 'ai',
   order: 22,
   readTime: '11 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-12',
+  date: 'December 2025',
+  publishedAt: '2025-12-20',
   series: 'RAG',
   excerpt:
     'Why keyword search fails on natural questions, what semantic search costs to add to an existing product, and when it is the wrong answer.',

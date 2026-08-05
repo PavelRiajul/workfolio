@@ -12,8 +12,8 @@ export default {
   category: 'career',
   order: 110,
   readTime: '13 min read',
-  date: 'November 2026',
-  publishedAt: '2026-11-03',
+  date: 'July 2026',
+  publishedAt: '2026-07-13',
   series: 'Working together',
   excerpt:
     'Most projects that go wrong were mis-scoped, not mis-built. The questions that surface the real work, and what to do with the answers.',

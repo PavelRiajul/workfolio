@@ -12,8 +12,8 @@ export default {
   category: 'ai',
   order: 15,
   readTime: '11 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-05',
+  date: 'December 2025',
+  publishedAt: '2025-12-03',
   series: 'AI cost',
   excerpt:
     'What to log on every model call, and the query that finds the one user costing more than their whole plan is worth.',

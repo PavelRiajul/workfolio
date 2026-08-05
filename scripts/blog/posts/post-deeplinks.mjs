@@ -12,8 +12,8 @@ export default {
   category: 'mobile',
   order: 109,
   readTime: '13 min read',
-  date: 'November 2026',
-  publishedAt: '2026-11-02',
+  date: 'July 2026',
+  publishedAt: '2026-07-11',
   series: 'React Native in production',
   excerpt:
     'A link that opens the right screen when the app is already running, and the home screen when it is not, is the standard half-finished implementation.',

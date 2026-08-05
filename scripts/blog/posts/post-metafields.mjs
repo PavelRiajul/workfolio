@@ -12,8 +12,8 @@ export default {
   category: 'ecommerce',
   order: 98,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-22',
+  date: 'June 2026',
+  publishedAt: '2026-06-13',
   series: 'Shopify storefront',
   excerpt:
     'Custom product data is how a Shopify store stops looking generic. It is also how a collection page ends up making four hundred lookups per render.',

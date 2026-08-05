@@ -12,8 +12,8 @@ export default {
   category: 'backend',
   order: 51,
   readTime: '14 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-05',
+  date: 'February 2026',
+  publishedAt: '2026-02-16',
   series: 'Foundations',
   excerpt:
     'The expand-and-contract pattern, which ALTER statements take an exclusive lock, and why the dangerous part of a rename is the deploy rather than the SQL.',

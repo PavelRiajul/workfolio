@@ -12,8 +12,8 @@ export default {
   category: 'performance',
   order: 79,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-03',
+  date: 'April 2026',
+  publishedAt: '2026-04-27',
   series: 'Foundations',
   excerpt:
     'Both serve static files fast. The decision is about runtime, framework fit and what happens when the bill scales — not about which edge is closer.',

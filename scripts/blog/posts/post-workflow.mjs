@@ -12,8 +12,8 @@ export default {
   category: 'ai',
   order: 1,
   readTime: '12 min read',
-  date: 'July 2026',
-  publishedAt: '2026-07-01',
+  date: 'November 2025',
+  publishedAt: '2025-11-18',
   series: 'AI workflow',
   excerpt:
     "The honest version of an AI-accelerated workflow: what gets generated, what gets rewritten, and the review discipline that keeps fast from meaning fragile.",

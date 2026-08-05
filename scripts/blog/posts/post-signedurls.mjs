@@ -12,8 +12,8 @@ export default {
   category: 'backend',
   order: 55,
   readTime: '12 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-09',
+  date: 'February 2026',
+  publishedAt: '2026-02-26',
   series: 'Foundations',
   excerpt:
     'The browser uploads straight to storage and your server never holds the bytes — plus the four checks that stop a signed URL being an open write endpoint.',

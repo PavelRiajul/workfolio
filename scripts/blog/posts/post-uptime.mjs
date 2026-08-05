@@ -12,8 +12,8 @@ export default {
   category: 'fullstack',
   order: 42,
   readTime: '12 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-26',
+  date: 'January 2026',
+  publishedAt: '2026-01-24',
   series: 'Every build',
   excerpt:
     'They catch different outages. Running only one is how a site stays down all weekend without anyone knowing.',

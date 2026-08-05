@@ -12,8 +12,8 @@ export default {
   category: 'fullstack',
   order: 35,
   readTime: '13 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-19',
+  date: 'January 2026',
+  publishedAt: '2026-01-07',
   series: 'B2B',
   excerpt:
     'Shared schema, schema-per-tenant or database-per-tenant — and the middleware that stops a missing where clause leaking another customer’s data.',

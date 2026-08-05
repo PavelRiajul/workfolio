@@ -12,8 +12,8 @@ export default {
   category: 'backend',
   order: 57,
   readTime: '13 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-11',
+  date: 'March 2026',
+  publishedAt: '2026-03-03',
   series: 'Foundations',
   excerpt:
     'Postgres table, Redis queue or hosted service — and the four properties that decide which one, starting with whether you need a queue at all.',

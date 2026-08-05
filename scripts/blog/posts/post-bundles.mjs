@@ -12,8 +12,8 @@ export default {
   category: 'performance',
   order: 80,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-04',
+  date: 'April 2026',
+  publishedAt: '2026-04-29',
   series: 'Foundations',
   excerpt:
     'Splitting moves bytes around; it does not remove them. What to split, what to delete instead, and why the shared chunk grows quietly.',

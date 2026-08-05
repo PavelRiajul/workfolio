@@ -12,8 +12,8 @@ export default {
   category: 'frontend',
   order: 62,
   readTime: '12 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-16',
+  date: 'March 2026',
+  publishedAt: '2026-03-15',
   series: 'Foundations',
   excerpt:
     'Which client directive to use and when, the state problem nobody mentions, and why most islands turn out not to need a framework at all.',

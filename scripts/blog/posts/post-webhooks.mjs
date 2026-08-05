@@ -12,8 +12,8 @@ export default {
   category: 'backend',
   order: 47,
   readTime: '13 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-01',
+  date: 'February 2026',
+  publishedAt: '2026-02-06',
   series: 'B2B',
   excerpt:
     'Stripe sends the same event twice, out of order, and to an endpoint that timed out. The handler shape that survives all three without granting twice.',

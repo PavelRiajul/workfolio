@@ -12,8 +12,8 @@ export default {
   category: 'ecommerce',
   order: 99,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-23',
+  date: 'June 2026',
+  publishedAt: '2026-06-16',
   series: 'Shopify storefront',
   excerpt:
     'Recurring revenue is the easiest thing to sell internally and the hardest to run. The failure modes are operational, not technical — here they are.',

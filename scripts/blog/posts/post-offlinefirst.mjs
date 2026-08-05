@@ -12,8 +12,8 @@ export default {
   category: 'mobile',
   order: 100,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-24',
+  date: 'June 2026',
+  publishedAt: '2026-06-18',
   series: 'React Native in production',
   excerpt:
     'An app that needs a connection to show data the user already owns is broken on a train. Local-first storage, sync, and the conflicts nobody plans for.',

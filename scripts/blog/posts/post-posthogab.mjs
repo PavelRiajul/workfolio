@@ -12,8 +12,8 @@ export default {
   category: 'ecommerce',
   order: 92,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-16',
+  date: 'May 2026',
+  publishedAt: '2026-05-29',
   series: 'CRO',
   excerpt:
     'Feature flags, experiments and session recordings on a Liquid theme — without a dedicated testing tool, and without the flicker that ruins the result.',

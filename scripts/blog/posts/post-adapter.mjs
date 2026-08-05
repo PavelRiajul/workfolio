@@ -12,8 +12,8 @@ export default {
   category: 'ai',
   order: 18,
   readTime: '12 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-08',
+  date: 'December 2025',
+  publishedAt: '2025-12-10',
   series: 'AI architecture',
   excerpt:
     'The adapter layer that let a production app move between Claude, GPT and Groq by changing one file — and the four things it has to normalise.',

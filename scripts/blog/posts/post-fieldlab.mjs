@@ -12,8 +12,8 @@ export default {
   category: 'performance',
   order: 82,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-06',
+  date: 'May 2026',
+  publishedAt: '2026-05-04',
   series: 'Foundations',
   excerpt:
     'Lighthouse says 98 and Search Console says the page is failing. Both are right. Here is what each measurement is for and which one decides.',

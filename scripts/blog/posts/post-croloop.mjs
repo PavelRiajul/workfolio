@@ -12,8 +12,8 @@ export default {
   category: 'ecommerce',
   order: 91,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-15',
+  date: 'May 2026',
+  publishedAt: '2026-05-27',
   series: 'CRO',
   excerpt:
     'Measure, hypothesise, build, test, decide, repeat. The loop is simple and almost every team breaks it in the same three places.',

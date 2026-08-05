@@ -12,8 +12,8 @@ export default {
   category: 'performance',
   order: 81,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-05',
+  date: 'May 2026',
+  publishedAt: '2026-05-02',
   series: 'Foundations',
   excerpt:
     'Format, dimensions, the sizes attribute nobody sets, and why build-time optimisation beats an on-demand service for most sites.',

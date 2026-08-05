@@ -12,8 +12,8 @@ export default {
   category: 'mobile',
   order: 101,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-25',
+  date: 'June 2026',
+  publishedAt: '2026-06-21',
   series: 'Mobile decisions',
   excerpt:
     'Most people asking for an app need a fast mobile site. Some genuinely need the store. The question that separates them is not technical.',

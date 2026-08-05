@@ -12,8 +12,8 @@ export default {
   category: 'backend',
   order: 50,
   readTime: '12 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-04',
+  date: 'February 2026',
+  publishedAt: '2026-02-13',
   series: 'Foundations',
   excerpt:
     'A branch per pull request with production-shaped data, why it makes migration review possible, and the two ways it quietly leaks customer records.',

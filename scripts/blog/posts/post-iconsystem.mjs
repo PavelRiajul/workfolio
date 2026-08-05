@@ -12,8 +12,8 @@ export default {
   category: 'frontend',
   order: 76,
   readTime: '12 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-30',
+  date: 'April 2026',
+  publishedAt: '2026-04-19',
   series: 'Foundations',
   excerpt:
     'Inline SVG keyed on the class strings a CMS already stores, a missing icon that renders nothing, and the script that stops paths being pasted by hand.',

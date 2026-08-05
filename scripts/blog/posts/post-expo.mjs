@@ -12,8 +12,8 @@ export default {
   category: 'mobile',
   order: 102,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-26',
+  date: 'June 2026',
+  publishedAt: '2026-06-23',
   series: 'React Native in production',
   excerpt:
     'Expo is no longer the beginner option you outgrow. Here is what it actually removes from a React Native project, and where it still bites.',

@@ -12,8 +12,8 @@ export default {
   category: 'backend',
   order: 52,
   readTime: '12 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-06',
+  date: 'February 2026',
+  publishedAt: '2026-02-18',
   series: 'Foundations',
   excerpt:
     'Zero egress fees is the headline. The decision is really about egress volume, ecosystem depth and how much of your architecture assumes AWS is nearby.',

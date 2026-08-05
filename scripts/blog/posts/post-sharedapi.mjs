@@ -12,8 +12,8 @@ export default {
   category: 'mobile',
   order: 105,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-29',
+  date: 'July 2026',
+  publishedAt: '2026-07-01',
   series: 'Mobile decisions',
   excerpt:
     'Share the contract, the types and the validation. Share the interface layer and you get something slightly wrong on both platforms.',

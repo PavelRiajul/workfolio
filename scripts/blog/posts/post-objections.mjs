@@ -12,8 +12,8 @@ export default {
   category: 'career',
   order: 115,
   readTime: '13 min read',
-  date: 'November 2026',
-  publishedAt: '2026-11-08',
+  date: 'July 2026',
+  publishedAt: '2026-07-26',
   series: 'Working together',
   excerpt:
     '"It is too expensive" is rarely about the price. The eight objections that recur, what is underneath each one, and how to answer honestly.',

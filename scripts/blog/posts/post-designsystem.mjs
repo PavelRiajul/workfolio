@@ -12,8 +12,8 @@ export default {
   category: 'frontend',
   order: 68,
   readTime: '13 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-22',
+  date: 'March 2026',
+  publishedAt: '2026-03-30',
   series: 'Foundations',
   excerpt:
     'Tokens, four primitives and a rule about inline styles. What to build, what to skip, and the signs a system has quietly stopped being used.',

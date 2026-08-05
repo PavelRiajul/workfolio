@@ -12,8 +12,8 @@ export default {
   category: 'frontend',
   order: 73,
   readTime: '12 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-27',
+  date: 'April 2026',
+  publishedAt: '2026-04-12',
   series: 'Foundations',
   excerpt:
     'Semantic tokens over literal ones, the two-layer split that makes a second theme a data change, and an honest case for not shipping dark mode at all.',

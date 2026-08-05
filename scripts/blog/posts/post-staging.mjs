@@ -12,8 +12,8 @@ export default {
   category: 'fullstack',
   order: 36,
   readTime: '12 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-20',
+  date: 'January 2026',
+  publishedAt: '2026-01-09',
   series: 'Every build',
   excerpt:
     'What shipping straight to production actually costs, and the twenty minutes of setup that prevents it.',

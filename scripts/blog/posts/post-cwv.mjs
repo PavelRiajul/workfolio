@@ -12,8 +12,8 @@ export default {
   category: 'performance',
   order: 77,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-01',
+  date: 'April 2026',
+  publishedAt: '2026-04-22',
   series: 'Foundations',
   excerpt:
     'LCP is usually one image, INP is usually one handler, and CLS is usually one element with no reserved space. Fixing those beats a rewrite.',

@@ -12,8 +12,8 @@ export default {
   category: 'performance',
   order: 78,
   readTime: '12 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-02',
+  date: 'April 2026',
+  publishedAt: '2026-04-24',
   series: 'Foundations',
   excerpt:
     'Every shift is something arriving into space nobody reserved. Aspect ratios, font metrics, and the banner that pushes the page down mid-read.',

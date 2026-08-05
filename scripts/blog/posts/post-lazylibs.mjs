@@ -12,8 +12,8 @@ export default {
   category: 'performance',
   order: 84,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-08',
+  date: 'May 2026',
+  publishedAt: '2026-05-09',
   series: 'Foundations',
   excerpt:
     'A PDF generator, a chart library and an editor in your main bundle serve a fraction of visits. How to move them behind the click that needs them.',

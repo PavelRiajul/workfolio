@@ -12,8 +12,8 @@ export default {
   category: 'backend',
   order: 46,
   readTime: '13 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-31',
+  date: 'February 2026',
+  publishedAt: '2026-02-03',
   series: 'B2B',
   excerpt:
     'Where the permission check belongs, why hiding a button is not access control, and the one file that stops roles becoming a nest of if statements.',

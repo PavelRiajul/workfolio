@@ -12,8 +12,8 @@ export default {
   category: 'frontend',
   order: 66,
   readTime: '12 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-20',
+  date: 'March 2026',
+  publishedAt: '2026-03-25',
   series: 'Foundations',
   excerpt:
     'One grey token failed AA across an entire site. How to find that, why the same grey passes on white and fails on a panel, and how to stop it recurring.',

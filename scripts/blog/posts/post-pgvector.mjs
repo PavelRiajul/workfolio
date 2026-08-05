@@ -12,8 +12,8 @@ export default {
   category: 'ai',
   order: 17,
   readTime: '12 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-07',
+  date: 'December 2025',
+  publishedAt: '2025-12-08',
   series: 'RAG',
   excerpt:
     'Postgres handles semantic search for most products. When pgvector is enough, how to index it, and where a dedicated vector database earns its cost.',

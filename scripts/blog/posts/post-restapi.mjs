@@ -12,8 +12,8 @@ export default {
   category: 'backend',
   order: 53,
   readTime: '13 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-07',
+  date: 'February 2026',
+  publishedAt: '2026-02-21',
   series: 'Foundations',
   excerpt:
     'Pagination, errors, versioning and partial updates — the four choices that are trivial before launch and permanent afterwards.',

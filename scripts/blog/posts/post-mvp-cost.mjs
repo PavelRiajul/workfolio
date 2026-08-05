@@ -12,8 +12,8 @@ export default {
   category: 'fullstack',
   order: 31,
   readTime: '13 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-15',
+  date: 'December 2025',
+  publishedAt: '2025-12-28',
   series: 'MVP',
   excerpt:
     'What an MVP actually costs by scope, what drives the number up, and the features that get cut first without hurting the launch.',

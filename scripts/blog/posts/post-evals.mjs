@@ -12,8 +12,8 @@ export default {
   category: 'ai',
   order: 21,
   readTime: '12 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-11',
+  date: 'December 2025',
+  publishedAt: '2025-12-18',
   series: 'AI safety',
   excerpt:
     'A test set, a scoring method and a regression check — so a prompt change cannot quietly make your answers worse without anyone noticing.',

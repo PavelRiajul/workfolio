@@ -12,8 +12,8 @@ export default {
   category: 'fullstack',
   order: 30,
   readTime: '12 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-14',
+  date: 'December 2025',
+  publishedAt: '2025-12-25',
   series: 'Templates',
   excerpt:
     'Landing, web app, B2B multi-tenant or AI app — the three questions that decide which a project gets, and why picking wrong is expensive.',

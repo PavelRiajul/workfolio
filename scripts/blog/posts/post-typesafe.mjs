@@ -12,8 +12,8 @@ export default {
   category: 'fullstack',
   order: 33,
   readTime: '12 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-17',
+  date: 'January 2026',
+  publishedAt: '2026-01-02',
   series: 'Type safety',
   excerpt:
     'One source of truth for your data shapes, so the compiler catches a mismatch between API and UI before a user does.',

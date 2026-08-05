@@ -12,8 +12,8 @@ export default {
   category: 'frontend',
   order: 74,
   readTime: '12 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-28',
+  date: 'April 2026',
+  publishedAt: '2026-04-14',
   series: 'Foundations',
   excerpt:
     'Two slugifiers agree on most headings and disagree on the ones with punctuation. One function, used by both the renderer and the contents list.',

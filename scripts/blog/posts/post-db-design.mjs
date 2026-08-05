@@ -12,8 +12,8 @@ export default {
   category: 'fullstack',
   order: 34,
   readTime: '13 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-18',
+  date: 'January 2026',
+  publishedAt: '2026-01-04',
   series: 'Templates',
   excerpt:
     'The schema decisions that are cheap now and expensive in six months, and how to tell them apart before you commit.',

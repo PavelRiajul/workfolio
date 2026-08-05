@@ -12,8 +12,8 @@ export default {
   category: 'mobile',
   order: 104,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-28',
+  date: 'June 2026',
+  publishedAt: '2026-06-28',
   series: 'React Native in production',
   excerpt:
     'Every layer between your server and a phone can drop a notification silently. Design for that, and ask for the permission at the right moment.',

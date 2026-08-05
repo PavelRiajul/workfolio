@@ -12,8 +12,8 @@ export default {
   category: 'ecommerce',
   order: 94,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-18',
+  date: 'June 2026',
+  publishedAt: '2026-06-03',
   series: 'Shopify storefront',
   excerpt:
     'Rich results need structured data that matches the page exactly. Most Shopify themes emit something close enough to look fine and wrong enough to fail.',

@@ -12,8 +12,8 @@ export default {
   category: 'frontend',
   order: 75,
   readTime: '12 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-29',
+  date: 'April 2026',
+  publishedAt: '2026-04-17',
   series: 'Foundations',
   excerpt:
     'A sticky cascade needs more height than a phone has, so the last cards pin above their own resting position and the effect silently runs backwards.',

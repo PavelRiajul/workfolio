@@ -12,8 +12,8 @@ export default {
   category: 'ai',
   order: 16,
   readTime: '11 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-06',
+  date: 'December 2025',
+  publishedAt: '2025-12-05',
   series: 'AI architecture',
   excerpt:
     'Token streaming that stays smooth: batching updates, avoiding layout shift, and handling a dropped connection mid-answer.',

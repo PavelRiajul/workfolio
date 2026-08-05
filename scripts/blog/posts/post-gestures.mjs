@@ -12,8 +12,8 @@ export default {
   category: 'mobile',
   order: 103,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-27',
+  date: 'June 2026',
+  publishedAt: '2026-06-26',
   series: 'React Native in production',
   excerpt:
     'A drag that lags by two frames feels broken in a way users cannot name. Keeping animation off the JavaScript thread is the whole technique.',

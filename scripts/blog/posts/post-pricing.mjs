@@ -12,8 +12,8 @@ export default {
   category: 'career',
   order: 112,
   readTime: '13 min read',
-  date: 'November 2026',
-  publishedAt: '2026-11-05',
+  date: 'July 2026',
+  publishedAt: '2026-07-18',
   series: 'AI-accelerated delivery',
   excerpt:
     'If you bill by the hour and the hours halve, you have given yourself a pay cut for getting better. What to charge for instead.',

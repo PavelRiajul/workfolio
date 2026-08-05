@@ -12,8 +12,8 @@ export default {
   category: 'backend',
   order: 58,
   readTime: '12 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-12',
+  date: 'March 2026',
+  publishedAt: '2026-03-05',
   series: 'Foundations',
   excerpt:
     'Background workers, cron jobs and the free-tier spin-down that quietly stops them — the practical setup for the always-on half of a serverless stack.',

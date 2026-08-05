@@ -12,8 +12,8 @@ export default {
   category: 'ecommerce',
   order: 88,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-12',
+  date: 'May 2026',
+  publishedAt: '2026-05-19',
   series: 'CRO',
   excerpt:
     'Most stores lose more revenue between the product page and the cart than anywhere else — and fix the homepage instead. Where to look, in order.',

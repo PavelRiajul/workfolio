@@ -12,8 +12,8 @@ export default {
   category: 'frontend',
   order: 72,
   readTime: '13 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-26',
+  date: 'April 2026',
+  publishedAt: '2026-04-09',
   series: 'Foundations',
   excerpt:
     'Labels, error announcement, autocomplete and the keyboard a phone shows — the plain HTML most form libraries reimplement badly.',

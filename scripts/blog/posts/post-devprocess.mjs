@@ -12,8 +12,8 @@ export default {
   category: 'career',
   order: 111,
   readTime: '13 min read',
-  date: 'November 2026',
-  publishedAt: '2026-11-04',
+  date: 'July 2026',
+  publishedAt: '2026-07-16',
   series: 'Working together',
   excerpt:
     'Six steps from first message to production. What each one is actually for, and why most process overhead solves problems small teams do not have.',

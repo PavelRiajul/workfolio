@@ -12,8 +12,8 @@ export default {
   category: 'fullstack',
   order: 38,
   readTime: '12 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-22',
+  date: 'January 2026',
+  publishedAt: '2026-01-14',
   series: 'Every build',
   excerpt:
     'An untested backup is not a backup. The restore drill that takes an hour and the failure it prevents.',

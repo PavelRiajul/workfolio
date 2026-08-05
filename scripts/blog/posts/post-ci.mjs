@@ -12,8 +12,8 @@ export default {
   category: 'fullstack',
   order: 37,
   readTime: '12 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-21',
+  date: 'January 2026',
+  publishedAt: '2026-01-12',
   series: 'Every build',
   excerpt:
     'A pipeline that catches the class of bug that reaches production most often, in under sixty lines of config.',

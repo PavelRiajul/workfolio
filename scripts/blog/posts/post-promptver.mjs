@@ -12,8 +12,8 @@ export default {
   category: 'ai',
   order: 23,
   readTime: '11 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-13',
+  date: 'December 2025',
+  publishedAt: '2025-12-23',
   series: 'AI safety',
   excerpt:
     'A prompt is code. Storing it in a dashboard means no review, no history, and no way to tell what changed when quality dropped.',

@@ -12,8 +12,8 @@ export default {
   category: 'ecommerce',
   order: 96,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-20',
+  date: 'June 2026',
+  publishedAt: '2026-06-08',
   series: 'Shopify storefront',
   excerpt:
     'Less than you want and more than you think. What is configurable, what needs Plus, what needs an extension, and what you should not touch at all.',

@@ -12,8 +12,8 @@ export default {
   category: 'performance',
   order: 86,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-10',
+  date: 'May 2026',
+  publishedAt: '2026-05-14',
   series: 'Foundations',
   excerpt:
     'Generating per-route social cards from real HTML, plus the screenshot helper I use to verify layout work — and the colour bug that fools both.',

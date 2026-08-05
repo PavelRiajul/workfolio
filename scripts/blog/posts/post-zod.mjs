@@ -12,8 +12,8 @@ export default {
   category: 'ai',
   order: 13,
   readTime: '11 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-03',
+  date: 'November 2025',
+  publishedAt: '2025-11-28',
   series: 'AI safety',
   excerpt:
     'The model will eventually return a malformed tool call. The Zod schema layer that turns that from a corrupted database into a logged retry.',

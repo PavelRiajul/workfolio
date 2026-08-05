@@ -12,8 +12,8 @@ export default {
   category: 'ai',
   order: 19,
   readTime: '12 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-09',
+  date: 'December 2025',
+  publishedAt: '2025-12-13',
   series: 'AI architecture',
   excerpt:
     'Turning PDFs, scans and inconsistent forms into structured data — with validation, confidence scores and a human review path that makes it trustworthy.',

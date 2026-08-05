@@ -12,8 +12,8 @@ export default {
   category: 'frontend',
   order: 65,
   readTime: '12 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-19',
+  date: 'March 2026',
+  publishedAt: '2026-03-23',
   series: 'Foundations',
   excerpt:
     'One clamp per step instead of a media query per component — plus the self-referential custom property that silently flattens a whole stylesheet.',

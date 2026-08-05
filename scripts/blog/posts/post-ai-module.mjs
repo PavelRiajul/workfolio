@@ -12,8 +12,8 @@ export default {
   category: 'ai',
   order: 12,
   readTime: '11 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-02',
+  date: 'November 2025',
+  publishedAt: '2025-11-25',
   series: 'AI architecture',
   excerpt:
     'AI-first architectures fall over the moment you need auth, billing or an audit trail. The case for bolting AI onto a boring, well-built application.',

@@ -12,8 +12,8 @@ export default {
   category: 'ecommerce',
   order: 87,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-11',
+  date: 'May 2026',
+  publishedAt: '2026-05-17',
   series: 'Headless commerce',
   excerpt:
     'Going headless cut one store’s load time by 58% and lifted mobile conversion 24%. It also cost more to build and more to run. When that trade makes sense.',

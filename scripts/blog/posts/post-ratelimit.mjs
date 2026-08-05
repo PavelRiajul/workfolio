@@ -12,8 +12,8 @@ export default {
   category: 'ai',
   order: 20,
   readTime: '11 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-10',
+  date: 'December 2025',
+  publishedAt: '2025-12-15',
   series: 'AI cost',
   excerpt:
     'Per-user, per-org and global limits for AI endpoints — and why degrading gracefully beats returning an error the user cannot act on.',

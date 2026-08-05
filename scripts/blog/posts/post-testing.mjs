@@ -12,8 +12,8 @@ export default {
   category: 'fullstack',
   order: 43,
   readTime: '12 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-27',
+  date: 'January 2026',
+  publishedAt: '2026-01-27',
   series: 'Every build',
   excerpt:
     'Not 100% coverage. The handful of flows where a regression costs real money, and how to cover them cheaply.',

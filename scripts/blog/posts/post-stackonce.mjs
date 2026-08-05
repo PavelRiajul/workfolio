@@ -12,8 +12,8 @@ export default {
   category: 'career',
   order: 114,
   readTime: '13 min read',
-  date: 'November 2026',
-  publishedAt: '2026-11-07',
+  date: 'July 2026',
+  publishedAt: '2026-07-23',
   series: 'Working together',
   excerpt:
     'Every project that starts with a technology debate loses a week. Four templates decided in advance, and the narrow cases where you deviate.',

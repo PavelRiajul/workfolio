@@ -12,8 +12,8 @@ export default {
   category: 'fullstack',
   order: 40,
   readTime: '12 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-24',
+  date: 'January 2026',
+  publishedAt: '2026-01-19',
   series: 'Process',
   excerpt:
     'The accounts and access that belong in the client’s name from day one, and the handover document that stops the late-night support calls.',

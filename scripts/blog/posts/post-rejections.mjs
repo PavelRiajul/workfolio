@@ -12,8 +12,8 @@ export default {
   category: 'mobile',
   order: 107,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-31',
+  date: 'July 2026',
+  publishedAt: '2026-07-06',
   series: 'Mobile decisions',
   excerpt:
     'Most first submissions are rejected, and most rejections are for the same handful of things. Here they are, with what to do before you submit.',

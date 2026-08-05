@@ -12,8 +12,8 @@ export default {
   category: 'ecommerce',
   order: 95,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-19',
+  date: 'June 2026',
+  publishedAt: '2026-06-06',
   series: 'Shopify storefront',
   excerpt:
     'A design that looks perfect in Figma and wrong in the theme editor failed at handoff, not at build. What the file needs before anyone writes Liquid.',

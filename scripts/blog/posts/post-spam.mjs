@@ -12,8 +12,8 @@ export default {
   category: 'fullstack',
   order: 44,
   readTime: '12 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-28',
+  date: 'January 2026',
+  publishedAt: '2026-01-29',
   series: 'Every build',
   excerpt:
     'Stopping bot submissions without making a human prove they are one — honeypots, Turnstile, rate limits and server-side verification.',

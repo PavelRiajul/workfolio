@@ -12,8 +12,8 @@ export default {
   category: 'ai',
   order: 11,
   readTime: '12 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-01',
+  date: 'November 2025',
+  publishedAt: '2025-11-23',
   series: 'AI cost',
   excerpt:
     'What an AI chat, search or extraction feature actually costs to build and to run — build fees, token spend, and the infrastructure most quotes leave out.',

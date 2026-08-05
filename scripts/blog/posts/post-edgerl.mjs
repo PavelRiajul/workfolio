@@ -12,8 +12,8 @@ export default {
   category: 'backend',
   order: 59,
   readTime: '12 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-13',
+  date: 'March 2026',
+  publishedAt: '2026-03-08',
   series: 'Foundations',
   excerpt:
     'Why the limit belongs in front of your origin, which algorithm to pick, and the identity question that decides whether it works at all.',

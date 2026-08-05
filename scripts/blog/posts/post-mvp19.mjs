@@ -12,8 +12,8 @@ export default {
   category: 'ai',
   order: 2,
   readTime: '12 min read',
-  date: 'July 2026',
-  publishedAt: '2026-07-15',
+  date: 'November 2025',
+  publishedAt: '2025-11-20',
   series: 'MVP',
   excerpt:
     'A real 19-day build of an AI research assistant: what got scoped out, what got generated, and the four things that never get cut no matter the deadline.',

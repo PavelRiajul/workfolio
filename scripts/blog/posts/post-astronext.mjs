@@ -12,8 +12,8 @@ export default {
   category: 'frontend',
   order: 61,
   readTime: '13 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-15',
+  date: 'March 2026',
+  publishedAt: '2026-03-13',
   series: 'Foundations',
   excerpt:
     'Not a benchmark. The question is whether your pages are documents or an application — and what it costs when you answer it wrong.',

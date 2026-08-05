@@ -12,8 +12,8 @@ export default {
   category: 'frontend',
   order: 70,
   readTime: '13 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-24',
+  date: 'April 2026',
+  publishedAt: '2026-04-04',
   series: 'Foundations',
   excerpt:
     'Portable Text stores each list item as a sibling, so naive rendering gives one list per bullet. That and four other things the format does not tell you.',

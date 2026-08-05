@@ -12,8 +12,8 @@ export default {
   category: 'frontend',
   order: 64,
   readTime: '12 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-18',
+  date: 'March 2026',
+  publishedAt: '2026-03-20',
   series: 'Foundations',
   excerpt:
     'The global override that misses half your animations, why animation does not inherit, and how to check a whole site in ten minutes.',

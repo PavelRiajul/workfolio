@@ -12,8 +12,8 @@ export default {
   category: 'fullstack',
   order: 45,
   readTime: '12 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-29',
+  date: 'February 2026',
+  publishedAt: '2026-02-01',
   series: 'Every build',
   excerpt:
     'Shipping unfinished work safely with a database table and twenty lines of code, before paying for a flag service.',

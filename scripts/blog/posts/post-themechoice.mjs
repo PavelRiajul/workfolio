@@ -12,8 +12,8 @@ export default {
   category: 'ecommerce',
   order: 90,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-14',
+  date: 'May 2026',
+  publishedAt: '2026-05-24',
   series: 'Shopify storefront',
   excerpt:
     'A £300 theme covers most stores completely. A custom build is right for a narrow set of them. The deciding factor is usually not what people think.',

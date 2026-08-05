@@ -12,8 +12,8 @@ export default {
   category: 'fullstack',
   order: 41,
   readTime: '12 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-25',
+  date: 'January 2026',
+  publishedAt: '2026-01-22',
   series: 'Process',
   excerpt:
     'Thirty minutes, and the questions that decide whether a quote is realistic or fiction.',

@@ -12,8 +12,8 @@ export default {
   category: 'ai',
   order: 14,
   readTime: '12 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-04',
+  date: 'November 2025',
+  publishedAt: '2025-11-30',
   series: 'Booking',
   excerpt:
     'A booking assistant that checks real availability and books the slot — and the architecture rule that stops it double-booking your calendar.',

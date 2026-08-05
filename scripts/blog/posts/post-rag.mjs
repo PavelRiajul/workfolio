@@ -11,8 +11,8 @@ export default {
   title: 'RAG That Actually Answers: Chunking, Reranking and Citations',
   category: 'ai',
   readTime: '13 min read',
-  date: 'June 2026',
-  publishedAt: '2026-06-01',
+  date: 'November 2025',
+  publishedAt: '2025-11-15',
   series: 'RAG',
   excerpt:
     'Most bad AI answers are bad retrieval, not a bad model. The chunking, reranking and citation changes that moved accuracy most on a production assistant.',

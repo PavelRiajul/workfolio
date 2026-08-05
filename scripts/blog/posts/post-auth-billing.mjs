@@ -12,8 +12,8 @@ export default {
   category: 'fullstack',
   order: 39,
   readTime: '12 min read',
-  date: 'August 2026',
-  publishedAt: '2026-08-23',
+  date: 'January 2026',
+  publishedAt: '2026-01-17',
   series: 'MVP',
   excerpt:
     'The three systems every product needs and nobody wants to pay for twice — built once, reused on every project.',

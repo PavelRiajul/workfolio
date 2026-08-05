@@ -12,8 +12,8 @@ export default {
   category: 'career',
   order: 119,
   readTime: '13 min read',
-  date: 'November 2026',
-  publishedAt: '2026-11-12',
+  date: 'August 2026',
+  publishedAt: '2026-08-05',
   series: 'Freelance practice',
   excerpt:
     'Every bad project was visible in the first conversation. The signals, what they cost when ignored, and how to say no without burning anything.',

@@ -12,8 +12,8 @@ export default {
   category: 'mobile',
   order: 106,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-30',
+  date: 'July 2026',
+  publishedAt: '2026-07-03',
   series: 'Mobile decisions',
   excerpt:
     'Most apps lose the majority of users within a week, and most of that happens in the first session. What actually causes it, and what fixes it.',

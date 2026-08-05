@@ -12,8 +12,8 @@ export default {
   category: 'ecommerce',
   order: 89,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-13',
+  date: 'May 2026',
+  publishedAt: '2026-05-22',
   series: 'Shopify storefront',
   excerpt:
     'Most slow Shopify stores are slow for four reasons, none of them Shopify. A day of the right work usually beats a quarter of rebuilding.',

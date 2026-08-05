@@ -12,8 +12,8 @@ export default {
   category: 'frontend',
   order: 63,
   readTime: '13 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-17',
+  date: 'March 2026',
+  publishedAt: '2026-03-18',
   series: 'Foundations',
   excerpt:
     'Smooth scroll and scroll-triggered animation fight over the same number. Wiring them properly, and the accessibility work that is not optional.',

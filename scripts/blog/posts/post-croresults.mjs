@@ -12,8 +12,8 @@ export default {
   category: 'ecommerce',
   order: 97,
   readTime: '13 min read',
-  date: 'October 2026',
-  publishedAt: '2026-10-21',
+  date: 'June 2026',
+  publishedAt: '2026-06-11',
   series: 'CRO',
   excerpt:
     'The test finished and the number is green. Here is what to check before you ship it, and the ways a result can be real and still not repeat.',

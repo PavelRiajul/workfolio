@@ -12,8 +12,8 @@ export default {
   category: 'career',
   order: 116,
   readTime: '13 min read',
-  date: 'November 2026',
-  publishedAt: '2026-11-09',
+  date: 'July 2026',
+  publishedAt: '2026-07-28',
   series: 'Working together',
   excerpt:
     'Most project documentation describes what the code does, which the code already says. What is missing is why, and who has the passwords.',

@@ -12,8 +12,8 @@ export default {
   category: 'career',
   order: 113,
   readTime: '13 min read',
-  date: 'November 2026',
-  publishedAt: '2026-11-06',
+  date: 'July 2026',
+  publishedAt: '2026-07-21',
   series: 'AI-accelerated delivery',
   excerpt:
     'One says you deliver faster. The other says you sell AI. They attract different clients, and only one of them survives the tooling changing again.',

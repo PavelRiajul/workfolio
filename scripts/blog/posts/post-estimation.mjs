@@ -12,8 +12,8 @@ export default {
   category: 'career',
   order: 118,
   readTime: '13 min read',
-  date: 'November 2026',
-  publishedAt: '2026-11-11',
+  date: 'August 2026',
+  publishedAt: '2026-08-02',
   series: 'Freelance practice',
   excerpt:
     'You are not bad at estimating the work. You are bad at remembering everything that is not the work — and that is the recoverable part.',

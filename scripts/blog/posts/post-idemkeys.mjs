@@ -12,8 +12,8 @@ export default {
   category: 'backend',
   order: 56,
   readTime: '12 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-10',
+  date: 'February 2026',
+  publishedAt: '2026-02-28',
   series: 'Foundations',
   excerpt:
     'A timeout tells the client nothing about whether the work happened. Idempotency keys are how a retry becomes safe instead of a second order.',

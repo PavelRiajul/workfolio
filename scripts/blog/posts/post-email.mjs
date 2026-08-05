@@ -12,8 +12,8 @@ export default {
   category: 'backend',
   order: 49,
   readTime: '13 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-03',
+  date: 'February 2026',
+  publishedAt: '2026-02-11',
   series: 'Foundations',
   excerpt:
     'SPF, DKIM and DMARC in the order they actually have to be set up, plus the subdomain decision that keeps a marketing blast from killing your login emails.',

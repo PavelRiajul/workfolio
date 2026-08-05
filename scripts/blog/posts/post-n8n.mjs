@@ -12,8 +12,8 @@ export default {
   category: 'backend',
   order: 60,
   readTime: '12 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-14',
+  date: 'March 2026',
+  publishedAt: '2026-03-10',
   series: 'Foundations',
   excerpt:
     'Workflow tools are excellent glue and poor application logic. The line between the two, and how to keep automations from becoming untested production code.',

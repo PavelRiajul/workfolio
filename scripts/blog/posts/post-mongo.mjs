@@ -12,8 +12,8 @@ export default {
   category: 'backend',
   order: 54,
   readTime: '13 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-08',
+  date: 'February 2026',
+  publishedAt: '2026-02-23',
   series: 'Foundations',
   excerpt:
     'Embed or reference, the compound index rule that decides whether a query is fast, and the unbounded array that eventually breaks a document.',

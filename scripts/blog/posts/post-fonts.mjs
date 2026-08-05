@@ -12,8 +12,8 @@ export default {
   category: 'frontend',
   order: 67,
   readTime: '13 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-21',
+  date: 'March 2026',
+  publishedAt: '2026-03-28',
   series: 'Foundations',
   excerpt:
     'Two render-blocking hops to other people\'s servers, removed. Self-hosted fonts with the right preload, and icons as inline SVG instead of a webfont.',

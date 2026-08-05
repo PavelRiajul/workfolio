@@ -12,8 +12,8 @@ export default {
   category: 'mobile',
   order: 108,
   readTime: '13 min read',
-  date: 'November 2026',
-  publishedAt: '2026-11-01',
+  date: 'July 2026',
+  publishedAt: '2026-07-08',
   series: 'React Native in production',
   excerpt:
     'AsyncStorage is a plain file on disk. Keychain and Keystore exist for exactly this, and the difference matters more than most teams assume.',

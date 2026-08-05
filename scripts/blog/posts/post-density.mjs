@@ -12,8 +12,8 @@ export default {
   category: 'frontend',
   order: 71,
   readTime: '12 min read',
-  date: 'September 2026',
-  publishedAt: '2026-09-25',
+  date: 'April 2026',
+  publishedAt: '2026-04-07',
   series: 'Foundations',
   excerpt:
     'Two-up grids on a 375px screen, the CSS that handles an odd card, and why a page 26 screens long is a design problem rather than a content one.',
