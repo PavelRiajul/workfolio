@@ -300,6 +300,17 @@ Tone keys (`.tone-*`) set `--sbg/--sfg/--smut/--spill*` for stack + showcase car
 `svcf` showcase rows take a per-row `--acc` accent (blue by default; the commerce row passes Shopify green).
 
 ## Client interactions (`src/scripts/main.ts`)
+**Transition timing lives in CSS, not config.** Astro injects no view-transition CSS of its
+own, so the cross-fade was the browser default — 250ms out and 250ms in — which stacked on top
+of the destination hero's own intro and made a click cost most of a second. `global.css`
+overrides `::view-transition-old/new(root)` to 120ms, and kills it outright under
+`prefers-reduced-motion` (a cross-fade is still motion). The hero intro is dual-speed: full
+length on a cold arrival, `--hero-dur`/`--hero-step` shortened via a `.nav-repeat` class for
+every navigation after that, because replaying a 1.1s flourish on every click reads as lag
+rather than polish. That class is set on the **incoming** document during `astro:before-swap` —
+setting it after the swap is a beat too late and the long intro has already started. Measured
+click-to-settled on 4G/4x CPU: 821ms → 504ms.
+
 **Navigation is client-side** — `<ClientRouter />` in `Base.astro`. That changes the contract
 for every script on the site: a module is evaluated **once per session, not once per page**, so
 a `<script>` that binds listeners at top level is dead on every visit after the first. All of

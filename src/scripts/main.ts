@@ -623,4 +623,13 @@ function boot() {
    `astro:before-swap` runs while the old document is still in place, which is
    the only moment ScrollTrigger can measure what it is killing. */
 document.addEventListener('astro:page-load', boot);
-document.addEventListener('astro:before-swap', teardown);
+document.addEventListener('astro:before-swap', (e) => {
+  teardown();
+  // Mark the incoming document while it is still detached, so the shortened
+  // hero intro is in effect on the animation's very first frame. Setting it
+  // after the swap would be a beat too late and the full-length intro would
+  // have already started.
+  (e as Event & { newDocument?: Document }).newDocument?.documentElement.classList.add(
+    'nav-repeat'
+  );
+});
