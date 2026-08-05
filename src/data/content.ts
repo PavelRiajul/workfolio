@@ -36,7 +36,7 @@ export const site: SiteSettings = {
     { label: 'Home', href: '/', icon: 'fa-solid fa-house' },
     { label: 'Work', href: '/work', icon: 'fa-solid fa-folder-open' },
     { label: 'Services', href: '/services', icon: 'fa-solid fa-wand-magic-sparkles' },
-    { label: 'Shopify', href: '/shopify', icon: 'fa-brands fa-shopify' },
+    { label: 'Shopify', href: '/shopify', icon: 'fa-solid fa-store' },
     { label: 'Blog', href: '/blog', icon: 'fa-solid fa-feather' },
     { label: 'About', href: '/about', icon: 'fa-solid fa-user' },
     { label: 'Talk', href: '/start?tab=form', icon: 'fa-solid fa-paper-plane', match: '/start' },

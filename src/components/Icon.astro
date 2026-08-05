@@ -9,6 +9,12 @@
 // Icons are decorative here (every one sits beside a text label), so they're
 // aria-hidden by default. Pass `label` for a standalone icon that carries
 // meaning on its own — it then renders as an img with an accessible name.
+//
+// TWO RENDER MODES. UI icons are Lucide: a 24x24 grid drawn with a 2px stroke,
+// so they need fill="none" and the stroke attributes. Brand marks are Font
+// Awesome and are filled single paths on their own viewBoxes. The stored mode
+// decides, because getting it wrong renders a solid black blob rather than a
+// glyph — visible immediately, but only if somebody looks at that one icon.
 import { ICONS, iconKey } from '../lib/icons';
 
 interface Props {
@@ -31,16 +37,20 @@ const icon = key ? ICONS[key] : undefined;
 {
   icon && (
     <svg
-      class={`icon ${cls}`.trim()}
+      class={`icon icon-${icon[2]} ${cls}`.trim()}
       style={style}
       viewBox={icon[0]}
-      fill="currentColor"
+      fill={icon[2] === 'fill' ? 'currentColor' : 'none'}
+      stroke={icon[2] === 'stroke' ? 'currentColor' : undefined}
+      stroke-width={icon[2] === 'stroke' ? 2 : undefined}
+      stroke-linecap={icon[2] === 'stroke' ? 'round' : undefined}
+      stroke-linejoin={icon[2] === 'stroke' ? 'round' : undefined}
       aria-hidden={label ? undefined : 'true'}
       role={label ? 'img' : undefined}
       focusable="false"
     >
       {label && <title>{label}</title>}
-      <path d={icon[1]} />
+      <Fragment set:html={icon[1]} />
     </svg>
   )
 }
