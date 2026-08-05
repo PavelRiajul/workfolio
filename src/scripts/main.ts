@@ -60,15 +60,29 @@ function scrollToTop() {
 function initReveal() {
   const els = gsap.utils.toArray<HTMLElement>('[data-reveal]');
   if (!els.length) return;
+  // Cancel the CSS failsafe on everything this function drives. Inline
+  // `animation: none` beats the stylesheet rule, and without it the keyframe's
+  // fill state would beat GSAP's inline opacity.
+  els.forEach((el) => (el.style.animation = 'none'));
   if (prefersReduced) {
     els.forEach((el) => el.classList.add('in'));
     return;
   }
+  // Anything already on screen when the bundle lands is left visible. Hiding it
+  // in order to animate it back is a flash, and on a slow connection the reader
+  // has been looking at it for half a second already. Only what is genuinely
+  // below the fold is worth a scroll reveal.
+  const hidden = els.filter((el) => {
+    if (el.getBoundingClientRect().top >= window.innerHeight * 0.9) return true;
+    el.classList.add('in');
+    return false;
+  });
+  if (!hidden.length) return;
   // Consistent start state (independent of CSS timing) → no flash.
-  gsap.set(els, { opacity: 0, y: 26 });
+  gsap.set(hidden, { opacity: 0, y: 26 });
 
   // Batch so items entering together animate as one staggered group.
-  ScrollTrigger.batch(els, {
+  ScrollTrigger.batch(hidden, {
     start: 'top 90%',
     once: true,
     onEnter: (batch) =>
@@ -85,7 +99,7 @@ function initReveal() {
 
   // Failsafe: never leave content hidden if a trigger misfires.
   window.setTimeout(() => {
-    els.forEach((el) => {
+    hidden.forEach((el) => {
       if (!el.classList.contains('in')) {
         gsap.set(el, { opacity: 1, y: 0 });
         el.classList.add('in');
@@ -138,20 +152,31 @@ function initCountUp() {
   });
 }
 
-/* ---- Hero entrance ----------------------------------------------------- */
+/* ---- Hero entrance -----------------------------------------------------
+   The intro itself is a CSS keyframe in global.css, not GSAP. Driving it from
+   here meant shipping the hero at `opacity: 0` and waiting for this 55KB bundle
+   to download, parse and execute before a single word appeared — 830ms of
+   measured LCP render delay, and the stall people felt on every navigation.
+
+   All that is left here is stopping it replaying. A CSS animation restarts when
+   an element's `display` changes, and three hero items are media-query-gated
+   (.hero-visual below 900px, and the two ledes), so a resize or an orientation
+   change would replay part of the intro mid-read. Freezing the end state once
+   it has played fixes that, and if this never runs the hero is still visible —
+   it just stays replayable. */
 function initHeroIntro() {
-  const hero = document.querySelector('[data-hero-intro]');
+  const hero = document.querySelector<HTMLElement>('[data-hero-intro]');
   if (!hero) return;
-  const targets = hero.querySelectorAll<HTMLElement>('[data-hero-item]');
-  if (prefersReduced) {
-    gsap.set(targets, { opacity: 1, y: 0 });
-    return;
-  }
-  gsap.fromTo(
-    targets,
-    { y: 24, opacity: 0 },
-    { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', stagger: 0.09, delay: 0.08 }
+  const freeze = () => hero.classList.add('hero-intro-done');
+  const items = Array.from(hero.querySelectorAll<HTMLElement>('[data-hero-item]'));
+  let left = items.length;
+  items.forEach((el) =>
+    el.addEventListener('animationend', () => { if (--left <= 0) freeze(); }, { once: true })
   );
+  // If the bundle lands after the intro already finished no animationend is
+  // coming. Longest delay plus duration is ~1.1s from first paint, and this
+  // timer starts later than that, so it can never cut the intro short.
+  window.setTimeout(freeze, 1400);
 }
 
 /* ---- Rotating hero word ------------------------------------------------ */
