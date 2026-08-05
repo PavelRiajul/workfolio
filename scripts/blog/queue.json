@@ -412,6 +412,12 @@
       "cat": "performance",
       "id": "post-bundle-splitting",
       "words": 2501
+    },
+    {
+      "slug": "image-optimization-strategy",
+      "cat": "performance",
+      "id": "post-image-optimization-strategy",
+      "words": 2503
     }
   ],
   "current_category": "performance",
@@ -421,7 +427,6 @@
     "backend": [],
     "frontend": [],
     "performance": [
-      "image-optimization-strategy",
       "field-vs-lab-data",
       "third-party-script-cost",
       "lazy-load-heavy-libraries",
