@@ -85,8 +85,10 @@ const ogCandidate = ogImage ?? `/og/${ogSlug}.png`;
 const ogPath = publicFileExists(ogCandidate) ? ogCandidate : '/og/default.png';
 const ogUrl = new URL(ogPath, Astro.site ?? Astro.url).href;
 
-// One connected @graph per page rather than several loose <script> blocks —
+// One connected @graph per page rather than several loose ld+json blocks —
 // the nodes cross-reference by @id, so Google reads them as one entity.
+// (Don't write a literal script tag in this comment: esbuild's dev dependency
+// scanner finds it in the raw file and tries to parse the rest as JS.)
 const graph = {
   '@context': 'https://schema.org',
   '@graph': [
