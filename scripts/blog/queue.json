@@ -388,6 +388,18 @@
       "cat": "frontend",
       "id": "post-inline-icon-system",
       "words": 2500
+    },
+    {
+      "slug": "core-web-vitals-nextjs",
+      "cat": "performance",
+      "id": "post-core-web-vitals-nextjs",
+      "words": 2508
+    },
+    {
+      "slug": "near-zero-cls",
+      "cat": "performance",
+      "id": "post-near-zero-cls",
+      "words": 2500
     }
   ],
   "current_category": "performance",
@@ -397,8 +409,6 @@
     "backend": [],
     "frontend": [],
     "performance": [
-      "core-web-vitals-nextjs",
-      "near-zero-cls",
       "cloudflare-pages-vs-vercel",
       "bundle-splitting",
       "image-optimization-strategy",
