@@ -418,60 +418,246 @@
       "cat": "performance",
       "id": "post-image-optimization-strategy",
       "words": 2503
+    },
+    {
+      "slug": "field-vs-lab-data",
+      "cat": "performance",
+      "id": "post-field-vs-lab-data",
+      "words": 2672
+    },
+    {
+      "slug": "third-party-script-cost",
+      "cat": "performance",
+      "id": "post-third-party-script-cost",
+      "words": 2554
+    },
+    {
+      "slug": "lazy-load-heavy-libraries",
+      "cat": "performance",
+      "id": "post-lazy-load-heavy-libraries",
+      "words": 2571
+    },
+    {
+      "slug": "prefetch-on-hover",
+      "cat": "performance",
+      "id": "post-prefetch-on-hover",
+      "words": 2569
+    },
+    {
+      "slug": "headless-chrome-screenshots",
+      "cat": "performance",
+      "id": "post-headless-chrome-screenshots",
+      "words": 2520
+    },
+    {
+      "slug": "shopify-hydrogen-worth-it",
+      "cat": "ecommerce",
+      "id": "post-shopify-hydrogen-worth-it",
+      "words": 2516
+    },
+    {
+      "slug": "ecommerce-conversion-leaks",
+      "cat": "ecommerce",
+      "id": "post-ecommerce-conversion-leaks",
+      "words": 2549
+    },
+    {
+      "slug": "shopify-performance-optimization",
+      "cat": "ecommerce",
+      "id": "post-shopify-performance-optimization",
+      "words": 2635
+    },
+    {
+      "slug": "custom-vs-premium-shopify-theme",
+      "cat": "ecommerce",
+      "id": "post-custom-vs-premium-shopify-theme",
+      "words": 2537
+    },
+    {
+      "slug": "cro-process-loop",
+      "cat": "ecommerce",
+      "id": "post-cro-process-loop",
+      "words": 2514
+    },
+    {
+      "slug": "posthog-ab-testing-shopify",
+      "cat": "ecommerce",
+      "id": "post-posthog-ab-testing-shopify",
+      "words": 2546
+    },
+    {
+      "slug": "product-page-elements",
+      "cat": "ecommerce",
+      "id": "post-product-page-elements",
+      "words": 2538
+    },
+    {
+      "slug": "shopify-product-schema",
+      "cat": "ecommerce",
+      "id": "post-shopify-product-schema",
+      "words": 2514
+    },
+    {
+      "slug": "figma-to-shopify",
+      "cat": "ecommerce",
+      "id": "post-figma-to-shopify",
+      "words": 2548
+    },
+    {
+      "slug": "shopify-checkout-customization",
+      "cat": "ecommerce",
+      "id": "post-shopify-checkout-customization",
+      "words": 2513
+    },
+    {
+      "slug": "cro-experiment-results",
+      "cat": "ecommerce",
+      "id": "post-cro-experiment-results",
+      "words": 2517
+    },
+    {
+      "slug": "shopify-metafields-performance",
+      "cat": "ecommerce",
+      "id": "post-shopify-metafields-performance",
+      "words": 2905
+    },
+    {
+      "slug": "shopify-subscriptions",
+      "cat": "ecommerce",
+      "id": "post-shopify-subscriptions",
+      "words": 2527
+    },
+    {
+      "slug": "react-native-offline-first",
+      "cat": "mobile",
+      "id": "post-react-native-offline-first",
+      "words": 2636
+    },
+    {
+      "slug": "app-vs-pwa",
+      "cat": "mobile",
+      "id": "post-app-vs-pwa",
+      "words": 2543
+    },
+    {
+      "slug": "expo-in-production",
+      "cat": "mobile",
+      "id": "post-expo-in-production",
+      "words": 2536
+    },
+    {
+      "slug": "react-native-gesture-performance",
+      "cat": "mobile",
+      "id": "post-react-native-gesture-performance",
+      "words": 2520
+    },
+    {
+      "slug": "push-notifications-reliability",
+      "cat": "mobile",
+      "id": "post-push-notifications-reliability",
+      "words": 2528
+    },
+    {
+      "slug": "shared-api-web-mobile",
+      "cat": "mobile",
+      "id": "post-shared-api-web-mobile",
+      "words": 2508
+    },
+    {
+      "slug": "mobile-app-retention",
+      "cat": "mobile",
+      "id": "post-mobile-app-retention",
+      "words": 2574
+    },
+    {
+      "slug": "app-store-rejections",
+      "cat": "mobile",
+      "id": "post-app-store-rejections",
+      "words": 2545
+    },
+    {
+      "slug": "mobile-token-storage",
+      "cat": "mobile",
+      "id": "post-mobile-token-storage",
+      "words": 2523
+    },
+    {
+      "slug": "react-native-deep-linking",
+      "cat": "mobile",
+      "id": "post-react-native-deep-linking",
+      "words": 2526
+    },
+    {
+      "slug": "project-scoping",
+      "cat": "career",
+      "id": "post-project-scoping",
+      "words": 2668
+    },
+    {
+      "slug": "development-process",
+      "cat": "career",
+      "id": "post-development-process",
+      "words": 2530
+    },
+    {
+      "slug": "pricing-ai-accelerated-work",
+      "cat": "career",
+      "id": "post-pricing-ai-accelerated-work",
+      "words": 2500
+    },
+    {
+      "slug": "ai-accelerated-positioning",
+      "cat": "career",
+      "id": "post-ai-accelerated-positioning",
+      "words": 2532
+    },
+    {
+      "slug": "choosing-a-stack-once",
+      "cat": "career",
+      "id": "post-choosing-a-stack-once",
+      "words": 2560
+    },
+    {
+      "slug": "client-objections",
+      "cat": "career",
+      "id": "post-client-objections",
+      "words": 2769
+    },
+    {
+      "slug": "handover-documentation",
+      "cat": "career",
+      "id": "post-handover-documentation",
+      "words": 2538
+    },
+    {
+      "slug": "freelancing-remote-timezones",
+      "cat": "career",
+      "id": "post-freelancing-remote-timezones",
+      "words": 2548
+    },
+    {
+      "slug": "estimation-lessons",
+      "cat": "career",
+      "id": "post-estimation-lessons",
+      "words": 2529
+    },
+    {
+      "slug": "declining-projects",
+      "cat": "career",
+      "id": "post-declining-projects",
+      "words": 2598
     }
   ],
-  "current_category": "performance",
+  "current_category": null,
   "remaining": {
     "ai": [],
     "fullstack": [],
     "backend": [],
     "frontend": [],
-    "performance": [
-      "field-vs-lab-data",
-      "third-party-script-cost",
-      "lazy-load-heavy-libraries",
-      "prefetch-on-hover",
-      "headless-chrome-screenshots"
-    ],
-    "ecommerce": [
-      "shopify-hydrogen-worth-it",
-      "ecommerce-conversion-leaks",
-      "shopify-performance-optimization",
-      "custom-vs-premium-shopify-theme",
-      "cro-process-loop",
-      "posthog-ab-testing-shopify",
-      "product-page-elements",
-      "shopify-product-schema",
-      "figma-to-shopify",
-      "shopify-checkout-customization",
-      "cro-experiment-results",
-      "shopify-metafields-performance",
-      "shopify-subscriptions"
-    ],
-    "mobile": [
-      "react-native-offline-first",
-      "app-vs-pwa",
-      "expo-in-production",
-      "react-native-gesture-performance",
-      "push-notifications-reliability",
-      "shared-api-web-mobile",
-      "mobile-app-retention",
-      "app-store-rejections",
-      "mobile-token-storage",
-      "react-native-deep-linking"
-    ],
-    "career": [
-      "project-scoping",
-      "development-process",
-      "pricing-ai-accelerated-work",
-      "ai-accelerated-positioning",
-      "choosing-a-stack-once",
-      "client-objections",
-      "handover-documentation",
-      "freelancing-remote-timezones",
-      "estimation-lessons",
-      "declining-projects"
-    ]
+    "performance": [],
+    "ecommerce": [],
+    "mobile": [],
+    "career": []
   },
   "note_stopped": "Loop stopped by user after the AI category completed. 89 posts remain across 7 categories; restart with /loop to continue."
 }
