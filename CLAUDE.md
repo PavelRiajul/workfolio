@@ -19,6 +19,22 @@ autonomous SVG mascot). Static Astro site with an optional embedded Sanity CMS.
   `public/fonts/`) and icons are inline SVG (`src/lib/icons.ts`). Both used to be
   render-blocking hops to `fonts.googleapis.com` and `cdnjs.cloudflare.com`. Don't add a CDN
   `<link>` back.
+- **One `@font-face` per family per subset — never one per weight.** Geist, Geist Mono and
+  Inter are variable fonts carrying `wght 100..900` in a single file, so `font-weight: 100 900`
+  is declared once and the browser interpolates. Google's CSS API still emits a face per weight
+  and the original generator copied that, which meant four byte-identical `geist-*.woff2` files
+  were all declared, all matched, and all downloaded: 351 KB of fonts on the home page against
+  122 KB of distinct bytes. It also silently broke Inter 700 — no 700 face was declared, so
+  every `<strong>` in the blog clamped to 600. Caveat is genuinely static and stays
+  weight-specific; it drives only the `.brand-sig` wordmark and is subset to exactly the
+  codepoints its `unicode-range` claims. **Subsetting narrower than the declared range is a
+  bug** — the browser picks a face by range and then falls back per missing glyph, so an
+  accented name would drop that one letter to `cursive`.
+- **`vercel.json` sets the cache headers for `/public` assets.** Vercel gives hashed
+  `_astro/*` output a year and everything in `public/` `max-age=0, must-revalidate`, so all
+  four fonts were revalidated on every repeat visit before text could render. Fonts are now
+  `immutable` for a year, which means **changing a font requires changing its filename** —
+  they carry no content hash.
 
 ## Commands
 ```bash

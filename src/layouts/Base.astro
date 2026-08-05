@@ -143,19 +143,23 @@ const graph = {
 
     <!-- Type is self-hosted (src/styles/fonts.css). Preload only the two faces
          above the fold — the h1 and body copy — so they don't wait for the
-         stylesheet to parse. Preloading more would compete with the LCP. -->
+         stylesheet to parse. Preloading more would compete with the LCP.
+
+         Both are variable: one file per family carries every weight, so these
+         two preloads now cover all four Geist weights and all three Inter
+         weights rather than one each. -->
     <link
       rel="preload"
       as="font"
       type="font/woff2"
-      href="/fonts/geist-700-latin.woff2"
+      href="/fonts/geist-latin.woff2"
       crossorigin
     />
     <link
       rel="preload"
       as="font"
       type="font/woff2"
-      href="/fonts/inter-400-latin.woff2"
+      href="/fonts/inter-latin.woff2"
       crossorigin
     />
   </head>
