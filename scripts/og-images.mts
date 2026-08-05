@@ -14,12 +14,13 @@ import { mkdirSync, existsSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import puppeteer from 'puppeteer-core';
+import { loadEnv } from 'vite';
 
 import {
   site,
   home,
   about,
-  posts,
+  posts as seededPosts,
   projects,
   servicesPage,
   stackPage,
@@ -28,10 +29,60 @@ import {
   blogPage,
   startPage,
 } from '../src/data/content.ts';
+import { categoryLabel } from '../src/lib/categories.ts';
 
 const CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const OUT = resolve(dirname(fileURLToPath(import.meta.url)), '../public/og');
 mkdirSync(OUT, { recursive: true });
+
+// Plain `node` doesn't read .env, and reaching for process.env alone would make
+// this fall back to the seed silently on a machine that is configured correctly.
+const {
+  PUBLIC_SANITY_PROJECT_ID: PROJECT_ID = 'placeholder',
+  PUBLIC_SANITY_DATASET: DATASET = 'production',
+} = loadEnv(process.env.NODE_ENV || 'development', process.cwd(), '');
+
+/**
+ * The posts that actually have pages, which is not the same as the seeded ones.
+ *
+ * This script runs outside the Astro runtime, so it can't use the loaders in
+ * `src/lib/content.ts` — hence the direct query, exactly as `blogLastmod()` in
+ * `astro.config.mjs` does it. It applies the same rule the loaders do: the live
+ * documents decide membership, the seed fills any field they're missing.
+ *
+ * Importing the seed array alone is what left 97 of 106 posts on the generic
+ * fallback card — `src/data/content.ts` still holds the original ten, while
+ * every post published since lives only in Sanity.
+ */
+async function publishedPosts() {
+  const seeded = new Map(seededPosts.map((p) => [p.slug, p]));
+  if (PROJECT_ID === 'placeholder') return [...seeded.values()];
+
+  try {
+    const query = encodeURIComponent(
+      '*[_type=="post" && defined(body)]{"slug":slug.current,title,excerpt,readTime,category,categoryLabel}'
+    );
+    const res = await fetch(
+      `https://${PROJECT_ID}.api.sanity.io/v2024-10-01/data/query/${DATASET}?query=${query}`
+    );
+    if (!res.ok) throw new Error(`Sanity responded ${res.status}`);
+
+    const { result = [] } = await res.json();
+    const live = result.filter((d: { slug?: string }) => d.slug);
+    if (!live.length) throw new Error('no published posts returned');
+
+    // Live wins per field, seed fills the gaps — `withFallback`, by hand.
+    return live.map((doc: Record<string, unknown>) => ({
+      ...(seeded.get(doc.slug as string) ?? {}),
+      ...Object.fromEntries(Object.entries(doc).filter(([, v]) => v != null)),
+    }));
+  } catch (err) {
+    console.warn(`  ! Sanity unavailable (${(err as Error).message}) — using seeded posts only.`);
+    return [...seeded.values()];
+  }
+}
+
+const posts = await publishedPosts();
 
 /** A card is a route + the two lines of text that go on it. */
 type Card = { file: string; eyebrow: string; title: string; sub: string };
@@ -61,9 +112,12 @@ const cards: Card[] = [
       title: p.title,
       sub: p.summary,
     })),
+  // `categoryLabel` is an optional per-post override, so derive it the way the
+  // pages do rather than reading the field — a post that left it blank would
+  // otherwise put "undefined" on its card.
   ...posts.map((p) => ({
     file: fileFor(`/blog/${p.slug}`),
-    eyebrow: `${p.categoryLabel} · ${p.readTime}`,
+    eyebrow: `${categoryLabel(p.category, p.categoryLabel)} · ${p.readTime}`,
     title: p.title,
     sub: p.excerpt,
   })),
