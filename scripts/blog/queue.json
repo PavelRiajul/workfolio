@@ -406,6 +406,12 @@
       "cat": "performance",
       "id": "post-cloudflare-pages-vs-vercel",
       "words": 2501
+    },
+    {
+      "slug": "bundle-splitting",
+      "cat": "performance",
+      "id": "post-bundle-splitting",
+      "words": 2501
     }
   ],
   "current_category": "performance",
@@ -415,7 +421,6 @@
     "backend": [],
     "frontend": [],
     "performance": [
-      "bundle-splitting",
       "image-optimization-strategy",
       "field-vs-lab-data",
       "third-party-script-cost",
