@@ -400,6 +400,12 @@
       "cat": "performance",
       "id": "post-near-zero-cls",
       "words": 2500
+    },
+    {
+      "slug": "cloudflare-pages-vs-vercel",
+      "cat": "performance",
+      "id": "post-cloudflare-pages-vs-vercel",
+      "words": 2501
     }
   ],
   "current_category": "performance",
@@ -409,7 +415,6 @@
     "backend": [],
     "frontend": [],
     "performance": [
-      "cloudflare-pages-vs-vercel",
       "bundle-splitting",
       "image-optimization-strategy",
       "field-vs-lab-data",
