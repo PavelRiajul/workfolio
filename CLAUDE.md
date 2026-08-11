@@ -47,9 +47,30 @@ npm run og            # regenerate the per-page social cards → public/og/ (nee
 npm run seed:build    # src/data/content.ts → sanity/seed.ndjson
 npm run seed:import   # ...then import it into the production dataset (needs `sanity login`)
 npm run schema:deploy # push the schema to the Content Lake (needs `sanity login`)
+npm run webhook       # wire Sanity publishes → Vercel rebuild (needs `sanity login` + `vercel login`)
 ```
 `.env` (see `.env.example`): `PUBLIC_SANITY_PROJECT_ID=1tfx8i80`, `PUBLIC_SANITY_DATASET=production`.
 Set the project id to `placeholder` to run fully offline against `src/data/content.ts`.
+**Without a `.env` the project id is `placeholder`, so `safeFetch` short-circuits to the seed and
+nothing authored in the Studio can ever appear** — including in production, where the same two
+vars must be set in the Vercel project.
+
+**Publishing does not reach the site on its own.** The build is static, so every loader in
+`src/lib/content.ts` runs once at build time; the Content Lake changes and the deployed HTML does
+not. `scripts/setup-webhook.mts` (`npm run webhook`) converges a Sanity webhook onto a Vercel
+Deploy Hook so a publish triggers a rebuild. It reads both tokens from the CLI logins you already
+have — never from arguments — and filters on `!(_id in path("drafts.**"))` because otherwise every
+Studio autosave is an `update` event and the project sits in a rebuild loop against the
+60-triggers-per-hour cap. It matches the webhook by name, compares an explicit field list, and
+**leaves an unchanged webhook alone**; on drift it deletes and recreates, because Sanity has no
+general update endpoint — `PATCH .../hooks/projects/{id}/{hookId}` accepts only `isDisabledByUser`
+and `PUT` on that path 404s. Compare explicitly, not by deep-equal: the API decorates responses
+with `id`, `createdAt` and a legacy top-level `filter: null` superseded by `rule.filter`, so a blind
+comparison reports drift every run and recreates the webhook forever.
+**The deploy hook itself must be created by hand once** (Vercel Settings → Git → Deploy Hooks):
+`deployHooks` is read-only on `PATCH /v9/projects/{id}` and the dashboard is its only writer. The
+script reads existing hooks and only asks you to click when it finds none. Treat the resulting URL
+as a credential — anyone holding it can spend your build minutes.
 
 **The Studio stays embedded at `/admin`** (single package, `studioBasePath` in `astro.config.mjs`) —
 deliberately not split into `studio/` + `web/`. Note this means the Studio bundle builds with the

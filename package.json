@@ -14,6 +14,7 @@
     "seed:import": "npm run seed:build && sanity dataset import sanity/seed.ndjson production --replace",
     "schema:deploy": "sanity schema deploy",
     "icons": "node --experimental-strip-types scripts/fetch-icons.mts",
+    "webhook": "node --experimental-strip-types scripts/setup-webhook.mts",
     "blog:check": "node scripts/blog/anatomy-check.mjs",
     "blog:push": "node scripts/blog/push.mjs",
     "blog:queue": "node -e \"const q=require('./scripts/blog/queue.json');const left=Object.entries(q.remaining).filter(([,v])=>v.length);console.log(q.done.length+' published, '+left.reduce((a,[,v])=>a+v.length,0)+' remaining');console.log('next: '+q.current_category);for(const [c,v] of left)console.log('  '+c.padEnd(12)+v.length+'  '+v.slice(0,3).join(', '))\"",
