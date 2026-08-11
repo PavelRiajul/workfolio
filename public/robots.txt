@@ -33,6 +33,9 @@ Disallow: /admin
 Disallow: /admin/
 
 # A curated map of the site for agents that look for one:
-# https://riajulislam.dev/llms.txt
+# https://workfolio-eight.vercel.app/llms.txt
 
-Sitemap: https://riajulislam.dev/sitemap-index.xml
+# This file is static, so it cannot read `site` from astro.config.mjs — the host
+# below has to be updated by hand whenever that one changes. A Sitemap: line
+# pointing at a different host than the one serving robots.txt is ignored.
+Sitemap: https://workfolio-eight.vercel.app/sitemap-index.xml

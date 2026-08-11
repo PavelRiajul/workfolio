@@ -81,7 +81,19 @@ const lastmodByPath = await blogLastmod();
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://riajulislam.dev',
+  // The canonical origin — it must be a host that actually resolves.
+  //
+  // This was `https://riajulislam.dev`, which has no A record and no NS
+  // delegation: the domain is not registered. Every canonical, `og:url`,
+  // sitemap `<loc>`, RSS `<link>` and JSON-LD `@id` is built from this value,
+  // so the whole site was telling crawlers "the real copy of this page lives
+  // over there" and pointing at a host that fails to resolve — which suppresses
+  // indexing far more effectively than having no canonical at all.
+  //
+  // Switch this back the moment riajulislam.dev is registered and pointed at
+  // Vercel, and change `Sitemap:` in `public/robots.txt` with it — that file is
+  // static, so it does not read this value.
+  site: 'https://workfolio-eight.vercel.app',
   // Secretly fetch a page on link hover so in-site navigation feels instant.
   prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
   // CRO used to be its own page; it now lives inside /shopify.
