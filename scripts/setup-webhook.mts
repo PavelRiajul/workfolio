@@ -135,7 +135,7 @@ async function findDeployHook(token: string, projectId: string, teamId: string) 
   die(
     `No deploy hook on this project yet, and Vercel's API cannot create one.\n\n` +
       `  Create it once, by hand:\n` +
-      `    1. https://vercel.com/sirajs/workfolio/settings/git\n` +
+      `    1. https://vercel.com/selfworks/workfolio/settings/git\n` +
       `    2. Deploy Hooks → name it "Sanity", branch "${branch}" → Create\n` +
       `    3. Copy the URL, then re-run:  npm run webhook\n\n` +
       `  (Or pass it directly: DEPLOY_HOOK_URL=https://... npm run webhook)`

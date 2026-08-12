@@ -68,7 +68,7 @@ export const site: SiteSettings = {
   footerWordmark: 'Riajul',
   whatsappPhone: '8801XXXXXXXXX',
   whatsappMessage: 'Hi Riajul — I found you through your portfolio.',
-  website: 'riajulislam.dev',
+  website: 'pavelriajul.com',
   // Add a platform here (or in the Studio) and it appears in the footer, the
   // résumé contact line and the Person schema's sameAs — no code change.
   socialLinks: [

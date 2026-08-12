@@ -83,17 +83,17 @@ const lastmodByPath = await blogLastmod();
 export default defineConfig({
   // The canonical origin — it must be a host that actually resolves.
   //
-  // This was `https://riajulislam.dev`, which has no A record and no NS
-  // delegation: the domain is not registered. Every canonical, `og:url`,
-  // sitemap `<loc>`, RSS `<link>` and JSON-LD `@id` is built from this value,
-  // so the whole site was telling crawlers "the real copy of this page lives
-  // over there" and pointing at a host that fails to resolve — which suppresses
-  // indexing far more effectively than having no canonical at all.
+  // Every canonical, `og:url`, sitemap `<loc>`, RSS `<link>` and JSON-LD `@id`
+  // is built from this value, so a host that fails to resolve tells crawlers
+  // "the real copy of this page lives over there" and points them at nothing —
+  // which suppresses indexing far more effectively than having no canonical at
+  // all. That is what `https://riajulislam.dev` did here: never registered, no
+  // A record, no NS delegation. It was parked on the Vercel preview host until
+  // a real domain existed.
   //
-  // Switch this back the moment riajulislam.dev is registered and pointed at
-  // Vercel, and change `Sitemap:` in `public/robots.txt` with it — that file is
-  // static, so it does not read this value.
-  site: 'https://workfolio-eight.vercel.app',
+  // Change `Sitemap:` in `public/robots.txt` with this — that file is static,
+  // so it does not read this value.
+  site: 'https://pavelriajul.com',
   // Secretly fetch a page on link hover so in-site navigation feels instant.
   prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
   // CRO used to be its own page; it now lives inside /shopify.
