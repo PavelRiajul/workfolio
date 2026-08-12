@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import WhatsApp from '../components/WhatsApp.astro';
 import BackToTop from '../components/BackToTop.astro';
+import Analytics from '@vercel/analytics/astro';
 import { publicFileExists } from '../lib/public-file';
 import { getSite } from '../lib/content';
 import { personSchema, websiteSchema, webPageSchema, autoBreadcrumbs } from '../lib/schema';
@@ -201,6 +202,16 @@ const graph = {
     </div>
 
     {backToTop && <BackToTop />}
+
+    {/*
+      Vercel Web Analytics. Renders a <vercel-analytics> custom element whose
+      constructor fires the pageview, which is what makes it work under
+      <ClientRouter />: the module defining the element evaluates once per
+      session, but every swap inserts a fresh element, and upgrading that
+      element runs the constructor again with the new page's data-pathname.
+      No astro:page-load binding needed, and nothing to tear down.
+    */}
+    <Analytics />
 
     <script>
       import '../scripts/main';
