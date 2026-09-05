@@ -95,6 +95,45 @@ export interface ShopifyService {
 }
 
 /**
+ * A kind of commerce build — one chip above the Shopify project grid.
+ *
+ * Categories are documents rather than a string field on the project so a chip
+ * and a project can't disagree on spelling: the project holds a reference, and
+ * the label is authored in exactly one place. Renaming a category renames its
+ * chip everywhere without touching a single project.
+ */
+export interface ShopifyCategory {
+  /** The filter value the chip matches against. Stable — don't rename it. */
+  value: string;
+  /** Visible chip text, and the note shown on each card in this category. */
+  label: string;
+  order: number;
+}
+
+/**
+ * A piece of Shopify work, shown only on /shopify.
+ *
+ * Deliberately its own document type rather than a `project` with a commerce
+ * tag: this carries just the card, and someone browsing commerce work sorts by
+ * the kind of build (subscriptions, headless, migration), not by stack. It has
+ * no case study of its own — `caseStudySlug` points at the `project` that
+ * documents it, when one exists.
+ */
+export interface ShopifyProject {
+  title: string;
+  slug: string;
+  order: number;
+  /** Resolved from the category reference; null while a doc is half-authored. */
+  category: ShopifyCategory | null;
+  /** The "Shopify · Next.js" pill on the card. */
+  stack: string;
+  blurb: string;
+  image?: SanityImage | null;
+  /** Slug of the `project` case study this links to. Null = card doesn't link. */
+  caseStudySlug: string | null;
+}
+
+/**
  * A top-level offering (AI web development, MVP engineering, commerce, APIs).
  * Rendered by the home ServiceStack and the /services showcase.
  */

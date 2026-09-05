@@ -433,6 +433,35 @@ function initFeatureLists() {
   on(narrow, 'change', apply);
 }
 
+/* ---- Project filter chips ---------------------------------------------- */
+/* Used by /work and by the Shopify page's project grid — both render the same
+   `[data-filter]` chips over a `.work-grid` of cards, so the handler lives
+   here rather than inline on two pages. `data-tags` holds whatever that page
+   filters by — stack tags on /work, one commerce category on /shopify — so
+   the two taxonomies need no second code path. Listeners land on elements
+   inside the swapped body, so they're collected with them and need no
+   teardown; `boot()` re-binds them to the incoming page. */
+function initFilters() {
+  const chips = document.querySelectorAll<HTMLElement>('[data-filter]');
+  const cards = document.querySelectorAll<HTMLElement>('.work-grid [data-tags]');
+  if (!chips.length || !cards.length) return;
+  chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      const f = chip.dataset.filter;
+      chips.forEach((c) => {
+        const active = c === chip;
+        c.classList.toggle('active', active);
+        c.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+      cards.forEach((card) => {
+        const tags = (card.dataset.tags || '').split(',');
+        const show = f === 'all' || (!!f && tags.includes(f));
+        card.style.display = show ? '' : 'none';
+      });
+    });
+  });
+}
+
 /* ---- Contents list: collapsed on phones -------------------------------- */
 /* Same reasoning as the feature lists, and the same no-JS behaviour: the
    markup ships `open` so every entry is in the DOM for a crawler and for
@@ -605,6 +634,7 @@ function boot() {
   initHeroTilt();
   initShopifyStack();
   initFeatureLists();
+  initFilters();
   initToc();
   initBarGrow();
   initTabSpy();

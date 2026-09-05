@@ -9,6 +9,8 @@ import shopifyPage from './shopifyPage';
 import { workPage, blogPage, startPage, caseStudyPage } from './simplePages';
 import service from './service';
 import shopifyService from './shopifyService';
+import shopifyCategory from './shopifyCategory';
+import shopifyProject from './shopifyProject';
 import project from './project';
 import post from './post';
 
@@ -30,6 +32,8 @@ export const schemaTypes = [
   // collections
   service,
   shopifyService,
+  shopifyCategory,
+  shopifyProject,
   project,
   post,
 ];

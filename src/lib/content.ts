@@ -4,6 +4,7 @@ import { safeFetch } from './sanity';
 import * as fallback from '../data/content';
 import type {
   SiteSettings, HomeContent, Project, Post, AboutContent, ResumeContent, Service, ShopifyService,
+  ShopifyCategory, ShopifyProject,
   ServicesPageContent, StackPageContent, ShopifyPageContent, WorkPageContent, BlogPageContent, StartPageContent,
   CaseStudyContent,
 } from './types';
@@ -58,6 +59,29 @@ export function getShopifyServices(): Promise<ShopifyService[]> {
     }`,
     {},
     fallback.shopifyServices
+  );
+}
+
+export function getShopifyCategories(): Promise<ShopifyCategory[]> {
+  return safeFetch<ShopifyCategory[]>(
+    `*[_type == "shopifyCategory"] | order(order asc){ "value": value.current, label, order }`,
+    {},
+    fallback.shopifyCategories
+  );
+}
+
+export function getShopifyProjects(): Promise<ShopifyProject[]> {
+  return safeFetch<ShopifyProject[]>(
+    // The category is dereferenced here rather than resolved on the page, so a
+    // card and its chip read the same authored label. `caseStudySlug` points at
+    // a `project` document — these carry no case study of their own.
+    `*[_type == "shopifyProject"] | order(order asc){
+      title, "slug": slug.current, order, stack, blurb, ${imageProjection},
+      "category": category->{ "value": value.current, label, order },
+      "caseStudySlug": caseStudy->slug.current
+    }`,
+    {},
+    fallback.shopifyProjects
   );
 }
 
