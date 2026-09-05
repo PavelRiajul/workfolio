@@ -628,6 +628,10 @@ html.lenis, html.lenis body { height: auto; }
 .calc-rows b { font-family: var(--font-display); font-weight: 600; font-size: var(--text-lg); color: #fff; }
 .calc-rows .up b { color: #84b94f; }
 .calc-note { font-size: var(--text-sm); color: var(--color-grey-3); margin-top: 18px; }
+/* Marks a figure as an illustrative example rather than a client result. Grey-3
+   is the lightest grey that clears AA on white — this is a disclosure, so it
+   has to stay readable rather than fade into the background. */
+.illus-note { font-size: var(--text-sm); line-height: 1.6; color: var(--color-grey-3); max-width: 62ch; margin: var(--space-md) 0 0; }
 
 /* Funnel leak + fixes */
 .lf { display: grid; grid-template-columns: minmax(0,0.95fr) minmax(0,1.05fr); gap: var(--space-lg); margin-top: 52px; align-items: start; }

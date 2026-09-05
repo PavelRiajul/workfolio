@@ -260,7 +260,7 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
               {i > 0 && (
                 <div class="leak-gap"><span class="leak-drop">{f.drop}</span><span class="leak-why">{f.why}</span></div>
               )}
-              <div class="leak-stage" style={`--w:${f.width}`}>
+              <div class="leak-stage" style={f.width ? `--w:${f.width}` : undefined}>
                 <span class="leak-name">{f.name}</span>
                 <span class="leak-val" data-count={String(f.count)} data-sep="true">{f.count.toLocaleString('en-US')}</span>
               </div>
@@ -272,11 +272,12 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
             <div class="fix">
               <span class="fix-ic"><Icon name={`fa-solid ${f.icon}`} /></span>
               <div class="fix-body"><h3>{f.title}</h3><p>{f.body}</p></div>
-              <div class="fix-impact"><span>Impact</span><div class="fix-bar"><i class="bargrow" style={`width:${f.barWidth}`}></i></div></div>
+              <div class="fix-impact"><span>Impact</span><div class="fix-bar"><i class="bargrow" style={f.barWidth ? `width:${f.barWidth}` : undefined}></i></div></div>
             </div>
           ))}
         </div>
       </div>
+      {page.funnelNote && <p class="illus-note" data-reveal>{page.funnelNote}</p>}
     </div>
   </section>
 
@@ -366,6 +367,7 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
           ))}
         </div>
       </div>
+      {page.experimentsNote && <p class="illus-note" data-reveal>{page.experimentsNote}</p>}
     </div>
   </section>
 

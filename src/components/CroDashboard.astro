@@ -4,6 +4,12 @@ import Icon from './Icon.astro';
 // a winner, and a checkout funnel. Every number comes from the Shopify page
 // document. Wrap it in an element carrying `data-bars` (so the bars grow on
 // scroll) — e.g. <div class="cro-viz" data-bars>.
+//
+// Bar widths are written only when there is a value. An absent one used to
+// emit `--w:null`, and that is worse than it looks: the custom property *is*
+// then defined, so the `var(--w, 100%)` fallback in global.css never fires and
+// the width resets to `auto` — a silently full-width bar rather than the
+// designed default.
 import type { ShopifyPageContent } from '../lib/types';
 
 interface Props {
@@ -27,7 +33,7 @@ const { data } = Astro.props;
         <span class="cro-ab-name">{v.name} {v.winner && v.winnerLabel && <em>{v.winnerLabel}</em>}</span>
         <b>{v.value}</b>
       </div>
-      <div class="cro-ab-bar"><i class="bargrow" style={`width:${v.barWidth}`}></i></div>
+      <div class="cro-ab-bar"><i class="bargrow" style={v.barWidth ? `width:${v.barWidth}` : undefined}></i></div>
     </div>
   ))}
   <div class="cro-ab-foot">{data.abFoot}</div>
@@ -39,7 +45,7 @@ const { data } = Astro.props;
     {data.funnel.map((r) => (
       <div class="cro-fn-row">
         <span>{r.step}</span>
-        <div class="cro-fn-bar bargrow" style={`--w:${r.barWidth}`}></div>
+        <div class="cro-fn-bar bargrow" style={r.barWidth ? `--w:${r.barWidth}` : undefined}></div>
         <b>{r.value}</b>
       </div>
     ))}

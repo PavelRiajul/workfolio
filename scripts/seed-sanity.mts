@@ -122,12 +122,16 @@ docs.push({
   education: keyed(resume.education, 'eduItem'),
 });
 
+// `velocity` is seed-only (tier b) — it isn't in the Studio schema or the GROQ
+// projection, so writing it here would only put an uneditable "unknown field"
+// into the dataset. Stripped rather than left to the spread.
+const { velocity: _velocity, ...servicesPageDoc } = servicesPage;
+
 docs.push({
   _id: 'servicesPage',
   _type: 'servicesPage',
-  ...servicesPage,
+  ...servicesPageDoc,
   hero: { ...servicesPage.hero, stats: keyed(servicesPage.hero.stats, 'textStat') },
-  velocity: { ...servicesPage.velocity, rows: keyed(servicesPage.velocity.rows, 'velocityRow') },
   engagements: keyed(servicesPage.engagements, 'engagement'),
   faqs: keyed(servicesPage.faqs, 'faqItem'),
 });
@@ -144,18 +148,16 @@ docs.push({
   })),
 });
 
+// Same as `velocity` above: `croDashboard` is seed-only (tier b).
+const { croDashboard: _croDashboard, ...shopifyPageDoc } = shopifyPage;
+
 docs.push({
   _id: 'shopifyPage',
   _type: 'shopifyPage',
-  ...shopifyPage,
+  ...shopifyPageDoc,
   hero: { ...shopifyPage.hero, stats: keyed(shopifyPage.hero.stats, 'textStat') },
   approach: keyed(shopifyPage.approach, 'numberedCard'),
   numbers: keyed(shopifyPage.numbers, 'countStat'),
-  croDashboard: {
-    ...shopifyPage.croDashboard,
-    abVariants: keyed(shopifyPage.croDashboard.abVariants, 'abVariant'),
-    funnel: keyed(shopifyPage.croDashboard.funnel, 'funnelBar'),
-  },
   funnel: keyed(shopifyPage.funnel, 'funnelStage'),
   fixes: keyed(shopifyPage.fixes, 'croFix'),
   croProcess: keyed(shopifyPage.croProcess, 'numberedCard'),

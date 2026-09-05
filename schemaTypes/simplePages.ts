@@ -110,6 +110,14 @@ export const startPage = defineType({
       group: 'intro',
     }),
     defineField({ name: 'lede', title: 'Lede', type: 'text', rows: 4, group: 'intro' }),
+    defineField({
+      name: 'ledeShort',
+      title: 'Lede (phones)',
+      description: 'A genuinely shorter sentence, not a truncation. Falls back to the lede if empty.',
+      type: 'text',
+      rows: 2,
+      group: 'intro',
+    }),
     defineField({ name: 'callTabLabel', title: '"Book a call" tab label', type: 'string', group: 'intro' }),
     defineField({ name: 'formTabLabel', title: '"Send a message" tab label', type: 'string', group: 'intro' }),
     defineField({
