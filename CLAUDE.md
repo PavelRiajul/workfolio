@@ -124,7 +124,8 @@ to crawlers, screen readers and AI retrievers while looking correct on screen.
 **To add/change content:** edit `src/data/content.ts`, add/update the type in `src/lib/types.ts`,
 and (if it's a new type) add a loader + GROQ projection in `src/lib/content.ts`. Loaders:
 `getSite, getHome, getServicesPage, getShopifyPage, getWorkPage, getBlogPage, getStartPage,
-getCaseStudy, getAbout, getResume, getServices, getShopifyServices, getProjects, getProject, getPosts`.
+getCaseStudy, getAbout, getResume, getServices, getShopifyServices, getShopifyCategories,
+getShopifyProjects, getProjects, getProject, getPosts`.
 
 **Blog specifics.** `src/lib/portable.ts` is the shared brain: `headings()` decides heading
 ids and is used by *both* the renderer and the TOC (two implementations would drift and leave
@@ -197,6 +198,19 @@ Two service datasets, deliberately separate:
 - `services` (`Service[]`) — the four top-level offers: **AI Web Development, MVP Engineering, Shopify & CRO, Full-Stack & APIs**. Drives the home stack and `/services`.
 - `shopifyServices` (`ShopifyService[]`) — the five Shopify sub-services shown only on `/shopify`.
 
+**Shopify work is its own document type, not a tagged `project`.** `shopifyProject` carries only
+the grid card and sorts by `shopifyCategory` — the kind of commerce build (headless,
+subscriptions, mobile) — because someone reading `/shopify` asks "have you done a subscription
+store?", where a visitor on `/work` filters by stack. It holds no case study: `caseStudy`
+references the `project` that documents it, and a card with no reference renders unlinked rather
+than pointing at a page that doesn't exist. The **categories are documents, not a string field**,
+for the same reason blog categories live in one list — a chip and a project referencing it can't
+disagree on spelling, and renaming a category renames its chip everywhere. `value` is the filter
+key and must stay stable; rename `label` instead. A category only earns a chip when it holds some
+but not all of the projects; one holding every project does what "All" already does.
+`WorkCard.astro` renders both types (`'category' in p` picks the branch) and puts whatever the
+page filters by into `data-tags`, so `initFilters` needs no second code path.
+
 ## Routes (`src/pages/`)
 | Path | File | Notes |
 | --- | --- | --- |
@@ -205,7 +219,7 @@ Two service datasets, deliberately separate:
 | `/work/[slug]` | `work/[slug].astro` | Case study — `halo`, `vellum`, `northwind`, `pulse`, `anchor` |
 | `/services` | `services.astro` | Services landing — hero (velocity card `.velo`), AI-method cards + caveat, the four services as `svcf` rows (`OfferVisual`), engagement models, process, FAQ |
 | `/stack` | `stack.astro` | The toolbox and the four locked build templates (Landing · Web App · B2B · AI). Linked from `/services` and the footer, not the tab bar. Source: `docs/mvp-stack-reference.md` — **only the publishable parts**; pricing, market strategy and studio gaps stay in that doc. |
-| `/shopify` | `shopify.astro` | **Shopify + CRO merged.** Hero (Shopify 3D scene), brands, 5 Shopify services (`ServiceVisual`), approach, dark by-the-numbers, then the CRO half at `#cro`: `CroDashboard`, funnel leak + fixes, CRO loop (`#cro-process`), ROI calculator (`#cro-calc`, inline script), experiments leaderboard, featured work, testimonials, merged FAQ |
+| `/shopify` | `shopify.astro` | **Shopify + CRO merged.** Hero (Shopify 3D scene), brands, 5 Shopify services (`ServiceVisual`), approach, dark by-the-numbers, then the CRO half at `#cro`: `CroDashboard`, funnel leak + fixes, CRO loop (`#cro-process`), ROI calculator (`#cro-calc`, inline script), experiments leaderboard, the Shopify work grid at `#sh-work` (category chips), testimonials, merged FAQ |
 | `/cro` | — | Retired; redirects to `/shopify#cro` via `redirects` in `astro.config.mjs` |
 | `/about` | `about.astro` | Bio, photo gallery, traits |
 | `/blog` | `blog.astro` | Featured post + category-filtered grid. A card only links once its post has a `body` |

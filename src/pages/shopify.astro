@@ -1,21 +1,37 @@
 ---
 import Icon from '../components/Icon.astro';
 import Base from '../layouts/Base.astro';
-import Placeholder from '../components/Placeholder.astro';
 import ClosingCta from '../components/ClosingCta.astro';
 import ServiceVisual from '../components/ServiceVisual.astro';
 import CroDashboard from '../components/CroDashboard.astro';
 import Testimonials from '../components/Testimonials.astro';
 import Faq from '../components/Faq.astro';
-import { getProjects, getShopifyServices, getShopifyPage } from '../lib/content';
+import WorkCard from '../components/WorkCard.astro';
+import {
+  getShopifyServices, getShopifyPage, getWorkPage,
+  getShopifyProjects, getShopifyCategories,
+} from '../lib/content';
 import { faqSchema, shopifyServicesSchema } from '../lib/schema';
 import Headline from '../components/Headline.astro';
 
-const projects = await getProjects();
 const services = await getShopifyServices();
 const page = await getShopifyPage();
-const shopifyProjects = projects.filter((p) => p.tags.includes('shopify'));
-const featured = shopifyProjects[0];
+// Chips here sort by the kind of commerce build, not by stack — someone on
+// this page is asking "have you done a subscription store?", not "have you
+// used Next.js?" (that second question is what /work's tag chips are for).
+// Only categories that actually have work get a chip, and only if they split
+// the grid: a category holding every project does what "All" already does.
+const shopifyProjects = await getShopifyProjects();
+const categories = (await getShopifyCategories())
+  .filter((c) => {
+    const held = shopifyProjects.filter((p) => p.category?.value === c.value).length;
+    return held > 0 && held < shopifyProjects.length;
+  })
+  .map((c) => ({ label: c.label, href: c.value }));
+// The "All" chip is authored copy, so it's borrowed from the Work page's
+// filter list rather than written here.
+const allFilter = (await getWorkPage()).filters.find((f) => f.href === 'all');
+const filters = allFilter && categories.length ? [allFilter, ...categories] : [];
 
 const heroLines = page.hero.headlineLines;
 const brandsTitle = page.brandsHeading.title.split('\n');
@@ -342,7 +358,7 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
   </section>
 
   <!-- Featured work -->
-  {featured && (
+  {shopifyProjects.length > 0 && (
     <section id="sh-work" class="section section-bordered anchor">
       <div class="wrap">
         <div class="work-head" data-reveal>
@@ -354,21 +370,16 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
           </div>
           <a href={page.featuredCta.href} class="btn btn-light btn-sm">{page.featuredCta.label}</a>
         </div>
-        <a href={`/work/${featured.slug}`} class="post-feature stack-lg" data-reveal>
-          <div class="cover"><Placeholder label={`${featured.title} — ${featured.type}`} image={featured.image} src={`/work/${featured.slug}.jpg`} /></div>
-          <div class="pf-body">
-            <div class="pf-meta">
-              {featured.pills.map((p) => <span class="pf-badge">{p}</span>)}
-            </div>
-            <h3 class="post-title">{featured.title}</h3>
-            <p>{featured.summary}</p>
-            <div class="sh-feat-stats">
-              {featured.outcomes.slice(0, 3).map((o) => (
-                <div><b>{o.stat}</b><span>{o.label}</span></div>
-              ))}
-            </div>
+        {filters.length > 0 && (
+          <div class="filters stack-lg" data-reveal>
+            {filters.map((f, i) => (
+              <button class={`chip ${i === 0 ? 'active' : ''}`} data-filter={f.href} aria-pressed={i === 0 ? 'true' : 'false'}>{f.label}</button>
+            ))}
           </div>
-        </a>
+        )}
+        <div class="work-grid">
+          {shopifyProjects.map((p) => <WorkCard project={p} />)}
+        </div>
       </div>
     </section>
   )}

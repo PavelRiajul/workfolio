@@ -15,6 +15,8 @@ import type {
   ResumeContent,
   Service,
   ShopifyService,
+  ShopifyCategory,
+  ShopifyProject,
   ServicesPageContent,
   StackPageContent,
   ShopifyPageContent,
@@ -639,6 +641,56 @@ export const projects: Project[] = [
     year: '2026', pills: [], summary: '', meta: [],
     challenge: [], approach: [], insights: [], processSteps: [],
     screens: [], mobileScreens: [], outcomes: [], outcomesNote: '',
+  },
+];
+
+/**
+ * The chips above the Shopify project grid. `value` is what a project points
+ * at, so it has to stay stable — rename the `label` freely, never the value.
+ */
+export const shopifyCategories: ShopifyCategory[] = [
+  { value: 'headless', label: 'Headless Storefront', order: 1 },
+  { value: 'subscriptions', label: 'Subscriptions', order: 2 },
+  { value: 'mobile', label: 'Mobile Commerce', order: 3 },
+  { value: 'migration', label: 'Replatform', order: 4 },
+];
+
+const category = (value: string) =>
+  shopifyCategories.find((c) => c.value === value) ?? null;
+
+/**
+ * Shopify work, shown only on /shopify. Separate from `projects` on purpose —
+ * see the ShopifyProject docblock. Only Vellum has a case study behind it; the
+ * rest are placeholders to fill the grid until real work replaces them.
+ */
+export const shopifyProjects: ShopifyProject[] = [
+  {
+    title: 'Vellum', slug: 'vellum-commerce', order: 1,
+    category: category('headless'), stack: 'Shopify · Next.js',
+    blurb:
+      'A headless Shopify storefront with a custom checkout, sub-second loads and a CMS the team actually enjoys.',
+    image: null, caseStudySlug: 'vellum',
+  },
+  {
+    title: 'Kindling', slug: 'kindling', order: 2,
+    category: category('headless'), stack: 'Shopify · Hydrogen',
+    blurb:
+      'Placeholder — a headless candle storefront on Hydrogen with a bundle builder and a rebuilt checkout.',
+    image: null, caseStudySlug: null,
+  },
+  {
+    title: 'Saltbox', slug: 'saltbox', order: 3,
+    category: category('subscriptions'), stack: 'Shopify Plus · Node',
+    blurb:
+      'Placeholder — a subscription box with a custom customer portal and a Node service behind it.',
+    image: null, caseStudySlug: null,
+  },
+  {
+    title: 'Tidewater', slug: 'tidewater', order: 4,
+    category: category('mobile'), stack: 'Shopify · React Native',
+    blurb:
+      'Placeholder — a React Native companion app for a surf brand, with offline browsing and native checkout.',
+    image: null, caseStudySlug: null,
   },
 ];
 

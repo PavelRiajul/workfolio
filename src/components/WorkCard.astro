@@ -1,19 +1,33 @@
 ---
 import Placeholder from './Placeholder.astro';
-import type { Project } from '../lib/types';
-interface Props { project: Project; coverLabel?: string; }
+import type { Project, ShopifyProject } from '../lib/types';
+interface Props { project: Project | ShopifyProject; coverLabel?: string; }
 const { project: p, coverLabel } = Astro.props;
-const interactive = p.hasCaseStudy || !!p.modalSummary;
-const href = p.hasCaseStudy ? `/work/${p.slug}` : '#';
-const label = coverLabel || `${p.title} — ${p.type}`;
+
+/* Both grids render this same card, but the two document types answer the
+   card's questions differently. A Shopify project sorts by its category and
+   links to the case study on the `project` it documents; a Project sorts by
+   its stack tags and links to (or opens a modal for) its own case study. */
+const shopify = 'category' in p;
+const note = shopify ? (p.category?.label ?? '') : p.type;
+// What the filter chips match against — one category, or several stack tags.
+const filter = shopify ? (p.category?.value ?? '') : p.tags.join(',');
+const studySlug = shopify ? p.caseStudySlug : p.hasCaseStudy ? p.slug : null;
+const interactive = shopify ? !!studySlug : p.hasCaseStudy || !!p.modalSummary;
+// A Shopify card has no modal: the modal lives on /work, over the projects it
+// reads from. ProjectModal binds to `data-project`, so it must stay off these
+// cards or a click would look up a slug that page has never heard of.
+const modalSlug = !shopify && interactive ? p.slug : null;
+const href = studySlug ? `/work/${studySlug}` : '#';
+const label = coverLabel || `${p.title} — ${note}`;
 const Tag = interactive ? 'a' : 'div';
 const attrs = interactive
-  ? { href, 'data-project': p.slug }
+  ? { href, ...(modalSlug ? { 'data-project': modalSlug } : {}) }
   : {};
 ---
-<Tag class="work-card" data-tags={p.tags.join(',')} data-reveal {...attrs}>
+<Tag class="work-card" data-tags={filter} data-reveal {...attrs}>
   <div class="work-thumb">
-    <Placeholder label={label} image={p.image} src={`/work/${p.slug}.jpg`} alt={`${p.title} — ${p.type}`} />
+    <Placeholder label={label} image={p.image} src={`/work/${p.slug}.jpg`} alt={`${p.title} — ${note}`} />
     {interactive && (
       <div class="work-overlay"><span>View case study ↗</span></div>
     )}
@@ -22,6 +36,6 @@ const attrs = interactive
   <p>{p.blurb}</p>
   <div class="work-tags">
     <span class="tag-pill">{p.stack}</span>
-    <span class="tag-note">{p.type}</span>
+    <span class="tag-note">{note}</span>
   </div>
 </Tag>

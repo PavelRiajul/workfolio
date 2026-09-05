@@ -76,33 +76,3 @@ const heroEyebrow = page.hero.eyebrow.replace(/^[—–-]\s*/, '');
 
   <ProjectModal projects={projects} ctaLabel={page.modalCtaLabel} />
 </Base>
-
-<script>
-  // Navigation is client-side, so this module is evaluated once for the whole
-  // session. `astro:page-load` fires on the first load and after every swap,
-  // which is what re-binds these to the incoming page's elements — without it
-  // the controls are dead on every visit after the first. Listeners land on
-  // swapped elements, so they are collected with them and need no teardown.
-  document.addEventListener('astro:page-load', () => {
-    // Project filter — Work page only.
-    const chips = document.querySelectorAll<HTMLElement>('[data-filter]');
-    const cards = document.querySelectorAll<HTMLElement>('.work-grid [data-tags]');
-    if (chips.length && cards.length) {
-      chips.forEach((chip) => {
-        chip.addEventListener('click', () => {
-          const f = chip.dataset.filter;
-          chips.forEach((c) => {
-            const on = c === chip;
-            c.classList.toggle('active', on);
-            c.setAttribute('aria-pressed', on ? 'true' : 'false');
-          });
-          cards.forEach((card) => {
-            const tags = (card.dataset.tags || '').split(',');
-            const show = f === 'all' || (f && tags.includes(f));
-            card.style.display = show ? '' : 'none';
-          });
-        });
-      });
-    }
-  });
-</script>
