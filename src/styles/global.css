@@ -146,6 +146,12 @@ body {
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .eyebrow { font-size: var(--text-sm); text-transform: uppercase; letter-spacing: 0.12em; color: var(--color-grey-3); font-weight: 500; }
 .section { padding: var(--section-y) var(--gutter); }
+/* /shopify carries fourteen sections — the merged Shopify + CRO page is the
+   longest on the site by a wide margin, and at the full rhythm the band
+   padding alone costs several screens. It steps down one rung of the same
+   scale rather than inventing a value, so the page reads tighter without
+   losing a single section. */
+body.shopify { --section-y: var(--space-2xl); --section-y-tight: var(--space-xl); }
 .section-tight { padding-block: var(--section-y-tight); }
 .section-tight-top { padding-top: var(--section-y-tight); }
 .section-tight-bottom { padding-bottom: var(--section-y-tight); }
@@ -698,6 +704,35 @@ html.lenis, html.lenis body { height: auto; }
 .sstack-tag.more { background: transparent; }
 
 /* ---- Stack card visuals (per-service mockups) ---- */
+/* The Shopify page carries far more sections than the home page, so its copy
+   of the stack runs tighter: shorter cards, and past five chips the rest stay
+   in the DOM but out of the layout on a phone (the same trick `.tpl-stack`
+   uses). Cards have to stay a uniform height on mobile or a short one won't
+   fully cover the card beneath it, and that sliver is exactly what reads as
+   stacking the wrong way. */
+/* Cards stack by covering each other, so a later card shorter than an earlier
+   one leaves a sliver of it showing — which is what reads as the stack going
+   the wrong way up. The floor therefore sits just above the tallest *natural*
+   card in each tier (measured: 547px here), and it is a flat px value, not a
+   `vh` one: the content doesn't change with viewport height, so a `vh` floor
+   drops below the content on a short laptop and the cards go uneven again.
+   The descriptions run two to five lines and are clamped to help them level;
+   the full text stays in the DOM. */
+#sh-services .sstack-card { min-height: 550px; }
+#sh-services .sstack-lede {
+  display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;
+}
+@media (max-width: 900px) {
+  /* Below 900 the card goes one-column and the mockup lands *under* the copy
+     rather than beside it, which took the natural card from ~516px to 780px —
+     five of those is a worse wall than the rows this replaced. It is
+     `aria-hidden` decoration, so it goes, exactly as `.svcf-media` and the
+     home stack's own visual do at their tightest tier. */
+  #sh-services .sstack-visual { display: none; }
+  #sh-services .sstack-card { min-height: 350px; }
+  #sh-services .sstack-lede { -webkit-line-clamp: 3; }
+  #sh-services .sstack-tag:nth-child(n+5) { display: none; }
+}
 .sstack-visual { width: 100%; }
 @media (max-width: 900px) { .sstack-visual { margin-top: 30px; } }
 @media (max-width: 640px) { .sstack-visual { display: none; } }
@@ -1507,6 +1542,9 @@ textarea.field { resize: vertical; }
 @media (max-width: 640px) {
   /* Tighter vertical rhythm — meaningfully less scrolling */
   .section { padding-top: 54px; padding-bottom: 54px; }
+  /* This flat 54px overrides `--section-y`, so the tighter rhythm /shopify
+     sets on <body> never reached a phone — where that page is longest. */
+  body.shopify .section { padding-top: 38px; padding-bottom: 38px; }
   .trait-grid, .tst-grid, .appr-grid, .cs-proc-grid { margin-top: 34px; }
   .brand-wall { margin-top: 30px; }
   .svcf { padding: 38px 0; }

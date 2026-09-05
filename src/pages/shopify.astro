@@ -53,6 +53,7 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
   title={page.seo.title}
   description={page.seo.description}
   subpage={true}
+  bodyClass="shopify"
   pageType="CollectionPage"
   schema={schema}
 >
@@ -129,7 +130,12 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
     </div>
   </section>
 
-  <!-- Services showcase (alternating per-service feature rows) -->
+  <!-- Services — the same scroll-stacking cards the home page uses. Five
+       full-width alternating rows ran 3.7 screens on their own, which is most
+       of why this page read as endless; stacked, they pin and cover each other
+       so the whole set costs about one screen of reading. The full feature
+       list stays in the DOM behind the `<details>`, so nothing is lost to a
+       crawler or to anyone without JS. -->
   <section id="sh-services" class="section section-bordered anchor">
     <div class="wrap">
       <div class="work-head" data-reveal>
@@ -142,29 +148,35 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
         <a href={page.servicesCta.href} class="btn btn-light btn-sm">{page.servicesCta.label}</a>
       </div>
 
-      <div class="svc-showcase">
+      <div class="sstack">
         {services.map((s, i) => (
-          <div class={`svcf ${i % 2 === 1 ? 'rev' : ''}`} data-reveal>
-            <div class={`svcf-media tone-${s.tone}`} aria-hidden="true">
-              <span class="svcf-ghost" aria-hidden="true">{s.number}</span>
+          <a
+            href={page.serviceCta.href}
+            class={`sstack-card tone-${s.tone}`}
+            style={`--i:${i}`}
+            aria-label={`${s.title} — ${page.serviceCta.label}`}
+          >
+            <span class="sstack-go" aria-hidden="true">↗</span>
+
+            <div class="sstack-main">
+              <span class="sstack-kicker">
+                <Icon name="fa-brands fa-shopify" />
+                {page.serviceTagLabel} · {s.number} / 0{services.length}
+              </span>
+              <h3>{s.title}</h3>
+              <p class="sstack-lede">{s.description}</p>
+              {/* Every capability still ships — as chips rather than a
+                  two-column list with icons, which is a third of the height
+                  and reads the tone vars, so it survives the dark card. */}
+              <div class="sstack-tags">
+                {s.features.map((f) => <span class="sstack-tag">{f}</span>)}
+              </div>
+            </div>
+
+            <div class="sstack-visual" aria-hidden="true">
               <ServiceVisual service={s} />
             </div>
-            <div class="svcf-copy">
-              <div class="svcf-top">
-                <span class="svcf-tag"><Icon name="fa-brands fa-shopify" /> {page.serviceTagLabel}</span>
-                <span class="svcf-no">{s.number} / 0{services.length}</span>
-              </div>
-              <h3>{s.title}</h3>
-              <p>{s.description}</p>
-              <details class="feats" open>
-                <summary><span>{s.features.length} capabilities</span><i aria-hidden="true">+</i></summary>
-                <ul class="svcf-feats">
-                  {s.features.map((f) => <li><Icon name="fa-solid fa-check" />{f}</li>)}
-                </ul>
-              </details>
-              <a class="svcf-cta" href={page.serviceCta.href}>{page.serviceCta.label} <span aria-hidden="true">↗</span></a>
-            </div>
-          </div>
+          </a>
         ))}
       </div>
     </div>
