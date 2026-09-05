@@ -834,12 +834,39 @@ html.lenis, html.lenis body { height: auto; }
 .chip.active { border-color: var(--color-ink); background: var(--color-ink); color: #fff; }
 .work-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,280px),1fr)); gap: var(--space-2xl) var(--space-lg); margin-top: var(--space-lg); }
 .work-card { text-decoration: none; color: inherit; display: block; }
-.work-thumb { position: relative; border-radius: var(--radius-md); overflow: hidden; aspect-ratio: 4/3; }
+.work-thumb { position: relative; border-radius: var(--radius-md); overflow: hidden; aspect-ratio: 3/4; }
 .work-overlay { position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 22px; background: linear-gradient(to top, rgba(10,10,10,0.5), transparent 58%); opacity: 0; transition: opacity .35s ease; }
 .work-overlay span { color: #fff; font-size: var(--text-md); font-weight: 500; }
 .work-card:hover .work-overlay { opacity: 1; }
 .work-card h3 { font-family: var(--font-display); font-weight: 600; font-size: var(--text-2xl); letter-spacing: -0.02em; margin: 22px 0 0; }
 .work-card p { font-size: var(--text-base); line-height: 1.5; color: var(--color-grey-2); margin: 10px 0 0; max-width: 440px; }
+/* Project covers are full-page screenshots — the live ones run to 7000px tall,
+   and a cropped frame shows the header and nothing else. On hover the image
+   pans down its own length: it sits at natural height and slides up by exactly
+   its overflow (its height less the frame's, which is what `100cqh - 100%`
+   works out to). An image no taller than the frame lands on 0 and simply
+   doesn't move, so this needs no per-image opt-in. `min-height` keeps a short
+   cover filling the frame as before.
+   ponytail: one duration for every cover, so a very long page pans faster than
+   a short one — set a per-card duration from the image height in JS if that
+   ever reads wrong. */
+@media (hover: hover) {
+  .work-thumb .fill { container-type: size; }
+  .work-thumb .fill img { height: auto; min-height: 100%; transition: transform .45s ease-out; }
+  .work-card:hover .work-thumb .fill img,
+  .work-card:focus-visible .work-thumb .fill img {
+    transform: translateY(calc(100cqh - 100%));
+    transition: transform 5s linear;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .work-card:hover .work-thumb .fill img,
+  .work-card:focus-visible .work-thumb .fill img { transform: none; }
+}
+/* Portrait is a desktop-only frame. Below this the grid is 2-up on a phone,
+   where cards have to stay short — a 3:4 thumb at half a 375px screen stacks
+   four screens of grid. */
+@media (max-width: 900px) { .work-thumb { aspect-ratio: 4/3; } }
 .work-tags { display: flex; align-items: center; gap: 12px; margin-top: 16px; }
 .tag-pill { font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-grey-1); border: 1px solid rgba(10,10,10,0.12); padding: 5px 12px; border-radius: var(--radius-pill); }
 .tag-note { font-size: var(--text-sm); color: var(--color-grey-3); }
