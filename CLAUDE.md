@@ -8,7 +8,7 @@ blue accent; heavy on tasteful motion (GSAP reveals, Lenis smooth scroll, CSS 3D
 autonomous SVG mascot). Static Astro site with an optional embedded Sanity CMS.
 
 ## Stack
-- **Astro 5** (static output) — `.astro` components + islands. React integration is installed (for Sanity Studio) but the UI is plain Astro + vanilla TS.
+- **Astro 7** (static output) — `.astro` components + islands. React integration is installed (for Sanity Studio) but the UI is plain Astro + vanilla TS.
 - **Tailwind CSS v4** via `@tailwindcss/vite` — but most styling is hand-written in `src/styles/global.css` using CSS custom properties (design tokens live in `@theme`).
 - **GSAP + ScrollTrigger** for scroll reveals, count-ups, pinning. **Lenis** for smooth scroll.
 - **Sanity v3** — Studio embedded at `/admin`. Content is fetched via GROQ with a **seeded offline fallback**, so the whole site renders with zero credentials.
@@ -42,6 +42,9 @@ npm run dev      # astro dev — local server (port 4321, or 4322+ if busy)
 npm run build    # astro build → dist/
 npm run preview  # serve the built site
 ```
+**`astro dev` daemonizes as of Astro 7** — it prints the URL and returns instead of
+holding the terminal, so Ctrl-C does nothing and a second `npm run dev` won't pick up a
+config change. Use `astro dev stop` / `astro dev status` / `astro dev logs`.
 ```bash
 npm run og            # regenerate the per-page social cards → public/og/ (needs local Chrome)
 npm run seed:build    # src/data/content.ts → sanity/seed.ndjson
