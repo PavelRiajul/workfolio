@@ -51,17 +51,43 @@ export function personSchema(site: SiteSettings, origin: string) {
 
 /**
  * Drives the **site name** line in a Google result — the bold `Riajul Islam`
- * above the URL. Without it Google falls back to printing the bare domain
- * twice with no snippet, which is the failure mode this exists to prevent.
+ * above the URL. With no usable name Google falls back to the bare domain,
+ * which then appears both as the site name and in the URL line: the domain
+ * printed twice, which is the failure mode this exists to prevent.
+ *
+ * Supplying the domain as `alternateName` causes that same failure, which is
+ * why it is filtered — see `alternateNameFor` below.
+ *
  * Google only reads this from the homepage, so it ships on every page (cheap)
  * and is guaranteed present at `/`.
  */
+/**
+ * `alternateName` is a *second name for the site*, and Google will happily
+ * display it instead of `name`. `site.website` holds "pavelriajul.com" — it
+ * exists for the résumé contact line — so feeding it here told Google the site
+ * is also called by its own domain, and the result rendered the domain as the
+ * site name with the URL line underneath it: "pavelriajul.com" twice, which is
+ * the exact failure this schema was written to prevent.
+ *
+ * So it is emitted only when it is a genuine alternative name — an acronym or
+ * a shorter brand form — and never when it is just the host or a URL.
+ */
+function alternateNameFor(site: SiteSettings, origin: string): string | undefined {
+  const alt = site.website?.trim();
+  if (!alt) return undefined;
+  const host = new URL(origin).host.replace(/^www\./, '');
+  const bare = alt.replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/$/, '');
+  if (bare.toLowerCase() === host.toLowerCase()) return undefined;
+  if (bare.includes('.') || bare.includes('/')) return undefined;
+  return alt === site.name ? undefined : alt;
+}
+
 export function websiteSchema(site: SiteSettings, origin: string) {
   return {
     '@type': 'WebSite',
     '@id': siteId(origin),
     name: site.name,
-    alternateName: site.website,
+    alternateName: alternateNameFor(site, origin),
     description: site.seo.description,
     url: abs(origin),
     inLanguage: 'en',
