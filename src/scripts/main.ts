@@ -474,6 +474,10 @@ function initToc() {
   const narrow = window.matchMedia('(max-width: 640px)');
   const apply = () => { toc.open = !narrow.matches; };
   apply();
+  /* CSS has already collapsed it on phones, so this only syncs the attribute
+     to what is on screen. Handing control back afterwards is what lets the
+     reader open it — see the `.toc-ready` note in Toc.astro. */
+  document.documentElement.classList.add('toc-ready');
   on(narrow, 'change', apply);
 }
 

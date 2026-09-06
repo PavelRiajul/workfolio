@@ -92,7 +92,12 @@ const hasCover = (p: (typeof posts)[number]) =>
             class={`chip ${i === 0 ? 'active' : ''}`}
             href={c.href === 'all' ? '/blog' : hubHrefs.has(c.href) ? `/blog/category/${c.href}` : undefined}
             data-blog-filter={c.href}
-            aria-pressed={i === 0 ? 'true' : 'false'}
+            {/* `aria-current`, not `aria-pressed`. These chips are real links
+                so a crawler can follow them to the hub, and `aria-pressed`
+                belongs to role=button — on a link it is invalid ARIA, which
+                is what a screen reader trips over. The /work and /shopify
+                chips are <button>, so theirs stays as it is. */}
+            aria-current={i === 0 ? 'true' : undefined}
           >{c.label}</a>
         ))}
       </div>
@@ -180,7 +185,8 @@ const hasCover = (p: (typeof posts)[number]) =>
           chips.forEach((c) => {
             const on = c === chip;
             c.classList.toggle('active', on);
-            c.setAttribute('aria-pressed', on ? 'true' : 'false');
+            if (on) c.setAttribute('aria-current', 'true');
+            else c.removeAttribute('aria-current');
           });
           let shown = 0;
           cards.forEach((card) => {
