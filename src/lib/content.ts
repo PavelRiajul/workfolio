@@ -89,7 +89,7 @@ export function getProjects(): Promise<Project[]> {
   return safeFetch<Project[]>(
     `*[_type == "project"] | order(order asc){
       title, "slug": slug.current, order, tags, stack, type, blurb, ${imageProjection},
-      hasCaseStudy, modalSummary, modalOutcomes,
+      hasCaseStudy, liveUrl, modalSummary, modalOutcomes,
       // The Shopify page renders a featured card from this list, so it needs
       // the summary/pills/outcomes too — not just the grid-card fields.
       pills, summary, outcomes
@@ -103,7 +103,7 @@ export function getProject(slug: string): Promise<Project | undefined> {
   return safeFetch<Project | undefined>(
     `*[_type == "project" && slug.current == $slug][0]{
       title, "slug": slug.current, order, tags, stack, type, blurb, ${imageProjection},
-      hasCaseStudy, modalSummary, modalOutcomes,
+      hasCaseStudy, liveUrl, modalSummary, modalOutcomes,
       year, pills, summary, meta, challenge, approach, insights,
       processSteps, screens, mobileScreens, outcomes, outcomesNote
     }`,
@@ -185,7 +185,7 @@ export function getShopifyPage(): Promise<ShopifyPageContent> {
 
 export function getWorkPage(): Promise<WorkPageContent> {
   return safeFetch<WorkPageContent>(
-    `*[_type == "workPage"][0]{ seo, hero, filters, modalCtaLabel, closing }`,
+    `*[_type == "workPage"][0]{ seo, hero, filters, modalCtaLabel, modalLiveLabel, closing }`,
     {},
     fallback.workPage
   );
