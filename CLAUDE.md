@@ -432,7 +432,14 @@ CSS `preserve-3d`; each card is positioned with `translate3d(...)` and floats (`
 Card sets: code/browser/phone/shop (home), store/stat/cart/badge (shopify), layers/db/deploy/badge (stack),
 case/stat/list/badge (work), post/editor/tags/badge (blog), msg/slot/reply/badge (talk).
 Index pages (work, blog, talk) add `.hero-compact` — same stage, no 100svh, so the grid below stays in reach.
-`.hero-meta` renders its own em-dash; eyebrow values are stripped of a leading one so the CMS can't double it.
+**Eyebrows carry no leading dash.** They were authored as "— Selected Work"; the dash was chrome,
+repeated in front of all 36 of them, and it's gone from the UI. `stripEyebrowDashes()` in
+`src/lib/sanity.ts` removes it inside `safeFetch`, which is the one boundary both content sources
+pass through — so the seed and the Content Lake are covered at once, nobody re-edits 36 documents,
+and an eyebrow authored with a dash tomorrow still renders without one. It matches any field
+*ending* in `eyebrow` (`approachEyebrow`, `outsideEyebrow` — an exact match on `eyebrow` left the
+dash on two pages) and only ever strips a **leading** dash: an em dash inside a sentence is
+punctuation and is left alone. `.hero-meta` no longer renders a standalone dash either.
 **Any looping animation inside a card must be named in the `prefers-reduced-motion` block** — `animation`
 doesn't inherit, so killing it on `.hv-inner` doesn't reach children (see `.bl-ed-body .caret`).
 

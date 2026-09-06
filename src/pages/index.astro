@@ -20,6 +20,13 @@ const services = await getServices();
 // The modal is shared with /work, and its button labels are authored there —
 // passing them keeps the home page from carrying two hardcoded strings.
 const workPage = await getWorkPage();
+
+// The home grid is a taster, not the archive. Eight keeps the rows full at
+// every tier -- 4x2 on desktop, 2x4 on a phone -- where nine leaves one card
+// stranded on a line of its own. Past that, the button sends people to /work.
+const HOME_PROJECT_LIMIT = 8;
+const shownProjects = projects.slice(0, HOME_PROJECT_LIMIT);
+const hasMoreProjects = projects.length > HOME_PROJECT_LIMIT;
 const bandTitle = home.aiBand.title.split('\n');
 const processTitle = home.processHeading.title.split('\n');
 
@@ -39,7 +46,6 @@ const schema = [faqSchema(home.faqs), ...servicesSchema(services, site, origin)]
     <div class="hero-grid"></div>
     <div class="hero-inner shell" data-hero-intro>
       <div class="hero-meta" data-hero-item>
-        <span>—</span>
         <span>{home.badge}</span>
         <span class="chip-open"><span class="dot"></span>{home.availabilityChip}</span>
       </div>
@@ -124,8 +130,13 @@ const schema = [faqSchema(home.faqs), ...servicesSchema(services, site, origin)]
       <a href={home.workCta.href} class="btn btn-light btn-sm">{home.workCta.label}</a>
     </div>
     <div class="work-grid">
-      {projects.map((p) => <WorkCard project={p} />)}
+      {shownProjects.map((p) => <WorkCard project={p} />)}
     </div>
+    {hasMoreProjects && (
+      <div class="work-more" data-reveal>
+        <a href={home.workCta.href} class="btn btn-light">{home.workCta.label}</a>
+      </div>
+    )}
     <p class="work-note" data-reveal>{home.workNote} <a href={home.workNoteLink.href}>{home.workNoteLink.label}</a></p>
   </section>
 
@@ -193,7 +204,7 @@ const schema = [faqSchema(home.faqs), ...servicesSchema(services, site, origin)]
 
   <ClosingCta title={home.closingTitle} />
 
-  <ProjectModal projects={projects} ctaLabel={workPage.modalCtaLabel} liveLabel={workPage.modalLiveLabel} />
+  <ProjectModal projects={shownProjects} ctaLabel={workPage.modalCtaLabel} liveLabel={workPage.modalLiveLabel} />
 
   <Mascot />
 </Base>

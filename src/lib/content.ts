@@ -76,7 +76,7 @@ export function getShopifyProjects(): Promise<ShopifyProject[]> {
     // card and its chip read the same authored label. `caseStudySlug` points at
     // a `project` document — these carry no case study of their own.
     `*[_type == "shopifyProject"] | order(order asc){
-      title, "slug": slug.current, order, stack, blurb, ${imageProjection},
+      title, "slug": slug.current, order, stack, blurb, liveUrl, ${imageProjection},
       "category": category->{ "value": value.current, label, order },
       "caseStudySlug": caseStudy->slug.current
     }`,

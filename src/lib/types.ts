@@ -129,8 +129,10 @@ export interface ShopifyProject {
   stack: string;
   blurb: string;
   image?: SanityImage | null;
-  /** Slug of the `project` case study this links to. Null = card doesn't link. */
+  /** Slug of the `project` case study this links to. Null = no case-study button. */
   caseStudySlug: string | null;
+  /** The live storefront. Empty means no button rather than a dead one. */
+  liveUrl?: string;
 }
 
 /**

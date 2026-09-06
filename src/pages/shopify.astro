@@ -2,6 +2,7 @@
 import Icon from '../components/Icon.astro';
 import Base from '../layouts/Base.astro';
 import ClosingCta from '../components/ClosingCta.astro';
+import ProjectModal from '../components/ProjectModal.astro';
 import ServiceVisual from '../components/ServiceVisual.astro';
 import CroDashboard from '../components/CroDashboard.astro';
 import Testimonials from '../components/Testimonials.astro';
@@ -30,7 +31,10 @@ const categories = (await getShopifyCategories())
   .map((c) => ({ label: c.label, href: c.value }));
 // The "All" chip is authored copy, so it's borrowed from the Work page's
 // filter list rather than written here.
-const allFilter = (await getWorkPage()).filters.find((f) => f.href === 'all');
+// The Work page owns the chip and modal-button copy; this page borrows it
+// rather than restating it.
+const workPage = await getWorkPage();
+const allFilter = workPage.filters.find((f) => f.href === 'all');
 const filters = allFilter && categories.length ? [allFilter, ...categories] : [];
 
 const heroLines = page.hero.headlineLines;
@@ -62,7 +66,6 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
     <div class="hero-grid"></div>
     <div class="hero-inner shell" data-hero-intro>
       <div class="hero-meta" data-hero-item>
-        <span>—</span>
         <span>{page.hero.eyebrow}</span>
         <span class="chip-open chip-shop"><span class="dot"></span>{page.hero.chip}</span>
       </div>
@@ -410,6 +413,12 @@ const schema = [faqSchema(page.faqs), ...shopifyServicesSchema(services, origin,
     eyebrow={page.faqHeading.eyebrow}
     title={page.faqHeading.title}
     items={page.faqs.map((f) => ({ q: f.question, a: f.answer }))}
+  />
+
+  <ProjectModal
+    projects={shopifyProjects}
+    ctaLabel={workPage.modalCtaLabel}
+    liveLabel={workPage.modalLiveLabel}
   />
 
   <ClosingCta

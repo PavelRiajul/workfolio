@@ -85,6 +85,35 @@ function withFallback<T>(res: unknown, fallback: T): T {
 }
 
 /**
+ * Drop the decorative leading em dash from every `eyebrow` value.
+ *
+ * Eyebrows were authored as "— Selected Work": the dash is chrome, not part of
+ * the label, and it was repeated in front of all 36 of them. Stripping it here
+ * rather than in the templates means it happens once for both content sources
+ * — the seed and the Content Lake — so no one has to re-edit 36 documents, and
+ * an eyebrow authored with a dash tomorrow still renders without one.
+ *
+ * Deliberately keyed on the field name and only ever touching a *leading*
+ * dash: an em dash inside a sentence is punctuation and is left alone.
+ *
+ * Matches any field *ending* in "eyebrow", not just the exact name — the home
+ * page calls one `approachEyebrow` and the about page `outsideEyebrow`, and an
+ * exact match left the dash showing on both.
+ */
+const EYEBROW_DASH = /^\s*[—–-]\s*/;
+const IS_EYEBROW = /eyebrow$/i;
+function stripEyebrowDashes<T>(value: T): T {
+  if (Array.isArray(value)) return value.map(stripEyebrowDashes) as T;
+  if (!isPlainObject(value)) return value;
+  const out: Record<string, unknown> = {};
+  for (const [key, v] of Object.entries(value)) {
+    out[key] =
+      IS_EYEBROW.test(key) && typeof v === 'string' ? v.replace(EYEBROW_DASH, '') : stripEyebrowDashes(v);
+  }
+  return out as T;
+}
+
+/**
  * Fetch from Sanity, but transparently fall back to seeded content when
  * Sanity isn't configured, the query errors, or a field is missing.
  */
@@ -93,13 +122,13 @@ export async function safeFetch<T>(
   params: Record<string, unknown>,
   fallback: T
 ): Promise<T> {
-  if (!sanityConfigured) return fallback;
+  if (!sanityConfigured) return stripEyebrowDashes(fallback);
   try {
     const res = await sanityClient.fetch<T>(query, params);
     const empty = res == null || (Array.isArray(res) && res.length === 0);
-    return empty ? fallback : withFallback(res, fallback);
+    return stripEyebrowDashes(empty ? fallback : withFallback(res, fallback));
   } catch (err) {
     console.warn('[sanity] fetch failed — using fallback content:', (err as Error).message);
-    return fallback;
+    return stripEyebrowDashes(fallback);
   }
 }
