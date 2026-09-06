@@ -1056,7 +1056,11 @@ html.lenis, html.lenis body { height: auto; }
 .post-title { font-family: var(--font-display); font-weight: 600; line-height: 1.05; letter-spacing: -0.025em; transition: color .25s ease; }
 .post-feature .post-title { font-size: clamp(26px,4vw,38px); margin: 18px 0 0; }
 .post-feature p { font-size: var(--text-lg); line-height: 1.6; color: var(--color-grey-2); margin: 16px 0 0; max-width: 480px; }
-.post-date { font-size: var(--text-sm); color: var(--color-grey-3); margin-top: var(--space-sm); }
+/* grey-2, not grey-3. The date sits inside `.pf-body` on a `--color-surface`
+   panel, where grey-3 measures 4.13:1 and misses AA — the exact case the
+   token comment warns about. It clears AA on white, which is why it read as
+   fine everywhere else. */
+.post-date { font-size: var(--text-sm); color: var(--color-grey-2); margin-top: var(--space-sm); }
 .post-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,300px),1fr)); gap: clamp(28px,4vw,40px); }
 .post-card { text-decoration: none; color: inherit; display: block; }
 .post-card .cover { position: relative; border-radius: var(--radius-md); overflow: hidden; aspect-ratio: 16/10; }

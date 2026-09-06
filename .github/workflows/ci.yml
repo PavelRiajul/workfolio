@@ -1,0 +1,42 @@
+name: CI
+
+# The repo had no CI at all, so nothing stopped a 6.65 MB hero image, a
+# duplicate URL or a link to a renamed project from shipping. These run on the
+# built site, because on a static build dist/ is exactly what Google receives.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build-and-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Studio schema and seeded content must agree, or a field is authored
+      # somewhere no editor can reach it.
+      - name: Schema drift
+        run: npm run schema:check
+
+      # Against the real dataset, not `placeholder`. The seed builds a handful
+      # of pages and would sail through every check below while production
+      # carried the defect — the broken /work/halo links and the duplicate
+      # `beauty ` slug are live content, invisible to a seed build. The dataset
+      # is public-read, so this needs no credentials; the trade-off is that a
+      # content edit can turn CI red, which is the entire point of running it.
+      - name: Build
+        run: npm run build
+        env:
+          PUBLIC_SANITY_PROJECT_ID: 1tfx8i80
+          PUBLIC_SANITY_DATASET: production
+
+      - name: SEO invariants
+        run: npm run seo:check

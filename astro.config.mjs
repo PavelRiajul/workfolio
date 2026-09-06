@@ -96,10 +96,12 @@ export default defineConfig({
   site: 'https://pavelriajul.com',
   // Secretly fetch a page on link hover so in-site navigation feels instant.
   prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
-  // CRO used to be its own page; it now lives inside /shopify.
-  redirects: {
-    '/cro': '/shopify#cro',
-  },
+  // CRO used to be its own page; it now lives inside /shopify. The redirect is
+  // a real 301 in vercel.json, not here: a static Astro redirect emits an HTML
+  // stub that answers 200 with a meta refresh, which is a weaker signal than a
+  // 301 and passes link equity less reliably. That stub also carried `noindex`
+  // *and* a canonical pointing elsewhere — two instructions that contradict
+  // each other. One mechanism, at the edge.
   vite: {
     plugins: [tailwindcss()],
   },
@@ -117,7 +119,17 @@ export default defineConfig({
     // The Studio is a private app, not a page — keep it out of the sitemap.
     // `/resume` is deliberately included: it's a real landing page for name searches.
     sitemap({
-      filter: (page) => !page.includes('/admin'),
+      // A sitemap is a list of URLs you are asking Google to index, so a
+      // malformed one is worse than an omission. `/work/beauty%20/` (a slug
+      // authored with a trailing space) and `/work/Gym/` (uppercase) are both
+      // live and were both being advertised here. They stay reachable — the
+      // route still builds and the slug is fixed in the Studio, not by
+      // deleting someone's page — they just stop being recommended.
+      filter: (page) => {
+        if (page.includes('/admin')) return false;
+        const path = new URL(page).pathname;
+        return path === path.toLowerCase() && !/%20|\s/.test(path);
+      },
       serialize(item) {
         const path = new URL(item.url).pathname;
         const lastmod = lastmodByPath.get(path);

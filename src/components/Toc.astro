@@ -53,6 +53,17 @@ for (const e of entries) {
     border: 1px solid var(--line); border-radius: 14px;
     padding: var(--space-sm) var(--space-md); background: var(--color-surface);
   }
+  /* The contents list ships `open` so a crawler and anyone without JS gets the
+     whole list, and `initToc` closes it on phones. Doing that in JS alone
+     collapsed a full-height list *after* first paint, and the article below
+     jumped up — 0.109 CLS, the only page on the site that shifted at all.
+     Collapsing it in CSS instead means the first frame is already correct and
+     `initToc` only has to sync the attribute. `.toc-ready` is set once JS has
+     done that, after which the `open` attribute is back in charge and the
+     reader can expand it normally. */
+  @media (max-width: 640px) {
+    :global(html:not(.toc-ready)) .toc-shell[open] > :not(summary) { display: none; }
+  }
   summary {
     display: flex; align-items: center; justify-content: space-between;
     cursor: pointer; list-style: none; min-height: 44px;

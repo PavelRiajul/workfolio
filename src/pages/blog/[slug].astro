@@ -11,6 +11,7 @@ import { articleSchema, faqSchema } from '../../lib/schema';
 import { isPublished, relatedPosts, tableOfContents } from '../../lib/portable';
 import { categoryLabel, serviceForCategory } from '../../lib/categories';
 import { publicFileExists } from '../../lib/public-file';
+import { withBrand } from '../../lib/seo-title';
 import type { Post } from '../../lib/types';
 import Headline from '../../components/Headline.astro';
 
@@ -66,7 +67,7 @@ const coverSrc = `/blog/${post.slug}.jpg`;
 const hasCover = Boolean(post.image?.asset?.url) || publicFileExists(coverSrc);
 ---
 <Base
-  title={post.seo?.title ?? `${post.title} — ${page.seo.title.split('—')[1]?.trim() ?? 'Blog'}`}
+  title={post.seo?.title ?? withBrand(post.title, page.seo.title.split('—')[1]?.trim() ?? 'Blog')}
   description={post.seo?.description ?? post.excerpt}
   subpage={true}
   backHome={false}
@@ -120,7 +121,7 @@ const hasCover = Boolean(post.image?.asset?.url) || publicFileExists(coverSrc);
 
     {hasCover && (
       <div class="cs-hero" data-reveal>
-        <Placeholder label={post.coverLabel} image={post.image} src={coverSrc} alt={post.title} />
+        <Placeholder label={post.coverLabel} image={post.image} src={coverSrc} alt={post.title} eager={true} sizes="(max-width: 1180px) 100vw, 1180px" />
       </div>
     )}
 
