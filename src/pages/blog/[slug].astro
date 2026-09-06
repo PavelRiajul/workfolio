@@ -120,7 +120,7 @@ const hasCover = Boolean(post.image?.asset?.url) || publicFileExists(coverSrc);
 
     {hasCover && (
       <div class="cs-hero" data-reveal>
-        <Placeholder label={post.coverLabel} image={post.image} src={coverSrc} alt={post.title} />
+        <Placeholder label={post.coverLabel} image={post.image} src={coverSrc} alt={post.title} eager={true} sizes="(max-width: 1180px) 100vw, 1180px" />
       </div>
     )}
 

@@ -5,18 +5,76 @@
 // A `src` pointing at a file that hasn't landed yet falls back to the
 // placeholder instead of a broken image, so captions can be wired up before
 // the photos exist. Checked at build time (the site is statically rendered).
+//
+// Sanity images go through the CDN's transform pipeline. They were previously
+// emitted as `asset.url` — the original upload, untouched. The project covers
+// are full-page screenshots, so /work was serving 22.3 MB of PNG (6.65, 6.10
+// and 9.55 MB) into card slots ~344px wide. Width-capped WebP with a srcset
+// fixes that; the transform is width-only on purpose, because the cards pan
+// the image on hover and a forced crop height would break that.
 import { publicFileExists } from '../lib/public-file';
+import { urlForImage } from '../lib/sanity';
 import type { SanityImage } from '../lib/types';
 
-interface Props { label: string; image?: SanityImage | null; src?: string; alt?: string; class?: string; }
-const { label, image, src, alt, class: cls = '' } = Astro.props;
+interface Props {
+  label: string;
+  image?: SanityImage | null;
+  src?: string;
+  alt?: string;
+  class?: string;
+  /**
+   * Set on an image that is above the fold — a hero. Everything defaults to
+   * lazy, which is right for a grid but is exactly wrong for the LCP element:
+   * a lazy hero is fetched only after layout, so it cannot start early.
+   */
+  eager?: boolean;
+  /** Passed to the browser so it can pick a srcset candidate before CSS loads. */
+  sizes?: string;
+}
+const {
+  label,
+  image,
+  src,
+  alt,
+  class: cls = '',
+  eager = false,
+  sizes = '(max-width: 640px) 50vw, (max-width: 1180px) 33vw, 380px',
+} = Astro.props;
 
 const localSrc = src && publicFileExists(src) ? src : undefined;
-const url = image?.asset?.url || localSrc;
 const altText = alt ?? image?.alt ?? label;
+
+/* Candidate widths. The largest is 1280 because nothing renders one of these
+   wider than a full-bleed case-study hero; the originals are 1920. */
+const WIDTHS = [320, 480, 640, 960, 1280];
+const QUALITY = 72;
+
+const sanityAsset = image?.asset?._id || image?.asset?._ref ? image : null;
+const build = (w: number) =>
+  urlForImage(sanityAsset).width(w).format('webp').quality(QUALITY).auto('format').url();
+
+const url = sanityAsset ? build(960) : image?.asset?.url || localSrc;
+const srcset = sanityAsset ? WIDTHS.map((w) => `${build(w)} ${w}w`).join(', ') : undefined;
+
+/* Sanity encodes the intrinsic size in the asset id
+   ("image-<hash>-1920x4833-png"), so width/height come free — no second
+   request, and the browser reserves the right box before the bytes land. */
+const dims = (image?.asset?._id || image?.asset?._ref || '').match(/-(\d+)x(\d+)-/);
+const width = dims ? Number(dims[1]) : undefined;
+const height = dims ? Number(dims[2]) : undefined;
 ---
 <div class={`fill ${cls}`}>
   {url
-    ? <img src={url} alt={altText} loading="lazy" decoding="async" />
+    ? <img
+        src={url}
+        srcset={srcset}
+        sizes={srcset ? sizes : undefined}
+        width={width}
+        height={height}
+        alt={altText}
+        loading={eager ? 'eager' : 'lazy'}
+        fetchpriority={eager ? 'high' : undefined}
+        decoding={eager ? 'sync' : 'async'}
+      />
     : <div class="placeholder"><span>{label}</span></div>}
 </div>

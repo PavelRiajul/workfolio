@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Placeholder from '../../components/Placeholder.astro';
 import { getProjects, getProject, getCaseStudy } from '../../lib/content';
+import { warnOnDirtySlugs } from '../../lib/slugs';
 import { caseStudySchema } from '../../lib/schema';
 import type { Project } from '../../lib/types';
 import Headline from '../../components/Headline.astro';
@@ -12,6 +13,7 @@ export async function getStaticPaths() {
   const full = (await Promise.all(studies.map((p) => getProject(p.slug)))).filter(
     Boolean
   ) as Project[];
+  warnOnDirtySlugs(full.map((p) => p.slug), 'project');
 
   return full.map((project, i) => {
     const next = full[(i + 1) % full.length];
@@ -57,7 +59,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
       ))}
     </div>
 
-    <div class="cs-hero" data-reveal><Placeholder label={heroLabel} image={p.image} src={`/work/${p.slug}.jpg`} alt={`${p.title} — ${p.type}`} /></div>
+    <!-- Above the fold, so almost certainly the LCP element: fetched eagerly
+         and at high priority rather than waiting on layout like the grid. -->
+    <div class="cs-hero" data-reveal><Placeholder label={heroLabel} image={p.image} src={`/work/${p.slug}.jpg`} alt={`${p.title} — ${p.type}`} eager={true} sizes="(max-width: 1180px) 100vw, 1180px" /></div>
   </article>
 
   <section class="section section-flush-bottom">
