@@ -96,10 +96,12 @@ export default defineConfig({
   site: 'https://pavelriajul.com',
   // Secretly fetch a page on link hover so in-site navigation feels instant.
   prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
-  // CRO used to be its own page; it now lives inside /shopify.
-  redirects: {
-    '/cro': '/shopify#cro',
-  },
+  // CRO used to be its own page; it now lives inside /shopify. The redirect is
+  // a real 301 in vercel.json, not here: a static Astro redirect emits an HTML
+  // stub that answers 200 with a meta refresh, which is a weaker signal than a
+  // 301 and passes link equity less reliably. That stub also carried `noindex`
+  // *and* a canonical pointing elsewhere — two instructions that contradict
+  // each other. One mechanism, at the edge.
   vite: {
     plugins: [tailwindcss()],
   },
