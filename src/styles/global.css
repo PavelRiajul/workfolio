@@ -867,6 +867,8 @@ html.lenis, html.lenis body { height: auto; }
 /* ===== Work / project cards ============================================ */
 #work { max-width: var(--maxw); margin: 0 auto; scroll-margin-top: 24px; }
 .work-head { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 24px; }
+/* Shown under the home grid only when there is more work than it displays. */
+.work-more { display: flex; justify-content: center; margin-top: var(--space-lg); }
 .work-head h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(29px,5.8vw,52px); line-height: 1; letter-spacing: -0.03em; margin: 16px 0 0; }
 .filters { display: flex; gap: 10px; flex-wrap: wrap; }
 .chip { font-family: var(--font-body); font-size: var(--text-sm); font-weight: 500; padding: 9px 18px; border-radius: var(--radius-pill); border: 1px solid rgba(10,10,10,0.14); background: #fff; color: var(--color-grey-1); cursor: pointer; transition: all .2s ease; }

@@ -57,6 +57,13 @@ export default defineType({
       options: { hotspot: true },
     }),
     defineField({
+      name: 'liveUrl',
+      title: 'Live store',
+      description:
+        'The storefront itself. Shown as a button in the quick-look modal. Leave it empty rather than guessing: no button beats a link that 404s.',
+      type: 'url',
+    }),
+    defineField({
       name: 'caseStudy',
       title: 'Case study',
       description:

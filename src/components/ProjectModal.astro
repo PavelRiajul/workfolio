@@ -1,23 +1,30 @@
 ---
-import type { Project } from '../lib/types';
-interface Props { projects: Project[]; ctaLabel?: string; liveLabel?: string }
+import type { Project, ShopifyProject } from '../lib/types';
+interface Props { projects: (Project | ShopifyProject)[]; ctaLabel?: string; liveLabel?: string }
 const { projects, ctaLabel = 'View full case study →', liveLabel = 'Visit live site ↗' } = Astro.props;
 
-// Build the modal lookup consumed by the script below (only projects with
-// modal data). Both buttons are optional per project: `href` is empty when
-// there's no case study — it used to fall back to "#", which rendered a
-// case-study button that went nowhere — and `live` is empty until someone
-// authors a URL.
+/* Build the modal lookup consumed by the script below.
+   Takes either document type, because /shopify shows the same quick-look over
+   `shopifyProject` documents. Those carry no dedicated modal copy, so the card
+   blurb is the summary and the category stands in for the type — a Shopify
+   project is described by the kind of build, not by a stack label.
+   Both buttons are optional per project: `href` is empty when there is no case
+   study (it used to fall back to "#", rendering a button that went nowhere)
+   and `live` is empty until someone authors a URL. */
 const modalData: Record<string, unknown> = {};
 for (const p of projects) {
-  if (!p.modalSummary) continue;
+  const shopify = 'category' in p;
+  const summary = shopify ? p.blurb : p.modalSummary;
+  if (!summary) continue;
   modalData[p.slug] = {
     name: p.title,
     stack: p.stack,
-    type: p.type,
-    summary: p.modalSummary,
-    outcomes: p.modalOutcomes.map((o) => [o.stat, o.label]),
-    href: p.hasCaseStudy ? `/work/${p.slug}` : '',
+    type: shopify ? (p.category?.label ?? '') : p.type,
+    summary,
+    outcomes: shopify ? [] : p.modalOutcomes.map((o) => [o.stat, o.label]),
+    href: shopify
+      ? (p.caseStudySlug ? `/work/${p.caseStudySlug}` : '')
+      : (p.hasCaseStudy ? `/work/${p.slug}` : ''),
     live: p.liveUrl || '',
   };
 }
@@ -32,7 +39,7 @@ for (const p of projects) {
     tabindex="-1"
   >
     <button class="pm-close" id="pm-close" aria-label="Close">✕</button>
-    <div class="pm-eyebrow">— Project</div>
+    <div class="pm-eyebrow">Project</div>
     <h3 id="pm-title">Project</h3>
     <div id="pm-meta"></div>
     <p id="pm-summary"></p>

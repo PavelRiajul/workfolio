@@ -13,12 +13,15 @@ const note = shopify ? (p.category?.label ?? '') : p.type;
 // What the filter chips match against — one category, or several stack tags.
 const filter = shopify ? (p.category?.value ?? '') : p.tags.join(',');
 const studySlug = shopify ? p.caseStudySlug : p.hasCaseStudy ? p.slug : null;
-const interactive = shopify ? !!studySlug : p.hasCaseStudy || !!p.modalSummary;
-// A Shopify card has no modal: the modal lives on /work, over the projects it
-// reads from. ProjectModal binds to `data-project`, so it must stay off these
-// cards or a click would look up a slug that page has never heard of.
-const modalSlug = !shopify && interactive ? p.slug : null;
-const href = studySlug ? `/work/${studySlug}` : '#';
+// Both pages carry a ProjectModal now, and it keys off `data-project`. A card
+// has a modal entry when it has something to say in one: dedicated modal copy
+// for a Project, the card blurb for a Shopify project.
+const hasModal = shopify ? !!p.blurb : !!p.modalSummary;
+const interactive = hasModal || !!studySlug || !!p.liveUrl;
+const modalSlug = hasModal ? p.slug : null;
+// Without JS the card still goes somewhere useful: the case study if there is
+// one, else the live site. The modal intercepts the click when JS is running.
+const href = studySlug ? `/work/${studySlug}` : p.liveUrl || '#';
 const label = coverLabel || `${p.title} — ${note}`;
 const Tag = interactive ? 'a' : 'div';
 const attrs = interactive
@@ -29,7 +32,11 @@ const attrs = interactive
   <div class="work-thumb">
     <Placeholder label={label} image={p.image} src={`/work/${p.slug}.jpg`} alt={`${p.title} — ${note}`} />
     {interactive && (
-      <div class="work-overlay"><span>View case study ↗</span></div>
+      <div class="work-overlay">
+        {/* The overlay promised a case study on every clickable card. A card
+            that only has a live store now says so instead of over-promising. */}
+        <span>{studySlug ? 'View case study ↗' : 'Quick look ↗'}</span>
+      </div>
     )}
   </div>
   <h3>{p.title}</h3>
