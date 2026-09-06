@@ -9,7 +9,7 @@ import Mascot from '../components/Mascot.astro';
 import ServiceStack from '../components/ServiceStack.astro';
 import Testimonials from '../components/Testimonials.astro';
 import Faq from '../components/Faq.astro';
-import { getSite, getHome, getProjects, getServices } from '../lib/content';
+import { getSite, getHome, getProjects, getServices, getWorkPage } from '../lib/content';
 import { faqSchema, servicesSchema } from '../lib/schema';
 import Headline from '../components/Headline.astro';
 
@@ -17,6 +17,9 @@ const site = await getSite();
 const home = await getHome();
 const projects = await getProjects();
 const services = await getServices();
+// The modal is shared with /work, and its button labels are authored there —
+// passing them keeps the home page from carrying two hardcoded strings.
+const workPage = await getWorkPage();
 const bandTitle = home.aiBand.title.split('\n');
 const processTitle = home.processHeading.title.split('\n');
 
@@ -190,7 +193,7 @@ const schema = [faqSchema(home.faqs), ...servicesSchema(services, site, origin)]
 
   <ClosingCta title={home.closingTitle} />
 
-  <ProjectModal projects={projects} />
+  <ProjectModal projects={projects} ctaLabel={workPage.modalCtaLabel} liveLabel={workPage.modalLiveLabel} />
 
   <Mascot />
 </Base>

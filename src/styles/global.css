@@ -985,7 +985,13 @@ html.lenis, html.lenis body { height: auto; }
 #pm-outcomes { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 16px; margin-top: 28px; padding-top: 24px; border-top: 1px solid rgba(10,10,10,0.1); }
 #pm-outcomes .out-num { font-family: var(--font-display); font-weight: 600; font-size: var(--text-2xl); letter-spacing: -0.03em; line-height: 1; }
 #pm-outcomes .out-lbl { font-size: var(--text-sm); color: var(--color-grey-3); margin-top: 7px; }
-.pm-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 30px; background: var(--color-ink); color: #fff; font-size: var(--text-base); font-weight: 500; padding: 13px 24px; border-radius: var(--radius-pill); text-decoration: none; }
+.pm-link { display: inline-flex; align-items: center; gap: 8px; background: var(--color-ink); color: #fff; font-size: var(--text-base); font-weight: 500; padding: 13px 24px; border-radius: var(--radius-pill); text-decoration: none; }
+/* Case study and live site sit side by side. They wrap rather than shrink —
+   at 375px two pills on one row leave each below the 44px touch target. */
+.pm-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+.pm-link-ghost { background: transparent; color: var(--color-ink); border: 1px solid rgba(10,10,10,0.14); }
+.pm-link-ghost:hover { border-color: var(--color-ink); }
+.pm-link[hidden] { display: none; }
 
 /* ===== About =========================================================== */
 .about-intro-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,240px),1fr)); gap: var(--space-xl); margin-top: 18px; align-items: start; }

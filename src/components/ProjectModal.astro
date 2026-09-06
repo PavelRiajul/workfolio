@@ -1,9 +1,13 @@
 ---
 import type { Project } from '../lib/types';
-interface Props { projects: Project[]; ctaLabel?: string }
-const { projects, ctaLabel = 'View full case study →' } = Astro.props;
+interface Props { projects: Project[]; ctaLabel?: string; liveLabel?: string }
+const { projects, ctaLabel = 'View full case study →', liveLabel = 'Visit live site ↗' } = Astro.props;
 
-// Build the modal lookup consumed by main.ts (only projects with modal data).
+// Build the modal lookup consumed by the script below (only projects with
+// modal data). Both buttons are optional per project: `href` is empty when
+// there's no case study — it used to fall back to "#", which rendered a
+// case-study button that went nowhere — and `live` is empty until someone
+// authors a URL.
 const modalData: Record<string, unknown> = {};
 for (const p of projects) {
   if (!p.modalSummary) continue;
@@ -13,7 +17,8 @@ for (const p of projects) {
     type: p.type,
     summary: p.modalSummary,
     outcomes: p.modalOutcomes.map((o) => [o.stat, o.label]),
-    href: p.hasCaseStudy ? `/work/${p.slug}` : '#',
+    href: p.hasCaseStudy ? `/work/${p.slug}` : '',
+    live: p.liveUrl || '',
   };
 }
 ---
@@ -32,7 +37,16 @@ for (const p of projects) {
     <div id="pm-meta"></div>
     <p id="pm-summary"></p>
     <div id="pm-outcomes"></div>
-    <a id="pm-link" class="pm-link" href="#">{ctaLabel}</a>
+    <div class="pm-actions">
+      <a id="pm-link" class="pm-link" href="#">{ctaLabel}</a>
+      <a
+        id="pm-live"
+        class="pm-link pm-link-ghost"
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+      >{liveLabel}</a>
+    </div>
   </div>
 </div>
 <script type="application/json" id="pm-data" set:html={JSON.stringify(modalData)}></script>
@@ -43,7 +57,7 @@ for (const p of projects) {
   // which re-binds this to the incoming page's modal markup.
   document.addEventListener('astro:page-load', () => {
     // Project modal — co-located with the component (Home + Work pages).
-    interface ModalProject { name: string; stack: string; type: string; summary: string; outcomes: [string, string][]; href: string; }
+    interface ModalProject { name: string; stack: string; type: string; summary: string; outcomes: [string, string][]; href: string; live: string; }
     const overlay = document.getElementById('pm-overlay');
     const dataEl = document.getElementById('pm-data');
     if (overlay && dataEl) {
@@ -67,7 +81,18 @@ for (const p of projects) {
         (document.getElementById('pm-outcomes') as HTMLElement).innerHTML = p.outcomes
           .map((o) => `<div><div class="out-num">${o[0]}</div><div class="out-lbl">${o[1]}</div></div>`)
           .join('');
-        if (p.href) document.getElementById('pm-link')?.setAttribute('href', p.href);
+        // Each button is shown only when this project has somewhere for it to
+        // go. `hidden` rather than a class, so the focus trap — which filters
+        // on rendered size — skips it too, and a keyboard user never lands on
+        // a button that isn't there.
+        const setLink = (id: string, url: string) => {
+          const el = document.getElementById(id) as HTMLAnchorElement | null;
+          if (!el) return;
+          el.hidden = !url;
+          if (url) el.setAttribute('href', url);
+        };
+        setLink('pm-link', p.href);
+        setLink('pm-live', p.live);
         lastFocused = document.activeElement as HTMLElement | null;
         overlay.classList.add('open');
         document.body.style.overflow = 'hidden';

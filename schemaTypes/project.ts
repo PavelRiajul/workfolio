@@ -39,6 +39,14 @@ export default defineType({
       initialValue: true,
       group: 'card',
     }),
+    defineField({
+      name: 'liveUrl',
+      title: 'Live site',
+      description:
+        'The shipped thing itself — storefront, app or repo. Adds a second button to the project modal. Leave it empty rather than guessing: no button beats a link that 404s.',
+      type: 'url',
+      group: 'card',
+    }),
 
     // Modal
     defineField({ name: 'modalSummary', title: 'Modal summary', type: 'text', rows: 3, group: 'card' }),
