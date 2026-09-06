@@ -21,6 +21,12 @@ import { join, relative } from 'node:path';
 const DIST = 'dist';
 const failures = [];
 const fail = (msg) => failures.push(msg);
+/* Warnings are things only a human can settle — copy length, mostly. They are
+   reported and do not fail the build, because the alternative is a gate that
+   someone silences. */
+const warnings = [];
+const warn = (msg) => warnings.push(msg);
+const SERP_TITLE_MAX = 60;
 
 if (!existsSync(DIST)) {
   console.error('dist/ not found — run `npm run build` first.');
@@ -69,6 +75,13 @@ for (const file of html) {
 
   if (title) {
     titles.set(title, [...(titles.get(title) ?? []), route]);
+    // Google shows ~60 characters and rewrites titles it considers unusable,
+    // which loses you the wording you chose. `withBrand()` already drops the
+    // brand suffix to buy room; past that the headline itself is too long and
+    // only its author can shorten it.
+    if (title.length > SERP_TITLE_MAX) {
+      warn(`${route} — title is ${title.length} chars, SERP shows ~${SERP_TITLE_MAX}: ${title}`);
+    }
   }
 
   // Raw Sanity CDN URLs mean the transform pipeline was bypassed again.
@@ -80,6 +93,38 @@ for (const file of html) {
 
 for (const [title, routes] of titles) {
   if (routes.length > 1) fail(`duplicate <title> ${JSON.stringify(title)} on ${routes.join(', ')}`);
+}
+
+/* ---- Internal links ----------------------------------------------------
+   The one class of defect here that recurs. Rename a project in the Studio and
+   every link written to the old slug 404s silently: /work/halo survived in four
+   posts after Halo was renamed, and /blog/zod was linked before the post
+   existed. Nothing in the build noticed, because a link to a missing page is
+   only a 404 at request time.
+
+   Orphans are the mirror image — a page nothing links to is one Google finds
+   late, if at all. */
+const routes = new Set(
+  html.map((f) => ('/' + relative(DIST, f).replace(/index\.html$/, '')).replace(/\/$/, '') || '/')
+);
+const linkedFrom = new Map();
+
+for (const file of html) {
+  const src = readFileSync(file, 'utf8');
+  const from = ('/' + relative(DIST, file).replace(/index\.html$/, '')).replace(/\/$/, '') || '/';
+  for (const href of [...src.matchAll(/href="(\/[^"#?]*)/g)].map((m) => m[1])) {
+    // Assets are files on disk, not routes.
+    if (/^\/(_astro|fonts|og|work\/.*\.(jpg|png|webp))/.test(href)) continue;
+    const target = href.replace(/\/$/, '') || '/';
+    if (!routes.has(target) && !existsSync(join(DIST, href.replace(/^\//, '')))) {
+      fail(`broken internal link ${target} — linked from ${from}`);
+    }
+    linkedFrom.set(target, (linkedFrom.get(target) ?? 0) + 1);
+  }
+}
+
+for (const route of routes) {
+  if (route !== '/' && !linkedFrom.has(route)) fail(`orphan page (nothing links to it): ${route}`);
 }
 
 /* ---- Sitemap ----------------------------------------------------------- */
@@ -117,10 +162,15 @@ if (!existsSync(robotsFile)) {
   if (!/^Sitemap:\s*https:\/\//m.test(robots)) fail('robots.txt has no absolute Sitemap: line');
 }
 
+if (warnings.length) {
+  console.warn(`\n⚠ ${warnings.length} warning(s) — worth fixing, not blocking:\n`);
+  for (const w of warnings) console.warn(`  · ${w}`);
+}
+
 if (failures.length) {
   console.error(`\n✗ ${failures.length} SEO check(s) failed:\n`);
   for (const f of failures) console.error(`  · ${f}`);
   console.error('');
   process.exit(1);
 }
-console.log(`✓ SEO checks passed across ${html.length} pages`);
+console.log(`\n✓ SEO checks passed across ${html.length} pages`);
