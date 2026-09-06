@@ -34,8 +34,14 @@ export const workPage = defineType({
     }),
     defineField({
       name: 'modalCtaLabel',
-      title: 'Modal link label',
-      description: 'The link at the bottom of the project quick-look modal.',
+      title: 'Modal case-study label',
+      description: 'The case-study button in the project quick-look modal.',
+      type: 'string',
+    }),
+    defineField({
+      name: 'modalLiveLabel',
+      title: 'Modal live-site label',
+      description: 'The second modal button. Only shown for projects that have a Live site set.',
       type: 'string',
     }),
     defineField({ name: 'closing', title: 'Closing CTA', type: 'closingCta' }),

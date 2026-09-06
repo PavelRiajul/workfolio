@@ -1206,6 +1206,7 @@ export const workPage: WorkPageContent = {
     { label: 'MERN', href: 'mern' },
   ],
   modalCtaLabel: 'View full case study →',
+  modalLiveLabel: 'Visit live site ↗',
   closing: {
     title: "Like what you see?\nLet's build the next one.",
     primary: { label: 'Get in touch', href: '/start?tab=form' },

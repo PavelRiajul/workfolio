@@ -418,6 +418,8 @@ export interface WorkPageContent {
   filters: Cta[];
   /** Label on the "view full case study" link inside the project modal. */
   modalCtaLabel: string;
+  /** Second modal button, shown only for projects with a `liveUrl`. */
+  modalLiveLabel: string;
   closing: ClosingCtaContent;
 }
 
@@ -519,6 +521,12 @@ export interface Project {
   blurb: string;
   image?: SanityImage | null;
   hasCaseStudy: boolean;
+  /**
+   * The shipped thing itself — a storefront, an app, a repo. Shown as the
+   * second button in the project modal. Empty means no button rather than a
+   * dead one: a portfolio link that 404s is worse than no link.
+   */
+  liveUrl?: string;
   modalSummary: string;
   modalOutcomes: Outcome[];
   year: string;
