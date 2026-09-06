@@ -12,35 +12,9 @@ export default defineType({
   fields: [
     defineField({ name: 'seo', title: 'SEO', type: 'seo', group: 'meta' }),
     defineField({ name: 'hero', title: 'Hero', type: 'pageHero', group: 'hero' }),
-    defineField({
-      name: 'velocity',
-      title: 'Velocity card',
-      description: 'The "same scope, two timelines" comparison in the hero.',
-      type: 'object',
-      group: 'hero',
-      fields: [
-        { name: 'kicker', title: 'Kicker', type: 'string' },
-        {
-          name: 'rows',
-          title: 'Rows',
-          type: 'array',
-          of: [
-            defineArrayMember({
-              type: 'object',
-              name: 'velocityRow',
-              fields: [
-                { name: 'label', title: 'Label', type: 'string' },
-                { name: 'value', title: 'Value', type: 'string' },
-                { name: 'barWidth', title: 'Bar width', description: 'e.g. "38%"', type: 'string' },
-                { name: 'muted', title: 'Muted (the "before" row)', type: 'boolean' },
-              ],
-              preview: { select: { title: 'label', subtitle: 'value' } },
-            }),
-          ],
-        },
-        { name: 'foot', title: 'Footnote', type: 'text', rows: 2 },
-      ],
-    }),
+    // The hero velocity card is seed-only (tier b): it renders inside
+    // aria-hidden="true" on /services and its rows carry bar widths that are
+    // CSS percentages. Authored in src/data/content.ts. See CLAUDE.md, tiers.
 
     defineField({ name: 'methodHeading', title: 'Method heading', type: 'heading', group: 'sections' }),
     defineField({ name: 'listHeading', title: 'Services heading', type: 'heading', group: 'sections' }),

@@ -82,12 +82,8 @@ export const countStat = defineType({
     defineField({ name: 'suffix', title: 'Suffix', description: 'e.g. "%", " wk", "M+"', type: 'string' }),
     defineField({ name: 'decimals', title: 'Decimal places', type: 'number' }),
     defineField({ name: 'label', title: 'Label', type: 'string' }),
-    defineField({
-      name: 'barWidth',
-      title: 'Bar width',
-      description: 'Only used where a bar is drawn beneath the number — e.g. "72%".',
-      type: 'string',
-    }),
+    // `barWidth` is seed-only (tier b) — it held a CSS percentage, in the one
+    // object every page reuses. Still in src/data/content.ts and types.ts.
   ],
   preview: { select: { title: 'label', subtitle: 'value' } },
 });
@@ -144,7 +140,6 @@ export const testimonialItem = defineType({
     defineField({ name: 'quote', title: 'Quote', type: 'text', rows: 3 }),
     defineField({ name: 'name', title: 'Name', type: 'string' }),
     defineField({ name: 'role', title: 'Role', type: 'string' }),
-    defineField({ name: 'initials', title: 'Initials', type: 'string' }),
     defineField({ name: 'color', title: 'Avatar color (hex)', type: 'string' }),
   ],
   preview: { select: { title: 'name', subtitle: 'role' } },

@@ -71,7 +71,7 @@ export interface Testimonial {
   quote: string;
   name: string;
   role: string;
-  initials: string;
+  /** Avatar initials are derived from `name` in Testimonials.astro, not stored. */
   color: string;
 }
 
@@ -350,6 +350,8 @@ export interface ShopifyPageContent {
   };
   leakHeading: Heading;
   funnel: { name: string; count: number; width: string; drop?: string; why?: string }[];
+  /** Marks the funnel as an illustrative example — the counts are not measured. */
+  funnelNote: string;
   fixes: { icon: string; title: string; body: string; barWidth: string }[];
   croProcessHeading: Heading;
   croProcess: { number: string; title: string; body: string }[];
@@ -371,6 +373,8 @@ export interface ShopifyPageContent {
   experimentsHeading: Heading;
   experimentsColumns: { test: string; metric: string; lift: string };
   experiments: { title: string; area: string; metric: string; lift: number }[];
+  /** Marks the leaderboard as illustrative — the lifts are not client results. */
+  experimentsNote: string;
   featuredHeading: Heading;
   featuredCta: Cta;
   testimonialsHeading: Heading;

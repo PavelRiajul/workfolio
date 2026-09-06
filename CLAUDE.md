@@ -8,7 +8,7 @@ blue accent; heavy on tasteful motion (GSAP reveals, Lenis smooth scroll, CSS 3D
 autonomous SVG mascot). Static Astro site with an optional embedded Sanity CMS.
 
 ## Stack
-- **Astro 5** (static output) — `.astro` components + islands. React integration is installed (for Sanity Studio) but the UI is plain Astro + vanilla TS.
+- **Astro 7** (static output) — `.astro` components + islands. React integration is installed (for Sanity Studio) but the UI is plain Astro + vanilla TS.
 - **Tailwind CSS v4** via `@tailwindcss/vite` — but most styling is hand-written in `src/styles/global.css` using CSS custom properties (design tokens live in `@theme`).
 - **GSAP + ScrollTrigger** for scroll reveals, count-ups, pinning. **Lenis** for smooth scroll.
 - **Sanity v3** — Studio embedded at `/admin`. Content is fetched via GROQ with a **seeded offline fallback**, so the whole site renders with zero credentials.
@@ -42,6 +42,9 @@ npm run dev      # astro dev — local server (port 4321, or 4322+ if busy)
 npm run build    # astro build → dist/
 npm run preview  # serve the built site
 ```
+**`astro dev` daemonizes as of Astro 7** — it prints the URL and returns instead of
+holding the terminal, so Ctrl-C does nothing and a second `npm run dev` won't pick up a
+config change. Use `astro dev stop` / `astro dev status` / `astro dev logs`.
 ```bash
 npm run og            # regenerate the per-page social cards → public/og/ (needs local Chrome)
 npm run seed:build    # src/data/content.ts → sanity/seed.ndjson
@@ -118,8 +121,46 @@ which takes either the `\n` string or the pre-split array. It emits a space befo
 adjacent text nodes are concatenated when anything extracts the text layer and `<br>` is not a
 word boundary, so 38 hand-rolled `.map(... <br/> ...)` call sites were shipping "Builtfor speed."
 to crawlers, screen readers and AI retrievers while looking correct on screen.
-**Not editable by design:** the decorative mockup internals (`OfferVisual`, `ServiceVisual`, the
-3D hero cards) — they're illustrations tied to specific layouts, not copy.
+**Three tiers, and every field sits in exactly one.** "Pages hold no copy" and "mockup internals
+aren't editable" used to be stated as two rules in tension, and because the first forbids
+hardcoding in a *page*, everything that had to come from a loader was pushed into the Studio —
+including CSS percentages. A loader source and the Studio are not the same thing:
+
+- **(a) Authored** — in `schemaTypes/`, in the GROQ projection, in the seed. The default for
+  anything a person reads: copy, labels, links, and numbers presented as fact.
+- **(b) Seed-only** — in `src/data/content.ts` and `src/lib/types.ts`, **not** in `schemaTypes/`,
+  and dropped from the projection *only when a whole top-level key qualifies*. The test: the entire
+  subtree renders inside `aria-hidden="true"` and holds no string a person or crawler reads. A key
+  that mixes copy with decoration does not qualify — it stays projected and only its decorative
+  leaves leave the Studio. Tier (b) still comes from a loader, so pages still hold no copy; it just
+  stops being an editor's problem. Today: `shopifyPage.croDashboard`, `servicesPage.velocity`,
+  `countStat.barWidth`, `funnel[].width`, `fixes[].barWidth`.
+- **(c) Hardcoded** — in the component. Only where there's no per-instance variation: the
+  `OfferVisual` / `ServiceVisual` internals and the 3D hero cards.
+
+**`npm run schema:check` enforces it** (`scripts/schema-drift.mts`, run automatically before
+`schema:deploy` and `seed:import`, never in `build` — Vercel runs that, and a copy mismatch must
+not be able to take the site down). It compares each singleton's seeded keys against its declared
+fields **both ways**, because the failure is silent in both directions: the Content Lake is
+schemaless and `withFallback` fills every gap from the seed, so a field can be authored, projected
+and rendering while absent from the schema and *nothing* breaks. That had happened to ~31 fields
+across four documents — including `siteSettings.nav`, which meant nobody could edit the site
+navigation, and Sanity's unknown-fields panel offered a **Remove** button beside it. Tier-(b)
+fields are exempted by an explicit allowlist in that script, one entry per field with a reason —
+not by a naming convention, because exempting a field should cost a visible edit.
+
+**Never interpolate a possibly-absent value into `style=`.** `--w:${x}` with `x` undefined emits
+`--w:null`, and that is worse than it reads: the custom property *is* then defined, so the
+`var(--w, 100%)` fallback never fires and the width resets to `auto` — a silently full-width bar.
+Write the attribute only when there's a value (`style={x ? \`--w:${x}\` : undefined}`). This matters
+because `withFallback` pairs array items by `slug`/`name`/`id` only, so an item keyed solely by
+`_key` — every `fixes[]`, `experiments[]` and `velocity.rows[]` entry — never reaches the seed.
+
+**Invented figures carry a disclosure.** The CRO funnel and the experiments leaderboard are
+illustrative, not client results, and neither is `aria-hidden` — visitors, crawlers and screen
+readers all read them. `funnelNote` and `experimentsNote` say so on the page. Keep them: an
+unlabelled invented metric is a false claim on a site whose whole positioning is the honest
+counterweight.
 
 **To add/change content:** edit `src/data/content.ts`, add/update the type in `src/lib/types.ts`,
 and (if it's a new type) add a loader + GROQ projection in `src/lib/content.ts`. Loaders:
@@ -247,6 +288,7 @@ page filters by into `data-tags`, so `initFilters` needs no second code path.
   schema is restricted to exactly what this renders.
 - `Placeholder.astro` — image with a hatched fallback. Source order: Sanity upload → `src` file in `/public` → placeholder. A `src` whose file doesn't exist yet falls back to the placeholder (checked with `fs` at build time), so captions can be wired before photos land.
 - **Project covers:** drop `public/work/<slug>.jpg` (e.g. `halo.jpg`, `vellum.jpg`) and it fills the work card, the case-study hero and the Shopify featured card. A Sanity upload on the project wins over the file.
+- **`.work-thumb` is portrait (3:4) on desktop and reverts to 4:3 at ≤900px**, where the grid is 2-up on a phone and cards have to stay short. Covers are full-page screenshots — the live ones run past 7000px tall — so on hover the image **pans its own length**: it sits at natural height inside a `container-type: size` frame and slides up by `calc(100cqh - 100%)`, which is exactly its overflow. That expression is self-limiting, so it needs no per-image opt-in — an image no taller than the frame computes to 0 and doesn't move, and `min-height: 100%` keeps a short cover filling the frame as it always did. One fixed duration for every cover, so a very long page pans faster than a short one; killed under `prefers-reduced-motion`.
 - **About photos:** drop files into `public/about/` matching the paths in `about.gallery` (`me.jpg`, `setup.jpg`, `project.jpg`, `coffee.jpg`, `gaming.jpg`, `books.jpg`, `outdoors.jpg`) — they appear with no code change. Or upload per-photo in the Studio (About Page → Photo gallery), which wins over the file. Frames are 4:5, so crop portrait.
 - `ServiceStack.astro` — home scroll-stacking glimpse of the four services (sticky cards + GSAP settle, still `#sstack`). Pairs copy with `OfferVisual`.
 - `OfferVisual.astro` — mockup per top-level service, keyed by `service.visual` (`ai` prompt→reviewed-code, `mvp` sprint timeline, `commerce` storefront+uplift, `api` endpoints). Shared by `ServiceStack` and `/services`. Uses the `.sv`/`.sv-panel` shell plus `.ov-*` internals.

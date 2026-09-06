@@ -68,5 +68,8 @@ export default defineType({
   orderings: [
     { title: 'Order', name: 'orderAsc', by: [{ field: 'order', direction: 'asc' }] },
   ],
-  preview: { select: { title: 'title', subtitle: 'category.label' } },
+  // `select` reads plain paths and does not resolve references, so the
+  // category can't be the subtitle — it would render empty. The stack is the
+  // next most useful thing to tell two cards apart by.
+  preview: { select: { title: 'title', subtitle: 'stack', media: 'image' } },
 });

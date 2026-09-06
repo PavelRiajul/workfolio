@@ -157,7 +157,7 @@ export function getResume(): Promise<ResumeContent> {
 export function getServicesPage(): Promise<ServicesPageContent> {
   return safeFetch<ServicesPageContent>(
     `*[_type == "servicesPage"][0]{
-      seo, hero, velocity, methodHeading, listHeading, listCta,
+      seo, hero, methodHeading, listHeading, listCta,
       serviceCta, serviceDeepLinkCta, stackLink, engagementsHeading, engagements,
       processHeading, faqHeading, faqs, closing
     }`,
@@ -171,10 +171,10 @@ export function getShopifyPage(): Promise<ShopifyPageContent> {
     `*[_type == "shopifyPage"][0]{
       seo, hero, brandsHeading, brands, servicesHeading, servicesCta,
       serviceTagLabel, serviceCta, approachHeading, approach,
-      numbersHeading, numbers, numbersNote, cro, croDashboard,
-      leakHeading, funnel, fixes, croProcessHeading, croProcess, croProcessLoopNote,
+      numbersHeading, numbers, numbersNote, cro,
+      leakHeading, funnel, funnelNote, fixes, croProcessHeading, croProcess, croProcessLoopNote,
       calcHeading, calcCta, calcLabels, calcNote,
-      experimentsHeading, experimentsColumns, experiments,
+      experimentsHeading, experimentsColumns, experiments, experimentsNote,
       featuredHeading, featuredCta, testimonialsHeading, testimonials,
       faqHeading, faqs, closing
     }`,

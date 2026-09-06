@@ -62,59 +62,11 @@ export default defineType({
         { name: 'secondaryCta', title: 'Secondary button', type: 'cta' },
       ],
     }),
-    defineField({
-      name: 'croDashboard',
-      title: 'CRO dashboard visual',
-      description: 'The numbers shown inside the uplift / A-B test / funnel cards.',
-      type: 'object',
-      group: 'cro',
-      fields: [
-        { name: 'rateLabel', title: 'Rate label', type: 'string' },
-        { name: 'rateBefore', title: 'Rate before', type: 'string' },
-        { name: 'rateAfter', title: 'Rate after', type: 'string' },
-        { name: 'rateBadge', title: 'Uplift badge', type: 'string' },
-        { name: 'abTitle', title: 'A/B card title', type: 'string' },
-        { name: 'abStatus', title: 'A/B status', type: 'string' },
-        {
-          name: 'abVariants',
-          title: 'A/B variants',
-          type: 'array',
-          of: [
-            defineArrayMember({
-              type: 'object',
-              name: 'abVariant',
-              fields: [
-                { name: 'name', title: 'Name', type: 'string' },
-                { name: 'value', title: 'Value', type: 'string' },
-                { name: 'barWidth', title: 'Bar width', type: 'string' },
-                { name: 'winner', title: 'Winner', type: 'boolean' },
-                { name: 'winnerLabel', title: 'Winner label', type: 'string' },
-              ],
-              preview: { select: { title: 'name', subtitle: 'value' } },
-            }),
-          ],
-        },
-        { name: 'abFoot', title: 'A/B footnote', type: 'string' },
-        { name: 'funnelLabel', title: 'Funnel label', type: 'string' },
-        {
-          name: 'funnel',
-          title: 'Funnel rows',
-          type: 'array',
-          of: [
-            defineArrayMember({
-              type: 'object',
-              name: 'funnelBar',
-              fields: [
-                { name: 'step', title: 'Step', type: 'string' },
-                { name: 'value', title: 'Value', type: 'string' },
-                { name: 'barWidth', title: 'Bar width', type: 'string' },
-              ],
-              preview: { select: { title: 'step', subtitle: 'value' } },
-            }),
-          ],
-        },
-      ],
-    }),
+    // The CRO dashboard visual is seed-only (tier b): the whole subtree lives
+    // inside aria-hidden="true" on /shopify and contains no string a person or
+    // crawler reads, so its sixteen fields -- invented rates, fake A/B variants
+    // and bar widths that are literally CSS percentages -- are authored in
+    // src/data/content.ts and never shown to an editor. See CLAUDE.md, tiers.
     defineField({ name: 'leakHeading', title: 'Funnel-leak heading', type: 'heading', group: 'cro' }),
     defineField({
       name: 'funnel',
@@ -128,13 +80,23 @@ export default defineType({
           fields: [
             { name: 'name', title: 'Stage', type: 'string' },
             { name: 'count', title: 'Count', type: 'number' },
-            { name: 'width', title: 'Bar width', description: 'e.g. "72%"', type: 'string' },
+            // `width` is seed-only (tier b) — a CSS percentage, hand-tuned to
+            // the shape of the drawing rather than derived from the count.
             { name: 'drop', title: 'Drop-off', description: 'e.g. "−43%" — omit on the first stage', type: 'string' },
             { name: 'why', title: 'Why it drops', type: 'string' },
           ],
           preview: { select: { title: 'name', subtitle: 'count' } },
         }),
       ],
+    }),
+    defineField({
+      name: 'funnelNote',
+      title: 'Funnel disclosure',
+      description:
+        'Says plainly that these counts are an illustrative example, not measured client results. Keep it — the figures are invented, and they are read by visitors, crawlers and screen readers alike.',
+      type: 'text',
+      rows: 3,
+      group: 'cro',
     }),
     defineField({
       name: 'fixes',
@@ -149,9 +111,11 @@ export default defineType({
             { name: 'icon', title: 'Icon', description: 'Font Awesome name, e.g. "fa-box-open".', type: 'string' },
             { name: 'title', title: 'Title', type: 'string' },
             { name: 'body', title: 'Body', type: 'string' },
-            { name: 'barWidth', title: 'Impact bar width', type: 'string' },
+            // `barWidth` is seed-only (tier b) — a CSS percentage, and it was
+            // also this list's preview subtitle, so an editor's item list was
+            // labelled with a bar length.
           ],
-          preview: { select: { title: 'title', subtitle: 'barWidth' } },
+          preview: { select: { title: 'title', subtitle: 'body' } },
         }),
       ],
     }),
@@ -210,6 +174,15 @@ export default defineType({
           preview: { select: { title: 'title', subtitle: 'metric' } },
         }),
       ],
+    }),
+    defineField({
+      name: 'experimentsNote',
+      title: 'Experiments disclosure',
+      description:
+        'Says plainly that these lifts are example ranges, not client results. Keep it — the numbers are invented and read as this developer\'s track record otherwise.',
+      type: 'text',
+      rows: 3,
+      group: 'cro',
     }),
     defineField({ name: 'featuredHeading', title: 'Featured-work heading', type: 'heading', group: 'proof' }),
     defineField({ name: 'featuredCta', title: 'Featured-work button', type: 'cta', group: 'proof' }),
