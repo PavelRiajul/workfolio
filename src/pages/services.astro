@@ -69,7 +69,7 @@ const schema = [faqSchema(page.faqs), ...servicesSchema(services, site, origin)]
             {page.velocity.rows.map((v) => (
               <div class={`velo-row ${v.muted ? 'muted' : ''}`}>
                 <div class="velo-top"><span>{v.label}</span><b>{v.value}</b></div>
-                <div class="velo-bar"><i class="bargrow" style={`width:${v.barWidth}`}></i></div>
+                <div class="velo-bar"><i class="bargrow" style={v.barWidth ? `width:${v.barWidth}` : undefined}></i></div>
               </div>
             ))}
             <div class="velo-foot"><Icon name="fa-solid fa-bolt" />{page.velocity.foot}</div>

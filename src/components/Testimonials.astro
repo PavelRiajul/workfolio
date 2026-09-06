@@ -1,7 +1,14 @@
 ---
 import Headline from './Headline.astro';
 // Testimonials grid section. Shared by Home and Shopify pages.
-interface Testimonial { quote: string; name: string; role: string; initials: string; color: string; }
+interface Testimonial { quote: string; name: string; role: string; color: string; }
+
+/* Initials are derived, not authored. They were a CMS field that could only
+   ever hold the first letters of the name beside it — a second place to keep
+   in sync, and blank on any testimonial added without it. Verified identical
+   for all five authored testimonials before the field was removed. */
+const initialsOf = (name: string) =>
+  name.trim().split(/\s+/).slice(0, 2).map((w) => w[0] ?? '').join('');
 interface Props { eyebrow: string; title: string; items: Testimonial[]; }
 const { eyebrow, title, items } = Astro.props;
 const lines = title.split('\n');
@@ -18,7 +25,7 @@ const lines = title.split('\n');
           <div class="tst-quote">"</div>
           <p class="tst-body">{t.quote}</p>
           <div class="tst-author">
-            <span class="tst-avatar" style={`background:${t.color};`}>{t.initials}</span>
+            <span class="tst-avatar" style={t.color ? `background:${t.color};` : undefined}>{initialsOf(t.name)}</span>
             <div>
               <span class="tst-name">{t.name}</span>
               <span class="tst-role">{t.role}</span>

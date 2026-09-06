@@ -175,9 +175,9 @@ export const home: HomeContent = {
     { number: '06', title: 'We ship it', body: 'Production deploy, docs and a clean handoff — with the support to keep moving after launch.' },
   ],
   testimonials: [
-    { quote: 'We had a working MVP in front of real users in under a month. Riajul moves fast without the code turning into a mess we had to pay for later.', name: 'Sarah Whitfield', role: 'Founder, Vellum', initials: 'SW', color: '#0F766E' },
-    { quote: 'He picked up our Next.js codebase fast and was opening solid PRs within days. Reliable, communicative, and genuinely good at the craft.', name: 'Daniel Mensah', role: 'Eng. Manager, Northwind', initials: 'DM', color: '#7C3AED' },
-    { quote: 'One developer delivered our web app, the AI search feature and the mobile app — and they actually feel like one product. Rare to find.', name: 'Aisha Karim', role: 'CTO, Anchor', initials: 'AK', color: '#2563EB' },
+    { quote: 'We had a working MVP in front of real users in under a month. Riajul moves fast without the code turning into a mess we had to pay for later.', name: 'Sarah Whitfield', role: 'Founder, Vellum', color: '#0F766E' },
+    { quote: 'He picked up our Next.js codebase fast and was opening solid PRs within days. Reliable, communicative, and genuinely good at the craft.', name: 'Daniel Mensah', role: 'Eng. Manager, Northwind', color: '#7C3AED' },
+    { quote: 'One developer delivered our web app, the AI search feature and the mobile app — and they actually feel like one product. Rare to find.', name: 'Aisha Karim', role: 'CTO, Anchor', color: '#2563EB' },
   ],
   faqs: [
     { question: 'Does "AI-powered" mean AI writes my app?', answer: "No — AI writes drafts, I write the software. It handles scaffolding, boilerplate and test fixtures; I own the architecture, review every line, and stand behind what ships. You get a codebase a human can maintain, just sooner." },
@@ -1119,6 +1119,8 @@ export const shopifyPage: ShopifyPageContent = {
     { name: 'Checkout', count: 1560, width: '33%', drop: '−50%', why: 'forced account · surprise fees' },
     { name: 'Purchase', count: 998, width: '22%', drop: '−36%', why: 'long form · few pay options' },
   ],
+  funnelNote:
+    'An illustrative funnel for a mid-size store, not measured results from a client. It shows where revenue typically leaks and what I look at first — your numbers will differ.',
   fixes: [
     { icon: 'fa-box-open', title: 'Product pages', body: 'Imagery, copy, reviews and a sticky add-to-cart.', barWidth: '92%' },
     { icon: 'fa-cart-shopping', title: 'Cart & checkout', body: 'Fewer steps, express pay, recovered carts.', barWidth: '88%' },
@@ -1158,12 +1160,14 @@ export const shopifyPage: ShopifyPageContent = {
     { title: 'Trust badges at checkout', area: 'Checkout', metric: 'Completion rate', lift: 12 },
     { title: 'Free-shipping threshold bar', area: 'Cart', metric: 'Average order value', lift: 9 },
   ],
+  experimentsNote:
+    'Example tests with typical ranges, not client results. They are the experiments I reach for first; what any one of them does for your store is a question the test answers.',
   featuredHeading: { eyebrow: '— Featured Shopify work', title: 'A headless rebuild, in detail.' },
   featuredCta: { label: 'All projects ↗', href: '/work' },
   testimonialsHeading: { eyebrow: '— What clients say', title: 'Shipped, fast, and still standing.' },
   testimonials: [
-    { quote: 'Riajul shipped our Shopify rebuild ahead of schedule and our store has never been faster. Clean code, clear updates, zero drama.', name: 'Sarah Whitfield', role: 'Founder, Vellum', initials: 'SW', color: '#0F766E' },
-    { quote: 'He took our slow, app-stuffed theme and got it under a second on mobile. Conversion went up the first week.', name: 'Marcus Lee', role: 'Founder, Harborline', initials: 'ML', color: '#5e8e3e' },
+    { quote: 'Riajul shipped our Shopify rebuild ahead of schedule and our store has never been faster. Clean code, clear updates, zero drama.', name: 'Sarah Whitfield', role: 'Founder, Vellum', color: '#0F766E' },
+    { quote: 'He took our slow, app-stuffed theme and got it under a second on mobile. Conversion went up the first week.', name: 'Marcus Lee', role: 'Founder, Harborline', color: '#5e8e3e' },
   ],
   faqHeading: { eyebrow: '— Shopify & CRO FAQ', title: 'The questions\nI usually get.' },
   faqs: [

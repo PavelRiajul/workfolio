@@ -174,5 +174,5 @@ export default defineType({
   orderings: [
     { title: 'Order', name: 'orderAsc', by: [{ field: 'order', direction: 'asc' }] },
   ],
-  preview: { select: { title: 'title', subtitle: 'stack' } },
+  preview: { select: { title: 'title', subtitle: 'stack', media: 'image' } },
 });
